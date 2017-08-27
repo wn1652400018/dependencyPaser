@@ -107,9 +107,9 @@ public class WordSegContextGeneratorConf implements WordSegContextGenerator
             
             int p = feature.indexOf("=");
             String name = feature.substring(0, p);
-            String value = feature.substring(+1);
+            String value = feature.substring(p+1);
             
-            String cof = c0+name + "=" + c0 + value;
+            String cof = "c0_" + name + "=" + c0 + value;
             
             result.add(cof);
         }
