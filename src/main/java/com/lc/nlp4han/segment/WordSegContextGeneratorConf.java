@@ -98,6 +98,24 @@ public class WordSegContextGeneratorConf implements WordSegContextGenerator
         PuSet = (config.getProperty("feature.Pu", "true").equals("true"));
         TSet = (config.getProperty("feature.T", "true").equals("true"));
     }
+    
+    private List<String> addC0Prefix(List<String> features, String c0){
+        List<String> result = new ArrayList<String>();
+        
+        for(String feature : features){
+            result.add(feature);
+            
+            int p = feature.indexOf("=");
+            String name = feature.substring(0, p);
+            String value = feature.substring(+1);
+            
+            String cof = c0+name + "=" + c0 + value;
+            
+            result.add(cof);
+        }
+        
+        return result;
+    }
 
 
     @Override
@@ -226,6 +244,9 @@ public class WordSegContextGeneratorConf implements WordSegContextGenerator
             if (c_1c0c1set)
                 features.add("c_1c0c1=" + c_1 + c0 + c1);
         }
+        
+        if(c0prefix)
+            features = addC0Prefix(features, c0);
         
         // 增加标点符号的特征【应用了全角转半角的strq2b方法】
         if (PuSet)
