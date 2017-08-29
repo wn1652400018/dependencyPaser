@@ -47,12 +47,15 @@ public class WordSegContextGeneratorConf implements WordSegContextGenerator
     private boolean TSet;
 
     // 获取词典中的词（自己提供地址和编码方式）
-    Set<String> dictWords;
+    private Set<String> dictWords;
+    
+    private String dictResource;
+    private String dictEncoding;
 
     public WordSegContextGeneratorConf() throws IOException
     {
-        InputStream dictIn = WordSegContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/segment/words-gb.txt");
-        dictWords = DictionaryLoader.getWords(dictIn, "gbk");
+//        InputStream dictIn = WordSegContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/segment/words-gb.txt");
+//        dictWords = DictionaryLoader.getWords(dictIn, "gbk");
 
         Properties featureConf = new Properties();
         InputStream featureStream = WordSegContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/segment/feature.properties");
@@ -61,13 +64,19 @@ public class WordSegContextGeneratorConf implements WordSegContextGenerator
         init(featureConf);
     }
 
-    public WordSegContextGeneratorConf(Properties config)
+    public WordSegContextGeneratorConf(Properties config) throws IOException
     {
         init(config);
     }
 
-    private void init(Properties config)
+    private void init(Properties config) throws IOException
     {
+        dictResource = config.getProperty("feature.dict");
+        dictEncoding = config.getProperty("feature.dict.encoding");
+        
+        InputStream dictIn = WordSegContextGeneratorConf.class.getClassLoader().getResourceAsStream(dictResource);
+        dictWords = DictionaryLoader.getWords(dictIn, dictEncoding);
+        
         c_2Set = (config.getProperty("feature.c_2", "true").equals("true"));
         c_1Set = (config.getProperty("feature.c_1", "true").equals("true"));
         c0Set = (config.getProperty("feature.c0", "true").equals("true"));
@@ -122,13 +131,6 @@ public class WordSegContextGeneratorConf implements WordSegContextGenerator
     public String[] getContext(int index, String[] tokens, String[] tags, Object[] ac)
     {
         return getContext(index, tokens, tags);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "WordSegContextGeneratorConf [c_2Set=" + c_2Set + ", c_1Set=" + c_1Set + ", c0Set=" + c0Set + ", c1Set=" + c1Set + ", c2Set=" + c2Set + ", c_2c_1Set=" + c_2c_1Set + ", c_1c0Set=" + c_1c0Set + ", c0c1Set=" + c0c1Set + ", c1c2Set=" + c1c2Set + ", c_1c1Set=" + c_1c1Set + ", t_2Set=" + t_2Set + ", t_1Set=" + t_1Set + ", c_2c0set=" + c_2c0set + ", c_1c0c1set=" + c_1c0c1set
-                + ", c0prefix=" + c0prefix + ", Lt0Set=" + Lt0Set + ", c_1t0Set=" + c_1t0Set + ", c0t0Set=" + c0t0Set + ", c1t0Set=" + c1t0Set + ", PuSet=" + PuSet + ", TSet=" + TSet + "]";
     }
 
     public String[] getContext(int index, Object[] tokens, String[] tags)
@@ -494,6 +496,13 @@ public class WordSegContextGeneratorConf implements WordSegContextGenerator
         String[] contexts = features.toArray(new String[features.size()]);
 
         return contexts;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "WordSegContextGeneratorConf [c_2Set=" + c_2Set + ", c_1Set=" + c_1Set + ", c0Set=" + c0Set + ", c1Set=" + c1Set + ", c2Set=" + c2Set + ", c_2c_1Set=" + c_2c_1Set + ", c_1c0Set=" + c_1c0Set + ", c0c1Set=" + c0c1Set + ", c1c2Set=" + c1c2Set + ", c_1c1Set=" + c_1c1Set + ", t_2Set=" + t_2Set + ", t_1Set=" + t_1Set + ", c_2c0set=" + c_2c0set + ", c_1c0c1set=" + c_1c0c1set
+                + ", c0prefix=" + c0prefix + ", Lt0Set=" + Lt0Set + ", c_1t0Set=" + c_1t0Set + ", c0t0Set=" + c0t0Set + ", c1t0Set=" + c1t0Set + ", PuSet=" + PuSet + ", TSet=" + TSet + ", dictResource=" + dictResource + ", dictEncoding=" + dictEncoding + "]";
     }
 
     public boolean isDictionalWords(String words)
