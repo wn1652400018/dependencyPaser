@@ -87,12 +87,14 @@ public final class WordPOSMeasure
     /**
      * 根据参考结果和系统预测更新评价指标
      * 
+     * @param words
+     *            词序列
      * @param references
      *            参考结果的标注词性序列
      * @param predictions
      *            系统预测结果的词性标注序列
      */
-    public void updateScores(final String[] references, final String[] predictions)
+    public void updateScores(final String[] words, final String[] references, final String[] predictions)
     {
         sentences++;
 
@@ -109,7 +111,7 @@ public final class WordPOSMeasure
                 sentencesOK++;
         }
 
-        truePositive += countTruePositivesWithDictionary(references, predictions);
+        truePositive += countTruePositivesWithDictionary(words, references, predictions);
 
         target += references.length;
     }
@@ -143,22 +145,20 @@ public final class WordPOSMeasure
     @Override
     public String toString()
     {
-        return "Precision: " + Double.toString(getPrecisionScore()) + "\n" + "RIV: " + Double.toString(getPrecisionScoreIV()) + "\n" + "ROOV: " + Double.toString(getPrecisionScoreOOV()) + "\n" + "SentenceAccuray: " + Double.toString(getSentenceAccuracy());
+        return "Precision: " + Double.toString(getPrecisionScore()) + "\n" + "PIV: " + Double.toString(getPrecisionScoreIV()) + "\n" + "POOV: " + Double.toString(getPrecisionScoreOOV()) + "\n" + "SentenceAccuray: " + Double.toString(getSentenceAccuracy());
     }
 
-    private int countTruePositivesWithDictionary(final String[] references, final String[] predictions)
+    private int countTruePositivesWithDictionary(final String[] words, final String[] references, final String[] predictions)
     {
         int truePositives = 0;
 
         for (int referenceIndex = 0; referenceIndex < references.length; referenceIndex++)
         {
-            String referenceName = references[referenceIndex];
-
             boolean isIV = true;
 
             if (dictionary != null)
             {
-                isIV = dictionary.contains(referenceName);
+                isIV = dictionary.contains(words[referenceIndex]);
 
                 if (isIV)
                     targetIV++;
