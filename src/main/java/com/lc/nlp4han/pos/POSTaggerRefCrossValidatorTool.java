@@ -146,7 +146,9 @@ public class POSTaggerRefCrossValidatorTool
 
             System.out.println("训练模型...");
             trainingSampleStream.reset();
+            long start = System.currentTimeMillis();
             POSModelRef model = train(trainingSampleStream);
+            System.out.println("训练时间： " + (System.currentTimeMillis()-start));
 
             System.out.println("评价模型...");
             POSTagger tagger = new POSTaggerRef(model);
@@ -156,7 +158,9 @@ public class POSTaggerRefCrossValidatorTool
             WordPOSMeasure measure = new WordPOSMeasure(dict);
             evaluator.setMeasure(measure);
 
+            start = System.currentTimeMillis();
             evaluator.evaluate(trainingSampleStream.getTestSampleStream());
+            System.out.println("标注时间： " + (System.currentTimeMillis()-start));
 
             System.out.println(evaluator.getMeasure());
         }
