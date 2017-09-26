@@ -105,7 +105,9 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
         HashSet<String> dict = CorpusStat.buildDict(trainFile.toString(), encoding);
 
         System.out.println("训练模型...");
+        long start = System.currentTimeMillis();
         POSModelRef model = POSTaggerRefTrainTool.train(trainFile, encoding);
+        System.out.println("训练时间： " + (System.currentTimeMillis()-start));
 
         System.out.println("评价模型...");
         POSTagger tagger = new POSTaggerRef(model);
@@ -117,7 +119,9 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
         ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
         ObjectStream<POSSample> testStream = new WordTagSampleStream(goldStream);
 
+        start = System.currentTimeMillis();
         evaluator.evaluate(testStream);
+        System.out.println("标注时间： " + (System.currentTimeMillis()-start));
 
         System.out.println(evaluator.getMeasure());
     }
