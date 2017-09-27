@@ -1,29 +1,18 @@
 package com.lc.nlp4han.pos;
 
-import java.io.BufferedReader;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import com.lc.nlp4han.pos.maxent.POSTaggerWordME;
 import com.lc.nlp4han.pos.maxent.WordPOSEvalTool;
-import com.lc.nlp4han.pos.maxent.WordPOSTaggerFactory;
 
-import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSSample;
-import opennlp.tools.postag.POSTaggerFactory;
 import opennlp.tools.postag.WordTagSampleStream;
 import opennlp.tools.util.MarkableFileInputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.eval.CrossValidationPartitioner;
 
 /**
