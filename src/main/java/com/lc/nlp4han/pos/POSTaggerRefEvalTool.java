@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 import com.lc.nlp4han.pos.CorpusStat;
 import com.lc.nlp4han.pos.WordPOSMeasure;
-import com.lc.nlp4han.pos.maxent.WordPOSErrorPrinter;
+import com.lc.nlp4han.pos.word.WordPOSErrorPrinter;
 
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.postag.POSTaggerEvaluationMonitor;

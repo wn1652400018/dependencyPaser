@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import com.lc.nlp4han.pos.maxent.WordPOSEvalTool;
+import com.lc.nlp4han.pos.word.WordPOSEvalTool;
 
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.postag.WordTagSampleStream;
