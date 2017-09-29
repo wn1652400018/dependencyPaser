@@ -17,5 +17,5 @@ public interface POSTaggerProb extends POSTagger
      * @param k 至多k个
      * @return 至多k个概率最高的标注序列
      */
-    public String[][] topKSequences(String[] sentence, int k);
+    public String[][] tag(String[] sentence, int k);
 }
