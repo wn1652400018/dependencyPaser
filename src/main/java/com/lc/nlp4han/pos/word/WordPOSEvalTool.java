@@ -43,7 +43,7 @@ public class WordPOSEvalTool extends Evaluator<POSSample>
     {
         return measure;
     }
-    
+
     public void setMeasure(WordPOSMeasure m)
     {
         this.measure = m;
@@ -70,20 +70,20 @@ public class WordPOSEvalTool extends Evaluator<POSSample>
 
         return predictions;
     }
-    
+
     public static HashSet<String> buildDict(ObjectStream<POSSample> samples) throws IOException
     {
         HashSet<String> dict = new HashSet<String>();
-        
+
         POSSample sample;
-        while((sample=samples.read()) != null)
+        while ((sample = samples.read()) != null)
         {
             String[] words = sample.getSentence();
-            
-            for(String w : words)
+
+            for (String w : words)
                 dict.add(w);
         }
-        
+
         return dict;
     }
 
@@ -102,7 +102,7 @@ public class WordPOSEvalTool extends Evaluator<POSSample>
      *            黄金标准文件编码
      * @throws IOException
      */
-    public static void eval(File trainFile, TrainingParameters params, File goldFile, File errorFile, String encoding) throws IOException
+    public static void eval(File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException
     {
         System.out.println("构建词典...");
         HashSet<String> dict = CorpusStat.buildDict(trainFile.toString(), encoding);
@@ -112,15 +112,21 @@ public class WordPOSEvalTool extends Evaluator<POSSample>
         ObjectStream<POSSample> sampleStream = new WordTagSampleStream(lineStream);
         POSTaggerFactory posFactory = new WordPOSTaggerFactory();
         System.out.println(posFactory.getPOSContextGenerator());
-        
+
         long start = System.currentTimeMillis();
         POSModel model = POSTaggerME.train("zh", sampleStream, params, posFactory);
-        System.out.println("训练时间： " + (System.currentTimeMillis()-start));
+        System.out.println("训练时间： " + (System.currentTimeMillis() - start));
 
         System.out.println("评价模型...");
         POSTaggerWordME tagger = new POSTaggerWordME(model, posFactory);
-        WordPOSErrorPrinter errorMonitor = new WordPOSErrorPrinter(new FileOutputStream(errorFile));
-        WordPOSEvalTool evaluator = new WordPOSEvalTool(tagger, errorMonitor); 
+        WordPOSEvalTool evaluator;
+        if (errorFile != null)
+        {
+            WordPOSErrorPrinter errorMonitor = new WordPOSErrorPrinter(new FileOutputStream(errorFile));
+            evaluator = new WordPOSEvalTool(tagger, errorMonitor);
+        }
+        else
+            evaluator = new WordPOSEvalTool(tagger);
         WordPOSMeasure measure = new WordPOSMeasure(dict);
         evaluator.setMeasure(measure);
 
@@ -129,54 +135,15 @@ public class WordPOSEvalTool extends Evaluator<POSSample>
 
         start = System.currentTimeMillis();
         evaluator.evaluate(testStream);
-        System.out.println("标注时间： " + (System.currentTimeMillis()-start));
+        System.out.println("标注时间： " + (System.currentTimeMillis() - start));
 
         System.out.println(evaluator.getMeasure());
     }
 
-    /**
-     * 依据黄金标准评价
-     * 
-     * 各种评价指标结果会输出到控制台
-     * 
-     * @param modelFile
-     *            系统模型文件
-     * @param goldFile
-     *            黄金标准文件
-     * @param encoding
-     *            黄金标准文件编码
-     * @throws IOException
-     */
-    public static void eval(File trainFile, TrainingParameters params, File goldFile, String encoding) throws IOException
-    {
-        System.out.println("构建词典...");
-        HashSet<String> dict = CorpusStat.buildDict(trainFile.toString(), encoding);
-
-        System.out.println("训练模型...");
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        ObjectStream<POSSample> sampleStream = new WordTagSampleStream(lineStream);
-        POSTaggerFactory posFactory = new WordPOSTaggerFactory();
-        System.out.println(posFactory.getPOSContextGenerator());
-        POSModel model = POSTaggerME.train("zh", sampleStream, params, posFactory);
-
-        System.out.println("评价模型...");
-        POSTaggerWordME tagger = new POSTaggerWordME(model, posFactory);
-        WordPOSEvalTool evaluator = new WordPOSEvalTool(tagger); 
-        WordPOSMeasure measure = new WordPOSMeasure(dict);
-        evaluator.setMeasure(measure);
-
-        ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-        ObjectStream<POSSample> testStream = new WordTagSampleStream(goldStream);
-
-        evaluator.evaluate(testStream);
-
-        System.out.println(evaluator.getMeasure());
-    }
 
     private static void usage()
     {
-        System.out.println(WordPOSEvalTool.class.getName() + " -data <trainFile> -gold <goldFile> -encoding <encoding> [-error <errorFile>]"
-                + " [-cutoff <num>] [-iters <num>]");
+        System.out.println(WordPOSEvalTool.class.getName() + " -data <trainFile> -gold <goldFile> -encoding <encoding> [-error <errorFile>]" + " [-cutoff <num>] [-iters <num>]");
     }
 
     public static void main(String[] args) throws IOException
@@ -220,22 +187,23 @@ public class WordPOSEvalTool extends Evaluator<POSSample>
             {
                 cutoff = Integer.parseInt(args[i + 1]);
                 i++;
-            }else if (args[i].equals("-iters"))
+            }
+            else if (args[i].equals("-iters"))
             {
                 iters = Integer.parseInt(args[i + 1]);
                 i++;
             }
         }
-        
+
         TrainingParameters params = TrainingParameters.defaultParams();
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
 
         if (errorFile != null)
         {
-            eval(new File(trainFile), params, new File(goldFile), new File(errorFile), encoding);
+            eval(new File(trainFile), params, new File(goldFile), encoding, new File(errorFile));
         }
         else
-            eval(new File(trainFile), params, new File(goldFile), encoding);
+            eval(new File(trainFile), params, new File(goldFile), encoding, null);
     }
 }
