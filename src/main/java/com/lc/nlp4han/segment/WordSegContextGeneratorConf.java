@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import com.lc.nlp4han.util.DictionaryLoader;
+import com.lc.nlp4han.util.FeaturesTools;
+
 /*
  * 基于配置文件的上下文特征产生器
  * 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import com.lc.nlp4han.segment.FeaturesTools;
+import com.lc.nlp4han.util.FeaturesTools;
 
 /**
  * 根据配置文件配置的特征的信息，生成上下文的特征
