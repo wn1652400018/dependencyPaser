@@ -1,4 +1,4 @@
-package com.lc.nlp4han.pos;
+package com.lc.nlp4han.pos.ref;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.HashSet;
 
 import com.lc.nlp4han.pos.CorpusStat;
+import com.lc.nlp4han.pos.POSModelRef;
+import com.lc.nlp4han.pos.POSTagger;
 import com.lc.nlp4han.pos.WordPOSMeasure;
 import com.lc.nlp4han.pos.word.WordPOSErrorPrinter;
 

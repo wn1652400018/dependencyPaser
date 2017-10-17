@@ -1,4 +1,4 @@
-package com.lc.nlp4han.pos;
+package com.lc.nlp4han.pos.ref;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.lc.nlp4han.pos.POSModelRef;
+import com.lc.nlp4han.pos.POSTagger;
+import com.lc.nlp4han.pos.WordPOSMeasure;
 import com.lc.nlp4han.pos.word.WordPOSEvalTool;
 
 import opennlp.tools.postag.POSSample;

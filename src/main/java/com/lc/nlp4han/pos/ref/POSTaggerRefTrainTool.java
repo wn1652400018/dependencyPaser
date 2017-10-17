@@ -1,4 +1,4 @@
-package com.lc.nlp4han.pos;
+package com.lc.nlp4han.pos.ref;
 
 import java.io.BufferedReader;
 import java.io.DataOutput;
@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.lc.nlp4han.pos.POSModelRef;
 
 /**
  * 基准词性标注器训练程序

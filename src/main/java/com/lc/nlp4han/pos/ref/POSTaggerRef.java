@@ -1,4 +1,7 @@
-package com.lc.nlp4han.pos;
+package com.lc.nlp4han.pos.ref;
+
+import com.lc.nlp4han.pos.POSModelRef;
+import com.lc.nlp4han.pos.POSTagger;
 
 /**
  * 基准词性标注器，作为比较基准使用
