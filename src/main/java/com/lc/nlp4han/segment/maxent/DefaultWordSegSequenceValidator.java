@@ -1,4 +1,4 @@
-package com.lc.nlp4han.segment;
+package com.lc.nlp4han.segment.maxent;
 
 import opennlp.tools.util.SequenceValidator;
 

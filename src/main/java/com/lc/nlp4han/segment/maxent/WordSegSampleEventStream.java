@@ -1,4 +1,4 @@
-package com.lc.nlp4han.segment;
+package com.lc.nlp4han.segment.maxent;
 
 import java.util.ArrayList;
 import java.util.Iterator;

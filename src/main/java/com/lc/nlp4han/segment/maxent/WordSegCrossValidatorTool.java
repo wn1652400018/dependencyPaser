@@ -1,8 +1,11 @@
-package com.lc.nlp4han.segment;
+package com.lc.nlp4han.segment.maxent;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+
+import com.lc.nlp4han.segment.WordSegMeasure;
+import com.lc.nlp4han.util.FileInputStreamFactory;
 
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;

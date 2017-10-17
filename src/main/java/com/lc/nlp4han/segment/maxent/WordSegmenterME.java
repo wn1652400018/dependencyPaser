@@ -1,4 +1,4 @@
-package com.lc.nlp4han.segment;
+package com.lc.nlp4han.segment.maxent;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import com.lc.nlp4han.segment.WordSegmenter;
 
 import opennlp.tools.ml.BeamSearch;
 import opennlp.tools.ml.EventModelSequenceTrainer;

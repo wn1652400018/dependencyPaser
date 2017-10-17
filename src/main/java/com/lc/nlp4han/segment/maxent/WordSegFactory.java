@@ -1,7 +1,9 @@
-package com.lc.nlp4han.segment;
+package com.lc.nlp4han.segment.maxent;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import com.lc.nlp4han.segment.WordSegmenter;
 
 import opennlp.tools.util.InvalidFormatException;
 
