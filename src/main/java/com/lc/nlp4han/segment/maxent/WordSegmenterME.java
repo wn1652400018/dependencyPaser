@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import com.lc.nlp4han.segment.WordSegmenter;
+import com.lc.nlp4han.segment.WordSegmenterProb;
 
 import opennlp.tools.ml.BeamSearch;
 import opennlp.tools.ml.EventModelSequenceTrainer;
@@ -29,7 +29,7 @@ import opennlp.tools.util.TrainingParameters;
  *
  * @author 刘小峰
  */
-public class WordSegmenterME implements WordSegmenter
+public class WordSegmenterME implements WordSegmenterProb
 {
 
     public static final int DEFAULT_BEAM_SIZE = 3;
@@ -384,6 +384,12 @@ public class WordSegmenterME implements WordSegmenter
         {
             return new WordSegModel(languageCode, seqPosModel, manifestInfoEntries);
         }
+    }
+
+    @Override
+    public String[][] segment(String sentence, int k)
+    {
+        return tag(k, sentence);
     }
 
 }
