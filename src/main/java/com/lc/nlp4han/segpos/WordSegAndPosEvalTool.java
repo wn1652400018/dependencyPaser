@@ -3,7 +3,9 @@ package com.lc.nlp4han.segpos;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import com.lc.nlp4han.pos.CorpusStat;
 
@@ -37,8 +39,8 @@ public class WordSegAndPosEvalTool
      */
     public static void eval(File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException
     {
-        System.out.println("构建词典...");
-        HashSet<String> dict = CorpusStat.buildDict(trainFile.toString(), encoding);
+//        System.out.println("构建词典...");
+//        HashSet<String> dict = CorpusStat.buildDict(trainFile.toString(), encoding);
 
         System.out.println("训练模型...");  
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
@@ -48,9 +50,13 @@ public class WordSegAndPosEvalTool
         long start = System.currentTimeMillis();
         WordSegAndPosModel model = WordSegAndPosME.train("zh", sampleStream, params, contextGen);
         System.out.println("训练时间： " + (System.currentTimeMillis() - start));
+        
+        System.out.println("构建词典...");
+        sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
+        HashMap<String,List<String>> dict = WordSegAndPosME.bulidDictionary(sampleStream);
 
         System.out.println("评价模型...");
-        POSTagger tagger = new CharPOSTaggerME(model, contextGen);
+        WordSegAndPosME tagger = new WordSegAndPosME(model, contextGen);
         WordSegAndPosEvaluator evaluator;
         if (errorFile != null)
         {
