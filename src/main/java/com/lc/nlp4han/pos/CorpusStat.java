@@ -91,6 +91,8 @@ public class CorpusStat
         int oov = 0;
         while ((sentence = in.readLine()) != null)
         {
+            if (sentence.length() == 0)
+                continue;
             nSentences++;
 
             String[] wordtags = sentence.split("\\s");
