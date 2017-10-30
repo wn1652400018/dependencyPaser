@@ -3,7 +3,6 @@ package com.lc.nlp4han.segpos;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -11,7 +10,6 @@ import java.util.Set;
 import com.lc.nlp4han.segment.maxent.WordSegContextGeneratorConf;
 import com.lc.nlp4han.util.DictionaryLoader;
 import com.lc.nlp4han.util.FeaturesTools;
-
 
 public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGenerator{
 
@@ -33,7 +31,15 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
 //    private boolean Pc_2w0Pc_1w0Set;
     private boolean Bc_1w0Pc_1w0Set;
     private boolean Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set;
-    private WordSegAndPosMeasure measure;
+    
+    private boolean Lt0Set;
+    private boolean c_1t0Set;
+    private boolean c0t0Set;
+    private boolean c1t0Set;
+    
+    private boolean c_2c0set;
+    private boolean c_1c0c1set;
+    
     Set<String> dictionalWords;
     
     private String dictResource;
@@ -42,7 +48,7 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
 	 * 无参构造，加载feature配置文件
 	 * @throws IOException
 	 */
-	public WordSegAndPosContextGeneratorConf() throws IOException{
+	public WordSegAndPosContextGeneratorConfExtend() throws IOException{
 		Properties featureConf = new Properties();
         InputStream featureStream = WordSegAndPosContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/segpos/feature.properties");
         featureConf.load(featureStream);
@@ -55,7 +61,7 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
 	 * @param properties 配置文件
 	 * @throws IOException 
 	 */
-	public WordSegAndPosContextGeneratorConf(Properties properties) throws IOException{
+	public WordSegAndPosContextGeneratorConfExtend(Properties properties) throws IOException{
         
         init(properties);
 	}
@@ -99,6 +105,12 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         
         Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set = (config.getProperty("feature.Bc_2w0Pc_2w0Bc_1w0Pc_1w0", "true").equals("true"));
         
+     // 获取配置文件中的字典特征的设置值
+        Lt0Set = (config.getProperty("feature.Lt0", "true").equals("true"));
+        c_1t0Set = (config.getProperty("feature.c_1t0", "true").equals("true"));
+        c0t0Set = (config.getProperty("feature.c0t0", "true").equals("true"));
+        c1t0Set = (config.getProperty("feature.c1t0", "true").equals("true"));
+        
 //        Bc_1w0Pc_1w0Set = (config.getProperty("feature.Bc_1w0Pc_1w0", "true").equals("true"));
 //        Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set = (config.getProperty("feature.Bc_2w0Pc_2w0Bc_1w0Pc_1w0", "true").equals("true"));	
         
@@ -106,14 +118,17 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
 
 	@Override
 	public String toString() {
-		return "WordSegPosContextGeneratorConf{" + "c_2Set=" + c_2Set + ", c_1Set=" + c_1Set + 
+		return "WordSegPosContextGeneratorConfExtend{" + "c_2Set=" + c_2Set + ", c_1Set=" + c_1Set + 
                 ", c0Set=" + c0Set + ", c1Set=" + c1Set + ", c2Set=" + c2Set + 
                 ", c_2c_1Set=" + c_2c_1Set + ", c_1c0Set=" + c_1c0Set + 
                 ", c0c1Set=" + c0c1Set + ", c1c2Set=" + c1c2Set + 
                 ", c_1c1Set=" + c_1c1Set + ",c0prefix=" + c0prefix +
                 ",w0c0Set="+ w0c0Set +",PuSet="+ PuSet +",TSet="+ TSet +
                 ",Bc_1w0Pc_1w0Set="+ Bc_1w0Pc_1w0Set +
-                ",Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set="+ Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set +"";
+                ",Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set="+ Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set +
+                ",Lt0Set=" + Lt0Set + 
+                ",c_1t0Set=" + c_1t0Set + ",c0t0Set=" + c0t0Set + ",c1t0Set=" + c1t0Set +
+                ",c_2c0set="+c_2c0set+",c_1c0c1set"+c_1c0c1set;
 	}
 
 	/**
@@ -162,6 +177,9 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
             {
                 c2 = characters[i + 2];
                 TC2 = FeaturesTools.featureType(c2);
+                if(characters.length > i + 3){
+                	c3 = characters[i + 3];
+                }
             }
         }
 
@@ -174,6 +192,9 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
             {
                 c_2 = characters[i - 2].toString();
                 TC_2 = FeaturesTools.featureType(c_2);
+                if(i - 3 >= 0){
+                	c_3 = characters[i - 3];
+                }
             }
         }
 
@@ -236,10 +257,13 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         		features.add("c_1c1="+c_1+c1);
         	}
         }
+        
         //c0pre
         if(c0prefix){
         	features = addC0Prefix(features, c0);
         }
+        
+       
         
         //W0C0
         if(w0c0Set){
@@ -309,6 +333,278 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         	}
         	
         }
+        
+     // 下面是增加和词典匹配后特征的情况
+
+        // 标志位:(1)如果匹配四字词成功则不需要匹配三字词，两字词
+        // (2)如果匹配四字词不成功则需要匹配三字词，匹配三字词成功，则不需要匹配两字词
+        boolean flagByThree = true;
+        boolean flagByTwo = true;
+        // 加入词典中提取出来的特征
+        // 1.如果当前词左右两侧三个都不为空，则匹配四字词
+        // (1)c_3c_2c_1c0
+        if (c_3 != null && c_2 != null && c_1 != null && c0 != null){
+        	
+            if (isDictionalWords(c_3 + c_2 + c_1 + c0))
+            {
+
+
+                if (Lt0Set)
+                {
+                    features.add("Le=" + 4);
+                }
+                if(c_1 != null){
+                	if (c_1t0Set)
+                    {
+                        features.add("c_1e=" + c_1);
+                    }
+                }
+                
+                if (c0t0Set)
+                {
+                    features.add("c0e=" + c0);
+                }
+                if(c1 != null){
+                	 if (c1t0Set)
+                     {
+                         features.add("c1e=" + c1);
+                     }
+                }
+               
+                flagByThree = false;
+                flagByTwo = false;
+            }
+        }
+        
+        // (2)c_2c_1c0c1与c_1c0c1c2记录的特征是一样的
+        if (c_2 != null && c_1 != null && c0 != null && c1 != null)
+        {
+            if (isDictionalWords(c_2 + c_1 + c0 + c1))
+            {
+            	 if (Lt0Set)
+                 {
+                     features.add("Lm=" + 4);
+                 }
+                 if(c_1 != null){
+                 	if (c_1t0Set)
+                     {
+                         features.add("c_1m=" + c_1);
+                     }
+                 }
+                 
+                 if (c0t0Set)
+                 {
+                     features.add("c0m=" + c0);
+                 }
+                 if(c1 != null){
+                 	if (c1t0Set)
+                     {
+                         features.add("c1m=" + c1);
+                     }
+                 }
+                flagByThree = false;
+                flagByTwo = false;
+            }
+        }
+        // (3)c_2c_1c0c1与c_1c0c1c2记录的特征是一样的
+        if (c_1 != null && c0 != null && c1 != null && c2 != null)
+        {
+            if (isDictionalWords(c_1 + c0 + c1 + c2))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lm=" + 4);
+                }
+                if (c_1t0Set)
+                {
+                    features.add("c_1m=" + c_1);
+                }
+                if (c0t0Set)
+                {
+                    features.add("c0m=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1m=" + c1);
+                }
+            	
+            	
+                flagByThree = false;
+                flagByTwo = false;
+            }
+        }
+        // (4)c0c1c2c3
+        if (c0 != null && c1 != null && c2 != null && c3 != null)
+        {
+        	if (isDictionalWords(c0 + c1 + c2 + c3))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lb=" + 4);
+                }
+                if(c_1 != null){
+                	if (c_1t0Set)
+                    {
+                        features.add("c_1b=" + c_1);
+                    }
+                }
+                
+                if (c0t0Set)
+                {
+                    features.add("c0b=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1b=" + c1);
+                }
+            	
+                flagByThree = false;
+                flagByTwo = false;
+            }
+        }
+
+        // 2.匹配三字词的情形
+        // （1）c_2c_1c0
+        if (c_2 != null && c_1 != null && c0 != null && flagByThree)
+        {
+            if (isDictionalWords(c_2 + c_1 + c0))
+            {
+            	 if (Lt0Set)
+                 {
+                     features.add("Le=" + 4);
+                 }
+                 if (c_1t0Set)
+                 {
+                     features.add("c_1e=" + c_1);
+                 }
+                 if (c0t0Set)
+                 {
+                     features.add("c0e=" + c0);
+                 }
+                 if(c1 != null){
+                 	if (c1t0Set)
+                     {
+                         features.add("c1e=" + c1);
+                     }
+                 }
+            	
+            
+                
+                flagByTwo = false;
+            }
+        }
+        // (2)c_1c0c1
+        if (c_1 != null && c0 != null && c1 != null && flagByThree)
+        {
+            if (isDictionalWords(c_1 + c0 + c1))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lm=" + 4);
+                }
+                if (c_1t0Set)
+                {
+                    features.add("c_1m=" + c_1);
+                }
+                if (c0t0Set)
+                {
+                    features.add("c0m=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1m=" + c1);
+                }
+            	
+            	
+                flagByTwo = false;
+            }
+        }
+        // (3)c0c1c2
+        if (c0 != null && c1 != null && c2 != null && flagByThree)
+        {
+            if (isDictionalWords(c0 + c1 + c2))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lb=" + 4);
+                }
+                if(c_1 != null){
+                	if (c_1t0Set)
+                    {
+                        features.add("c_1b=" + c_1);
+                    }
+                }
+                
+                if (c0t0Set)
+                {
+                    features.add("c0b=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1b=" + c1);
+                }
+            	
+            	
+                flagByTwo = false;
+            }
+        }
+        // 3.匹配两字的情形
+        // （1）c_1c0
+        if (c_1 != null && c0 != null && flagByTwo)
+        {
+            if (isDictionalWords(c_1 + c0))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Le=" + 4);
+                }
+                if (c_1t0Set)
+                {
+                    features.add("c_1e=" + c_1);
+                }
+                if (c0t0Set)
+                {
+                    features.add("c0e=" + c0);
+                }
+                if(c1 != null){
+                	if (c1t0Set)
+                    {
+                        features.add("c1e=" + c1);
+                    }
+                }
+            	
+            	
+                
+            }
+        }
+        // (2)c0c1
+        if (c0 != null && c1 != null && flagByTwo)
+        {
+            if (isDictionalWords(c0 + c1))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lb=" + 4);
+                }
+                if(c_1 != null){
+                	if (c_1t0Set)
+                    {
+                        features.add("c_1b=" + c_1);
+                    }
+                }
+                
+                if (c0t0Set)
+                {
+                    features.add("c0b=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1b=" + c1);
+                }
+            	
+            }
+        }
+        
         String[] contexts = features.toArray(new String[features.size()]);
 		return contexts;
 	}
@@ -354,10 +650,12 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
 	 * @param characters 字符的序列
 	 * @param tags 字符的标记序列
 	 */
+	@SuppressWarnings("unused")
 	private String[] getContext(int i, String[] characters, String[] tags) {
 		//HashMap<String,List<String>> dictionary = measure.getDictionary();
 //		System.out.println(i);
-		
+        String[] tag = null;
+        String[] pos = null;
 		String c1, c2, c3, c0, c_1, c_2, c_3;
         c1 = c2 = c3 = c0 = c_1 = c_2 = c_3 = null;
         String TC_1, TC_2, TC0, TC1, TC2;
@@ -375,18 +673,32 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
             {
                 c2 = characters[i + 2];
                 TC2 = FeaturesTools.featureType(c2);
+                if(characters.length > i + 3){
+                	c3 = characters[i + 3];
+                }
             }
         }
 
         if (i - 1 >= 0)
         {
+        	//将 词的边界_词性 转成两个数组，分别是词的边界数组，词性数组    
+            tag = new String[i];
+            pos = new String[i];
+            for (int j = i-1; j >= 0; j--) {
+        		tag[j] = tags[j].split("_")[0];
+        		pos[j] = tags[j].split("_")[1];
+        	}
+                       
             c_1 = characters[i - 1];
             TC_1 = FeaturesTools.featureType(c_1);
 
             if (i - 2 >= 0)
             {
-                c_2 = characters[i - 2].toString();
+                c_2 = characters[i - 2];
                 TC_2 = FeaturesTools.featureType(c_2);
+                if(i - 3 >= 0){
+                	c_3 = characters[i - 3];
+                }
             }
         }
 
@@ -450,11 +762,11 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         	}
         }
   
+        
         //c0pre
         if(c0prefix){
         	features = addC0Prefix(features, c0);
         }
-        
         //Pu
         if(PuSet){
         	if (FeaturesTools.isChinesePunctuation(FeaturesTools.strq2b(c0)))
@@ -468,187 +780,389 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         		features.add("T="+TC_2+TC_1+TC0+TC1+TC2);
         	}
         }
-        
-        
-        
-        if(i-1 >= 0){
-        	
-        	//将 词的边界_词性 转成两个数组，分别是词的边界数组，词性数组
-            String[] tag = new String[i];
-            String[] pos = new String[i];
-            for (int j = i-1; j >= 0; j--) {
-    			tag[j] = tags[j].split("_")[0];
-    			pos[j] = tags[j].split("_")[1];
-    		}
-            
-            //如果当前字前面一个为E
-            if(tag[i-1].equals("E")){
-            	w0 = characters[i];
-            	if(w0c0Set){
-                 	features.add("w0c0="+w0+c0);
-                }       	      
-            	if(Bc_1w0Pc_1w0Set){          	
-            		features.add("Bc_1w0Pc_1w0="+"E"+pos[i-1]);            
-            	} 
-            	if(i-2 >= 0){
-            		//如果当前词的前面第二字语为E
-//                	if(tag[i-2].equals("M")){
-//                		if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"M"+pos[i-2]+"E"+pos[i-1]);
-//                		}
-//                	}else if(tag[i-2].equals("B")){//如果当前词的前面第二字语为B
-//                		if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"B"+pos[i-2]+"E"+pos[i-1]);
-//                		}
-//                	}	
-            		if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-            			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]+tag[i-1]+pos[i-1]);
-            		}
-            	}
+
+                    
+        // 下面是增加和词典匹配后特征的情况
+
+        // 标志位:(1)如果匹配四字词成功则不需要匹配三字词，两字词
+        // (2)如果匹配四字词不成功则需要匹配三字词，匹配三字词成功，则不需要匹配两字词
+        boolean flagByThree = true;
+        boolean flagByTwo = true;
+        // 加入词典中提取出来的特征
+        // 1.如果当前词左右两侧三个都不为空，则匹配四字词
+        // (1)c_3c_2c_1c0
+        if (c_3 != null && c_2 != null && c_1 != null && c0 != null)
+        {
+            if (isDictionalWords(c_3 + c_2 + c_1 + c0))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Le=" + 4);
+                }
+                if(c_1 != null){
+                	if (c_1t0Set)
+                    {
+                        features.add("c_1e=" + c_1);
+                    }
+                }
+                
+                if (c0t0Set)
+                {
+                    features.add("c0e=" + c0);
+                }
+                if(c1 != null){
+                	 if (c1t0Set)
+                     {
+                         features.add("c1e=" + c1);
+                     }
+                }
             	
+                if(w0c0Set){
+                	features.add("w0c0="+c_3 + c_2 + c_1 + c0 + c0);
+                }
+                if(i - 4 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-4]+pos[i-4]);
+                    }
+                }
+                if(i - 5 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-5]+pos[i-5]+tag[i-4]+pos[i-4]);
+                	}
+                }               
+                flagByThree = false;
+                flagByTwo = false;
             }
-          //如果当前字前面一个为S
-            if(tag[i-1].equals("S")){
-            	w0 = characters[i];
-            	if(w0c0Set){
-                 	features.add("w0c0="+w0+c0);
-                }       	      
-            	if(Bc_1w0Pc_1w0Set){          	
-            		features.add("Bc_1w0Pc_1w0="+"S"+pos[i-1]);            
-            	}  
-            	if(i-2 >= 0){
-//            		if(tag[i-2].equals("E")){
-//                		if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"E"+pos[i-2]+"S"+pos[i-1]);
-//                		}
-//                	}else if(tag[i-2].equals("S")){//如果当前词的前面第二字语为B
-//                		if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"S"+pos[i-2]+"S"+pos[i-1]);
-//                		}
-//                	}	
-            		if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-            			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]+tag[i-1]+pos[i-1]);
-            		}
-            	}
+        }
+        
+        // (2)c_2c_1c0c1与c_1c0c1c2记录的特征是一样的
+        if (c_2 != null && c_1 != null && c0 != null && c1 != null)
+        {
+            if (isDictionalWords(c_2 + c_1 + c0 + c1))
+            {
+            	 if (Lt0Set)
+                 {
+                     features.add("Lm=" + 4);
+                 }
+                 if(c_1 != null){
+                 	if (c_1t0Set)
+                     {
+                         features.add("c_1m=" + c_1);
+                     }
+                 }
+                 
+                 if (c0t0Set)
+                 {
+                     features.add("c0m=" + c0);
+                 }
+                 if(c1 != null){
+                 	if (c1t0Set)
+                     {
+                         features.add("c1m=" + c1);
+                     }
+                 }
             	
-            }
-            
-          //如果当前字前面一个为B
-            if(tag[i-1].equals("B")){
-            	w0 = characters[i-1]+characters[i];
             	if(w0c0Set){
-                 	features.add("w0c0="+w0+c0);
-                }       	      
-            	if(i-2 >=0 ){
-            		if(Bc_1w0Pc_1w0Set){          	
-                		features.add("Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]);            
-                	} 
-            		if(i-3 >= 0){
-            			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-                			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-3]+pos[i-3]+tag[i-2]+pos[i-2]);
-                		}
-            		}
-            		
-//            		if(tag[i-2].equals("E")){
-//                		if(Bc_1w0Pc_1w0Set){          	
-//                    		features.add("Bc_1w0Pc_1w0="+"E"+pos[i-2]);            
-//                    	}  
-//                		if(i-3 >= 0){
-//                			if(tag[i-3].equals("B")){
-//                    			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                        			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"B"+pos[i-3]+"E"+pos[i-2]);
-//                        		}
-//                    		}else if(tag[i-3].equals("M")){
-//                    			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                        			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"M"+pos[i-3]+"E"+pos[i-2]);
-//                        		}
-//                    		}
-//                		}
-//                		
-//                	}else if(tag[i-2].equals("S")){//如果当前词的前面第二字语为B
-//                		if(Bc_1w0Pc_1w0Set){          	
-//                    		features.add("Bc_1w0Pc_1w0="+"S"+pos[i-2]);            
-//                    	} 
-//                		if(i-3 >= 0){
-//                			if(tag[i-3].equals("S")){
-//                    			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                        			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"S"+pos[i-3]+"S"+pos[i-2]);
-//                        		}
-//                    		}else if(tag[i-3].equals("E")){
-//                    			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                        			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"E"+pos[i-3]+"S"+pos[i-2]);
-//                        		}
-//                    		}  
-//                		}
-//                		     		
-//                	}
-            	}          		
+                	features.add("w0c0="+ c_2 + c_1 + c0 + c1 + c0);
+                }
+                if(i - 3 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-3]+pos[i-3]);
+                    }
+                }
+                if(i - 4 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-4]+pos[i-4]+tag[i-3]+pos[i-3]);
+                	}
+                }  
+                
+                flagByThree = false;
+                flagByTwo = false;
             }
-            
-          //如果当前字前面一个为M
-            String word = characters[i-1] + characters[i];
-            int record = -1;
-            if(tag[i-1].equals("M")){
-            	if(i-2 >= 0){
-            		for (int j = i-2; j > 0; j--) {
-        				if(tag[j].equals("B")){
-        					record = j;
-        					word = characters[j] + word;
-        					break;
-        				}else{
-        					word = characters[j] + word;
-        				}
-        			}
-            	}
+        }
+        // (3)c_2c_1c0c1与c_1c0c1c2记录的特征是一样的
+        if (c_1 != null && c0 != null && c1 != null && c2 != null)
+        {
+            if (isDictionalWords(c_1 + c0 + c1 + c2))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lm=" + 4);
+                }
+                if (c_1t0Set)
+                {
+                    features.add("c_1m=" + c_1);
+                }
+                if (c0t0Set)
+                {
+                    features.add("c0m=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1m=" + c1);
+                }
             	
-            	if(record != -1){
-            		if(w0c0Set){
-                     	features.add("w0c0="+word+c0);
-                    }   
-            		if(record-1 >= 0){
-            			if(Bc_1w0Pc_1w0Set){          	
-                    		features.add("Bc_1w0Pc_1w0="+tag[record-1]+pos[record-1]);            
-                    	}  
-            			if(record - 2 >= 0){
-            				if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-                    			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[record-2]+pos[record-2]+tag[record-1]+pos[record-1]);
-                    		}
-            			}
-//            			if(tag[record-1].equals("E")){
-//                    		if(Bc_1w0Pc_1w0Set){          	
-//                        		features.add("Bc_1w0Pc_1w0="+"E"+pos[record-1]);            
-//                        	}  
-//                    		if(record-2 >= 0){
-//                    			if(tag[record-2].equals("B")){
-//                        			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                            			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"B"+pos[record-2]+"E"+pos[record-1]);
-//                            		}
-//                        		}else if(tag[record-2].equals("M")){
-//                        			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                            			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"M"+pos[record-2]+"E"+pos[record-1]);
-//                            		}
-//                        		}
-//                    		}
-//                    		
-//                    	}else if(tag[record-1].equals("S")){//如果当前词的前面第二字语为B
-//                    		if(Bc_1w0Pc_1w0Set){          	
-//                        		features.add("Bc_1w0Pc_1w0="+"S"+pos[record-1]);            
-//                        	}  
-//                    		if(record-2 >= 0){
-//                    			if(tag[record-2].equals("E")){
-//                        			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                            			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"E"+pos[record-2]+"S"+pos[record-1]);
-//                            		}
-//                        		}else if(tag[record-2].equals("S")){
-//                        			if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
-//                            			features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+"S"+pos[record-2]+"S"+pos[record-1]);
-//                            		}
-//                        		}
-//                    		}                   		
-//                    	}
-            		}                	
-            	}    		
-            }    
+            	if(w0c0Set){
+                	features.add("w0c0="+ c_1 + c0 + c1 + c2 + c0);
+                }
+                if(i - 2 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]);
+                    }
+                }
+                if(i - 3 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-3]+pos[i-3]+tag[i-2]+pos[i-2]);
+                	}
+                }  
+                flagByThree = false;
+                flagByTwo = false;
+            }
+        }
+        // (4)c0c1c2c3
+        if (c0 != null && c1 != null && c2 != null && c3 != null)
+        {
+            if (isDictionalWords(c0 + c1 + c2 + c3))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lb=" + 4);
+                }
+                if(c_1 != null){
+                	if (c_1t0Set)
+                    {
+                        features.add("c_1b=" + c_1);
+                    }
+                }
+                
+                if (c0t0Set)
+                {
+                    features.add("c0b=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1b=" + c1);
+                }
+            	
+            	if(w0c0Set){
+                	features.add("w0c0="+ c0 + c1 + c2 + c3 + c0);
+                }
+                if(i - 1 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-1]+pos[i-1]);
+                    }
+                }
+                if(i - 2 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]+tag[i-1]+pos[i-1]);
+                	}
+                }  
+                flagByThree = false;
+                flagByTwo = false;
+            }
+        }
+
+        // 2.匹配三字词的情形
+        // （1）c_2c_1c0
+        if (c_2 != null && c_1 != null && c0 != null && flagByThree)
+        {
+            if (isDictionalWords(c_2 + c_1 + c0))
+            {
+            	 if (Lt0Set)
+                 {
+                     features.add("Le=" + 4);
+                 }
+                 if (c_1t0Set)
+                 {
+                     features.add("c_1e=" + c_1);
+                 }
+                 if (c0t0Set)
+                 {
+                     features.add("c0e=" + c0);
+                 }
+                 if(c1 != null){
+                 	if (c1t0Set)
+                     {
+                         features.add("c1e=" + c1);
+                     }
+                 }
+            	
+            	if(w0c0Set){
+                	features.add("w0c0="+ c_2 + c_1 + c0 + c0);
+                }
+                if(i - 3 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-3]+pos[i-3]);
+                    }
+                }
+                if(i - 4 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-4]+pos[i-4]+tag[i-3]+pos[i-3]);
+                	}
+                }  
+                
+                flagByTwo = false;
+            }
+        }
+        // (2)c_1c0c1
+        if (c_1 != null && c0 != null && c1 != null && flagByThree)
+        {
+            if (isDictionalWords(c_1 + c0 + c1))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lm=" + 4);
+                }
+                if (c_1t0Set)
+                {
+                    features.add("c_1m=" + c_1);
+                }
+                if (c0t0Set)
+                {
+                    features.add("c0m=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1m=" + c1);
+                }
+            	
+            	if(w0c0Set){
+                	features.add("w0c0="+ c_1 + c0 + c1 + c0);
+                }
+                if(i - 2 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]);
+                    }
+                }
+                if(i - 3 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-3]+pos[i-3]+tag[i-2]+pos[i-2]);
+                	}
+                }  
+                flagByTwo = false;
+            }
+        }
+        // (3)c0c1c2
+        if (c0 != null && c1 != null && c2 != null && flagByThree)
+        {
+            if (isDictionalWords(c0 + c1 + c2))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lb=" + 4);
+                }
+                if(c_1 != null){
+                	if (c_1t0Set)
+                    {
+                        features.add("c_1b=" + c_1);
+                    }
+                }
+                
+                if (c0t0Set)
+                {
+                    features.add("c0b=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1b=" + c1);
+                }
+            	
+            	if(w0c0Set){
+                	features.add("w0c0="+ c0 + c1 + c2 + c0);
+                }
+                if(i - 1 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-1]+pos[i-1]);
+                    }
+                }
+                if(i - 2 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]+tag[i-1]+pos[i-1]);
+                	}
+                } 
+                flagByTwo = false;
+            }
+        }
+        // 3.匹配两字的情形
+        // （1）c_1c0
+        if (c_1 != null && c0 != null && flagByTwo)
+        {
+            if (isDictionalWords(c_1 + c0))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Le=" + 4);
+                }
+                if (c_1t0Set)
+                {
+                    features.add("c_1e=" + c_1);
+                }
+                if (c0t0Set)
+                {
+                    features.add("c0e=" + c0);
+                }
+                if(c1 != null){
+                	if (c1t0Set)
+                    {
+                        features.add("c1e=" + c1);
+                    }
+                }
+            	
+            	if(w0c0Set){
+                	features.add("w0c0="+ c_1 + c0 + c0);
+                }
+                if(i - 2 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]);
+                    }
+                }
+                if(i - 3 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-3]+pos[i-3]+tag[i-2]+pos[i-2]);
+                	}
+                } 
+                
+            }
+        }
+        // (2)c0c1
+        if (c0 != null && c1 != null && flagByTwo)
+        {
+            if (isDictionalWords(c0 + c1))
+            {
+            	if (Lt0Set)
+                {
+                    features.add("Lb=" + 4);
+                }
+                if(c_1 != null){
+                	if (c_1t0Set)
+                    {
+                        features.add("c_1b=" + c_1);
+                    }
+                }
+                
+                if (c0t0Set)
+                {
+                    features.add("c0b=" + c0);
+                }
+                if (c1t0Set)
+                {
+                    features.add("c1b=" + c1);
+                }
+            	
+            	if(w0c0Set){
+                	features.add("w0c0="+ c0 + c1 + c0);
+                }
+                if(i - 1 >= 0){
+                	if(Bc_1w0Pc_1w0Set){
+                    	features.add("Bc_1w0Pc_1w0="+tag[i-1]+pos[i-1]);
+                    }
+                }
+                if(i - 2 >= 0){
+                	if(Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set){
+                		features.add("Bc_2w0Pc_2w0Bc_1w0Pc_1w0="+tag[i-2]+pos[i-2]+tag[i-1]+pos[i-1]);
+                	}
+                } 
+            }
         }
         String[] contexts = features.toArray(new String[features.size()]);
 		return contexts;
