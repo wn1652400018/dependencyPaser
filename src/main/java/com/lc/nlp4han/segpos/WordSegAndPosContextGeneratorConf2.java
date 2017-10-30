@@ -41,7 +41,7 @@ public class WordSegAndPosContextGeneratorConf2 implements WordSegAndPosContextG
 	 * 无参构造，加载feature配置文件
 	 * @throws IOException
 	 */
-	public WordSegAndPosContextGeneratorConf() throws IOException{
+	public WordSegAndPosContextGeneratorConf2() throws IOException{
 		Properties featureConf = new Properties();
         InputStream featureStream = WordSegAndPosContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/segpos/feature.properties");
         featureConf.load(featureStream);
@@ -54,7 +54,7 @@ public class WordSegAndPosContextGeneratorConf2 implements WordSegAndPosContextG
 	 * @param properties 配置文件
 	 * @throws IOException 
 	 */
-	public WordSegAndPosContextGeneratorConf(Properties properties) throws IOException{
+	public WordSegAndPosContextGeneratorConf2(Properties properties) throws IOException{
         
         init(properties);
 	}
