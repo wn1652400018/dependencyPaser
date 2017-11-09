@@ -62,13 +62,17 @@ public class CharPOSCrossValidation
             
             // 训练模型
             trainingSampleStream.reset();
+            long start = System.currentTimeMillis();
             CharPOSModel model = CharPOSTaggerME.train("zh", trainingSampleStream, params, contextGenerator);
+            System.out.println("训练时间： " + (System.currentTimeMillis()-start));
 
             CharPOSEvaluator evaluator = new CharPOSEvaluator(new CharPOSTaggerME(model, contextGenerator));
             WordPOSMeasure measure = new WordPOSMeasure(dict);
             evaluator.setMeasure(measure);
             // 设置测试集（在测试集上进行评价）
+            start = System.currentTimeMillis();
             evaluator.evaluate(trainingSampleStream.getTestSampleStream());
+            System.out.println("标注时间： " + (System.currentTimeMillis()-start));
 
             System.out.println(measure);
             run++;

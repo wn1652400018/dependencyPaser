@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -60,9 +61,14 @@ public class CorpusSplit
     /**
      * 采样生成训练和测试语料
      * 
-     * @param source 源训练语料
-     * @param trainCount 新训练语料采样句子数
-     * @param testCount 测试语料采样句子数
+     * 训练和测试不相交
+     * 
+     * @param source
+     *            源训练语料
+     * @param trainCount
+     *            新训练语料采样句子数
+     * @param testCount
+     *            测试语料采样句子数
      * @param encoding
      * @throws IOException
      */
@@ -88,38 +94,34 @@ public class CorpusSplit
 
         in.close();
 
-        Random r = new Random();
-        boolean[] occupied = new boolean[n];
-        for (int i = 0; i < n; i++)
-            occupied[i] = false;
+        Collections.shuffle(sentences);
+        
+        System.out.println("总样本数：" + sentences.size());
 
         int cnt = 0;
-        while (cnt < trainCount)
+        int idx = 0;
+        while (cnt < trainCount && idx < sentences.size())
         {
-            int idx = r.nextInt(n);
-            if (!occupied[idx])
-            {
-                train.println(sentences.get(idx));
-                occupied[idx] = true;
+            train.println(sentences.get(idx));
 
-                cnt++;
-            }
+            cnt++;
+            idx++;
         }
+        
+        System.out.println("随机采样训练样本数：" + cnt);
 
         train.close();
 
         cnt = 0;
-        while (cnt < testCount)
+        while (cnt < testCount && idx < sentences.size())
         {
-            int idx = r.nextInt(n);
-            if (!occupied[idx])
-            {
-                test.println(sentences.get(idx));
-                occupied[idx] = true;
+            test.println(sentences.get(idx));
 
-                cnt++;
-            }
+            cnt++;
+            idx++;
         }
+        
+        System.out.println("随机采样测试样本数：" + cnt);
 
         test.close();
 
@@ -147,16 +149,16 @@ public class CorpusSplit
 
             split(source, percent, encoding);
         }
-        else if(args[0].equals("-sample"))
+        else if (args[0].equals("-sample"))
         {
             String source = args[1];
             String encoding = "GBK";
             int trainCount = Integer.parseInt(args[2]);
             int testCount = Integer.parseInt(args[3]);
-            
+
             if (args.length > 4)
                 encoding = args[4];
-            
+
             sample(source, trainCount, testCount, encoding);
         }
     }

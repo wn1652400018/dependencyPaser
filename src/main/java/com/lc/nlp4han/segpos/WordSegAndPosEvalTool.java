@@ -52,7 +52,8 @@ public class WordSegAndPosEvalTool
         System.out.println("训练时间： " + (System.currentTimeMillis() - start));
         
         System.out.println("构建词典...");
-        sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
+//        sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
+        sampleStream.reset();
         HashMap<String,List<String>> dict = WordSegAndPosME.bulidDictionary(sampleStream);
 
         System.out.println("评价模型...");

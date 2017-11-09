@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
+
+
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.eval.CrossValidationPartitioner;
@@ -49,14 +52,18 @@ public class WordSegAndPosCrossValidation {
 			HashMap<String,List<String>> dict = WordSegAndPosME.bulidDictionary(trainingSampleStream);
 			//训练模型
 			trainingSampleStream.reset();
+			long start = System.currentTimeMillis();
 			WordSegAndPosModel model = WordSegAndPosME.train("zh", trainingSampleStream, params, contextGenerator);
+			System.out.println("训练时间： " + (System.currentTimeMillis()-start));
 
 			WordSegAndPosEvaluator evaluator = new WordSegAndPosEvaluator(new WordSegAndPosME(model, contextGenerator), monitor);
 			WordSegAndPosMeasure measure = new WordSegAndPosMeasure(dict);
 			
 			evaluator.setMeasure(measure);
 	        //设置测试集（在测试集上进行评价）
+			start = System.currentTimeMillis();
 	        evaluator.evaluate(trainingSampleStream.getTestSampleStream());
+	        System.out.println("标注时间： " + (System.currentTimeMillis()-start));
 	        
 	        System.out.println(measure);
 	        run++;
