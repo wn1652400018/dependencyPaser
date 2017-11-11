@@ -120,10 +120,12 @@ public class WordPOSEvalTool extends Evaluator<POSSample>
         System.out.println("评价模型...");
         POSTaggerWordME tagger = new POSTaggerWordME(model, posFactory);
         WordPOSEvalTool evaluator;
+        WordPOSConfusionMatrixBuilder matrixBuilder = null;
         if (errorFile != null)
         {
             WordPOSErrorPrinter errorMonitor = new WordPOSErrorPrinter(new FileOutputStream(errorFile));
-            evaluator = new WordPOSEvalTool(tagger, errorMonitor);
+            matrixBuilder = new WordPOSConfusionMatrixBuilder();
+            evaluator = new WordPOSEvalTool(tagger, errorMonitor, matrixBuilder);
         }
         else
             evaluator = new WordPOSEvalTool(tagger);
@@ -138,6 +140,9 @@ public class WordPOSEvalTool extends Evaluator<POSSample>
         System.out.println("标注时间： " + (System.currentTimeMillis() - start));
 
         System.out.println(evaluator.getMeasure());
+        
+        if(matrixBuilder!=null)
+            System.out.println(matrixBuilder.getMatrix());
     }
 
 
