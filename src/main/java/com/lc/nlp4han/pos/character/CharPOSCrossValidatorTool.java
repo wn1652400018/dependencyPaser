@@ -72,7 +72,7 @@ public class CharPOSCrossValidatorTool
 
 
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);    
-        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseContextOpen());
+        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseOpen());
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
 

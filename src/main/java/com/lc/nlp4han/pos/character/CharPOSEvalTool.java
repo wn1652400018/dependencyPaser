@@ -44,7 +44,7 @@ public class CharPOSEvalTool
 
         System.out.println("训练模型...");  
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseContextOpen());
+        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseOpen());
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
         long start = System.currentTimeMillis();

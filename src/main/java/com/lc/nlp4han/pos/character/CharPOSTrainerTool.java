@@ -65,7 +65,7 @@ public class CharPOSTrainerTool
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
 
-        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseContextOpen());
+        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseOpen());
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
