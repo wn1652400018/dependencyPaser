@@ -51,7 +51,7 @@ public class DependencyParseContextGeneratorConfExtend implements DependencyPars
 	public DependencyParseContextGeneratorConfExtend() throws IOException {
 		Properties featureConf = new Properties();
 		InputStream featureStream = DependencyParseContextGeneratorConf.class.getClassLoader()
-				.getResourceAsStream("com/wxw/tc/phraseanalysis/run/feature.properties");
+				.getResourceAsStream("com/lc/nlp4han/dependency/feature.properties");
 		featureConf.load(featureStream);
 
 		init(featureConf);
