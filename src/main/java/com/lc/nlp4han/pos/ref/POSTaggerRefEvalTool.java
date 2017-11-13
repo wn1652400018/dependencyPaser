@@ -9,6 +9,7 @@ import com.lc.nlp4han.pos.CorpusStat;
 import com.lc.nlp4han.pos.POSModelRef;
 import com.lc.nlp4han.pos.POSTagger;
 import com.lc.nlp4han.pos.WordPOSMeasure;
+import com.lc.nlp4han.pos.word.WordPOSConfusionMatrixBuilder;
 import com.lc.nlp4han.pos.word.WordPOSErrorPrinter;
 
 import opennlp.tools.postag.POSSample;
@@ -114,7 +115,8 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
         System.out.println("评价模型...");
         POSTagger tagger = new POSTaggerRef(model);
         WordPOSErrorPrinter errorMonitor = new WordPOSErrorPrinter(new FileOutputStream(errorFile));
-        POSTaggerRefEvalTool evaluator = new POSTaggerRefEvalTool(tagger, errorMonitor); 
+        WordPOSConfusionMatrixBuilder matrixBuilder = new WordPOSConfusionMatrixBuilder();;
+        POSTaggerRefEvalTool evaluator = new POSTaggerRefEvalTool(tagger, errorMonitor, matrixBuilder); 
         WordPOSMeasure measure = new WordPOSMeasure(dict);
         evaluator.setMeasure(measure);
 
@@ -126,6 +128,8 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
         System.out.println("标注时间： " + (System.currentTimeMillis()-start));
 
         System.out.println(evaluator.getMeasure());
+        
+        System.out.println(matrixBuilder.getMatrix());
     }
 
     /**

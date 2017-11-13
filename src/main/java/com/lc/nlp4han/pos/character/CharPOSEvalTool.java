@@ -44,7 +44,7 @@ public class CharPOSEvalTool
 
         System.out.println("训练模型...");  
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseContextOpen());
+        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseOpen());
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
         long start = System.currentTimeMillis();
@@ -54,10 +54,12 @@ public class CharPOSEvalTool
         System.out.println("评价模型...");
         POSTagger tagger = new CharPOSTaggerME(model, contextGen);
         CharPOSEvaluator evaluator;
+        CharPOSConfusionMatrixBuilder matrixBuilder = null;
         if (errorFile != null)
         {
             CharPOSEvaluateMonitor errorMonitor = new CharPOSErrorPrinter(new FileOutputStream(errorFile));
-            evaluator = new CharPOSEvaluator(tagger, errorMonitor);
+            matrixBuilder = new CharPOSConfusionMatrixBuilder();
+            evaluator = new CharPOSEvaluator(tagger, errorMonitor, matrixBuilder);
         }
         else
             evaluator = new CharPOSEvaluator(tagger);
@@ -73,6 +75,9 @@ public class CharPOSEvalTool
         System.out.println("标注时间： " + (System.currentTimeMillis() - start));
 
         System.out.println(evaluator.getMeasure());
+        
+        if(matrixBuilder!=null)
+            System.out.println(matrixBuilder.getMatrix());
     }
 
     private static void usage()

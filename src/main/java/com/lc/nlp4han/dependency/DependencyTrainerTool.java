@@ -1,4 +1,4 @@
-package com.lc.nlp4han.pos.character;
+package com.lc.nlp4han.dependency;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -6,16 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
 import opennlp.tools.util.TrainingParameters;
 
-public class CharPOSTrainerTool
+/**
+ * 依存分析模型训练应用
+ * 
+ * @author 刘小峰
+ *
+ */
+public class DependencyTrainerTool
 {
     private static void usage()
     {
-        System.out.println(CharPOSTrainerTool.class.getName() + " -data <corpusFile> -model <modelFile> -encoding <encoding> " + "[-cutoff <num>] [-iters <num>]");
+        System.out.println(DependencyTrainerTool.class.getName() + " -data <corpusFile> -model <modelFile> -encoding <encoding> " + "[-cutoff <num>] [-iters <num>]");
     }
 
     public static void main(String[] args) throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException
@@ -65,13 +68,12 @@ public class CharPOSTrainerTool
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
 
-        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseOpen());
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
-        ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
-        CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
-        CharPOSModel model = CharPOSTaggerME.train("zh", sampleStream, params, contextGen);
-        OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
+        DependencyParseContextGenerator gen = new DependencyParseContextGeneratorConf();
+        
+        DependencyParseModel model = DependencyParserME.train(corpusFile, params, gen, encoding);
+        
+        OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));           
         model.serialize(modelOut);
-
+        modelOut.close();
     }
 }

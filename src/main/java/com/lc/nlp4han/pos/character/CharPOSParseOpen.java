@@ -10,7 +10,7 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
  * @author 刘小峰
  *
  */
-public class CharPOSParseContextOpen implements CharPOSParseStrage
+public class CharPOSParseOpen implements CharPOSParseStrage
 {
 
     /**
@@ -27,7 +27,7 @@ public class CharPOSParseContextOpen implements CharPOSParseStrage
         ArrayList<String> tags = new ArrayList<String>();
         ArrayList<String> poses = new ArrayList<String>();
 
-        for (int i = 1; i < wordsAndPoses.length; i++)
+        for (int i = 0; i < wordsAndPoses.length; i++)
         {
             String[] wordanspos = wordsAndPoses[i].split("_");
             String word = wordanspos[0];

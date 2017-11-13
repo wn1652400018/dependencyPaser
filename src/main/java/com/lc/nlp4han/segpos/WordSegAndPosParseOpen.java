@@ -28,7 +28,7 @@ public class WordSegAndPosParseOpen implements WordSegAndPosParseStrategy
         ArrayList<String> tags = new ArrayList<String>();
         ArrayList<String> poses = new ArrayList<String>();
 
-        for (int i = 1; i < wordsAndPoses.length; i++)
+        for (int i = 0; i < wordsAndPoses.length; i++)
         {
             String[] wordanspos = wordsAndPoses[i].split("_");
             String word = wordanspos[0];
