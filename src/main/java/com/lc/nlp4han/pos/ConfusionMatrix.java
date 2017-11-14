@@ -5,6 +5,8 @@ import java.util.HashMap;
 /**
  * 词性标注混淆矩阵
  * 
+ * 要求参考标注和预测标注的词要一一对应。
+ * 
  * @author 刘小峰
  *
  */
