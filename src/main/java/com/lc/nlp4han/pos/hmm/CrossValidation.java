@@ -1,6 +1,5 @@
 package com.lc.nlp4han.pos.hmm;
 
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Random;
@@ -9,11 +8,6 @@ import com.lc.nlp4han.pos.WordPOSMeasure;
 
 public class CrossValidation implements ModelEval {
 
-    public static void main(String[] args) throws Exception {
-        ModelEval modelScore = new CrossValidation(new PeopleDailyWordTagStream("/home/jx_m/桌面/PoS/corpus/199801_format.txt", "utf-8"), 10, NGram.BiGram,-1,1);
-        modelScore.eval();
-        System.out.println(modelScore.getScores().toString());
-    }
     /**
      * 标明使用的n-gram
      */
@@ -82,10 +76,17 @@ public class CrossValidation implements ModelEval {
     @Override
     public void eval() throws Exception {
         for (int i = 0; i < this.fold; ++i) {
+            System.out.println("训练模型...");
+            long start = System.currentTimeMillis();
             this.tagger = this.getTagger(i);
+            System.out.println("训练时间:\t" + (System.currentTimeMillis()-start));
+            
             this.stream.openReadStream();
             
-            WordPOSMeasure m = this.estimate(i);
+            System.out.println("词性标注...");
+            start = System.currentTimeMillis();
+            WordPOSMeasure m = this.tag(i);
+            System.out.println("标注时间:\t" + (System.currentTimeMillis()-start));
             System.out.println(m);
             this.measure.mergeInto(m);
             this.stream.openReadStream();
@@ -156,7 +157,7 @@ public class CrossValidation implements ModelEval {
      *
      * @return 一折验证的评分
      */
-    private WordPOSMeasure estimate(int taggerNo) throws IOException {
+    private WordPOSMeasure tag(int taggerNo) throws IOException {
         WordPOSMeasure posMeasure = new WordPOSMeasure(this.wordDict);
         WordTag[] wts = null;
         int num = 0;
