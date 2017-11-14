@@ -190,4 +190,18 @@ public class WordSegAndPosSample {
 		}
 		return sample;
 	}
+	
+	@Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj instanceof WordSegAndPosSample) {
+            WordSegAndPosSample a = (WordSegAndPosSample) obj;
+
+            return Arrays.equals(getWords(), a.getWords())
+                    && Arrays.equals(getPoses(), a.getPoses());
+        } else {
+            return false;
+        }
+}
 }
