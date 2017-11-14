@@ -8,12 +8,6 @@ import com.lc.nlp4han.pos.WordPOSMeasure;
 
 public class ModelEvaluator implements ModelEval {
 
-    public static void main(String[] args) throws Exception {
-        ModelEval modelScore = new ModelEvaluator(new PeopleDailyWordTagStream("/home/jx_m/桌面/PoS/corpus/training", "utf-8"),new PeopleDailyWordTagStream("/home/jx_m/桌面/PoS/corpus/testing", "utf-8"), NGram.BiGram,-1, AbstractParams.UNK_MAXPROB);
-        modelScore.eval();
-        System.out.println(modelScore.getScores().toString());
-    }
-
     /**
      * 标明使用的n-gram
      */
@@ -75,8 +69,15 @@ public class ModelEvaluator implements ModelEval {
 
     @Override
     public void eval() throws Exception {
+        System.out.println("训练模型...");
+        long start = System.currentTimeMillis();
         this.getTagger();
-        this.estimate();
+        System.out.println("训练时间:\t" + (System.currentTimeMillis()-start));
+        
+        System.out.println("词性标注...");
+        start = System.currentTimeMillis();
+        this.tag();
+        System.out.println("标注时间:\t" + (System.currentTimeMillis()-start));
     }
 
     /**
@@ -101,7 +102,7 @@ public class ModelEvaluator implements ModelEval {
      * 在测试集上进行测试
      *
      */
-    private void estimate() throws IOException {
+    private void tag() throws IOException {
         WordTag[] wts = null;
 
         while ((wts = this.testing.readSentence()) != null) {
