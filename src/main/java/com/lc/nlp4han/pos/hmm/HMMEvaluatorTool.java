@@ -1,5 +1,7 @@
 package com.lc.nlp4han.pos.hmm;
 
+import com.lc.nlp4han.pos.ConfusionMatrix;
+
 /**
  * 模型测试主函数。
  */
@@ -56,10 +58,13 @@ public class HMMEvaluatorTool {
         WordTagStream trainStream = new OpenNLPWordTagStream(corpusFile, encoding);
         WordTagStream goldStream = new OpenNLPWordTagStream(goldFile, encoding);
         
+        ConfusionMatrix matrix = new ConfusionMatrix();
 
-        ModelEval modelEval = new ModelEvaluator(trainStream, goldStream, nGram, holdOutRate, unk);
+        ModelEvaluator modelEval = new ModelEvaluator(trainStream, goldStream, nGram, holdOutRate, unk);
+        modelEval.setConfusionMatrix(matrix);
         modelEval.eval();
         System.out.println(modelEval.getScores());
+        System.out.println(modelEval.getConfusionMatrix());
 //        logger.info("交加验证评分为：\n"+ modelScore.getScores().toString());
     }
 }
