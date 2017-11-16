@@ -45,5 +45,23 @@ public class WordTag {
     public String toString() {
         return this.word + "/" + this.tag;
     }
+    
+    public static String[] getWords(WordTag[] wordTags)
+    {
+        String[] words =  new String[wordTags.length];
+        for(int i=0; i<wordTags.length; i++)
+            words[i] = wordTags[i].getWord();
+        
+        return words;
+    }
+    
+    public static String[] geTags(WordTag[] wordTags)
+    {
+        String[] tags =  new String[wordTags.length];
+        for(int i=0; i<wordTags.length; i++)
+            tags[i] = wordTags[i].getTag();
+        
+        return tags;
+    }
 
 }
