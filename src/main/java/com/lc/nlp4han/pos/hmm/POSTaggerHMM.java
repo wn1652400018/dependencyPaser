@@ -4,11 +4,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import com.lc.nlp4han.pos.POSTaggerProb;
+
 
 /**
  * 基于HMM的词性标注器
  */
-public class POSTaggerHMM {
+public class POSTaggerHMM implements POSTaggerProb {
 
     /**
      * 隐马尔科夫模型
@@ -46,8 +48,13 @@ public class POSTaggerHMM {
      * @param words 未标注句子
      * @return 标注结果
      */
-    public WordTag[] tag(String[] words) {
-        return tagTopK(words, 1)[0];
+    public String[] tag(String[] words) {
+        WordTag[] wordTags = tagTopK(words, 1)[0];
+        String[] tags = new String[wordTags.length];
+        for(int i=0; i<wordTags.length; i++)
+            tags[i] = wordTags[i].getTag();
+        
+        return tags;
     }
 
     /**
@@ -136,5 +143,25 @@ public class POSTaggerHMM {
             }
         }
         return hmm;
+    }
+
+    @Override
+    public String[][] tag(String[] sentence, int k)
+    {
+        WordTag[][] sequences = tagTopK(sentence, k);
+        
+        String[][] tagsList = new String[sequences.length][];
+        for(int i=0; i<sequences.length; i++)
+        {
+            WordTag[] wordTags = sequences[i];
+            
+            String[] tags = new String[wordTags.length];
+            for(int j=0; j<wordTags.length; j++)
+                tags[j] = wordTags[j].getTag();
+            
+            tagsList[i] = tags;
+        }
+        
+        return tagsList;
     }
 }
