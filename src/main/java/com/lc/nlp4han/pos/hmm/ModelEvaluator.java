@@ -4,6 +4,7 @@ package com.lc.nlp4han.pos.hmm;
 import java.io.IOException;
 import java.util.HashSet;
 
+import com.lc.nlp4han.pos.ConfusionMatrix;
 import com.lc.nlp4han.pos.WordPOSMeasure;
 
 public class ModelEvaluator implements ModelEval {
@@ -48,6 +49,8 @@ public class ModelEvaluator implements ModelEval {
      * 评估器
      */
     private WordPOSMeasure measure;
+    
+    private ConfusionMatrix matrix;
 
     /**
      * 留存数据比例
@@ -97,6 +100,16 @@ public class ModelEvaluator implements ModelEval {
         this.dict = paras.getDictionary().getWordSet();
         this.measure = new WordPOSMeasure(this.dict);
     }
+    
+    public void setConfusionMatrix(ConfusionMatrix m)
+    {
+        this.matrix = m;
+    }
+    
+    public ConfusionMatrix getConfusionMatrix()
+    {
+        return this.matrix;
+    }
 
     /**
      * 在测试集上进行测试
@@ -115,6 +128,9 @@ public class ModelEvaluator implements ModelEval {
                 words[j]=predict[j].getWord();
             }
             this.measure.updateScores(words,this.expectedTags,predictTags);
+            
+            if(matrix!=null)
+                matrix.add(this.expectedTags, predictTags);
         }
     }
 
