@@ -264,7 +264,7 @@ public class WordSegAndPosME implements WordSegAndPos{
 		String[] words = WordSegAndPosSample.toWord(characters, characterandpos);
 		String[] res = new String[words.length];
 		for (int i = 0; i < words.length && i < poses.length; i++) {
-			res[i] = words[i]+"/"+poses[i]+" ";
+			res[i] = words[i]+"/"+poses[i];
 		}
 		return res;
 	}
