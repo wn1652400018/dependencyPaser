@@ -6,11 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.lc.nlp4han.util.FileInputStreamFactory;
-
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 训练和保存最大熵分词模型
@@ -32,19 +33,19 @@ public class WordSegMETrainerTool
      * @throws java.io.IOException
      */
     public static void train(File corpusFile, File modelFile, TrainingParameters params,
-            WordSegContextGenerator contextGenerator, String encoding) throws IOException
+            AbstractStringContextGenerator contextGenerator, String encoding) throws IOException
     {
-        WordSegModel model = null;
+        ModelWrapper model = null;
 
         OutputStream modelOut = null;
         try
         {
-            ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(corpusFile), encoding);
+            ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
             ObjectStream<WordSegSample> sampleStream = new WordTagSampleStream(lineStream);
 
             long start = System.currentTimeMillis();
 
-            model = WordSegmenterME.train("zh", sampleStream, params, contextGenerator);
+            model = WordSegmenterME.train(sampleStream, params, contextGenerator);
 
             long t = System.currentTimeMillis() - start;
             System.out.println("Time for training: " + t);
@@ -88,6 +89,7 @@ public class WordSegMETrainerTool
         File corpusFile = null;
         File modelFile = null;
         String encoding = "UTF-8";
+        String algType = "MAXENT";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data"))
@@ -115,13 +117,19 @@ public class WordSegMETrainerTool
                 iters = Integer.parseInt(args[i + 1]);
                 i++;
             }
+            else if (args[i].equals("-type"))
+            {
+                algType = args[i + 1];
+                i++;
+            }
         }
 
         TrainingParameters params = TrainingParameters.defaultParams();
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
+        params.put(TrainingParameters.ALGORITHM_PARAM, algType);
 
-        WordSegContextGenerator contextGenerator = (WordSegContextGenerator) Class.forName(contextClass).newInstance();
+        AbstractStringContextGenerator contextGenerator = (AbstractStringContextGenerator) Class.forName(contextClass).newInstance();
         
         train(corpusFile, modelFile, params, contextGenerator, encoding);
     }

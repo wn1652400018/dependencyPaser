@@ -8,21 +8,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import com.lc.nlp4han.ml.model.ClassificationModel;
+import com.lc.nlp4han.ml.model.Event;
+import com.lc.nlp4han.ml.model.SequenceClassificationModel;
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+import com.lc.nlp4han.ml.util.BeamSearch;
+import com.lc.nlp4han.ml.util.EventModelSequenceTrainer;
+import com.lc.nlp4han.ml.util.EventTrainer;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.Sequence;
+import com.lc.nlp4han.ml.util.SequenceTrainer;
+import com.lc.nlp4han.ml.util.SequenceValidator;
+import com.lc.nlp4han.ml.util.TrainerFactory;
+import com.lc.nlp4han.ml.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
 import com.lc.nlp4han.segment.WordSegmenterProb;
-
-import opennlp.tools.ml.BeamSearch;
-import opennlp.tools.ml.EventModelSequenceTrainer;
-import opennlp.tools.ml.EventTrainer;
-import opennlp.tools.ml.SequenceTrainer;
-import opennlp.tools.ml.TrainerFactory;
-import opennlp.tools.ml.TrainerFactory.TrainerType;
-import opennlp.tools.ml.model.Event;
-import opennlp.tools.ml.model.MaxentModel;
-import opennlp.tools.ml.model.SequenceClassificationModel;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.Sequence;
-import opennlp.tools.util.SequenceValidator;
-import opennlp.tools.util.TrainingParameters;
 
 /**
  * 基于最大熵的中文分词器
@@ -34,12 +35,10 @@ public class WordSegmenterME implements WordSegmenterProb
 
     public static final int DEFAULT_BEAM_SIZE = 3;
 
-    private WordSegModel modelPackage;
-
     /**
      * 上下文产生器
      */
-    protected WordSegContextGenerator contextGen;
+    protected AbstractStringContextGenerator contextGen;
 
     /**
      * 决定最佳分词序列的搜索bean数
@@ -57,7 +56,7 @@ public class WordSegmenterME implements WordSegmenterProb
      *
      * @param model 分词模型
      */
-    public WordSegmenterME(WordSegModel model)
+    public WordSegmenterME(ModelWrapper model)
     {
         this(model, new DefaultWordSegContextGenerator());
     }
@@ -67,38 +66,24 @@ public class WordSegmenterME implements WordSegmenterProb
      * @param model 分词模型
      * @param contextGenerator 分词上下文产生器
      */
-    public WordSegmenterME(WordSegModel model, WordSegContextGenerator contextGenerator)
+    public WordSegmenterME(ModelWrapper model, AbstractStringContextGenerator contextGenerator)
     {
         init(model, contextGenerator);
 
     }
     
-    private void init(WordSegModel model, WordSegContextGenerator contextGenerator)
+    private void init(ModelWrapper model, AbstractStringContextGenerator contextGenerator)
     {
         int beamSize = WordSegmenterME.DEFAULT_BEAM_SIZE;
-
-        String beamSizeString = model.getManifestProperty(BeamSearch.BEAM_SIZE_PARAMETER);
-
-        if (beamSizeString != null)
-        {
-            beamSize = Integer.parseInt(beamSizeString);
-        }
-
-        modelPackage = model;
+        
+        beamSize = model.getBeamSize();
 
         contextGen = contextGenerator;
         size = beamSize;
 
         sequenceValidator = new DefaultWordSegSequenceValidator();
 
-        if (model.getWordsegSequenceModel() != null)
-        {
-            this.model = model.getWordsegSequenceModel();
-        } else
-        {
-            this.model = new opennlp.tools.ml.BeamSearch<String>(beamSize,
-                    model.getWordsegModel(), 0);
-        }
+        this.model = model.getSequenceModel();
     }
     
     /**
@@ -117,9 +102,9 @@ public class WordSegmenterME implements WordSegmenterProb
      * @param modelFile 分词模型文件
      * @param contextGenerator 分词上下文产生器
      */
-    public WordSegmenterME(File modelFile, WordSegContextGenerator contextGenerator) throws IOException
+    public WordSegmenterME(File modelFile, AbstractStringContextGenerator contextGenerator) throws IOException
     {
-        WordSegModel model = new WordSegModel(modelFile);
+        ModelWrapper model = new ModelWrapper(modelFile);
         
         init(model, contextGenerator);
         
@@ -314,10 +299,9 @@ public class WordSegmenterME implements WordSegmenterProb
         return dict;
     }
 
-    public static WordSegModel train(String languageCode,
-            ObjectStream<WordSegSample> samples, TrainingParameters trainParams) throws IOException
+    public static ModelWrapper train(ObjectStream<WordSegSample> samples, TrainingParameters trainParams) throws IOException
     {
-        return train(languageCode, samples, trainParams, new DefaultWordSegContextGenerator());
+        return train(samples, trainParams, new DefaultWordSegContextGenerator());
     }
 
     /**
@@ -331,9 +315,8 @@ public class WordSegmenterME implements WordSegmenterProb
      * @return 最大熵分词模型
      * @throws IOException 
      */
-    public static WordSegModel train(String languageCode,
-            ObjectStream<WordSegSample> samples, TrainingParameters trainParams,
-            WordSegContextGenerator contextGenerator) throws IOException
+    public static ModelWrapper train(ObjectStream<WordSegSample> samples, TrainingParameters trainParams,
+            AbstractStringContextGenerator contextGenerator) throws IOException
     {
 
         String beamSizeString = trainParams.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
@@ -349,7 +332,7 @@ public class WordSegmenterME implements WordSegmenterProb
 
         TrainerType trainerType = TrainerFactory.getTrainerType(trainParams.getSettings());
 
-        MaxentModel posModel = null;
+        ClassificationModel segModel = null;
         SequenceClassificationModel<String> seqPosModel = null;
         if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType))
         {
@@ -357,19 +340,18 @@ public class WordSegmenterME implements WordSegmenterProb
 
             EventTrainer trainer = TrainerFactory.getEventTrainer(trainParams.getSettings(),
                     manifestInfoEntries);
-            posModel = trainer.train(es);
+            segModel = trainer.train(es);
         } else if (TrainerType.EVENT_MODEL_SEQUENCE_TRAINER.equals(trainerType))
         {
             WordSegSampleSequenceStream ss = new WordSegSampleSequenceStream(samples, contextGenerator);
             EventModelSequenceTrainer trainer = TrainerFactory.getEventModelSequenceTrainer(trainParams.getSettings(),
                     manifestInfoEntries);
-            posModel = trainer.train(ss);
+            segModel = trainer.train(ss);
         } else if (TrainerType.SEQUENCE_TRAINER.equals(trainerType))
         {
             SequenceTrainer trainer = TrainerFactory.getSequenceModelTrainer(
                     trainParams.getSettings(), manifestInfoEntries);
 
-            // TODO: This will probably cause issue, since the feature generator uses the outcomes array
             WordSegSampleSequenceStream ss = new WordSegSampleSequenceStream(samples, contextGenerator);
             seqPosModel = trainer.train(ss);
         } else
@@ -377,12 +359,13 @@ public class WordSegmenterME implements WordSegmenterProb
             throw new IllegalArgumentException("Trainer type is not supported: " + trainerType);
         }
 
-        if (posModel != null)
+        if (segModel != null)
         {
-            return new WordSegModel(languageCode, posModel, beamSize, manifestInfoEntries);
-        } else
+            return new ModelWrapper(segModel, beamSize);
+        } 
+        else
         {
-            return new WordSegModel(languageCode, seqPosModel, manifestInfoEntries);
+            return new ModelWrapper(seqPosModel);
         }
     }
 

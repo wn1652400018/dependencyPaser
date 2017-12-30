@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 import com.lc.nlp4han.util.DictionaryLoader;
 import com.lc.nlp4han.util.FeaturesTools;
 
@@ -16,7 +17,7 @@ import com.lc.nlp4han.util.FeaturesTools;
  * @author 刘小峰
  * @author 王馨苇
  */
-public class WordSegContextGeneratorConf implements WordSegContextGenerator
+public class WordSegContextGeneratorConf extends AbstractStringContextGenerator
 {
 
     private boolean c_2Set;

@@ -1,6 +1,7 @@
 package com.lc.nlp4han.segment.maxent;
 
-import opennlp.tools.util.eval.EvaluationMonitor;
+import com.lc.nlp4han.ml.util.EvaluationMonitor;
+
 
 /**
  * 分词评价监视器
