@@ -141,7 +141,7 @@ public class WordSegEvalTool extends Evaluator<WordSegSample>
         String goldFile = null;
         String errorFile = null;
         String encoding = null;
-        String contextClass = "com.lc.nlp4han.segment.DefaultWordSegContextGenerator";
+        String contextClass = "com.lc.nlp4han.segment.maxent.DefaultWordSegContextGenerator";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-model"))

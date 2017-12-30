@@ -102,7 +102,7 @@ public class WordSegCrossValidatorTool
         int cutoff = 3;
         int iters = 100;
         int folds = 10;
-        String contextClass = "com.lc.nlp4han.segment.DefaultWordSegContextGenerator";
+        String contextClass = "com.lc.nlp4han.segment.maxent.DefaultWordSegContextGenerator";
         File corpusFile = null;
         String encoding = "UTF-8";
         String algType = "MAXENT";

@@ -85,7 +85,7 @@ public class WordSegMETrainerTool
 
         int cutoff = 3;
         int iters = 100;
-        String contextClass = "com.lc.nlp4han.segment.DefaultWordSegContextGenerator";
+        String contextClass = "com.lc.nlp4han.segment.maxent.DefaultWordSegContextGenerator";
         File corpusFile = null;
         File modelFile = null;
         String encoding = "UTF-8";
