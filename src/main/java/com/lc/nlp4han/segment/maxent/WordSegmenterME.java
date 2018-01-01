@@ -333,7 +333,7 @@ public class WordSegmenterME implements WordSegmenterProb
         TrainerType trainerType = TrainerFactory.getTrainerType(trainParams.getSettings());
 
         ClassificationModel segModel = null;
-        SequenceClassificationModel<String> seqPosModel = null;
+        SequenceClassificationModel<String> seqSegModel = null;
         if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType))
         {
             ObjectStream<Event> es = new WordSegSampleEventStream(samples, contextGenerator);
@@ -353,7 +353,7 @@ public class WordSegmenterME implements WordSegmenterProb
                     trainParams.getSettings(), manifestInfoEntries);
 
             WordSegSampleSequenceStream ss = new WordSegSampleSequenceStream(samples, contextGenerator);
-            seqPosModel = trainer.train(ss);
+            seqSegModel = trainer.train(ss);
         } else
         {
             throw new IllegalArgumentException("Trainer type is not supported: " + trainerType);
@@ -365,7 +365,7 @@ public class WordSegmenterME implements WordSegmenterProb
         } 
         else
         {
-            return new ModelWrapper(seqPosModel);
+            return new ModelWrapper(seqSegModel);
         }
     }
 
