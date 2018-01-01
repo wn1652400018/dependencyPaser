@@ -2,20 +2,25 @@ package com.lc.nlp4han.pos.word;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import opennlp.tools.ml.BeamSearch;
-import opennlp.tools.ml.model.SequenceClassificationModel;
-import opennlp.tools.postag.POSContextGenerator;
-import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSSample;
-import opennlp.tools.postag.POSTaggerFactory;
-import opennlp.tools.postag.POSTaggerME;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.Sequence;
-import opennlp.tools.util.SequenceValidator;
-import opennlp.tools.util.TrainingParameters;
-
+import com.lc.nlp4han.ml.model.ClassificationModel;
+import com.lc.nlp4han.ml.model.Event;
+import com.lc.nlp4han.ml.model.SequenceClassificationModel;
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+import com.lc.nlp4han.ml.util.BeamSearch;
+import com.lc.nlp4han.ml.util.EventModelSequenceTrainer;
+import com.lc.nlp4han.ml.util.EventTrainer;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.Sequence;
+import com.lc.nlp4han.ml.util.SequenceTrainer;
+import com.lc.nlp4han.ml.util.SequenceValidator;
+import com.lc.nlp4han.ml.util.TrainerFactory;
+import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.pos.POSTaggerProb;
 
 /**
@@ -30,7 +35,7 @@ public class POSTaggerWordME implements POSTaggerProb
 {
     public final static int DEFAULT_BEAM_SIZE = 3;
 
-    protected POSContextGenerator contextGen;
+    protected AbstractStringContextGenerator contextGen;
 
     protected int size;
 
@@ -39,42 +44,41 @@ public class POSTaggerWordME implements POSTaggerProb
     private SequenceClassificationModel<String> model;
 
     private SequenceValidator<String> sequenceValidator;
-
+    
     public POSTaggerWordME(File model) throws IOException
     {
-        this(new POSModel(model), new WordPOSTaggerFactory());
+        this(new ModelWrapper(model), new DefaultWordPOSContextGenerator());
+    }
+
+    public POSTaggerWordME(File model, AbstractStringContextGenerator contextGen) throws IOException
+    {
+        this(new ModelWrapper(model), contextGen);
     }
     
-    public POSTaggerWordME(File model, POSTaggerFactory factory) throws IOException
+    public POSTaggerWordME(ModelWrapper model)
     {
-        this(new POSModel(model), factory);
+        init(model, new DefaultWordPOSContextGenerator());
+
     }
 
-    public POSTaggerWordME(POSModel model, POSTaggerFactory factory)
+    public POSTaggerWordME(ModelWrapper model, AbstractStringContextGenerator contextGen)
+    {
+        init(model, contextGen);
+
+    }
+    
+    private void init(ModelWrapper model, AbstractStringContextGenerator contextGenerator)
     {
         int beamSize = DEFAULT_BEAM_SIZE;
+        
+        beamSize = model.getBeamSize();
 
-        String beamSizeString = model.getManifestProperty(BeamSearch.BEAM_SIZE_PARAMETER);
-
-        if (beamSizeString != null)
-        {
-            beamSize = Integer.parseInt(beamSizeString);
-        }
-
-        contextGen = factory.getPOSContextGenerator(beamSize);
+        contextGen = contextGenerator;
         size = beamSize;
 
-        sequenceValidator = factory.getSequenceValidator();
+        sequenceValidator = new DefaultWordPOSSequenceValidator();
 
-        if (model.getPosSequenceModel() != null)
-        {
-            this.model = model.getPosSequenceModel();
-        }
-        else
-        {
-            this.model = new opennlp.tools.ml.BeamSearch<>(beamSize, model.getPosModel(), 0);
-        }
-
+        this.model = model.getSequenceModel();
     }
 
     @Override
@@ -109,14 +113,55 @@ public class POSTaggerWordME implements POSTaggerProb
      * 
      * @throws java.io.IOException
      */
-    public static POSModel train(ObjectStream<POSSample> sampleStream, TrainingParameters params) throws IOException
+    public static ModelWrapper train(ObjectStream<WordPOSSample> samples, 
+            TrainingParameters trainParams,
+            AbstractStringContextGenerator contextGenerator) throws IOException
     {
-        POSModel model = null;
+        String beamSizeString = trainParams.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
 
-        POSTaggerFactory posFactory = new WordPOSTaggerFactory();
-        model = POSTaggerME.train("zh", sampleStream, params, posFactory);
+        int beamSize = DEFAULT_BEAM_SIZE;
+        if (beamSizeString != null) {
+          beamSize = Integer.parseInt(beamSizeString);
+        };
 
-        return model;
+        TrainerType trainerType = TrainerFactory.getTrainerType(trainParams.getSettings());
+
+        Map<String, String> manifestInfoEntries = new HashMap<String, String>();
+        
+        ClassificationModel posModel = null;
+        SequenceClassificationModel<String> seqPosModel = null;
+        if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType)) {
+          ObjectStream<Event> es = new WordPOSSampleEventStream(samples, contextGenerator);
+
+          EventTrainer trainer = TrainerFactory.getEventTrainer(trainParams.getSettings(),
+              manifestInfoEntries);
+          posModel = trainer.train(es);
+        }
+        else if (TrainerType.EVENT_MODEL_SEQUENCE_TRAINER.equals(trainerType)) {
+          WordPOSSampleSequenceStream ss = new WordPOSSampleSequenceStream(samples, contextGenerator);
+          EventModelSequenceTrainer trainer = TrainerFactory.getEventModelSequenceTrainer(trainParams.getSettings(),
+              manifestInfoEntries);
+          posModel = trainer.train(ss);
+        }
+        else if (TrainerType.SEQUENCE_TRAINER.equals(trainerType)) {
+          SequenceTrainer trainer = TrainerFactory.getSequenceModelTrainer(
+              trainParams.getSettings(), manifestInfoEntries);
+
+          // TODO: This will probably cause issue, since the feature generator uses the outcomes array
+
+          WordPOSSampleSequenceStream ss = new WordPOSSampleSequenceStream(samples, contextGenerator);
+          seqPosModel = trainer.train(ss);
+        }
+        else {
+          throw new IllegalArgumentException("Trainer type is not supported: " + trainerType);
+        }
+
+        if (posModel != null) {
+          return new ModelWrapper(posModel, beamSize);
+        }
+        else {
+          return new ModelWrapper(seqPosModel);
+        }
     }
 
 }

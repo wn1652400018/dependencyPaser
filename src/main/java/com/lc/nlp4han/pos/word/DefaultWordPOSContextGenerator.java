@@ -3,28 +3,16 @@ package com.lc.nlp4han.pos.word;
 import java.util.ArrayList;
 import java.util.List;
 
-import opennlp.tools.dictionary.Dictionary;
-import opennlp.tools.postag.POSContextGenerator;
-import opennlp.tools.util.StringList;
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 
-public class WordPOSContextGenerator implements POSContextGenerator
+public class DefaultWordPOSContextGenerator extends AbstractStringContextGenerator
 {
 
     protected final String SE = "*SE*";
     protected final String SB = "*SB*";
 
-    private Dictionary dict;
-    private String[] dictGram;
-
-    public WordPOSContextGenerator(Dictionary dict)
+    public DefaultWordPOSContextGenerator()
     {
-        this(0, dict);
-    }
-
-    public WordPOSContextGenerator(int cacheSize, Dictionary dict)
-    {
-        this.dict = dict;
-        dictGram = new String[1];
     }
 
     public String[] getContext(int index, String[] sequence, String[] priorDecisions, Object[] additionalContext)
@@ -33,7 +21,7 @@ public class WordPOSContextGenerator implements POSContextGenerator
         return getContext(index, sequence, priorDecisions);
     }
 
-    public String[] getContext(int index, Object[] tokens, String[] tags)
+    public String[] getContext(int index, String[] tokens, String[] tags)
     {
         String next, nextnext = null, lex, prev, prevprev = null;
         String tagprev, tagprevprev;
@@ -79,11 +67,6 @@ public class WordPOSContextGenerator implements POSContextGenerator
         // add the word itself
         
         e.add("w0=" + lex);
-        
-        dictGram[0] = lex;
-        if (dict == null || !dict.contains(new StringList(dictGram)))
-        {
-        }
         
         // add the words and pos's of the surrounding context
         if (prev != null)
