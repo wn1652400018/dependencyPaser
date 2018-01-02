@@ -5,20 +5,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 
+import com.lc.nlp4han.ml.util.Evaluator;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.pos.CorpusStat;
 import com.lc.nlp4han.pos.POSModelRef;
 import com.lc.nlp4han.pos.POSTagger;
 import com.lc.nlp4han.pos.WordPOSMeasure;
+import com.lc.nlp4han.pos.word.WordPOSSample;
+import com.lc.nlp4han.pos.word.WordPOSTaggerEvaluationMonitor;
 import com.lc.nlp4han.pos.word.WordPOSConfusionMatrixBuilder;
 import com.lc.nlp4han.pos.word.WordPOSErrorPrinter;
-
-import opennlp.tools.postag.POSSample;
-import opennlp.tools.postag.POSTaggerEvaluationMonitor;
-import opennlp.tools.postag.WordTagSampleStream;
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.eval.Evaluator;
+import com.lc.nlp4han.pos.word.WordTagSampleStream;
 
 /**
  * 基准词性标注评价
@@ -26,14 +25,14 @@ import opennlp.tools.util.eval.Evaluator;
  * @author 刘小峰
  * 
  */
-public class POSTaggerRefEvalTool extends Evaluator<POSSample>
+public class POSTaggerRefEvalTool extends Evaluator<WordPOSSample>
 {
 
     private POSTagger tagger;
 
     private WordPOSMeasure measure;
 
-    public POSTaggerRefEvalTool(POSTagger tagger, POSTaggerEvaluationMonitor... listeners)
+    public POSTaggerRefEvalTool(POSTagger tagger, WordPOSTaggerEvaluationMonitor... listeners)
     {
         super(listeners);
         this.tagger = tagger;
@@ -59,11 +58,11 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
      * @return 系统标注
      */
     @Override
-    protected POSSample processSample(POSSample reference)
+    protected WordPOSSample processSample(WordPOSSample reference)
     {
         String predictedTags[] = tagger.tag(reference.getSentence());
 
-        POSSample predictions = new POSSample(reference.getSentence(), predictedTags);
+        WordPOSSample predictions = new WordPOSSample(reference.getSentence(), predictedTags);
 
         String referenceTags[] = reference.getTags();
         measure.updateScores(reference.getSentence(), referenceTags, predictedTags);
@@ -71,11 +70,11 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
         return predictions;
     }
     
-    public static HashSet<String> buildDict(ObjectStream<POSSample> samples) throws IOException
+    public static HashSet<String> buildDict(ObjectStream<WordPOSSample> samples) throws IOException
     {
         HashSet<String> dict = new HashSet<String>();
         
-        POSSample sample;
+        WordPOSSample sample;
         while((sample=samples.read()) != null)
         {
             String[] words = sample.getSentence();
@@ -104,6 +103,7 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
      */
     public static void eval(File trainFile, File goldFile, File errorFile, String encoding) throws IOException
     {
+        String seperator = "_";
         System.out.println("构建词典...");
         HashSet<String> dict = CorpusStat.buildDict(trainFile.toString(), encoding);
 
@@ -115,13 +115,13 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
         System.out.println("评价模型...");
         POSTagger tagger = new POSTaggerRef(model);
         WordPOSErrorPrinter errorMonitor = new WordPOSErrorPrinter(new FileOutputStream(errorFile));
-        WordPOSConfusionMatrixBuilder matrixBuilder = new WordPOSConfusionMatrixBuilder();;
+        WordPOSConfusionMatrixBuilder matrixBuilder = new WordPOSConfusionMatrixBuilder();
         POSTaggerRefEvalTool evaluator = new POSTaggerRefEvalTool(tagger, errorMonitor, matrixBuilder); 
         WordPOSMeasure measure = new WordPOSMeasure(dict);
         evaluator.setMeasure(measure);
 
         ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-        ObjectStream<POSSample> testStream = new WordTagSampleStream(goldStream);
+        ObjectStream<WordPOSSample> testStream = new WordTagSampleStream(goldStream, seperator);
 
         start = System.currentTimeMillis();
         evaluator.evaluate(testStream);
@@ -160,7 +160,7 @@ public class POSTaggerRefEvalTool extends Evaluator<POSSample>
         evaluator.setMeasure(measure);
 
         ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-        ObjectStream<POSSample> testStream = new WordTagSampleStream(goldStream);
+        ObjectStream<WordPOSSample> testStream = new WordTagSampleStream(goldStream, "_");
 
         evaluator.evaluate(testStream);
 

@@ -6,17 +6,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.lc.nlp4han.ml.util.CrossValidationPartitioner;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.pos.POSModelRef;
 import com.lc.nlp4han.pos.POSTagger;
 import com.lc.nlp4han.pos.WordPOSMeasure;
+import com.lc.nlp4han.pos.word.WordPOSSample;
 import com.lc.nlp4han.pos.word.WordPOSEvalTool;
-
-import opennlp.tools.postag.POSSample;
-import opennlp.tools.postag.WordTagSampleStream;
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.eval.CrossValidationPartitioner;
+import com.lc.nlp4han.pos.word.WordTagSampleStream;
 
 /**
  * 基准词性标注交叉验证器
@@ -32,9 +31,9 @@ public class POSTaggerRefCrossValidatorTool
         System.out.println(POSTaggerRefCrossValidatorTool.class.getName() + " -data <corpusFile> -encoding <encoding> [-folds <nFolds>]");
     }
     
-    public static POSModelRef train(ObjectStream<POSSample> samples) throws IOException
+    public static POSModelRef train(ObjectStream<WordPOSSample> samples) throws IOException
     {
-        POSSample sample = null;
+        WordPOSSample sample = null;
         HashMap<String, Integer> tag2Count = new HashMap<String, Integer>();
         HashMap<String, HashMap<String, Integer>> word2TagCount = new HashMap<String, HashMap<String, Integer>>();
         while ((sample = samples.read()) != null)
@@ -124,14 +123,14 @@ public class POSTaggerRefCrossValidatorTool
         return result;
     }
     
-    public void evaluate(ObjectStream<POSSample> samples, int nFolds) throws IOException
+    public void evaluate(ObjectStream<WordPOSSample> samples, int nFolds) throws IOException
     {
 
-        CrossValidationPartitioner<POSSample> partitioner = new CrossValidationPartitioner<>(samples, nFolds);
+        CrossValidationPartitioner<WordPOSSample> partitioner = new CrossValidationPartitioner<>(samples, nFolds);
 
         while (partitioner.hasNext())
         {
-            CrossValidationPartitioner.TrainingSampleStream<POSSample> trainingSampleStream = partitioner.next();
+            CrossValidationPartitioner.TrainingSampleStream<WordPOSSample> trainingSampleStream = partitioner.next();
 
             System.out.println("构建词典...");
             HashSet<String> dict = WordPOSEvalTool.buildDict(trainingSampleStream);
@@ -192,9 +191,10 @@ public class POSTaggerRefCrossValidatorTool
         
         POSTaggerRefCrossValidatorTool crossValidator = new POSTaggerRefCrossValidatorTool();
 
+        String seperator = "_";
 
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
-        ObjectStream<POSSample> sampleStream = new WordTagSampleStream(lineStream);
+        ObjectStream<WordPOSSample> sampleStream = new WordTagSampleStream(lineStream, seperator);
 
         crossValidator.evaluate(sampleStream, folds);
     }
