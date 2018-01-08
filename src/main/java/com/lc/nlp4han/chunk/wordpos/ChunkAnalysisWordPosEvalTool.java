@@ -1,4 +1,4 @@
-package com.lc.nlp4han.chunk.word;
+package com.lc.nlp4han.chunk.wordpos;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +15,9 @@ import com.lc.nlp4han.chunk.ChunkAnalysisEvaluateMonitor;
 import com.lc.nlp4han.chunk.ChunkAnalysisMeasureWithBIEO;
 import com.lc.nlp4han.chunk.ChunkAnalysisMeasureWithBIEOS;
 import com.lc.nlp4han.chunk.ChunkAnalysisMeasureWithBIO;
+import com.lc.nlp4han.chunk.word.ChunkAnalysisSequenceValidatorWithBIEO;
+import com.lc.nlp4han.chunk.word.ChunkAnalysisSequenceValidatorWithBIEOS;
+import com.lc.nlp4han.chunk.word.ChunkAnalysisSequenceValidatorWithBIO;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.SequenceValidator;
@@ -30,10 +33,10 @@ import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
  * <li>Date: 2017年12月18日
  * </ul>
  */
-public class ChunkAnalysisWordEvalTool {
+public class ChunkAnalysisWordPosEvalTool {
 
 	/**
-	 * 依据黄金标准评价基于词的标注效果, 各种评价指标结果会输出到控制台，错误的结果会输出到指定文件
+	 * 依据黄金标准评价基于词和词性的标注效果, 各种评价指标结果会输出到控制台，错误的结果会输出到指定文件
 	 * 
 	 * @param modelFile
 	 *            模型文件
@@ -45,33 +48,34 @@ public class ChunkAnalysisWordEvalTool {
 	 *            错误输出文件
 	 * @throws IOException
 	 */
-	private static void eval(File modelFile, File goldFile, String encoding, File errorFile,
+	public static void eval(File modelFile, File goldFile, String encoding, File errorFile,
 			AbstractChunkAnalysisParse parse, 
 			SequenceValidator<String> sequenceValidator, 
 			AbstractChunkAnalysisMeasure measure,
 			String label)
 			throws IOException {
 		long start = System.currentTimeMillis();
-		
+
 		InputStream modelIn = new FileInputStream(modelFile);
         ModelWrapper model = new ModelWrapper(modelIn);
-
-		System.out.println("评价模型...");
-		ChunkAnalysisContextGenerator contextGen = new ChunkAnalysisWordContextGeneratorConf();
-		ChunkAnalysisWordME tagger = new ChunkAnalysisWordME(model, sequenceValidator, contextGen, label);
-		ChunkAnalysisWordEvaluator evaluator = null;
+        
+		ChunkAnalysisContextGenerator contextGen = new ChunkAnalysisWordPosContextGeneratorConf();
+		ChunkAnalysisWordPosME tagger = new ChunkAnalysisWordPosME(model, sequenceValidator, contextGen,
+				label);
+		ChunkAnalysisWordPosEvaluator evaluator = null;
 
 		if (errorFile != null) {
 			ChunkAnalysisEvaluateMonitor errorMonitor = new ChunkAnalysisErrorPrinter(new FileOutputStream(errorFile));
-			evaluator = new ChunkAnalysisWordEvaluator(tagger, measure, errorMonitor);
+			evaluator = new ChunkAnalysisWordPosEvaluator(tagger, measure, errorMonitor);
 		} else
-			evaluator = new ChunkAnalysisWordEvaluator(tagger);
+			evaluator = new ChunkAnalysisWordPosEvaluator(tagger);
 
 		evaluator.setMeasure(measure);
 
-		ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-		ObjectStream<AbstractChunkAnalysisSample> testStream = new ChunkAnalysisWordSampleStream(goldStream, parse,
-				label);
+		ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile),
+				encoding);
+		ObjectStream<AbstractChunkAnalysisSample> testStream = new ChunkAnalysisWordPosSampleStream(goldStream,
+				parse, label);
 
 		start = System.currentTimeMillis();
 		evaluator.evaluate(testStream);
@@ -80,9 +84,10 @@ public class ChunkAnalysisWordEvalTool {
 		System.out.println(evaluator.getMeasure());
 	}
 
+
 	private static void usage() {
-		System.out.println(ChunkAnalysisWordEvalTool.class.getName()
-				+ " -model <modelFile> -type <type> -label <label> -gold <goldFile> -encoding <encoding> [-error <errorFile>]");
+		System.out.println(ChunkAnalysisWordPosEvalTool.class.getName()
+				+ " -model <modelFile> -type <type> -method <method> -label <label> -gold <goldFile> -encoding <encoding> [-error <errorFile>]");
 	}
 
 	public static void main(String[] args)
@@ -141,15 +146,15 @@ public class ChunkAnalysisWordEvalTool {
 
 		if (label.equals("BIEOS")) {
 			sequenceValidator = new ChunkAnalysisSequenceValidatorWithBIEOS();
-			parse = new ChunkAnalysisWordParseWithBIEOS();
+			parse = new ChunkAnalysisWordPosParseWithBIEOS();
 			measure = new ChunkAnalysisMeasureWithBIEOS();
 		} else if (label.equals("BIEO")) {
 			sequenceValidator = new ChunkAnalysisSequenceValidatorWithBIEO();
-			parse = new ChunkAnalysisWordParseWithBIEO();
+			parse = new ChunkAnalysisWordPosParseWithBIEO();
 			measure = new ChunkAnalysisMeasureWithBIEO();
 		} else {
 			sequenceValidator = new ChunkAnalysisSequenceValidatorWithBIO();
-			parse = new ChunkAnalysisWordParseWithBIO();
+			parse = new ChunkAnalysisWordPosParseWithBIO();
 			measure = new ChunkAnalysisMeasureWithBIO();
 		}
 
@@ -157,5 +162,6 @@ public class ChunkAnalysisWordEvalTool {
 			eval(new File(modelFile), new File(goldFile), encoding, new File(errorFile), parse, sequenceValidator, measure, label);
 		else
 			eval(new File(modelFile), new File(goldFile), encoding, null, parse, sequenceValidator, measure, label);
+
 	}
 }
