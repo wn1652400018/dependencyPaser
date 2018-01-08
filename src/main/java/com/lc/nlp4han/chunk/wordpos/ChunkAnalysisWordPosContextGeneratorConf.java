@@ -123,7 +123,7 @@ public class ChunkAnalysisWordPosContextGeneratorConf implements ChunkAnalysisCo
 	 */
 	public ChunkAnalysisWordPosContextGeneratorConf() throws IOException {
 		Properties featureConf = new Properties();
-        InputStream featureStream = ChunkAnalysisWordPosContextGeneratorConf.class.getClassLoader().getResourceAsStream("properties/feature.properties");
+        InputStream featureStream = ChunkAnalysisWordPosContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/chunk/feature.properties");
         featureConf.load(featureStream);
         
         init(featureConf);
