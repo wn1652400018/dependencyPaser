@@ -11,7 +11,7 @@ import java.util.Properties;
  * @author 王馨苇
  *
  */
-public class DependencyParseContextGeneratorConfExtend implements DependencyParseContextGenerator {
+public class DependencyParseContextGeneratorConfSimple implements DependencyParseContextGenerator {
 
 	// 定义变量控制feature的使用
 	// 一元特征
@@ -48,7 +48,7 @@ public class DependencyParseContextGeneratorConfExtend implements DependencyPars
 	 * 无参构造
 	 * @throws IOException IO异常
 	 */
-	public DependencyParseContextGeneratorConfExtend() throws IOException {
+	public DependencyParseContextGeneratorConfSimple() throws IOException {
 		Properties featureConf = new Properties();
 		InputStream featureStream = DependencyParseContextGeneratorConf.class.getClassLoader()
 				.getResourceAsStream("com/lc/nlp4han/dependency/feature.properties");
@@ -61,7 +61,7 @@ public class DependencyParseContextGeneratorConfExtend implements DependencyPars
 	 * 有参构造
 	 * @param config 配置文件
 	 */
-	public DependencyParseContextGeneratorConfExtend(Properties config){
+	public DependencyParseContextGeneratorConfSimple(Properties config){
 		init(config);
 	}
 	

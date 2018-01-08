@@ -9,9 +9,11 @@ import java.nio.charset.Charset;
 
 import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
+
 /**
  * 实现ObjectStream，完成其中的read操作，每次读取两个空行之间的内容
  * ObjectStream<String>接口ObjectStream<T>
+ * 
  * @author 王馨苇
  *
  */
@@ -46,11 +48,11 @@ public class PlainTextBySpaceLineStream implements ObjectStream<String>{
 		this.channel = null;
 		this.reset();
 	}
+	
 	/**
 	 * 关闭文件
 	 */
 	public void close() throws IOException {
-		// TODO Auto-generated method stub
 		if (this.in != null && this.channel == null) {
 			this.in.close();
 		} else if (this.channel != null) {

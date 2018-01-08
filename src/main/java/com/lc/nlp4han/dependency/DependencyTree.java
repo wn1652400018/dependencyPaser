@@ -15,17 +15,23 @@ public class DependencyTree {
 
 	private DependencySample sample;
 	
+	public DependencyTree() {
+	}
+	
+	public DependencyTree(DependencySample sample) {
+		this.sample = sample;
+	}
+
 	public void setTree(DependencySample sample){
 		this.sample = sample;
 	}
 	
-	public DependencySample getTree(){
+	public DependencySample getSample(){
 		return this.sample;
 	}
 	
 	/**
-	 * 获得实根
-	 * @param sample 一颗树
+	 * 获得实根词
 	 * @return
 	 */
 	public String getRoot(){
@@ -40,10 +46,10 @@ public class DependencyTree {
 		}
 		return sentence[record+1];
 	}
+	
 	/**
-	 * 获得当前词的依存词
+	 * 获得给定词的依存词
 	 * @param word 词语
-	 * @param sample 一颗树
 	 * @return
 	 */
 	public String getDependencyWord(String word){
@@ -64,74 +70,9 @@ public class DependencyTree {
 	/**
 	 * 获得被当前词依存的
 	 * @param word 词语
-	 * @param sample 一颗树
 	 * @return
 	 */
 	public String[] getDependencyWords(String word){
-		String[] words = sample.getWords();
-		String[] indice = sample.getDependencyIndices();
-		List<String> temp = new ArrayList<>();
-		int record = -1;
-		for (int i = 1; i < words.length; i++) {
-			if(words[i].compareTo(word) == 0){
-				record = i;
-				break;
-			}
-		}
-		
-		for (int i = 0; i < indice.length; i++) {
-			if(Integer.parseInt(indice[i]) == record){
-				temp.add(words[i+1]);
-			}
-		}
-		return temp.toArray(new String[temp.size()]);
-	}
-	
-	/**
-	 * 获得实根
-	 * @param sample 一颗树
-	 * @return
-	 */
-	public static String getRoot(DependencySample sample){
-		int record = -1;
-		String[] sentence = sample.getWords();
-		String[] depedencyIndice = sample.getDependencyIndices();
-		for (int i = 0; i < depedencyIndice.length; i++) {
-			if(depedencyIndice[i].compareTo("0") == 0){
-				record = i;
-				break;
-			}
-		}
-		return sentence[record+1];
-	}
-	/**
-	 * 获得当前词的依存词
-	 * @param word 词语
-	 * @param sample 一颗树
-	 * @return
-	 */
-	public static String getDependencyWord(String word,DependencySample sample){
-		String[] words = sample.getWords();
-		String[] indice = sample.getDependencyIndices();
-		
-		int record = -1;
-		for (int i = 1; i < words.length; i++) {
-			if(words[i].compareTo(word) == 0){
-				record = i;
-				break;
-			}
-		}
-		int index = Integer.parseInt(indice[record-1]);
-		return words[index];
-	}
-	
-	/**
-	 * 获得被当前词依存的
-	 * @param word 词语
-	 * @param sample 一颗树
-	 * @return
-	 */
-	public static String[] getDependencyWords(String word,DependencySample sample){
 		String[] words = sample.getWords();
 		String[] indice = sample.getDependencyIndices();
 		List<String> temp = new ArrayList<>();

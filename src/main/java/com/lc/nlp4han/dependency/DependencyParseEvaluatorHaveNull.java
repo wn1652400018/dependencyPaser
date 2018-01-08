@@ -82,7 +82,7 @@ public class DependencyParseEvaluatorHaveNull extends Evaluator<DependencySample
 		String[] dependencyRef = sample.getDependency();
 		String[] dependencyWordsRef = sample.getDependencyWords();
 		
-		DependencyParseBestProba proba = tagger.tagNull(wordsRef, posRef, sample.getAditionalContext());
+		DependencyParseMatrix proba = tagger.tagNull(wordsRef, posRef, sample.getAditionalContext());
 		sample = MaxSpanningTree.getMaxTree(proba);
 		String[] dependencyWordsPre = sample.getDependencyWords();
 		String[] dependencyPre = sample.getDependency();

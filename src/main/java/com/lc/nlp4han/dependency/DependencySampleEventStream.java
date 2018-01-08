@@ -11,6 +11,8 @@ import opennlp.tools.util.ObjectStream;
 
 /**
  * 训练模型所需要的事件流
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -31,9 +33,8 @@ public class DependencySampleEventStream extends AbstractEventStream<DependencyS
 	}
 
 	/**
-	 * 根据读取的文件流创建事件
-	 * @param 解析后的train文本流
-	 * @see opennlp.tools.util.AbstractEventStream#createEvents(java.lang.Object)
+	 * 根据依存样本流创建事件
+	 * @param sample 依存样本
 	 */
 	@Override
 	protected Iterator<Event> createEvents(DependencySample sample) {
@@ -43,18 +44,18 @@ public class DependencySampleEventStream extends AbstractEventStream<DependencyS
 		String[] dependencyWords = sample.getDependencyWords();
 		String[] dependencyIndices = sample.getDependencyIndices();
 		String[][] ac = sample.getAditionalContext();
+		
 		List<Event> events = generateEvents(words, pos, dependency, dependencyWords,dependencyIndices,ac);
         return events.iterator();
-		//return null;
 	}
 
 	/**
 	 * 产生每个词对应的事件
 	 * @param words 词语
 	 * @param pos 词性
-	 * @param dependency 词性标记
-	 * @param dependencyWords 对应的词
-	 * @param dependencyIndices 对应的下标
+	 * @param dependency 依存关系
+	 * @param dependencyWords 依存词
+	 * @param dependencyIndices 依存词的下标
 	 * @param ac 额外的信息
 	 * @return 事件列表
 	 */
