@@ -71,56 +71,13 @@ public class ChunkAnalysisWordME implements Chunker {
 	 */
 	private void init(ModelWrapper model, ChunkAnalysisContextGenerator contextGen) {
 		int beamSize = ChunkAnalysisWordME.DEFAULT_BEAM_SIZE;
-		// String beamSizeString =
-		// model.getManifestProperty(BeamSearch.BEAM_SIZE_PARAMETER);
-
-		// if (beamSizeString != null)
-		// beamSize = Integer.parseInt(beamSizeString);
 
 		contextGenerator = contextGen;
 		size = beamSize;
 
 		this.model = model.getSequenceModel();
-
-		// if (model.getChunkAnalysisSequenceModel() != null)
-		// this.model = model.getChunkAnalysisSequenceModel();
-		// else
-		// this.model = new BeamSearch<String>(beamSize, model.getChunkAnalysisModel(),
-		// 0);
 	}
 
-//	/**
-//	 * 训练模型
-//	 * 
-//	 * @param file
-//	 *            训练文件
-//	 * @param params
-//	 *            训练
-//	 * @param contextGen
-//	 *            特征
-//	 * @param encoding
-//	 *            编码
-//	 * @return 模型和模型信息的包裹结果
-//	 * @throws IOException
-//	 * @throws FileNotFoundException
-//	 */
-//	public ChunkAnalysisBasedWordModel train(File file, TrainingParameters params,
-//			ChunkAnalysisContextGenerator contextGen, String encoding, AbstractChunkAnalysisParse parse) {
-//		ChunkAnalysisBasedWordModel model = null;
-//		try {
-//			ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file),
-//					encoding);
-//			ObjectStream<AbstractChunkAnalysisSample> sampleStream = new ChunkAnalysisBasedWordSampleStream(lineStream,
-//					parse, label);
-//			model = train("zh", sampleStream, params, contextGen);
-//			return model;
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
 
 	/**
 	 * 训练模型
@@ -162,69 +119,6 @@ public class ChunkAnalysisWordME implements Chunker {
 			return new ModelWrapper(chunkClassificationModel);
 		}
 	}
-
-	// /**
-	// * 训练模型，并将模型写出
-	// * @param file 训练的文本
-	// * @param modelFile 模型文件
-	// * @param params 训练的参数配置
-	// * @param contextGen 上下文 产生器
-	// * @param encoding 编码方式
-	// * @return
-	// */
-	// public ChunkAnalysisBasedWordModel train(File file, File modelFile,
-	// TrainingParameters params,
-	// ChunkAnalysisContextGenerator contextGen, String encoding,
-	// AbstractChunkAnalysisParse parse) {
-	// OutputStream modelOut = null;
-	// ChunkAnalysisBasedWordModel model = null;
-	// try {
-	// ObjectStream<String> lineStream = new PlainTextByLineStream(new
-	// MarkableFileInputStreamFactory(file), encoding);
-	// ObjectStream<AbstractChunkAnalysisSample> sampleStream = new
-	// ChunkAnalysisBasedWordSampleStream(lineStream, parse, label);
-	// model = train("zh", sampleStream, params, contextGen);
-	// //模型的持久化，写出的为二进制文件
-	// modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
-	// model.serialize(modelOut);
-	// return model;
-	// } catch (FileNotFoundException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }finally {
-	// if (modelOut != null) {
-	// try {
-	// modelOut.close();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// return null;
-	// }
-
-	// /**
-	// * 根据训练得到的模型文件得到
-	// * @param modelFile 模型文件
-	// * @param params 参数
-	// * @param contextGen 上下文生成器
-	// * @param encoding 编码方式
-	// * @return
-	// */
-	// public ChunkAnalysisBasedWordModel readModel(File modelFile) {
-	// ChunkAnalysisBasedWordModel model = null;
-	//
-	// try {
-	// model = new ChunkAnalysisBasedWordModel(modelFile);
-	// System.out.println("读取模型成功");
-	// return model;
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return model;
-	// }
 
 	/**
 	 * 得到最好的numTaggings个标记序列

@@ -17,7 +17,6 @@ import opennlp.tools.ml.TrainerFactory.TrainerType;
 import opennlp.tools.ml.model.Event;
 import opennlp.tools.ml.model.MaxentModel;
 import opennlp.tools.ml.model.SequenceClassificationModel;
-import opennlp.tools.tokenize.WhitespaceTokenizer;
 import opennlp.tools.util.MarkableFileInputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
@@ -26,6 +25,7 @@ import opennlp.tools.util.TrainingParameters;
 /**
  * 训练模型
  * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
