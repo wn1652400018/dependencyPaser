@@ -72,7 +72,7 @@ public class WordSegAndPosTrainerTool
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
 
-        WordSegAndPosParseContext parse = new WordSegAndPosParseContext(new WordSegAndPosParseOpen());
+        WordSegAndPosParseStrategy parse = new WordSegAndPosParseOpen();
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         ObjectStream<WordSegAndPosSample> sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
         WordSegAndPosContextGenerator contextGen = new WordSegAndPosContextGeneratorConf();

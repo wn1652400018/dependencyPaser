@@ -72,7 +72,7 @@ public class WordSegAndPosCrossValidationTool
 
 
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);    
-        WordSegAndPosParseContext parse = new WordSegAndPosParseContext(new WordSegAndPosParseOpen());
+        WordSegAndPosParseStrategy parse = new WordSegAndPosParseOpen();
         ObjectStream<WordSegAndPosSample> sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
         WordSegAndPosContextGenerator contextGen = new WordSegAndPosContextGeneratorConf();
 

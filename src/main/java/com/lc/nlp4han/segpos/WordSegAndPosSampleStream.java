@@ -16,12 +16,12 @@ public class WordSegAndPosSampleStream extends FilterObjectStream<String,WordSeg
 
 	private static Logger logger = Logger.getLogger(WordSegAndPosSampleStream.class.getName());
 	
-	private WordSegAndPosParseContext context;
+	private WordSegAndPosParseStrategy context;
 	/**
 	 * 有参构造函数
 	 * @param samples 读取的一行未解析的样本流
 	 */
-	public WordSegAndPosSampleStream(ObjectStream<String> samples, WordSegAndPosParseContext context) {
+	public WordSegAndPosSampleStream(ObjectStream<String> samples, WordSegAndPosParseStrategy context) {
 		super(samples);
 		this.context = context;
 	}
@@ -38,7 +38,7 @@ public class WordSegAndPosSampleStream extends FilterObjectStream<String,WordSeg
 			if(sentence.compareTo("") != 0){
 				try{
 					//System.out.println(sentences);
-					sample = context.parseSample(sentence);;
+					sample = context.parse(sentence);;
 				}catch(Exception e){
 					if (logger.isLoggable(Level.WARNING)) {
 						

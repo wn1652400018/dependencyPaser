@@ -42,7 +42,7 @@ public class WordSegAndPosEvalTool
 
         System.out.println("训练模型...");  
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        WordSegAndPosParseContext parse = new WordSegAndPosParseContext(new WordSegAndPosParseOpen());
+        WordSegAndPosParseStrategy parse = new WordSegAndPosParseOpen();
         ObjectStream<WordSegAndPosSample> sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
         WordSegAndPosContextGenerator contextGen = new WordSegAndPosContextGeneratorConf();
         long start = System.currentTimeMillis();
