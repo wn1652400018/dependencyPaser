@@ -10,7 +10,6 @@ import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.pos.CorpusStat;
-import com.lc.nlp4han.pos.POSTagger;
 import com.lc.nlp4han.pos.WordPOSMeasure;
 import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 
@@ -44,7 +43,7 @@ public class CharPOSEvalTool
 
         System.out.println("训练模型...");  
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseOpen());
+        CharPOSSampleParser parse = new CharPOSParseOpen();
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
         long start = System.currentTimeMillis();

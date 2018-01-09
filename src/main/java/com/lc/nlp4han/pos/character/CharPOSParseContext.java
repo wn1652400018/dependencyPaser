@@ -9,7 +9,7 @@ package com.lc.nlp4han.pos.character;
  */
 public class CharPOSParseContext
 {
-    private CharPOSParseStrage strage;
+    private CharPOSSampleParser strage;
 
     /**
      * 构造函数
@@ -17,7 +17,7 @@ public class CharPOSParseContext
      * @param strage
      *            解析语料对应的策略类
      */
-    public CharPOSParseContext(CharPOSParseStrage strage)
+    public CharPOSParseContext(CharPOSSampleParser strage)
     {
         this.strage = strage;
     }

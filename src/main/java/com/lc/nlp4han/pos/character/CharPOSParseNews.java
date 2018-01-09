@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @author 王馨苇
  * 
  */
-public class CharPOSParseNews implements CharPOSParseStrage {
+public class CharPOSParseNews implements CharPOSSampleParser {
 
 	/**
 	 * 解析语料

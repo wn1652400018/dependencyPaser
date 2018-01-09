@@ -19,7 +19,7 @@ public class CharPOSSampleStream extends FilterObjectStream<String, CharPOSSampl
 
     private static Logger logger = Logger.getLogger(CharPOSSampleStream.class.getName());
 
-    private CharPOSParseContext contextParse;
+    private CharPOSSampleParser contextParse;
 
     /**
      * 有参构造函数
@@ -29,7 +29,7 @@ public class CharPOSSampleStream extends FilterObjectStream<String, CharPOSSampl
      * @param contextParse
      *            样本解析
      */
-    public CharPOSSampleStream(ObjectStream<String> samples, CharPOSParseContext contextParse)
+    public CharPOSSampleStream(ObjectStream<String> samples, CharPOSSampleParser contextParse)
     {
         super(samples);
 
@@ -52,7 +52,7 @@ public class CharPOSSampleStream extends FilterObjectStream<String, CharPOSSampl
             {
                 try
                 {
-                    sample = contextParse.parseSample(sentence);
+                    sample = contextParse.parse(sentence);
                 }
                 catch (Exception e)
                 {

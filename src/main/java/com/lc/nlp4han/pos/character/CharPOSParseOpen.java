@@ -2,7 +2,6 @@ package com.lc.nlp4han.pos.character;
 
 import java.util.ArrayList;
 
-import opennlp.tools.tokenize.WhitespaceTokenizer;
 
 /**
  * 解析OpenNLP词性标注语料
@@ -10,7 +9,7 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
  * @author 刘小峰
  *
  */
-public class CharPOSParseOpen implements CharPOSParseStrage
+public class CharPOSParseOpen implements CharPOSSampleParser
 {
 
     /**

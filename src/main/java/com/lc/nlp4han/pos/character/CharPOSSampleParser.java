@@ -6,7 +6,7 @@ package com.lc.nlp4han.pos.character;
  * @author 王馨苇
  * 
  */
-public interface CharPOSParseStrage
+public interface CharPOSSampleParser
 {
 
     /**

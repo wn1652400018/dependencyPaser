@@ -2,7 +2,6 @@ package com.lc.nlp4han.pos.character;
 
 
 import com.lc.nlp4han.ml.util.Evaluator;
-import com.lc.nlp4han.pos.POSTagger;
 import com.lc.nlp4han.pos.WordPOSMeasure;
 
 

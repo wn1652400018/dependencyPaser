@@ -15,7 +15,6 @@ import java.util.Map;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.model.SequenceClassificationModel;
-import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 import com.lc.nlp4han.ml.util.BeamSearch;
 import com.lc.nlp4han.ml.util.EventTrainer;
 import com.lc.nlp4han.ml.util.ModelWrapper;
@@ -26,7 +25,6 @@ import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.pos.POSTaggerProb;
-import com.lc.nlp4han.pos.word.DefaultWordPOSContextGenerator;
 
 /**
  * 基于字的最大熵中文词性标注器
@@ -152,7 +150,7 @@ public class CharPOSTaggerME implements POSTaggerProb
      * @param words
      *            分词之后的词语数组
      */
-    public void taglabel(String[] words)
+    private void taglabel(String[] words)
     {
     	characters.clear();
 		segwords.clear();

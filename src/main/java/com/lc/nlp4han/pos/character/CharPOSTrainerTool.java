@@ -33,6 +33,7 @@ public class CharPOSTrainerTool
         File corpusFile = null;
         File modelFile = null;
         String encoding = "UTF-8";
+        String algType = "MAXENT";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data"))
@@ -60,13 +61,19 @@ public class CharPOSTrainerTool
                 iters = Integer.parseInt(args[i + 1]);
                 i++;
             }
+            else if (args[i].equals("-type"))
+            {
+                algType = args[i + 1];
+                i++;
+            }
         }
 
         TrainingParameters params = TrainingParameters.defaultParams();
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
+        params.put(TrainingParameters.ALGORITHM_PARAM, algType);
 
-        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseOpen());
+        CharPOSSampleParser parse = new CharPOSParseOpen();
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
