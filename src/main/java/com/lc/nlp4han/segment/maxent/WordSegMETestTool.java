@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+
 /**
  * 最大熵分词测试工具
  * 
@@ -66,7 +68,7 @@ public class WordSegMETestTool
 
         String line = null;
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(textFile), encoding));
-        WordSegContextGenerator contextGenerator = (WordSegContextGenerator) Class.forName(contextClass).newInstance();
+        AbstractStringContextGenerator contextGenerator = (AbstractStringContextGenerator) Class.forName(contextClass).newInstance();
         WordSegmenterME segmenter = new WordSegmenterME(modelFile, contextGenerator);
         PrintWriter out = new PrintWriter(System.out);
         if(resultFile != null)

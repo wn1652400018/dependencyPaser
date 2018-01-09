@@ -37,7 +37,8 @@ public class DependencyEvalTool
          evaluatorNoNull.setMeasure(measureNoNull);
          
          ObjectStream<String> linesStreamNoNull = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-         ObjectStream<DependencySample> sampleStreamNoNull = new DependencySampleStream(linesStreamNoNull);
+         DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
+         ObjectStream<DependencySample> sampleStreamNoNull = new DependencySampleStream(linesStreamNoNull, sampleParser);
          evaluatorNoNull.evaluate(sampleStreamNoNull);
          
          DependencyParseMeasure measureResNoNull = evaluatorNoNull.getMeasure();

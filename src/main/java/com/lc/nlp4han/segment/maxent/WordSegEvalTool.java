@@ -6,12 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+import com.lc.nlp4han.ml.util.Evaluator;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.segment.WordSegMeasure;
-import com.lc.nlp4han.util.FileInputStreamFactory;
-
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.eval.Evaluator;
 
 
 /**
@@ -77,16 +78,16 @@ public class WordSegEvalTool extends Evaluator<WordSegSample>
      * @param encoding 黄金分词标准文件编码
      * @throws IOException
      */
-    public static void eval(File modelFile, File goldFile, File errorFile, WordSegContextGenerator contextGenerator, String encoding) throws IOException
+    public static void eval(File modelFile, File goldFile, File errorFile, AbstractStringContextGenerator contextGenerator, String encoding) throws IOException
     {
         InputStream modelIn = new FileInputStream(modelFile);
-        WordSegModel model = new WordSegModel(modelIn);
+        ModelWrapper model = new ModelWrapper(modelIn);
         WordSegmenterME tagger = new WordSegmenterME(model, contextGenerator);
         
         WordSegErrorPrinter errorMonitor = new WordSegErrorPrinter(new FileOutputStream(errorFile));
         WordSegEvalTool evaluator = new WordSegEvalTool(tagger, errorMonitor);
 
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(goldFile), encoding);
+        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
         ObjectStream<WordSegSample> sampleStream = new WordTagSampleStream(lineStream);
 
         evaluator.evaluate(sampleStream);
@@ -106,14 +107,14 @@ public class WordSegEvalTool extends Evaluator<WordSegSample>
      * @param encoding 黄金分词标准文件编码
      * @throws IOException
      */
-    public static void eval(File modelFile, File goldFile, WordSegContextGenerator contextGenerator, String encoding) throws IOException
+    public static void eval(File modelFile, File goldFile, AbstractStringContextGenerator contextGenerator, String encoding) throws IOException
     {
         InputStream modelIn = new FileInputStream(modelFile);
-        WordSegModel model = new WordSegModel(modelIn);
+        ModelWrapper model = new ModelWrapper(modelIn);
         WordSegmenterME tagger = new WordSegmenterME(model, contextGenerator);
         WordSegEvalTool evaluator = new WordSegEvalTool(tagger);
 
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(goldFile), encoding);
+        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
         ObjectStream<WordSegSample> sampleStream = new WordTagSampleStream(lineStream);
 
         evaluator.evaluate(sampleStream);
@@ -140,7 +141,7 @@ public class WordSegEvalTool extends Evaluator<WordSegSample>
         String goldFile = null;
         String errorFile = null;
         String encoding = null;
-        String contextClass = "com.lc.nlp4han.segment.DefaultWordSegContextGenerator";
+        String contextClass = "com.lc.nlp4han.segment.maxent.DefaultWordSegContextGenerator";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-model"))
@@ -171,7 +172,7 @@ public class WordSegEvalTool extends Evaluator<WordSegSample>
         }
 
 //        WordSegContextGenerator contextGenerator = new DefaultWordSegContextGenerator();
-        WordSegContextGenerator contextGenerator = (WordSegContextGenerator) Class.forName(contextClass).newInstance();
+        AbstractStringContextGenerator contextGenerator = (AbstractStringContextGenerator) Class.forName(contextClass).newInstance();
 
         if (errorFile != null)
         {

@@ -6,16 +6,20 @@ import java.util.List;
 
 /**
  * 解析之后要返回的样本类
+ * 
+ * TODO: 内部表示抽象
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
 public class DependencySample {
 
-	public List<String> words;
-	public List<String> pos;
-	public List<String> dependency;
-	public List<String> dependencyWords;
-	public List<String> dependencyIndices;
+	private List<String> words;
+	private List<String> pos;
+	private List<String> dependency;
+	private List<String> dependencyWords;
+	private List<String> dependencyIndices;
 	private String[][] adtionalContext;
 	
 	public DependencySample(List<String> words,List<String> pos){
@@ -90,9 +94,11 @@ public class DependencySample {
 	}
     /**
      * 输出的样本的格式
+     * 
+     * TODO: toStanfordSample
      * @return 输出的结果
      */
-    public String toSample(){
+    public String toCoNLLSample(){
     	String sample = new String();
     	for (int i = 0; i < dependency.size(); i++) {
 			sample += (i+1)+"\t"+words.get(i+1)+"\t"+words.get(i+1)+"\t"

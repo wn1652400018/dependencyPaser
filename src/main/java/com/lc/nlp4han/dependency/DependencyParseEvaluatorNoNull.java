@@ -81,7 +81,7 @@ public class DependencyParseEvaluatorNoNull extends Evaluator<DependencySample>{
 		
 		@SuppressWarnings("unused")
 		//最大生成树
-		DependencyParseBestProba proba = tagger.tagNoNull(wordsRef, posRef, sample.getAditionalContext());
+		DependencyParseMatrix proba = tagger.tagNoNull(wordsRef, posRef, sample.getAditionalContext());
 		sample = MaxSpanningTree.getMax(proba);
 		
 		//最大的K棵树

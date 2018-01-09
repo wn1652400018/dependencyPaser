@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import opennlp.tools.ml.model.Event;
-import opennlp.tools.util.AbstractEventStream;
-import opennlp.tools.util.ObjectStream;
+import com.lc.nlp4han.ml.model.Event;
+import com.lc.nlp4han.ml.util.AbstractEventStream;
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
  * 将分词样本{@link WordSegSample}流转换成最大熵训练需要的事件流
@@ -18,7 +19,7 @@ public class WordSegSampleEventStream extends AbstractEventStream<WordSegSample>
     /**
      * 用于产生事件的上下文产生器
      */
-    private WordSegContextGenerator cg;
+    private AbstractStringContextGenerator cg;
 
     /**
      * 用分词样本流和上下文产生器创建实例
@@ -26,7 +27,7 @@ public class WordSegSampleEventStream extends AbstractEventStream<WordSegSample>
      * @param samples 分词样本流
      * @param cg 上下文产生器
      */
-    public WordSegSampleEventStream(ObjectStream<WordSegSample> samples, WordSegContextGenerator cg) {
+    public WordSegSampleEventStream(ObjectStream<WordSegSample> samples, AbstractStringContextGenerator cg) {
         super(samples);
 
         this.cg = cg;
@@ -60,7 +61,7 @@ public class WordSegSampleEventStream extends AbstractEventStream<WordSegSample>
      * @return 事件序列
      */
     public static List<Event> generateEvents(String[] sentence, String[] tags,
-            Object[] additionalContext, WordSegContextGenerator cg) {
+            Object[] additionalContext, AbstractStringContextGenerator cg) {
         List<Event> events = new ArrayList<Event>(sentence.length);
 
         for (int i = 0; i < sentence.length; i++) {
@@ -83,7 +84,7 @@ public class WordSegSampleEventStream extends AbstractEventStream<WordSegSample>
      * @return 事件序列
      */
     public static List<Event> generateEvents(String[] sentence, String[] tags,
-            WordSegContextGenerator cg) {
+            AbstractStringContextGenerator cg) {
         return generateEvents(sentence, tags, null, cg);
     }
 }

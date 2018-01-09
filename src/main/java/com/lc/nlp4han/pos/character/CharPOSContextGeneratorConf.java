@@ -109,36 +109,53 @@ public class CharPOSContextGeneratorConf implements CharPOSContextGenerator{
 	 * @param ac 额外的信息
 	 * @return 上下文信息
 	 */
-	private String[] getContext(int i, int j, String[] characters, String[] tags, String[] words, String[] poses) {
-		String c1, c2, c3, c0, c_1, c_2, c_3;
-        c1 = c2 = c3 = c0 = c_1 = c_2 = c_3 = null;
+	private String[] getContext(int i, String[] characters, String[] tagsAndPoses, String[] words) {
+		String c1, c2, c0, c_1, c_2;
+        c1 = c2 = c0 = c_1 = c_2 = null;
         String TC_1, TC_2, TC0, TC1, TC2;
         TC_1 = TC_2 = TC0 = TC1 = TC2 = null;
         String w0,w_1,w_2,p_1,p_2;
         w0 = w_1 = w_2 = p_1 = p_2 = null;
-        c0 = characters[i];
-        w0 = words[j];
+        c0 = characters[i].split("_")[0];
+        int record = -1;
+		int len = 0;
+		for (int j = 0; j < words.length; j++) {				
+			len += words[j].length();
+			if((i+1) <= len){
+				record = j;
+				break;
+			}
+		}
+        w0 = words[record];
+        if(record - 1 >= 0){
+        	w_1 = words[record - 1];
+        	if(record - 2 >= 0){
+        		w_2 = words[record - 2];
+        	}
+        }
         TC0 = FeaturesTools.featureType(c0);
         if (characters.length > i + 1)
         {
-            c1 = characters[i + 1];
+            c1 = characters[i + 1].split("_")[0];
             TC1 = FeaturesTools.featureType(c1);
 
             if (characters.length > i + 2)
             {
-                c2 = characters[i + 2];
+                c2 = characters[i + 2].split("_")[0];
                 TC2 = FeaturesTools.featureType(c2);
             }
         }
 
         if (i - 1 >= 0)
         {
-            c_1 = characters[i - 1];
+            c_1 = characters[i - 1].split("_")[0];
+            p_1 = tagsAndPoses[i - 1].split("_")[1];
             TC_1 = FeaturesTools.featureType(c_1);
 
             if (i - 2 >= 0)
             {
-                c_2 = characters[i - 2].toString();
+                c_2 = characters[i - 2].split("_")[0];
+                p_2 = tagsAndPoses[i - 2].split("_")[1];
                 TC_2 = FeaturesTools.featureType(c_2);
             }
         }
@@ -202,6 +219,7 @@ public class CharPOSContextGeneratorConf implements CharPOSContextGenerator{
         		features.add("c_1c1="+c_1+c1);
         	}
         }
+        
         //W0C0
         if(w0c0Set){
         	features.add("w0c0="+w0+c0);
@@ -219,16 +237,7 @@ public class CharPOSContextGeneratorConf implements CharPOSContextGenerator{
         		features.add("T="+TC_2+TC_1+TC0+TC1+TC2);
         	}
         }
-        
-        //判断当前词语前面还有没有词
-        if(j - 1 >= 0){
-        	w_1 = words[j - 1];
-        	p_1 = poses[j - 1];
-        	if(j - 2 >= 0){
-        		w_2 = words[j - 2];
-        		p_2 = poses[j - 2];
-        	}
-        }
+
         //pos(c_1w0)
         if(w_1 != null && (w_1.length() == 1)){
         	if(Pc_1w0Set){
@@ -249,6 +258,7 @@ public class CharPOSContextGeneratorConf implements CharPOSContextGenerator{
     			features.add("Pc_2w0Pc_1w0="+p_1+p_1);
     		}
         }
+        
         String[] contexts = features.toArray(new String[features.size()]);
 		return contexts;
 	}
@@ -256,18 +266,12 @@ public class CharPOSContextGeneratorConf implements CharPOSContextGenerator{
 	/**
 	 * 根据当前下标生成上下文
 	 * @param i 当前字下标
-	 * @param j 当前词的下标
 	 * @param characters 字符序列
-	 * @param tags 字符的标记序列
-	 * @param words 词语序列
-	 * @param poses 词语的标记序列
+	 * @param tagsAndPoses 字符的标记序列
 	 * @param ac 额外的信息
 	 * @return 上下文信息
 	 */
-	public String[] getContext(int i, int j, String[] characters, String[] tags, String[] words, String[] poses,
-			Object[] ac) {
-		return getContext(i, j, characters, tags, words, poses);
-	}
-
-	
+	public String[] getContext(int i, String[] characters, String[] tagsAndPoses, Object[] ac) {
+		return getContext(i,  characters, tagsAndPoses, (String[])ac);
+	}	
 }

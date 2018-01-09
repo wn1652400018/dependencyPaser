@@ -5,12 +5,14 @@ import java.io.PrintStream;
 
 /**
  * 打印错误信息类 
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
 public class DependencyParseErrorPrinter extends DependencyParseEvaluateMonitor{
 	private PrintStream errOut;
-	private int countErrorRes = 0;
+//	private int countErrorRes = 0;
 	
 	public DependencyParseErrorPrinter(OutputStream out){
 		errOut = new PrintStream(out);
@@ -24,10 +26,10 @@ public class DependencyParseErrorPrinter extends DependencyParseEvaluateMonitor{
 	@Override
 	public void missclassified(DependencySample reference, DependencySample predict) {
 		 errOut.println("样本的结果：");
-		 errOut.println(reference.toSample());	 
+		 errOut.println(reference.toCoNLLSample());	 
 		 errOut.println("预测的结果：");
-		 errOut.println(predict.toSample());
-		 errOut.println("错误的总数：");
-		 errOut.println(countErrorRes++);
+		 errOut.println(predict.toCoNLLSample());
+//		 errOut.println("错误的总数：");
+//		 errOut.println(countErrorRes++);
 	}
 }

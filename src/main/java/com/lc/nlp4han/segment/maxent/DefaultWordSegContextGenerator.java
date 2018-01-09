@@ -3,12 +3,14 @@ package com.lc.nlp4han.segment.maxent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+
 /**
  * 缺省分词上下文产生器
  *
  * @author 刘小峰
  */
-public class DefaultWordSegContextGenerator implements WordSegContextGenerator
+public class DefaultWordSegContextGenerator extends AbstractStringContextGenerator
 {
 
     @Override
@@ -17,7 +19,7 @@ public class DefaultWordSegContextGenerator implements WordSegContextGenerator
         return getContext(index, sequence, priorDecisions);
     }
 
-    public String[] getContext(int index, Object[] tokens, String[] tags)
+    public String[] getContext(int index, String[] tokens, String[] tags)
     {
         String c1, c2, c0, c_1, c_2;
         c1 = c2 = c0 = c_1 = c_2 = null;

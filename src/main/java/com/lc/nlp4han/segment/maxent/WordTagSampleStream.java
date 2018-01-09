@@ -2,8 +2,8 @@ package com.lc.nlp4han.segment.maxent;
 
 import java.io.IOException;
 
-import opennlp.tools.util.FilterObjectStream;
-import opennlp.tools.util.ObjectStream;
+import com.lc.nlp4han.ml.util.FilterObjectStream;
+import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
  * 将空格分隔的切分句子转换成{@link WordSegSample}

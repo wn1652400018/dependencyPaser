@@ -1,7 +1,9 @@
 package com.lc.nlp4han.dependency;
 
 /**
- * 特征的接口
+ * 特征生成的接口
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -9,10 +11,10 @@ public interface DependencyParseContextGenerator{
 
 	/**
 	 * 获取特征
-	 * @param indexi i的位置
-	 * @param indexj j的位置
-	 * @param words 词语
-	 * @param pos 词性
+	 * @param indexi 词语1的位置
+	 * @param indexj 词语2的位置
+	 * @param words 句子词序列
+	 * @param pos 词性序列
 	 * @param ac 额外的信息
 	 * @return
 	 */

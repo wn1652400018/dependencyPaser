@@ -3,10 +3,10 @@ package com.lc.nlp4han.segpos;
 import java.io.File;
 import java.io.IOException;
 
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 分词和词性标注交叉验证程序
@@ -72,7 +72,7 @@ public class WordSegAndPosCrossValidationTool
 
 
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);    
-        WordSegAndPosParseContext parse = new WordSegAndPosParseContext(new WordSegAndPosParseOpen());
+        WordSegAndPosParseStrategy parse = new WordSegAndPosParseOpen();
         ObjectStream<WordSegAndPosSample> sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
         WordSegAndPosContextGenerator contextGen = new WordSegAndPosContextGeneratorConf();
 

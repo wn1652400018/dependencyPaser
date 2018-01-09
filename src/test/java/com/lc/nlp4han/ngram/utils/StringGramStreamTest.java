@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +30,10 @@ public class StringGramStreamTest {
 	
 	@Before
 	public void setup() throws IOException  {
-		String filePath = "src\\test\\java\\hust\\tools\\ngram\\utils\\testCorpus.txt";
+		String testSources = "com/lc/nlp4han/ngram/testCorpus.txt";
 		encoding = "utf-8";
+		URL url = this.getClass().getClassLoader().getResource(testSources);
+		String filePath = url.getFile();
 		sGramStream = new StringGramStream(filePath, encoding);
 		
 		File file = new File(filePath);

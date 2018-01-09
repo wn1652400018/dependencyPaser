@@ -4,15 +4,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
-import com.lc.nlp4han.pos.CorpusStat;
-
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 分词和词性标注评价程序
@@ -44,11 +42,11 @@ public class WordSegAndPosEvalTool
 
         System.out.println("训练模型...");  
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        WordSegAndPosParseContext parse = new WordSegAndPosParseContext(new WordSegAndPosParseOpen());
+        WordSegAndPosParseStrategy parse = new WordSegAndPosParseOpen();
         ObjectStream<WordSegAndPosSample> sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
         WordSegAndPosContextGenerator contextGen = new WordSegAndPosContextGeneratorConf();
         long start = System.currentTimeMillis();
-        WordSegAndPosModel model = WordSegAndPosME.train("zh", sampleStream, params, contextGen);
+        ModelWrapper model = WordSegAndPosME.train("zh", sampleStream, params, contextGen);
         System.out.println("训练时间： " + (System.currentTimeMillis() - start));
         
         System.out.println("构建词典...");

@@ -3,11 +3,11 @@ package com.lc.nlp4han.pos.character;
 import java.io.IOException;
 import java.util.HashSet;
 
+import com.lc.nlp4han.ml.util.CrossValidationPartitioner;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.pos.WordPOSMeasure;
-
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.TrainingParameters;
-import opennlp.tools.util.eval.CrossValidationPartitioner;
 
 /**
  * 交叉验证
@@ -63,7 +63,7 @@ public class CharPOSCrossValidation
             // 训练模型
             trainingSampleStream.reset();
             long start = System.currentTimeMillis();
-            CharPOSModel model = CharPOSTaggerME.train("zh", trainingSampleStream, params, contextGenerator);
+            ModelWrapper model = CharPOSTaggerME.train(trainingSampleStream, params, contextGenerator);
             System.out.println("训练时间： " + (System.currentTimeMillis()-start));
 
             CharPOSEvaluator evaluator = new CharPOSEvaluator(new CharPOSTaggerME(model, contextGenerator));

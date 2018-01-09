@@ -1,6 +1,7 @@
 package com.lc.nlp4han.segment.maxent;
 
-import opennlp.tools.util.SequenceValidator;
+import com.lc.nlp4han.ml.util.SequenceValidator;
+
 
 /**
  * 对最大熵产生的中间分词结果进行验证

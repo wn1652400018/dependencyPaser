@@ -1,7 +1,8 @@
 package com.lc.nlp4han.dependency;
 
 /**
- * 句法分析结果的评估
+ * 依存句法分析结果的评估
+ * 
  * @author 王馨苇
  *
  */
@@ -9,20 +10,28 @@ public class DependencyParseMeasure {
 
 	//所有词的个数，也就是句子的长度
 	private double countAllWords = 0;
+	
 	//依存关系和正确支配的词都正确
 	private double countWordsAndDep = 0;
+	
 	//正确支配的词
 	private double countWords = 0;
+	
 	//非根正确支配词
 	private double countWordsAndDepNotRoot = 0;
+	
 	//非根总节点
 	private double countAllWordsNotRoot = 0;
+	
 	//句子
 	private double countSentence = 0;
+	
 	//正确根节点
 	private double countWordsAndDepRoot = 0;
+	
 	//整个依存关系正确
 	private double countAllDependency = 0;
+	
 	private double countAllWordsAndDep = 0;
 	
 	/**
@@ -40,6 +49,7 @@ public class DependencyParseMeasure {
 
 	/**
 	 * 统计正确的依赖词数，和正确的依赖词和依赖关系数
+	 * 
 	 * @param dependencyWordsRef 参考依存词
 	 * @param dependencyRef 参考依存关系
 	 * @param dependencyWordsPre 预测依存词
@@ -58,6 +68,7 @@ public class DependencyParseMeasure {
 				countAllWordsNotRoot++;
 			}
 		}
+		
 		for (int i = 0; i < dependencyPre.length; i++) {
 			//无标记匹配
 			if(dependencyWordsPre[i].compareTo(dependencyWordsRef[i]) == 0){
@@ -86,9 +97,11 @@ public class DependencyParseMeasure {
 			}
 			
 		}	
+		
 		if(dependencyCount == dependencyWordsPre.length){
 			countAllDependency++;
 		}
+		
 		if(wordsAndDepCount == dependencyPre.length){
 			countAllWordsAndDep++;
 		}
@@ -102,6 +115,7 @@ public class DependencyParseMeasure {
 	public double getUAS(){
 		return countWords/countAllWords;
 	}
+	
 	/**
 	 * 带标记正确依存率
 	 * @return
@@ -109,6 +123,7 @@ public class DependencyParseMeasure {
 	public double getLAS(){
 		return countWordsAndDep/countAllWords;
 	}
+	
 	/**
 	 * 依存正确率
 	 * @return

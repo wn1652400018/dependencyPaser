@@ -1,7 +1,6 @@
 package com.lc.nlp4han.dependency;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -19,7 +18,7 @@ public class MaxSpanningTree {
 	 * @param phraseProba 概率
 	 * @return 样本的格式
 	 */
-	public static DependencySample getMaxTree(DependencyParseBestProba phraseProba){
+	public static DependencySample getMaxTree(DependencyParseMatrix phraseProba){
 		double[][] proba = phraseProba.getProba();
 		String[][] dependency = phraseProba.getDependency();
 		String[] sentence = phraseProba.getSentence();
@@ -93,7 +92,7 @@ public class MaxSpanningTree {
 	 * @param phraseProba 概率
 	 * @return 样本的形式
 	 */
-	public static DependencySample getMax(DependencyParseBestProba phraseProba){
+	public static DependencySample getMax(DependencyParseMatrix phraseProba){
 		double[][] proba = phraseProba.getProba();
 		String[][] dependency = phraseProba.getDependency();
 		String[] sentence = phraseProba.getSentence();
@@ -191,7 +190,7 @@ public class MaxSpanningTree {
 	 * @param phraseProba 概率
 	 * @return 样本的形式
 	 */
-	public static DependencyTree[] getMaxFromKres(int k,DependencyParseBestProba phraseProba){
+	public static DependencyTree[] getMaxFromKres(int k,DependencyParseMatrix phraseProba){
 		String[][] proba = phraseProba.getKProba();//获得概率
 		String[][] dependency = phraseProba.getKDependency();//获得关系
 		String[] sentence = phraseProba.getSentence();//获得词语
@@ -273,7 +272,7 @@ public class MaxSpanningTree {
 	 * @param phraseProba 概率对象
 	 * @return
 	 */
-	public static Queue<Data> getQueue(int i,DependencyParseBestProba phraseProba){
+	public static Queue<Data> getQueue(int i,DependencyParseMatrix phraseProba){
 		String[][] proba = phraseProba.getKProba();//获得概率
 		String[][] dependency = phraseProba.getKDependency();//获得关系
 		String[] sentence = phraseProba.getSentence();//词语
@@ -297,11 +296,5 @@ public class MaxSpanningTree {
 			j++;
 		}
 		return queue;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return super.equals(obj);
 	}
 }

@@ -4,13 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+import com.lc.nlp4han.ml.util.CrossValidationPartitioner;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.segment.WordSegMeasure;
-import com.lc.nlp4han.util.FileInputStreamFactory;
 
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
-import opennlp.tools.util.eval.CrossValidationPartitioner;
 
 /**
  * 分词交叉验证器
@@ -20,9 +22,6 @@ import opennlp.tools.util.eval.CrossValidationPartitioner;
  */
 public class WordSegCrossValidatorTool
 {
-
-    private final String languageCode;
-
     private final TrainingParameters params;
 
     private WordSegEvaluationMonitor[] listeners;
@@ -37,9 +36,8 @@ public class WordSegCrossValidatorTool
      * @param listeners
      *            评价监视器
      */
-    public WordSegCrossValidatorTool(String languageCode, TrainingParameters trainParam, WordSegEvaluationMonitor... listeners)
+    public WordSegCrossValidatorTool(TrainingParameters trainParam, WordSegEvaluationMonitor... listeners)
     {
-        this.languageCode = languageCode;
         this.params = trainParam;
         this.listeners = listeners;
     }
@@ -56,7 +54,7 @@ public class WordSegCrossValidatorTool
      * 
      * @throws IOException
      */
-    public void evaluate(ObjectStream<WordSegSample> samples, int nFolds, WordSegContextGenerator contextGenerator) throws IOException
+    public void evaluate(ObjectStream<WordSegSample> samples, int nFolds, AbstractStringContextGenerator contextGenerator) throws IOException
     {
         CrossValidationPartitioner<WordSegSample> partitioner = new CrossValidationPartitioner<>(samples, nFolds);
 
@@ -71,7 +69,7 @@ public class WordSegCrossValidatorTool
             
             System.out.println("训练分词模型...");
             trainingSampleStream.reset();
-            WordSegModel model = WordSegmenterME.train(languageCode, trainingSampleStream, params, contextGenerator);
+            ModelWrapper model = WordSegmenterME.train(trainingSampleStream, params, contextGenerator);
 
             System.out.println("评价分词模型...");
             WordSegMeasure measure = new WordSegMeasure(dict);
@@ -104,9 +102,10 @@ public class WordSegCrossValidatorTool
         int cutoff = 3;
         int iters = 100;
         int folds = 10;
-        String contextClass = "com.lc.nlp4han.segment.DefaultWordSegContextGenerator";
+        String contextClass = "com.lc.nlp4han.segment.maxent.DefaultWordSegContextGenerator";
         File corpusFile = null;
         String encoding = "UTF-8";
+        String algType = "MAXENT";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data"))
@@ -139,20 +138,26 @@ public class WordSegCrossValidatorTool
                 folds = Integer.parseInt(args[i + 1]);
                 i++;
             }
+            else if (args[i].equals("-type"))
+            {
+                algType = args[i + 1];
+                i++;
+            }
         }
 
         TrainingParameters params = TrainingParameters.defaultParams();
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
+        params.put(TrainingParameters.ALGORITHM_PARAM, algType);
 
-        WordSegContextGenerator contextGenerator = (WordSegContextGenerator) Class.forName(contextClass).newInstance();
+        AbstractStringContextGenerator contextGenerator = (AbstractStringContextGenerator) Class.forName(contextClass).newInstance();
         System.out.println(contextGenerator);
 
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(corpusFile), encoding);
+        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         ObjectStream<WordSegSample> sampleStream = new WordTagSampleStream(lineStream);
 
 
-        WordSegCrossValidatorTool crossValidator = new WordSegCrossValidatorTool("zh", params);
+        WordSegCrossValidatorTool crossValidator = new WordSegCrossValidatorTool(params);
 
         crossValidator.evaluate(sampleStream, folds, contextGenerator);
     }

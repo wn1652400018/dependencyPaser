@@ -2,22 +2,25 @@ package com.lc.nlp4han.segment.maxent;
 
 import java.io.IOException;
 
-import opennlp.tools.ml.model.AbstractModel;
-import opennlp.tools.ml.model.Event;
-import opennlp.tools.ml.model.Sequence;
-import opennlp.tools.ml.model.SequenceStream;
-import opennlp.tools.util.ObjectStream;
+import com.lc.nlp4han.ml.model.AbstractModel;
+import com.lc.nlp4han.ml.model.Event;
+import com.lc.nlp4han.ml.model.Sequence;
+import com.lc.nlp4han.ml.model.SequenceStream;
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+
 
 public class WordSegSampleSequenceStream implements SequenceStream {
 
-    private WordSegContextGenerator pcg;
+    private AbstractStringContextGenerator pcg;
     private ObjectStream<WordSegSample> psi;
 
     public WordSegSampleSequenceStream(ObjectStream<WordSegSample> psi) throws IOException {
         this(psi, new DefaultWordSegContextGenerator());
     }
 
-    public WordSegSampleSequenceStream(ObjectStream<WordSegSample> psi, WordSegContextGenerator pcg)
+    public WordSegSampleSequenceStream(ObjectStream<WordSegSample> psi, AbstractStringContextGenerator pcg)
             throws IOException {
         this.psi = psi;
         this.pcg = pcg;
@@ -26,7 +29,7 @@ public class WordSegSampleSequenceStream implements SequenceStream {
     @SuppressWarnings("unchecked")
     public Event[] updateContext(Sequence sequence, AbstractModel model) {
         Sequence<WordSegSample> pss = sequence;
-        WordSegmenterME tagger = new WordSegmenterME(new WordSegModel("x-unspecified", model, null));
+        WordSegmenterME tagger = new WordSegmenterME(new ModelWrapper(model));
         String[] sentence = pss.getSource().getSentence();
         Object[] ac = pss.getSource().getAddictionalContext();
         String[] tags = tagger.tag(pss.getSource().getSentence());

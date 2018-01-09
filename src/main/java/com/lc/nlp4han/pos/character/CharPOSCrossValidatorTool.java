@@ -3,10 +3,10 @@ package com.lc.nlp4han.pos.character;
 import java.io.File;
 import java.io.IOException;
 
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 词性标注交叉验证器
@@ -35,6 +35,7 @@ public class CharPOSCrossValidatorTool
         int folds = 10;
         File corpusFile = null;
         String encoding = "UTF-8";
+        String algType = "MAXENT";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data"))
@@ -62,17 +63,22 @@ public class CharPOSCrossValidatorTool
                 folds = Integer.parseInt(args[i + 1]);
                 i++;
             }
+            else if (args[i].equals("-type"))
+            {
+                algType = args[i + 1];
+                i++;
+            }
         }
 
         TrainingParameters params = TrainingParameters.defaultParams();
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
+        params.put(TrainingParameters.ALGORITHM_PARAM, algType);
         
         CharPOSCrossValidation crossValidator = new CharPOSCrossValidation(params);
 
-
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);    
-        CharPOSParseContext parse = new CharPOSParseContext(new CharPOSParseOpen());
+        CharPOSSampleParser parse = new CharPOSParseOpen();
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
 

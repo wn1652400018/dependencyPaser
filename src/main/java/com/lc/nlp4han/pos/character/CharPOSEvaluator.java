@@ -1,10 +1,9 @@
 package com.lc.nlp4han.pos.character;
 
 
-import com.lc.nlp4han.pos.POSTagger;
+import com.lc.nlp4han.ml.util.Evaluator;
 import com.lc.nlp4han.pos.WordPOSMeasure;
 
-import opennlp.tools.util.eval.Evaluator;
 
 /**
  * 评估器
@@ -15,14 +14,14 @@ import opennlp.tools.util.eval.Evaluator;
  */
 public class CharPOSEvaluator extends Evaluator<CharPOSSample>{
 
-	private POSTagger tagger;
+	private CharPOSTaggerME tagger;
 	private WordPOSMeasure measure;
 	
 	/**
 	 * 构造
 	 * @param tagger 训练得到的模型
 	 */
-	public CharPOSEvaluator(POSTagger tagger) {
+	public CharPOSEvaluator(CharPOSTaggerME tagger) {
 		this.tagger = tagger;
 	}
 	
@@ -31,7 +30,7 @@ public class CharPOSEvaluator extends Evaluator<CharPOSSample>{
 	 * @param tagger 训练得到的模型
 	 * @param evaluateMonitors 评估的监控管理器
 	 */
-	public CharPOSEvaluator(POSTagger tagger,CharPOSEvaluateMonitor... evaluateMonitors) {
+	public CharPOSEvaluator(CharPOSTaggerME tagger,CharPOSEvaluateMonitor... evaluateMonitors) {
 		super(evaluateMonitors);
 		this.tagger = tagger;
 	}
@@ -58,15 +57,15 @@ public class CharPOSEvaluator extends Evaluator<CharPOSSample>{
 	 */
 	@Override
 	protected CharPOSSample processSample(CharPOSSample reference) {
-	    String[] wordsRef = reference.getWords();
-        String[] posesRef = reference.getPoses();
-        String[] charactersRef = reference.getCharacters();
-        String[] tagsRef = reference.getTags();
+		String[] wordsRef = reference.getWords();
+		String[] charactersRef = reference.getCharacters();
+		String[] tagsRef = reference.getTagsAndPoses();
+		String[] posesRef = CharPOSSample.toPos(tagsRef);
+		String[] tagsandposesPre = tagger.tag(charactersRef,wordsRef);
+		String[] posesPre = CharPOSSample.toPos(tagsandposesPre);
 
-		String[] posesPre = tagger.tag(wordsRef);
+		CharPOSSample prediction = new CharPOSSample(charactersRef,wordsRef,tagsandposesPre);
 		measure.updateScores(wordsRef,posesRef,posesPre);
-		
-		CharPOSSample prediction = new CharPOSSample(charactersRef,tagsRef,wordsRef,posesPre);
 		return prediction;
 	}
 

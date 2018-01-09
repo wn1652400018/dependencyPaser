@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import opennlp.tools.tokenize.WhitespaceTokenizer;
-
 /**
  * 切分后的句子的内部表示或训练样本内部表示.
  *
@@ -171,7 +169,6 @@ public class WordSegSample
     public String toSample()
     {
         String sample = new String();
-        ArrayList<String> words = new ArrayList<String>();
         for (int i = 0; i < tags.size(); i++)
         {
             sample += sentence.get(i);
@@ -220,7 +217,8 @@ public class WordSegSample
     public static WordSegSample parse(String sentenceString)
     {
 
-        String[] words = WhitespaceTokenizer.INSTANCE.tokenize(sentenceString);
+//        String[] words = WhitespaceTokenizer.INSTANCE.tokenize(sentenceString);
+        String[] words = sentenceString.split("\\s+");
 
         ArrayList<String> sentence = new ArrayList<String>();
         ArrayList<String> tags = new ArrayList<String>();

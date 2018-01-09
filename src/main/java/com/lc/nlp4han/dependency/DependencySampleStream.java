@@ -20,10 +20,12 @@ public class DependencySampleStream extends FilterObjectStream<String, Dependenc
 
 	private static Logger logger = Logger.getLogger(DependencySampleStream.class.getName());
 	
-	public DependencySampleStream(ObjectStream<String> samples) {
-		//samples为PlainTextBySpaceLineStream对象
+	private DependencySampleParser sampleParser;
+	
+	public DependencySampleStream(ObjectStream<String> samples, DependencySampleParser sampleParser) {
 		super(samples);
 		
+		this.sampleParser = sampleParser;
 	}
 
 	/**
@@ -36,12 +38,12 @@ public class DependencySampleStream extends FilterObjectStream<String, Dependenc
 		//这里的read()读取训练语料中两个空行之间的内容
 		String sentences = samples.read();
 		//用PhraseAnalysisDependencySample的实现来解析文本
-		DependencyFormat parser = new DependencyFormat(new DefaultDependencySampleParser(), sentences);
+//		DependencyFormat parser = new DependencyFormat(new DependencySampleParserCoNLL(), sentences);
 		if(sentences != "" || !(sentences.equals(""))){
 			DependencySample sample = null ;
 			try{
 				//System.out.println(sentences);
-				sample = parser.sampleParse();
+				sample = sampleParser.parseIn(sentences);
 			}catch(Exception e){
 				if (logger.isLoggable(Level.WARNING)) {
 					

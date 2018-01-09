@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import opennlp.tools.postag.POSContextGenerator;
+import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 
 /**
  * 基于配置的上下文特征生成
@@ -14,7 +14,7 @@ import opennlp.tools.postag.POSContextGenerator;
  * @author 刘小峰
  *
  */
-public class WordPOSContextGeneratorConf implements POSContextGenerator
+public class WordPOSContextGeneratorConf extends AbstractStringContextGenerator
 {
     protected final String SE = "*SE*";
     protected final String SB = "*SB*";

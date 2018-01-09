@@ -69,7 +69,8 @@ public class DependencyCrossValidatorTool
 
 
         ObjectStream<String> linesStream = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
-        ObjectStream<DependencySample> sampleStream = new DependencySampleStream(linesStream);
+        DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
+        ObjectStream<DependencySample> sampleStream = new DependencySampleStream(linesStream, sampleParser);
 
         // 交叉验证
         DependencyParseCrossValidator crossValidator = new DependencyParseCrossValidator("ZH", params);

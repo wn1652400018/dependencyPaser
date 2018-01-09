@@ -3,9 +3,9 @@ package com.lc.nlp4han.segment.maxent;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.lc.nlp4han.ml.util.InvalidFormatException;
+import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.segment.WordSegmenter;
-
-import opennlp.tools.util.InvalidFormatException;
 
 /**
  * 中文分词工厂
@@ -39,7 +39,7 @@ public class WordSegFactory
             return null;
         
         InputStream modelIn = WordSegFactory.class.getClassLoader().getResourceAsStream(modelName);
-        WordSegModel model = new WordSegModel(modelIn);
+        ModelWrapper model = new ModelWrapper(modelIn);
         
         WordSegmenterME segmenter = new WordSegmenterME(model, new WordSegContextGeneratorConf());
         

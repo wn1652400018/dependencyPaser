@@ -4,7 +4,9 @@ package com.lc.nlp4han.dependency;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
 /**
- * 评估
+ * 依存分析评估监视器
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -12,21 +14,19 @@ public class DependencyParseEvaluateMonitor implements EvaluationMonitor<Depende
 
 	/**
 	 * 预测正确的时候执行
-	 * @param arg0 参考的结果
-	 * @param arg1 预测的结果
+	 * @param ref 参考的结果
+	 * @param predict 预测的结果
 	 */
-	public void correctlyClassified(DependencySample arg0, DependencySample arg1) {
-		// TODO Auto-generated method stub
+	public void correctlyClassified(DependencySample ref, DependencySample predict) {
 		
 	}
 
 	/**
 	 * 预测错误的时候执行
-	 * @param arg0 参考的结果
-	 * @param arg1 预测的结果
+	 * @param ref 参考的结果
+	 * @param predict 预测的结果
 	 */
-	public void missclassified(DependencySample arg0, DependencySample arg1) {
-		// TODO Auto-generated method stub
+	public void missclassified(DependencySample ref, DependencySample predict) {
 		
 	}
 
