@@ -1,6 +1,6 @@
 package com.lc.nlp4han.segpos;
 
-import opennlp.tools.util.BeamSearchContextGenerator;
+import com.lc.nlp4han.ml.util.BeamSearchContextGenerator;
 
 /**
  * 上下文特征生成器

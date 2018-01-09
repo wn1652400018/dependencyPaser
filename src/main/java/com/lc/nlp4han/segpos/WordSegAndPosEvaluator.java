@@ -1,7 +1,6 @@
 package com.lc.nlp4han.segpos;
 
-
-import opennlp.tools.util.eval.Evaluator;
+import com.lc.nlp4han.ml.util.Evaluator;
 
 /**
  * 评估器

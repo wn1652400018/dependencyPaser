@@ -32,7 +32,6 @@ public class WordSegAndPosContextGeneratorConf2 implements WordSegAndPosContextG
 //    private boolean Pc_2w0Pc_1w0Set;
     private boolean Bc_1w0Pc_1w0Set;
     private boolean Bc_2w0Pc_2w0Bc_1w0Pc_1w0Set;
-    private WordSegAndPosMeasure measure;
     Set<String> dictionalWords;
     
     private String dictResource;
@@ -357,8 +356,8 @@ public class WordSegAndPosContextGeneratorConf2 implements WordSegAndPosContextG
 		//HashMap<String,List<String>> dictionary = measure.getDictionary();
 //		System.out.println(i);
 		
-		String c1, c2, c3, c0, c_1, c_2, c_3;
-        c1 = c2 = c3 = c0 = c_1 = c_2 = c_3 = null;
+		String c1, c2, c0, c_1, c_2, c_3;
+        c1 = c2 = c0 = c_1 = c_2 = c_3 = null;
         String TC_1, TC_2, TC0, TC1, TC2;
         TC_1 = TC_2 = TC0 = TC1 = TC2 = null;
         String w0,w_1,w_2,p_1,p_2;

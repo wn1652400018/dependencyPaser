@@ -6,10 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 分词和词性标注训练程序
@@ -75,7 +76,7 @@ public class WordSegAndPosTrainerTool
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         ObjectStream<WordSegAndPosSample> sampleStream = new WordSegAndPosSampleStream(lineStream, parse);
         WordSegAndPosContextGenerator contextGen = new WordSegAndPosContextGeneratorConf();
-        WordSegAndPosModel model = WordSegAndPosME.train("zh", sampleStream, params, contextGen);
+        ModelWrapper model = WordSegAndPosME.train("zh", sampleStream, params, contextGen);
         OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
         model.serialize(modelOut);
 

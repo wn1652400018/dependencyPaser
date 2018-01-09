@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-
-
-
-
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.TrainingParameters;
-import opennlp.tools.util.eval.CrossValidationPartitioner;
+import com.lc.nlp4han.ml.util.CrossValidationPartitioner;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 交叉验证
@@ -53,7 +50,7 @@ public class WordSegAndPosCrossValidation {
 			//训练模型
 			trainingSampleStream.reset();
 			long start = System.currentTimeMillis();
-			WordSegAndPosModel model = WordSegAndPosME.train("zh", trainingSampleStream, params, contextGenerator);
+			ModelWrapper model = WordSegAndPosME.train("zh", trainingSampleStream, params, contextGenerator);
 			System.out.println("训练时间： " + (System.currentTimeMillis()-start));
 
 			WordSegAndPosEvaluator evaluator = new WordSegAndPosEvaluator(new WordSegAndPosME(model, contextGenerator), monitor);

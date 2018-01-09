@@ -2,8 +2,6 @@ package com.lc.nlp4han.segpos;
 
 import java.util.ArrayList;
 
-import opennlp.tools.tokenize.WhitespaceTokenizer;
-
 /**
  * 解析新闻199801词性标记的语料
  * @author 王馨苇
@@ -16,7 +14,7 @@ public class WordSegAndPosParseNews implements WordSegAndPosParseStrategy{
 	 * @return WordSegPosSample对象
 	 */
 	public WordSegAndPosSample parse(String sampleSentence) {
-		String[] wordsAndPoses = WhitespaceTokenizer.INSTANCE.tokenize(sampleSentence);
+		String[] wordsAndPoses = sampleSentence.split("\\s+");
 		
 		ArrayList<String> characters = new ArrayList<String>();
 		ArrayList<String> words = new ArrayList<String>();

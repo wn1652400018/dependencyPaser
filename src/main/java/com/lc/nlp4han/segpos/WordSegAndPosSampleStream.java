@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-import opennlp.tools.util.FilterObjectStream;
-import opennlp.tools.util.ObjectStream;
+import com.lc.nlp4han.ml.util.FilterObjectStream;
+import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
  * 读取文件流，并解析成要的格式返回

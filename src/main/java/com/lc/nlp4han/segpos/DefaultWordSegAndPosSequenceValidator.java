@@ -1,6 +1,6 @@
 package com.lc.nlp4han.segpos;
 
-import opennlp.tools.util.SequenceValidator;
+import com.lc.nlp4han.ml.util.SequenceValidator;
 
 /**
  * 序列验证类
