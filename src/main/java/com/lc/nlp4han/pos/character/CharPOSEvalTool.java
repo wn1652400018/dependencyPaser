@@ -5,14 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
-
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.pos.CorpusStat;
 import com.lc.nlp4han.pos.POSTagger;
 import com.lc.nlp4han.pos.WordPOSMeasure;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 
 /**
  * 基于字的最大熵词性标注评价
@@ -48,11 +48,11 @@ public class CharPOSEvalTool
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
         long start = System.currentTimeMillis();
-        CharPOSModel model = CharPOSTaggerME.train("zh", sampleStream, params, contextGen);
+        ModelWrapper model = CharPOSTaggerME.train(sampleStream, params, contextGen);
         System.out.println("训练时间： " + (System.currentTimeMillis() - start));
 
         System.out.println("评价模型...");
-        POSTagger tagger = new CharPOSTaggerME(model, contextGen);
+        CharPOSTaggerME tagger = new CharPOSTaggerME(model, contextGen);
         CharPOSEvaluator evaluator;
         CharPOSConfusionMatrixBuilder matrixBuilder = null;
         if (errorFile != null)

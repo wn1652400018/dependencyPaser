@@ -1,6 +1,6 @@
 package com.lc.nlp4han.pos.character;
 
-import opennlp.tools.util.eval.EvaluationMonitor;
+import com.lc.nlp4han.ml.util.EvaluationMonitor;
 
 /**
  * 评估监控器

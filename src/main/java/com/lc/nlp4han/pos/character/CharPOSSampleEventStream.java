@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import opennlp.tools.ml.model.Event;
-import opennlp.tools.util.AbstractEventStream;
-import opennlp.tools.util.ObjectStream;
+import com.lc.nlp4han.ml.model.Event;
+import com.lc.nlp4han.ml.util.AbstractEventStream;
+import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
  * 根据上下文得到事件
@@ -42,57 +42,33 @@ public class CharPOSSampleEventStream extends AbstractEventStream<CharPOSSample>
     @Override
     protected Iterator<Event> createEvents(CharPOSSample sample)
     {
-        String[] words = sample.getWords();
-        String[] poses = sample.getPoses();
-        String[] characters = sample.getCharacters();
-        String[] tags = sample.getTags();
-        String[][] ac = sample.getAditionalContext();
-        List<Event> events = generateEvents(characters, tags, words, poses, ac);
+    	String[] words = sample.getWords();
+		String[] tagsAndposes = sample.getTagsAndPoses();
+		String[] characters = sample.getCharacters();
+		String[][] ac = sample.getAditionalContext();
+		List<Event> events = generateEvents(characters, words, tagsAndposes,ac);
         return events.iterator();
     }
 
     /**
-     * 产生事件
-     * 
-     * @param characters
-     *            字符
-     * @param tags
-     *            字符序列
-     * @param words
-     *            词语
-     * @param poses
-     *            词性
-     * @param ac
-     * @return
-     */
-    private List<Event> generateEvents(String[] characters, String[] tags, String[] words, String[] poses, String[][] ac)
-    {
-        List<Event> events = new ArrayList<Event>(characters.length);
-        // for (int i = 0; i < words.length; i++) {
-        // System.out.print(i+" "+words[i]);
-        // }
-        for (int i = 0; i < characters.length; i++)
-        {
-            int record = -1;
-            int len = 0;
-            for (int j = 0; j < words.length; j++)
-            {
+	 * 产生事件
+	 * @param characters 字符
+	 * @param words 词语
+	 * @param tagsAndposes 词性
+	 * @param ac
+	 * @return
+	 */
+	private List<Event> generateEvents(String[] characters, String[] words, String[] tagsAndposes,
+			String[][] ac) {
+		List<Event> events = new ArrayList<Event>(tagsAndposes.length);
 
-                len += words[j].length();
-                if ((i + 1) <= len)
-                {
-                    record = j;
-                    break;
-                }
-            }
-            // System.out.print(characters[i]+" "+record);
-            // System.out.println();
-            // 产生事件的部分
-            String[] context = generator.getContext(i, record, characters, tags, words, poses, ac);
+		for (int i = 0; i < characters.length; i++) {
+			//产生事件的部分
+			String[] context = generator.getContext(i, characters, tagsAndposes, words);
 
-            events.add(new Event(tags[i] + "_" + poses[record], context));
-        }
-        return events;
-    }
+            events.add(new Event(tagsAndposes[i], context));
+		}
+		return events;
+	}
 
 }
