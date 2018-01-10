@@ -2,9 +2,10 @@ package com.lc.nlp4han.dependency;
 
 import java.io.IOException;
 
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.TrainingParameters;
-import opennlp.tools.util.eval.CrossValidationPartitioner;
+import com.lc.nlp4han.ml.util.CrossValidationPartitioner;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 交叉验证
@@ -47,7 +48,7 @@ public class DependencyParseCrossValidator {
 		while(partitioner.hasNext()){
 			System.out.println("Run"+run+"...");
 			CrossValidationPartitioner.TrainingSampleStream<DependencySample> trainingSampleStream = partitioner.next();
-	        DependencyParseModel model = DependencyParserME.train(languageCode, trainingSampleStream, params, contextGenerator);
+			ModelWrapper model = DependencyParserME.train(languageCode, trainingSampleStream, params, contextGenerator);
 
 	        DependencyParseEvaluatorNoNull evaluator = new DependencyParseEvaluatorNoNull(new DependencyParserME(model, contextGenerator), listeners);
 //	        evaluator.setCount(count);

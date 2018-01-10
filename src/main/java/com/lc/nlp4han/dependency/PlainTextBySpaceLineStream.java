@@ -7,8 +7,9 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
-import opennlp.tools.util.InputStreamFactory;
-import opennlp.tools.util.ObjectStream;
+import com.lc.nlp4han.ml.util.InputStreamFactory;
+import com.lc.nlp4han.ml.util.ObjectStream;
+
 
 /**
  * 实现ObjectStream，完成其中的read操作，每次读取两个空行之间的内容

@@ -10,17 +10,18 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import opennlp.tools.ml.BeamSearch;
-import opennlp.tools.ml.EventTrainer;
-import opennlp.tools.ml.TrainerFactory;
-import opennlp.tools.ml.TrainerFactory.TrainerType;
-import opennlp.tools.ml.model.Event;
-import opennlp.tools.ml.model.MaxentModel;
-import opennlp.tools.ml.model.SequenceClassificationModel;
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.model.ClassificationModel;
+import com.lc.nlp4han.ml.model.Event;
+import com.lc.nlp4han.ml.model.SequenceClassificationModel;
+import com.lc.nlp4han.ml.util.BeamSearch;
+import com.lc.nlp4han.ml.util.EventTrainer;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.TrainerFactory;
+import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
+import com.lc.nlp4han.ml.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 
 /**
  * 训练模型
@@ -35,9 +36,7 @@ public class DependencyParserME implements DependencyParser {
 
 	private DependencyParseContextGenerator contextGenerator;
 
-	private MaxentModel mm;
-//	private double[][] proba;
-//	private String[][] dependencyRelation;
+	private ClassificationModel mm;
 
 	public DependencyParserME() {
 
@@ -51,7 +50,7 @@ public class DependencyParserME implements DependencyParser {
 	 * @param contextGen
 	 *            特征
 	 */
-	public DependencyParserME(DependencyParseModel model, DependencyParseContextGenerator contextGen) {
+	public DependencyParserME(ModelWrapper model, DependencyParseContextGenerator contextGen) {
 		init(model, contextGen);
 	}
 
@@ -63,14 +62,9 @@ public class DependencyParserME implements DependencyParser {
 	 * @param contextGen
 	 *            特征
 	 */
-	private void init(DependencyParseModel model, DependencyParseContextGenerator contextGen) {
+	private void init(ModelWrapper model, DependencyParseContextGenerator contextGen) {
 		int beamSize = DependencyParserME.DEFAULT_BEAM_SIZE;
 
-		String beamSizeString = model.getManifestProperty(BeamSearch.BEAM_SIZE_PARAMETER);
-
-		if (beamSizeString != null) {
-			beamSize = Integer.parseInt(beamSizeString);
-		}
 
 		mm = model.getModel();
 
@@ -95,12 +89,12 @@ public class DependencyParserME implements DependencyParser {
 	 * @return PhraseAnalysisModel类，包装模型的信息
 	 * @throws IOException
 	 */
-	public static DependencyParseModel train(File file, File modelbinaryFile, File modeltxtFile,
+	public static ModelWrapper train(File file, File modelbinaryFile, File modeltxtFile,
 			TrainingParameters params, DependencyParseContextGenerator contextGen, String encoding) throws IOException {
 		ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), encoding);
 		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
 		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
-		DependencyParseModel model = DependencyParserME.train("zh", sampleStream, params, contextGen);
+		ModelWrapper model = DependencyParserME.train("zh", sampleStream, params, contextGen);
 		return model;
 
 	}
@@ -119,12 +113,12 @@ public class DependencyParserME implements DependencyParser {
 	 * @return 模型和模型信息的包裹结果
 	 * @throws IOException
 	 */
-	public static DependencyParseModel train(File file, TrainingParameters params,
+	public static ModelWrapper train(File file, TrainingParameters params,
 			DependencyParseContextGenerator contextGen, String encoding) throws IOException {
 		ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), encoding);
 		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
 		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
-		DependencyParseModel model = DependencyParserME.train("zh", sampleStream, params, contextGen);
+		ModelWrapper model = DependencyParserME.train("zh", sampleStream, params, contextGen);
 		return model;
 	}
 
@@ -143,7 +137,7 @@ public class DependencyParserME implements DependencyParser {
 	 * @throws IOException
 	 *             IO异常
 	 */
-	public static DependencyParseModel train(String languageCode, ObjectStream<DependencySample> sampleStream,
+	public static ModelWrapper train(String languageCode, ObjectStream<DependencySample> sampleStream,
 			TrainingParameters params, DependencyParseContextGenerator contextGen) throws IOException {
 		// beamSizeString为空
 		String beamSizeString = params.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
@@ -152,7 +146,7 @@ public class DependencyParserME implements DependencyParser {
 		if (beamSizeString != null) {
 			beamSize = Integer.parseInt(beamSizeString);
 		}
-		MaxentModel posModel = null;
+		ClassificationModel maxentModel = null;
 
 		Map<String, String> manifestInfoEntries = new HashMap<String, String>();
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
@@ -160,13 +154,13 @@ public class DependencyParserME implements DependencyParser {
 		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType)) {
 			ObjectStream<Event> es = new DependencySampleEventStream(sampleStream, contextGen);
 			EventTrainer trainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
-			posModel = trainer.train(es);
+			maxentModel = trainer.train(es);
 		}
 
-		if (posModel != null) {
-			return new DependencyParseModel(languageCode, posModel, beamSize, manifestInfoEntries);
+		if (maxentModel != null) {
+			return new ModelWrapper(maxentModel, beamSize);
 		} else {
-			return new DependencyParseModel(languageCode, seqPosModel, manifestInfoEntries);
+			return new ModelWrapper(seqPosModel);
 		}
 	}
 

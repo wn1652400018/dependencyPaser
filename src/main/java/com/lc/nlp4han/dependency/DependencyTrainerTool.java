@@ -6,7 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 依存分析模型训练应用
@@ -70,7 +71,7 @@ public class DependencyTrainerTool
 
         DependencyParseContextGenerator gen = new DependencyParseContextGeneratorConf();
         
-        DependencyParseModel model = DependencyParserME.train(corpusFile, params, gen, encoding);
+        ModelWrapper model = DependencyParserME.train(corpusFile, params, gen, encoding);
         
         OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));           
         model.serialize(modelOut);

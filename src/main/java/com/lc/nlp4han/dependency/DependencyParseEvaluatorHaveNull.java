@@ -1,7 +1,6 @@
 package com.lc.nlp4han.dependency;
 
-
-import opennlp.tools.util.eval.Evaluator;
+import com.lc.nlp4han.ml.util.Evaluator;
 
 /**
  * 评估句法分析器的性能【此时句法树中的关系无Null】
