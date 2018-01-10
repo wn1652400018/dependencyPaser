@@ -1,6 +1,6 @@
 package com.lc.nlp4han.ml.model;
 
-import opennlp.tools.util.ObjectStream;
+import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
  *  Interface for streams of sequences used to train sequence models.
