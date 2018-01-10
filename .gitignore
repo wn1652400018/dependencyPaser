@@ -23,3 +23,5 @@ hs_err_pid*
 /nbproject/
 /target/
 /nbactions.xml
+/.classpath
+/.project
