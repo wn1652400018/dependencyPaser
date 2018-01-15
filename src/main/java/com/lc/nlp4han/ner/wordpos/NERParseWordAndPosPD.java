@@ -12,7 +12,7 @@ import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
  * @author 王馨苇
  *
  */
-public class NERParseWordAndPos implements NERParseStrategy{
+public class NERParseWordAndPosPD implements NERParseStrategy{
 
 	private ArrayList<String> words = new ArrayList<String>();
     private ArrayList<String> tags = new ArrayList<String>();

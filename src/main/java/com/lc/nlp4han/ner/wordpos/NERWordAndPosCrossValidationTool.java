@@ -90,7 +90,7 @@ public class NERWordAndPosCrossValidationTool {
         NERWordAndPosContextGenerator context = new NERWordAndPosContextGeneratorConf();
         System.out.println(context);
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);       
-        NERParseStrategy parse = new NERParseWordAndPos();
+        NERParseStrategy parse = new NERParseWordAndPosPD();
         ObjectStream<NERWordOrCharacterSample> sampleStream = new NERWordAndPosSampleStream(lineStream, parse);
         NERWordAndPosCrossValidationTool run = new NERWordAndPosCrossValidationTool();
         run.evaluate(sampleStream,folds,context, params);

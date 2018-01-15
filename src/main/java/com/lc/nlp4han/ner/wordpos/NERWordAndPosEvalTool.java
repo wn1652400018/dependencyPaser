@@ -24,7 +24,7 @@ public class NERWordAndPosEvalTool {
 	
 	public static void eval(File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException{
 		long start = System.currentTimeMillis();
-		NERParseStrategy parse = new NERParseWordAndPos();
+		NERParseStrategy parse = new NERParseWordAndPosPD();
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
         ObjectStream<NERWordOrCharacterSample> sampleStream = new NERWordSampleStream(lineStream, parse);
         NERWordAndPosContextGenerator contextGen = new NERWordAndPosContextGeneratorConf();

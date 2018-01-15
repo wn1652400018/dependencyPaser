@@ -69,7 +69,7 @@ public class NERWordAndPosTrainTool {
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
         
-        NERParseStrategy parse = new NERParseWordAndPos();
+        NERParseStrategy parse = new NERParseWordAndPosPD();
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         ObjectStream<NERWordOrCharacterSample> sampleStream = new NERWordSampleStream(lineStream, parse);
         NERWordAndPosContextGenerator contextGen = new NERWordAndPosContextGeneratorConf();
