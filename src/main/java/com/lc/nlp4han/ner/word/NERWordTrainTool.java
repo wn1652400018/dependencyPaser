@@ -20,7 +20,7 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
 public class NERWordTrainTool {
 
 	private static void usage(){
-		System.out.println(NERWordTrainTool.class.getName()+"-data <corpusFile> -model <modelFile> -encoding"+"[-cutoff <num>] [-iters <num>]");
+		System.out.println(NERWordTrainTool.class.getName()+" -data <corpusFile> -model <modelFile> -encoding"+"[-cutoff <num>] [-iters <num>]");
 	}
 	
 	public static void main(String[] args) throws IOException {

@@ -11,7 +11,6 @@ public class NEREvaluateMonitor implements EvaluationMonitor<NERWordOrCharacterS
 	 * @param arg1 预测的结果
 	 */
 	public void correctlyClassified(NERWordOrCharacterSample arg0, NERWordOrCharacterSample arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -21,7 +20,6 @@ public class NEREvaluateMonitor implements EvaluationMonitor<NERWordOrCharacterS
 	 * @param arg1 预测的结果
 	 */
 	public void missclassified(NERWordOrCharacterSample arg0, NERWordOrCharacterSample arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 

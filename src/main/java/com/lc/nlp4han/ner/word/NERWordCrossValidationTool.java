@@ -96,7 +96,7 @@ public class NERWordCrossValidationTool {
         NERWordContextGenerator context = new NERWordContextGeneratorConf();
         System.out.println(context);
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);    
-        NERParseStrategy parse = new NERParseWordPD();
+        NERParseStrategy parse = new NERParseWordMSRA();
         ObjectStream<NERWordOrCharacterSample> sampleStream = new NERWordSampleStream(lineStream, parse);
         NERWordCrossValidationTool run = new NERWordCrossValidationTool();
         run.evaluate(sampleStream,folds,context, params);

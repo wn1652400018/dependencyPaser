@@ -35,7 +35,7 @@ public class NERWordContextGeneratorConf implements NERWordContextGenerator{
     
     public NERWordContextGeneratorConf() throws IOException {
     	Properties featureConf = new Properties();
-        InputStream featureStream = NERWordContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/wxw/ner/run/feature.properties");
+        InputStream featureStream = NERWordContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/ner/feature.properties");
         featureConf.load(featureStream);
         
         init(featureConf);

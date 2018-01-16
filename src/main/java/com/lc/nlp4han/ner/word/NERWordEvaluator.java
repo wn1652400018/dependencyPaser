@@ -58,15 +58,11 @@ public class NERWordEvaluator extends Evaluator<NERWordOrCharacterSample>{
 		for (int i = 0; i < wordsRef.length; i++) {
 			System.out.print(wordsRef[i]+" ");
 		}
-		System.out.println();
 		String[] wordsAndtagsRef = sample.getTags();
 		String[][] acRef = sample.getAditionalContext();
 		
 		String[] wordsAndtagsPre = tagger.tag(wordsRef, acRef);
-		for (int i = 0; i < wordsAndtagsPre.length; i++) {
-			System.out.print(wordsAndtagsPre[i]+" ");
-		}
-		System.out.println();
+
 		String[] tagsRef = NERWordOrCharacterSample.toNer(wordsAndtagsRef);
 		String[] nerRef = NERWordOrCharacterSample.toWord(wordsRef, wordsAndtagsRef);
 		String[] tagsPre = NERWordOrCharacterSample.toNer(wordsAndtagsPre);
