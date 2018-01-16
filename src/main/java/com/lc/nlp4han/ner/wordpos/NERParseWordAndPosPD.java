@@ -23,6 +23,9 @@ public class NERParseWordAndPosPD implements NERParseStrategy{
      */
 	public NERWordOrCharacterSample parse(String sentence) {
 		String[] str = sentence.split("\\s+");
+		words.clear();
+		tags.clear();
+		poses.clear();
 		Queue<String> queue = new LinkedList<String>();
 		int i = 1;
 		String word = "";

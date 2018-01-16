@@ -19,6 +19,8 @@ public class NERParseCharacterPD implements NERParseStrategy {
 	@Override
 	public NERWordOrCharacterSample parse(String sentence) {
 		String[] str = sentence.split("\\s+");
+		characters.clear();
+		tags.clear();
 		Queue<String> queue = new LinkedList<String>();
 		int i = 1;
 		String word = "";

@@ -21,6 +21,8 @@ public class NERParseWordPD implements NERParseStrategy{
 	@Override
 	public NERWordOrCharacterSample parse(String sentence) {
 		String[] str = sentence.split("\\s+");
+		words.clear();
+		tags.clear();
 		Queue<String> queue = new LinkedList<String>();
 		int i = 1;
 		String word = "";
@@ -147,9 +149,7 @@ public class NERParseWordPD implements NERParseStrategy{
 				break;
 			}
 		}
-//		for (int j = 0; j < words.size(); j++) {
-//			System.out.println(words.get(j)+"--"+tags.get(j)+"--"+poses.get(j));
-//		}
+		
 		return new NERWordOrCharacterSample(words,tags);
 	}
 

@@ -52,7 +52,7 @@ public class NERWordAndPosContextGeneratorConf implements NERWordAndPosContextGe
 	 */
 	public NERWordAndPosContextGeneratorConf() throws IOException{
 		Properties featureConf = new Properties();
-        InputStream featureStream = NERWordAndPosContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/wxw/ner/run/feature.properties");
+        InputStream featureStream = NERWordAndPosContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/ner/feature.properties");
         featureConf.load(featureStream);
         
         init(featureConf);
