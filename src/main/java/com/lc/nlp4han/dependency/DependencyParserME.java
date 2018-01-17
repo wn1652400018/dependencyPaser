@@ -24,7 +24,7 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 
 /**
- * 训练模型
+ * 基于最大熵的依存解析器
  * 
  * @author 刘小峰
  * @author 王馨苇
@@ -38,21 +38,27 @@ public class DependencyParserME implements DependencyParser {
 
 	private ClassificationModel mm;
 
-	public DependencyParserME() {
+	public DependencyParserME(File model) throws IOException
+    {
+        this(new ModelWrapper(model), new DependencyParseContextGeneratorConf());
+    }
 
-	}
+    public DependencyParserME(File model, DependencyParseContextGenerator contextGen) throws IOException
+    {
+        this(new ModelWrapper(model), contextGen);
+    }
+    
+    public DependencyParserME(ModelWrapper model) throws IOException
+    {
+        init(model, new DependencyParseContextGeneratorConf());
 
-	/**
-	 * 构造函数，初始化工作
-	 * 
-	 * @param model
-	 *            模型
-	 * @param contextGen
-	 *            特征
-	 */
-	public DependencyParserME(ModelWrapper model, DependencyParseContextGenerator contextGen) {
-		init(model, contextGen);
-	}
+    }
+
+    public DependencyParserME(ModelWrapper model, DependencyParseContextGenerator contextGen)
+    {
+        init(model, contextGen);
+
+    }
 
 	/**
 	 * 初始化工作
@@ -63,41 +69,11 @@ public class DependencyParserME implements DependencyParser {
 	 *            特征
 	 */
 	private void init(ModelWrapper model, DependencyParseContextGenerator contextGen) {
-		int beamSize = DependencyParserME.DEFAULT_BEAM_SIZE;
-
-
 		mm = model.getModel();
 
 		contextGenerator = contextGen;
 	}
 
-	/**
-	 * 训练模型并输出
-	 * 
-	 * @param file
-	 *            训练语料的文件
-	 * @param modelbinaryFile
-	 *            持久化模型文件，二进制
-	 * @param modeltxtFile
-	 *            输出模型文件
-	 * @param params
-	 *            训练参数
-	 * @param contextGen
-	 *            特征
-	 * @param encoding
-	 *            编码
-	 * @return PhraseAnalysisModel类，包装模型的信息
-	 * @throws IOException
-	 */
-	public static ModelWrapper train(File file, File modelbinaryFile, File modeltxtFile,
-			TrainingParameters params, DependencyParseContextGenerator contextGen, String encoding) throws IOException {
-		ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), encoding);
-		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
-		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
-		ModelWrapper model = DependencyParserME.train("zh", sampleStream, params, contextGen);
-		return model;
-
-	}
 
 	/**
 	 * 训练模型
@@ -118,7 +94,7 @@ public class DependencyParserME implements DependencyParser {
 		ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), encoding);
 		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
 		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
-		ModelWrapper model = DependencyParserME.train("zh", sampleStream, params, contextGen);
+		ModelWrapper model = DependencyParserME.train(sampleStream, params, contextGen);
 		return model;
 	}
 
@@ -137,7 +113,7 @@ public class DependencyParserME implements DependencyParser {
 	 * @throws IOException
 	 *             IO异常
 	 */
-	public static ModelWrapper train(String languageCode, ObjectStream<DependencySample> sampleStream,
+	public static ModelWrapper train(ObjectStream<DependencySample> sampleStream,
 			TrainingParameters params, DependencyParseContextGenerator contextGen) throws IOException {
 		// beamSizeString为空
 		String beamSizeString = params.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
@@ -146,11 +122,12 @@ public class DependencyParserME implements DependencyParser {
 		if (beamSizeString != null) {
 			beamSize = Integer.parseInt(beamSizeString);
 		}
+		
 		ClassificationModel maxentModel = null;
-
+		SequenceClassificationModel<String> seqModel = null;
+		
 		Map<String, String> manifestInfoEntries = new HashMap<String, String>();
-		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
-		SequenceClassificationModel<String> seqPosModel = null;
+		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());	
 		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType)) {
 			ObjectStream<Event> es = new DependencySampleEventStream(sampleStream, contextGen);
 			EventTrainer trainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
@@ -160,66 +137,8 @@ public class DependencyParserME implements DependencyParser {
 		if (maxentModel != null) {
 			return new ModelWrapper(maxentModel, beamSize);
 		} else {
-			return new ModelWrapper(seqPosModel);
+			return new ModelWrapper(seqModel);
 		}
-	}
-
-	/**
-	 * 获得最大概率与最大概率对应的依赖标记，为最大生成树做准备
-	 * 
-	 * @param sentence
-	 *            语句
-	 * @param pos
-	 *            词性标注
-	 * @param additionaContext
-	 *            额外的信息
-	 * @return 对象包装概率和依存关系的信息
-	 */
-	public DependencyParseMatrix tagNull(String[] sentence, String[] pos, Object[] additionaContext) {
-		int i = 1, j = 0;
-		double[][] proba = new double[sentence.length][sentence.length];
-		String[][] dependencyRelation = new String[sentence.length][sentence.length];
-		for (int m = 0; m < sentence.length; m++) {
-			for (int n = 0; n < sentence.length; n++) {
-				proba[m][n] = 0.0;
-				dependencyRelation[m][n] = "null";
-			}
-		}
-		int lenLeft, lenRight;
-		if (DependencyParseContextGeneratorConf.LEFT == -1 && DependencyParseContextGeneratorConf.RIGHT == -1) {
-			lenLeft = -sentence.length;
-			lenRight = sentence.length;
-		} else {
-			lenLeft = DependencyParseContextGeneratorConf.LEFT;
-			lenRight = DependencyParseContextGeneratorConf.RIGHT;
-		}
-		// if()
-		while (i < sentence.length) {
-			while (j < sentence.length) {
-				// while(j - i <= lenRight && j - i >= lenLeft && j < sentence.length){
-				if (i != j) {
-					String[] context = contextGenerator.getContext(i, j, sentence, pos, additionaContext);
-					double temp[] = mm.eval(context);
-					String str = mm.getBestOutcome(temp);
-					// System.out.println(mm.getAllOutcomes(temp));
-					// for (int k = 0; k < temp.length; k++) {
-					// System.out.println(temp[k]+":"+mm.getOutcome(k));
-					// }
-
-					Arrays.sort(temp);
-					// 根据最大的下标获取对应的依赖关系
-					dependencyRelation[i][j] = str;
-					// 最大的概率
-					proba[i][j] = temp[temp.length - 1];
-					// System.out.println(sentence[i]+" "+sentence[j]+":"+str);
-				}
-				j++;
-			}
-			i++;
-			j = 0;
-		}
-
-		return new DependencyParseMatrix(sentence, pos, proba, dependencyRelation);
 	}
 
 	/**
@@ -252,17 +171,18 @@ public class DependencyParserME implements DependencyParser {
 			lenLeft = DependencyParseContextGeneratorConf.LEFT;
 			lenRight = DependencyParseContextGeneratorConf.RIGHT;
 		}
-		// if()
+
 		while (i < sentence.length) {
-			// while(j < sentence.length){
 			while (j - i <= lenRight && j - i >= lenLeft && j < sentence.length) {
 				if (i != j) {
 					String[] context = contextGenerator.getContext(i, j, sentence, pos, additionaContext);
 					double temp[] = mm.eval(context);
+					
 					String tempDependency[] = new String[temp.length];
 					for (int k = 0; k < temp.length; k++) {
 						tempDependency[k] = mm.getOutcome(k);
 					}
+					
 					double max = -1;
 					int record = -1;
 					for (int k = 0; k < temp.length; k++) {
@@ -271,13 +191,16 @@ public class DependencyParserME implements DependencyParser {
 							record = k;
 						}
 					}
+					
 					// 根据最大的下标获取对应的依赖关系
 					dependencyRelation[i][j] = tempDependency[record];
 					// 最大的概率
 					proba[i][j] = temp[record];
 				}
+				
 				j++;
 			}
+			
 			i++;
 			j = 0;
 		}
@@ -303,12 +226,7 @@ public class DependencyParserME implements DependencyParser {
 		int i = 1, j = 0;
 		String[][] proba = new String[sentence.length][sentence.length];
 		String[][] dependencyRelation = new String[sentence.length][sentence.length];
-		// for (int m = 0; m < sentence.length; m++) {
-		// for (int n = 0; n < sentence.length; n++) {
-		// proba[m][n] = 0.0;
-		// dependencyRelation[m][n] = "null";
-		// }
-		// }
+
 		int lenLeft, lenRight;
 		if (DependencyParseContextGeneratorConf.LEFT == -1 && DependencyParseContextGeneratorConf.RIGHT == -1) {
 			lenLeft = -sentence.length;
@@ -325,23 +243,22 @@ public class DependencyParserME implements DependencyParser {
 		}
 
 		while (i < sentence.length) {
-			// while(j < sentence.length){
 			while (j - i <= lenRight && j - i >= lenLeft && j < sentence.length) {
 				if (i != j) {
-					Queue<Data> queue = new PriorityQueue<>();
+					Queue<DepDatum> queue = new PriorityQueue<>();
 					String[] context = contextGenerator.getContext(i, j, sentence, pos, additionaContext);
 					double temp[] = mm.eval(context);
 					String tempDependency[] = new String[temp.length];
 					for (int k = 0; k < temp.length; k++) {
 						if (mm.getOutcome(k).compareTo("null") != 0) {
 							tempDependency[k] = mm.getOutcome(k);
-							queue.add(new Data(temp[k], k));
+							queue.add(new DepDatum(temp[k], k));
 						}
 					}
 					String tempProba = "";
 					String tempDepen = "";
 					for (int k = 0; k < kRes; k++) {
-						Data data = queue.poll();
+						DepDatum data = queue.poll();
 						if (k == kRes - 1) {
 							tempProba += data.getValue();
 							tempDepen += tempDependency[data.getIndex()];
@@ -374,7 +291,6 @@ public class DependencyParserME implements DependencyParser {
 	 * @return 对象包装概率和依存关系的信息
 	 */
 	public DependencyParseMatrix tagNoNull(String[] sentence, String[] pos) {
-
 		return tagNoNull(sentence, pos, null);
 	}
 

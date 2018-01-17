@@ -2,10 +2,11 @@ package com.lc.nlp4han.dependency;
 
 /**
  * 存放数组中的值和对应的下标
+ * 
  * @author 王馨苇
  *
  */
-public class Data implements Comparable<Data>{
+public class DepDatum implements Comparable<DepDatum>{
 
 	private double value;
 	private int index;
@@ -13,17 +14,18 @@ public class Data implements Comparable<Data>{
 	private int wordIndex;
 	private String word;
 	private String pos;
+	
 	/**
 	 * 构造
 	 * @param value 数组中的值
 	 * @param index 值对应的下标
 	 */
-	public Data(double value,int index) {
+	public DepDatum(double value,int index) {
 		this.value = value;
 		this.index = index;		
 	}
 	
-	public Data(double value,int index, String dependency,int wordIndex,String word,String pos){
+	public DepDatum(double value,int index, String dependency,int wordIndex,String word,String pos){
 		this.value = value;
 		this.index = index;	
 		this.dependency = dependency;
@@ -55,6 +57,7 @@ public class Data implements Comparable<Data>{
 	public String getPos(){
 		return this.pos;
 	}
+	
 	/**
 	 * 获取值
 	 * @return 值
@@ -75,7 +78,7 @@ public class Data implements Comparable<Data>{
 	 * 重写的用于比较值的大小的方法
 	 */
 	@Override
-	public int compareTo(Data arg0) {
+	public int compareTo(DepDatum arg0) {
 		if(this.getValue() > arg0.getValue()){
 			return -1;
 		}else if(this.getValue() == arg0.getValue()){

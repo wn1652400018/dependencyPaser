@@ -73,7 +73,7 @@ public class DependencyCrossValidatorTool
         ObjectStream<DependencySample> sampleStream = new DependencySampleStream(linesStream, sampleParser);
 
         // 交叉验证
-        DependencyParseCrossValidator crossValidator = new DependencyParseCrossValidator("ZH", params);
+        DependencyParseCrossValidator crossValidator = new DependencyParseCrossValidator(params);
         DependencyParseContextGenerator contextGen = new DependencyParseContextGeneratorConf();
         crossValidator.evaluate(sampleStream, folds, contextGen);
     }
