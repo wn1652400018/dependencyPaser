@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
-import opennlp.tools.ml.model.Event;
-import opennlp.tools.util.AbstractEventStream;
-import opennlp.tools.util.ObjectStream;
+import com.lc.nlp4han.ml.model.Event;
+import com.lc.nlp4han.ml.util.AbstractEventStream;
+import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
  * 训练模型所需要的事件流

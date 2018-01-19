@@ -11,6 +11,7 @@ public interface DependencyParseContextGenerator{
 
 	/**
 	 * 获取特征
+	 * 
 	 * @param indexi 词语1的位置
 	 * @param indexj 词语2的位置
 	 * @param words 句子词序列

@@ -8,6 +8,8 @@ import java.util.Queue;
 
 /**
  * 最大生成树算法
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -15,29 +17,34 @@ public class MaxSpanningTree {
 	
 	/**
 	 * 最大生成树
-	 * @param phraseProba 概率
-	 * @return 样本的格式
+	 * 
+	 * @param depMatrix 概率
+	 * @return 样本表示的依存结果
 	 */
-	public static DependencySample getMaxTree(DependencyParseMatrix phraseProba){
-		double[][] proba = phraseProba.getProba();
-		String[][] dependency = phraseProba.getDependency();
-		String[] sentence = phraseProba.getSentence();
-		String[] pos = phraseProba.getPos();	
+	public static DependencySample getMaxTree(DependencyParseMatrix depMatrix){
+		double[][] proba = depMatrix.getProba();
+		String[][] dependency = depMatrix.getDependency();
+		String[] sentence = depMatrix.getSentence();
+		String[] pos = depMatrix.getPos();	
+		
 		//当前生成树到剩余各顶点最短边的权值
 		double[] maxcost = new double[proba.length];
 		//最大权重
 		double maxWeightNotNull = -1,maxWeightNull = -1;
 		//记录最大权重对应的节点的下标
 		int recordNotNull = -1,recordNull = -1;
+		
 		//关系依赖词对应的下标
 		String[] dependencyIndiceRec = new String[proba.length-1];
 		for (int i = 0; i < dependencyIndiceRec.length; i++) {
 			dependencyIndiceRec[i] = "-1";
 		}
+		
 		//记录关系
 		String[] dependencyRec = new String[proba.length-1];
 		//依赖的词
 		String[] dependencyWordsRec = new String[proba.length-1];
+		
 		//从第一个词的节点开始
 		int start = 1;
 		for (int i = 0; i < proba[start].length; i++) {
@@ -53,6 +60,7 @@ public class MaxSpanningTree {
 						maxWeightNotNull = maxcost[j];
 						recordNotNull = j;
 					}
+					
 					//针对于一行都是null的情况，都是null取最大的null
 					if(maxcost[j] > maxWeightNull){
 						maxWeightNull = maxcost[j];
@@ -61,6 +69,7 @@ public class MaxSpanningTree {
 				}
 				j++;
 			}
+			
 			//一行有不是null的情况
 			if(recordNotNull != -1){
 				dependencyIndiceRec[i-1] = String.valueOf(recordNotNull);
@@ -72,6 +81,7 @@ public class MaxSpanningTree {
 				dependencyRec[i-1] = dependency[i][recordNull];		
 				dependencyWordsRec[i-1] = sentence[recordNull];	
 			}
+			
 			//复位
 			recordNotNull = -1;
 			recordNull = -1;
@@ -82,8 +92,10 @@ public class MaxSpanningTree {
 					maxcost[k] = proba[i+1][k];
 				}
 			}
+			
 			i++;j=0;		
 		}
+		
 		return new DependencySample(sentence,pos,dependencyRec,dependencyWordsRec,dependencyIndiceRec);
 	}
 	
@@ -205,7 +217,7 @@ public class MaxSpanningTree {
 		String[][] dep = new String[proba.length-1][k];
 		String[][] depIndice = new String[proba.length-1][k];
 		
-		Queue<Data> queue;
+		Queue<DepDatum> queue;
 
 		//记录会出现环的下标数组
 	    List<Integer> recordNotNullLoop = new ArrayList<Integer>();
@@ -219,7 +231,7 @@ public class MaxSpanningTree {
 			queue = getQueue(i,phraseProba);//为了排序用的
 			//k的循环为了得到K个最好的结果
 			while(j2 < k) {				
-				Data data = queue.poll();				
+				DepDatum data = queue.poll();				
 				depIndice[i-1][j2] = data.getWordIndex()+"";
 				//把depIndice中的一列转成一行
 				for (int l = 0; l < i; l++) {
@@ -272,12 +284,12 @@ public class MaxSpanningTree {
 	 * @param phraseProba 概率对象
 	 * @return
 	 */
-	public static Queue<Data> getQueue(int i,DependencyParseMatrix phraseProba){
+	public static Queue<DepDatum> getQueue(int i,DependencyParseMatrix phraseProba){
 		String[][] proba = phraseProba.getKProba();//获得概率
 		String[][] dependency = phraseProba.getKDependency();//获得关系
 		String[] sentence = phraseProba.getSentence();//词语
 		String[] pos = phraseProba.getPos();//词性
-		Queue<Data> queue = new PriorityQueue<>();//为了排序用的
+		Queue<DepDatum> queue = new PriorityQueue<>();//为了排序用的
 		int j = 0;
 		while(j < proba.length){	
 			if(i != j){	
@@ -289,7 +301,7 @@ public class MaxSpanningTree {
 				for (int l = 0; l < temp1.length && l < temp2.length; l++) {
 					if(temp2[l].compareTo("null") != 0){
 						//最大的K个概率就是队列最前面的几个，然后也能根据下标取到K个标记
-						queue.add(new Data(Double.parseDouble(temp1[l]),indexk++,temp2[l],j,sentence[j],pos[j]));
+						queue.add(new DepDatum(Double.parseDouble(temp1[l]),indexk++,temp2[l],j,sentence[j],pos[j]));
 					}				
 				}
 			}

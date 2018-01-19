@@ -3,9 +3,9 @@ package com.lc.nlp4han.dependency;
 import java.io.File;
 import java.io.IOException;
 
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 依存分析交叉验证应用
@@ -73,7 +73,7 @@ public class DependencyCrossValidatorTool
         ObjectStream<DependencySample> sampleStream = new DependencySampleStream(linesStream, sampleParser);
 
         // 交叉验证
-        DependencyParseCrossValidator crossValidator = new DependencyParseCrossValidator("ZH", params);
+        DependencyParseCrossValidator crossValidator = new DependencyParseCrossValidator(params);
         DependencyParseContextGenerator contextGen = new DependencyParseContextGeneratorConf();
         crossValidator.evaluate(sampleStream, folds, contextGen);
     }

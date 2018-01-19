@@ -3,8 +3,6 @@ package com.lc.nlp4han.dependency;
 import java.util.ArrayList;
 import java.util.List;
 
-import opennlp.tools.tokenize.WhitespaceTokenizer;
-
 
 /**
  * 对CoNLL格式的依存语料进行解析
@@ -54,45 +52,5 @@ public class DependencySampleParserCoNLL implements DependencySampleParser{
 				dependencyWords.toArray(new String[dependencyWords.size()]), 
 				dependencyIndices.toArray(new String[dependencyIndices.size()]));
 	}
-
-//	/**
-//	 * 解析测试语料的样本
-//	 */
-//	public DependencySample parseTest(String sentenceTest) {
-//		String[] wordsandpoese = WhitespaceTokenizer.INSTANCE.tokenize(sentenceTest);
-//		List<String> words = new ArrayList<>();
-//		List<String> poses = new ArrayList<>();
-//		words.add("核心");
-//		poses.add("root");
-//		//假设词语和词性之间的/分割的
-//		for (int i = 0; i < wordsandpoese.length; i++) {
-//			String[] temp = wordsandpoese[i].split("/");
-//			words.add(temp[0]);
-//			words.add(temp[1]);
-//		}
-//		return new DependencySample(words,poses);
-//	}
-
-//	/**
-//	 * 输出最终对测试文本进行句法分析的结果
-//	 * @param pas 样本信息
-//	 */
-//	public void printPhraseAnalysisRes(DependencySample pas) {
-//		String[] words = pas.getWords();
-//		String[] pos = pas.getPos();
-//		String[] dependency = pas.getDependency();
-//		String[] dependencyIndice = pas.getDependencyIndices();
-//		int length = dependency.length;
-//		for (int i = 0; i < length; i++) {
-//			System.out.println((i+1)+"\t"+words[i+1]+"\t"+words[i+1]+"\t"
-//					+pos[i+1]+"\t"+pos[i+1]+"\t"
-//					+"_"+"\t"
-//					+dependencyIndice[i]+"\t"
-//					+dependency[i]+"\t"
-//					+"_"+"\t"+"_");
-//		}
-//		System.out.println();
-//		
-//	}
 
 }

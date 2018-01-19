@@ -8,6 +8,7 @@ import java.util.Properties;
 
 /**
  * 中文论文《基于最大熵的依存句法分析》里的特征实现
+ * 
  * @author 王馨苇
  *
  */

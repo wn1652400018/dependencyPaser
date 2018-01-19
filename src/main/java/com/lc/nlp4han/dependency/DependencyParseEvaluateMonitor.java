@@ -1,7 +1,6 @@
 package com.lc.nlp4han.dependency;
 
-
-import opennlp.tools.util.eval.EvaluationMonitor;
+import com.lc.nlp4han.ml.util.EvaluationMonitor;
 
 /**
  * 依存分析评估监视器

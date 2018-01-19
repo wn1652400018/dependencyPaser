@@ -4,9 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import opennlp.tools.util.MarkableFileInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.TrainingParameters;
+import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
+import com.lc.nlp4han.ml.util.ModelWrapper;
+import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
  * 依存解析评价应用
@@ -20,7 +21,7 @@ public class DependencyEvalTool
     {
         DependencyParseContextGenerator gen = new DependencyParseContextGeneratorConf();
         
-        DependencyParseModel model = DependencyParserME.train(trainFile, params, gen, encoding);
+        ModelWrapper model = DependencyParserME.train(trainFile, params, gen, encoding);
         
         DependencyParserME tagger = new DependencyParserME(model,gen);
              

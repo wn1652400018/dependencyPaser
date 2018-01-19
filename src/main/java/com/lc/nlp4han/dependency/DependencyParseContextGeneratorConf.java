@@ -8,6 +8,7 @@ import java.util.Properties;
 
 /**
  * 根据配置文件的信息提取特征，并组合
+ * 
  * @author 王馨苇
  *
  */
@@ -21,6 +22,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	private boolean CwordCposSet;
 	private boolean CwordSet;
 	private boolean CposSet;
+	
 	//二元特征
 	private boolean PwordPposCwordCposSet;
 	private boolean PposCwordCposSet;
@@ -29,15 +31,19 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	private boolean PwordPposCwordSet;
 	private boolean PwordCwordSet;
 	private boolean PposCposSet;
+	
 	//i j之间的词性
 	private boolean PposBposCposSet;
+	
 	//父亲儿子周围特征
 	private boolean PposPpos1Cpos_1CposSet;
 	private boolean Ppos_1PposCpos_1CposSet;
 	private boolean PposPpos1CposCpos1Set;
 	private boolean Ppos_1PposCposCpos1Set;
+	
 	//父亲和儿子之间的位置和距离
 	private boolean disSet;
+	
 	//和中文论文对比增加的特征
 	private boolean Ppos_1Set;
 	private boolean Ppos1Set;
@@ -53,6 +59,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	private boolean PposCposCpos_1Set;
 	private boolean PposCposPpos1Set;
 	private boolean PposCposCpos1Set;
+	
 	//窗口大小参数
 	public static int LEFT;
 	public static int RIGHT;
