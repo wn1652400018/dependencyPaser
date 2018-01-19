@@ -10,6 +10,7 @@ public interface DependencySampleParser{
 
 	/**
 	 * 从训练语料中读取的要解析的句子
+	 * 
 	 * @param sentence 要解析的语句
 	 * @return 解析的结果
 	 */

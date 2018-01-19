@@ -12,7 +12,6 @@ import java.io.PrintStream;
  */
 public class DependencyParseErrorPrinter extends DependencyParseEvaluateMonitor{
 	private PrintStream errOut;
-//	private int countErrorRes = 0;
 	
 	public DependencyParseErrorPrinter(OutputStream out){
 		errOut = new PrintStream(out);
@@ -20,6 +19,7 @@ public class DependencyParseErrorPrinter extends DependencyParseEvaluateMonitor{
 
 	/**
 	 * 样本和预测的不一样的时候进行输出
+	 * 
 	 * @param reference 参考的样本
 	 * @param predict 预测的结果
 	 */
@@ -29,7 +29,5 @@ public class DependencyParseErrorPrinter extends DependencyParseEvaluateMonitor{
 		 errOut.println(reference.toCoNLLSample());	 
 		 errOut.println("预测的结果：");
 		 errOut.println(predict.toCoNLLSample());
-//		 errOut.println("错误的总数：");
-//		 errOut.println(countErrorRes++);
 	}
 }
