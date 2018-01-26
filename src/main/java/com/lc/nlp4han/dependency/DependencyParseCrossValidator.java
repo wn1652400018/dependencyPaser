@@ -17,7 +17,6 @@ public class DependencyParseCrossValidator {
 	private final TrainingParameters params;
 	private DependencyParseEvaluateMonitor[] listeners;
 	private DependencyParseMeasure measure = new DependencyParseMeasure();
-//	private DependencyParsingCount count = new DependencyParsingCount();
 	
 	/**
 	 * 构造
@@ -32,32 +31,33 @@ public class DependencyParseCrossValidator {
 	}
 	
 	/**
-	 * 交叉验证十折评估
+	 * 交叉验证
 	 * @param sample 样本流
 	 * @param nFolds 折数
 	 * @param contextGenerator 上下文
+	 * 
 	 * @throws IOException io异常
 	 */
 	public void evaluate(ObjectStream<DependencySample> sample, int nFolds,
 			DependencyParseContextGenerator contextGenerator) throws IOException{
 		CrossValidationPartitioner<DependencySample> partitioner = new CrossValidationPartitioner<DependencySample>(sample, nFolds);
 		int run = 1;
-		//小于折数的时候
 		while(partitioner.hasNext()){
+			
 			System.out.println("Run"+run+"...");
+			
+			// 训练模型
 			CrossValidationPartitioner.TrainingSampleStream<DependencySample> trainingSampleStream = partitioner.next();
 			ModelWrapper model = DependencyParserME.train(trainingSampleStream, params, contextGenerator);
 
+			// 评价模型
 	        DependencyParseEvaluatorNoNull evaluator = new DependencyParseEvaluatorNoNull(new DependencyParserME(model, contextGenerator), listeners);
-//	        evaluator.setCount(count);
 	        evaluator.setMeasure(measure);
-	        //设置测试集（在测试集上进行评价）
 	        evaluator.evaluate(trainingSampleStream.getTestSampleStream());
 	        
 	        System.out.println(measure);
 	        run++;
 		}
-//		System.out.println(count);
 		System.out.println(measure);
 	}
 }

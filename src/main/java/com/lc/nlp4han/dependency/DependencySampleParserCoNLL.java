@@ -19,7 +19,7 @@ public class DependencySampleParserCoNLL implements DependencySampleParser{
 	 * @param 待解析的语句
 	 * @return 解析后的样本
 	 */
-	public DependencySample parseIn(String sentence) {
+	public DependencySample parse(String sentence) {
 		String wordLine[] = sentence.split("\\n");
 		//词
 		List<String> word = new ArrayList<String>();

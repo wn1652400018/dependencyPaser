@@ -157,7 +157,7 @@ public class MaxSpanningTree {
 				//每加入一条边都要去判断是否为环路
 				dependencyIndiceRec[i-1] = String.valueOf(recordNotNull);
 				//判断是否有环
-				boolean isLoop = IsHaveForestOrLoop.isHaveLoop(dependencyIndiceRec,recordNotNull);
+				boolean isLoop = HasForestOrLoop.hasLoop(dependencyIndiceRec,recordNotNull);
 				if(isLoop){
 					dependencyRec[i-1] = dependency[i][recordNotNull];
 					dependencyWordsRec[i-1] = sentence[recordNotNull];
@@ -174,7 +174,7 @@ public class MaxSpanningTree {
 			}else{
 				//一行都是null的情况
 				dependencyIndiceRec[i-1] = String.valueOf(recordNull);
-				boolean isLoop = IsHaveForestOrLoop.isHaveLoop(dependencyIndiceRec,recordNull);
+				boolean isLoop = HasForestOrLoop.hasLoop(dependencyIndiceRec,recordNull);
 				if(isLoop){
 					dependencyRec[i-1] = dependency[i][recordNull];		
 					dependencyWordsRec[i-1] = sentence[recordNull];
@@ -238,7 +238,7 @@ public class MaxSpanningTree {
 					tempIndice[l] = depIndice[l][j2];
 				}
 				//判断是否是环路
-				boolean isLoop = IsHaveForestOrLoop.isHaveLoop(tempIndice,data.getWordIndex());
+				boolean isLoop = HasForestOrLoop.hasLoop(tempIndice,data.getWordIndex());
 				//（1）无环路
 				if(isLoop){
 					wordsDep[i-1][j2] = data.getWord();

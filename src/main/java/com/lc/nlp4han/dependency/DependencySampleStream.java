@@ -43,7 +43,7 @@ public class DependencySampleStream extends FilterObjectStream<String, Dependenc
 			DependencySample sample = null ;
 			try{
 				//System.out.println(sentences);
-				sample = sampleParser.parseIn(sentences);
+				sample = sampleParser.parse(sentences);
 			}catch(Exception e){
 				if (logger.isLoggable(Level.WARNING)) {
 					
