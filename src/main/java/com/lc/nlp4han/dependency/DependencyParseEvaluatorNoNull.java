@@ -79,7 +79,7 @@ public class DependencyParseEvaluatorNoNull extends Evaluator<DependencySample>{
 		String[] dependencyPre = sample.getDependency();
 		String[] dependencyIndicesPre = sample.getDependencyIndices();
 
-		boolean forest = HasForestOrLoop.hasForest(wordsRef,dependencyIndicesPre);
+		boolean forest = HasForestOrLoop.hasForest(wordsRef, dependencyIndicesPre);
 		if(forest){
 			forestcount++;
 		}
