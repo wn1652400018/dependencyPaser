@@ -10,7 +10,6 @@ import java.net.URL;
 
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.SequenceClassificationModel;
-import com.lc.nlp4han.segment.maxent.WordSegmenterME;
 
 public class ModelWrapper
 {
@@ -88,11 +87,21 @@ public class ModelWrapper
         ModelUtil.writeModel(model, out);
     }
 
+    /**
+     * 得到分类模型
+     * 
+     * @return 分类模型
+     */
     public ClassificationModel getModel()
     {
         return model;
     }
 
+    /**
+     * 得到序列分类模型或构造序列分类模型
+     * 
+     * @return 序列分类模型
+     */
     public SequenceClassificationModel<String> getSequenceModel()
     {
         if (seqModel != null)
