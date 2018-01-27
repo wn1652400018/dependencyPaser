@@ -17,6 +17,8 @@ public class ModelWrapper
     protected ClassificationModel model;
     protected SequenceClassificationModel<String> seqModel;
     protected int beamSize = 3;
+    
+    public static int DEFAULT_BEAM_SIZE = 3;
 
     public ModelWrapper(SequenceClassificationModel<String> seqModel)
     {
@@ -30,7 +32,7 @@ public class ModelWrapper
 
     public ModelWrapper(ClassificationModel model)
     {
-        this(model, WordSegmenterME.DEFAULT_BEAM_SIZE);
+        this(model, DEFAULT_BEAM_SIZE);
     }
 
     public ModelWrapper(ClassificationModel model, int beamSize)
