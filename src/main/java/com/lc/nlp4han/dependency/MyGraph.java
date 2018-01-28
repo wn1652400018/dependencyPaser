@@ -25,6 +25,7 @@ public class MyGraph {
 		this.data = new int[node];
 		this.visited = new int[node];
 	}
+	
 	/**
 	 * 构造
 	 * @param begin 词语组成的节点数组
@@ -42,7 +43,7 @@ public class MyGraph {
 	 * 获取图的矩阵结果
 	 * @return 包含图中边的关系的二维数组
 	 */
-	public int[][] getMetric(){
+	public int[][] getMatrix(){
 		
 		for (int i = 0; i < node-1; i++) {
 			if(Integer.parseInt(begin[i]) != -1){
@@ -69,7 +70,7 @@ public class MyGraph {
 	 * 获取节点
 	 * @return 节点
 	 */
-	public int getNode(){
+	public int getNumOfNodes(){
 		return this.node;
 	}
 	

@@ -85,6 +85,7 @@ public class DependencyParseEvaluatorNoNull extends Evaluator<DependencySample>{
 		}
 		
 		measure.updateScore(dependencyWordsRef, dependencyRef, dependencyWordsPre, dependencyPre);
+		
 		DependencySample samplePre = new DependencySample(wordsRef, posRef, dependencyPre, dependencyWordsPre, dependencyIndicesPre);
 		
 		return samplePre;

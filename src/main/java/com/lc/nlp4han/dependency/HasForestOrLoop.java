@@ -15,16 +15,13 @@ public class HasForestOrLoop {
 	 * @param begin 遍历开始的位置
 	 * @return 是否存在森林
 	 */
-	public static boolean hasForest(String[] word,String[] begin){
+	public static boolean hasForest(String[] word, String[] begin){
 		MyGraph graph = new MyGraph(begin);
 		DepthSearch search = new DepthSearch();
 		int[] visited = graph.getVisited();
 		
 		int flag = search.DFS(graph, 0, visited);
 		if(flag == 1){
-//			for (int i = 1; i < word.length; i++) {
-//				System.out.println(i+"\t"+word[i]+"\t"+begin[i-1]);
-//			}
 			return true;
 		}else{		
 			return false;
@@ -38,7 +35,7 @@ public class HasForestOrLoop {
 	 * @param position 遍历开始的位置
 	 * @return 是否有环路
 	 */
-	public static boolean hasLoop(String[] begin,int position){
+	public static boolean hasLoop(String[] begin, int position){
 		MyGraph graph = new MyGraph(begin);
 		DepthSearch search = new DepthSearch();
 		int[] visited = graph.getVisited();

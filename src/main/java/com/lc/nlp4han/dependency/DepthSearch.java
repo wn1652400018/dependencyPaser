@@ -15,17 +15,19 @@ public class DepthSearch {
 	 * @param k 当前节点
 	 * @return 第一个邻接顶点
 	 */
-	public int getFirst(MyGraph graph,int k){
-		int node = graph.getNode();
-		int[][] edge = graph.getMetric();
+	public int getFirst(MyGraph graph, int k){
+		int node = graph.getNumOfNodes();
+		int[][] edge = graph.getMatrix();
 		if(k<0 || k>node-1){
 			return -1;
 		}
+		
 		for (int i = 0; i < node; i++) {
 			if(edge[k][i] == 1){
 				return i;
 			}
 		}
+		
 		return -1;
 	}
 	
@@ -37,11 +39,12 @@ public class DepthSearch {
 	 * @return 第t个邻接顶点的位置
 	 */
 	public int getNext(MyGraph graph,int k,int t){
-		int node = graph.getNode();
-		int[][] edge = graph.getMetric();
+		int node = graph.getNumOfNodes();
+		int[][] edge = graph.getMatrix();
 		if(k<0 || k>node-1 || t<0 || t>node-1){
 			return -1;
 		}
+		
 		for(int i = t+1; i < node; i++){
 			if(edge[k][i] == 1){
 				return i;
@@ -70,7 +73,7 @@ public class DepthSearch {
 			u = getNext(graph, k, u);
 		}
 		//System.out.println();
-		if(countNode == graph.getNode()){
+		if(countNode == graph.getNumOfNodes()){
 			return -1;
 		}else{
 			return 1;
