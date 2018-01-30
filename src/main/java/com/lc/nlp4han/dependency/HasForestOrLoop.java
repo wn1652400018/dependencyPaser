@@ -16,16 +16,11 @@ public class HasForestOrLoop {
 	 * @return 是否存在森林
 	 */
 	public static boolean hasForest(String[] word, String[] begin){
-		MyGraph graph = new MyGraph(begin);
+		GraphByMatrix graph = new GraphByMatrix(begin);
 		DepthSearch search = new DepthSearch();
 		int[] visited = graph.getVisited();
 		
-		int flag = search.DFS(graph, 0, visited);
-		if(flag == 1){
-			return true;
-		}else{		
-			return false;
-		}
+		return search.DFS(graph, 0, visited);
 	}
 	
 	/**
@@ -36,16 +31,11 @@ public class HasForestOrLoop {
 	 * @return 是否有环路
 	 */
 	public static boolean hasLoop(String[] begin, int position){
-		MyGraph graph = new MyGraph(begin);
+		GraphByMatrix graph = new GraphByMatrix(begin);
 		DepthSearch search = new DepthSearch();
 		int[] visited = graph.getVisited();
 		
-		int flag = search.DFSLoop(graph, position, visited);
-		if(flag == 1){		
-			return true;
-		}else{		
-			return false;
-		}
+		return search.DFSLoop(graph, position, visited);
 	}
 	
 	
