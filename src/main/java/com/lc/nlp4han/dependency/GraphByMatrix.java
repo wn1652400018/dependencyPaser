@@ -18,19 +18,19 @@ public class GraphByMatrix {
 	/**
 	 * 构造
 	 * 
-	 * @param begin
+	 * @param depIndexes
 	 *            节点的数组
 	 */
-	public GraphByMatrix(String[] begin) {
-		this.nodes = begin.length + 1;
+	public GraphByMatrix(String[] depIndexes) {
+		this.nodes = depIndexes.length + 1;
 		this.edge = new int[nodes][nodes];
 		this.nodelLabels = new int[nodes];
 		this.visited = new int[nodes];
 
 		// 初始化边
 		for (int i = 0; i < nodes - 1; i++) {
-			if (Integer.parseInt(begin[i]) != -1) {
-				this.edge[Integer.parseInt(begin[i])][i + 1] = 1;
+			if (Integer.parseInt(depIndexes[i]) != -1) {
+				this.edge[Integer.parseInt(depIndexes[i])][i + 1] = 1;
 			}
 
 		}
@@ -44,12 +44,12 @@ public class GraphByMatrix {
 	/**
 	 * 构造
 	 * 
-	 * @param begin
+	 * @param depIndexes
 	 *            词语组成的节点数组
 	 * @param length
 	 *            节点个数
 	 */
-	public GraphByMatrix(String[] begin, int length) {
+	public GraphByMatrix(String[] depIndexes, int length) {
 		this.nodes = length + 1;
 		this.edge = new int[nodes][nodes];
 		this.nodelLabels = new int[nodes];
@@ -57,8 +57,8 @@ public class GraphByMatrix {
 
 		// 初始化边
 		for (int i = 0; i < nodes - 1; i++) {
-			if (Integer.parseInt(begin[i]) != -1) {
-				this.edge[Integer.parseInt(begin[i])][i + 1] = 1;
+			if (Integer.parseInt(depIndexes[i]) != -1) {
+				this.edge[Integer.parseInt(depIndexes[i])][i + 1] = 1;
 			}
 
 		}

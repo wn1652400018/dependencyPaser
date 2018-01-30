@@ -3,6 +3,7 @@ package com.lc.nlp4han.dependency;
 /**
  * 深度遍历算法
  * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -65,7 +66,7 @@ public class DepthSearch {
 	 * 
 	 * @return 判断是否有森林的标记
 	 */
-	public boolean DFS(GraphByMatrix graph,int k,int[] visited){
+	public boolean hasForestDFS(GraphByMatrix graph, int k, int[] visited){
 		int u;//k的邻接顶点
 		
 		countNode++;
@@ -73,7 +74,7 @@ public class DepthSearch {
 		u = getFirst(graph, k);
 		while(u != -1){
 			if(visited[u] == 0){
-				DFS(graph,u,visited);
+				hasForestDFS(graph,u,visited);
 			}
 			u = getNext(graph, k, u);
 		}
@@ -94,7 +95,7 @@ public class DepthSearch {
 	 * @param k 当前节点
 	 * @return 是否有环路
 	 */
-	public boolean DFSLoop(GraphByMatrix graph,int k,int[] visited){
+	public boolean hasLoopDFS(GraphByMatrix graph,int k,int[] visited){
 		int u;//k的邻接顶点
 
 		visited[k] = 1;
@@ -104,7 +105,7 @@ public class DepthSearch {
 				flag = -1;
 				break;
 			}else if(visited[u] == 0){
-				DFSLoop(graph,u,visited);
+				hasLoopDFS(graph,u,visited);
 			}
 			u = getNext(graph, k, u);
 		}
