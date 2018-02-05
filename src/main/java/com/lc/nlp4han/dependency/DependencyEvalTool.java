@@ -25,26 +25,23 @@ public class DependencyEvalTool
         
         DependencyParserME tagger = new DependencyParserME(model,gen);
              
-         //最大概率中不包含null的情况   
-         DependencyParseMeasure measureNoNull = new DependencyParseMeasure();
-         DependencyParseEvaluatorNoNull evaluatorNoNull = null;
-         DependencyParseErrorPrinter printerNoNull = null;
+         DependencyParseMeasure measure = new DependencyParseMeasure();
+         DependencyParseEvaluatorNoNull evaluator = null;
+         DependencyParseErrorPrinter errorPrinter = null;
          if(errorFile != null){
-             printerNoNull = new DependencyParseErrorPrinter(new FileOutputStream(errorFile));        
-             evaluatorNoNull = new DependencyParseEvaluatorNoNull(tagger,printerNoNull);
+             errorPrinter = new DependencyParseErrorPrinter(new FileOutputStream(errorFile));        
+             evaluator = new DependencyParseEvaluatorNoNull(tagger,errorPrinter);
          }else{
-             evaluatorNoNull = new DependencyParseEvaluatorNoNull(tagger);
+             evaluator = new DependencyParseEvaluatorNoNull(tagger);
          }
-         evaluatorNoNull.setMeasure(measureNoNull);
+         evaluator.setMeasure(measure);
          
-         ObjectStream<String> linesStreamNoNull = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
+         ObjectStream<String> linesStream = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
          DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
-         ObjectStream<DependencySample> sampleStreamNoNull = new DependencySampleStream(linesStreamNoNull, sampleParser);
-         evaluatorNoNull.evaluate(sampleStreamNoNull);
+         ObjectStream<DependencySample> sampleStream = new DependencySampleStream(linesStream, sampleParser);
+         evaluator.evaluate(sampleStream);
          
-         DependencyParseMeasure measureResNoNull = evaluatorNoNull.getMeasure();
-
-         System.out.println(measureResNoNull);
+         System.out.println(evaluator.getMeasure());
     }
 
     private static void usage()

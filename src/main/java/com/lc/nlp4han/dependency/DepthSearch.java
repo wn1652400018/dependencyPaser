@@ -95,7 +95,7 @@ public class DepthSearch {
 	 * @param k 当前节点
 	 * @return 是否有环路
 	 */
-	public boolean hasLoopDFS(GraphByMatrix graph,int k,int[] visited){
+	public boolean hasLoopDFS(GraphByMatrix graph, int k, int[] visited){
 		int u;//k的邻接顶点
 
 		visited[k] = 1;
@@ -105,8 +105,9 @@ public class DepthSearch {
 				flag = -1;
 				break;
 			}else if(visited[u] == 0){
-				hasLoopDFS(graph,u,visited);
+				hasLoopDFS(graph, u, visited);
 			}
+			
 			u = getNext(graph, k, u);
 		}
 
