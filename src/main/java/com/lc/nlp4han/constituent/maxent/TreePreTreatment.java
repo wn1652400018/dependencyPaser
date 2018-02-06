@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 
+import com.lc.nlp4han.ml.util.FileInputStreamFactory;
+
 /**
  * 训练语料中树的初始化处理
  * @author 王馨苇

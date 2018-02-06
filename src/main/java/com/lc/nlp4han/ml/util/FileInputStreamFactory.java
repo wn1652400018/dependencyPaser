@@ -1,12 +1,10 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.ml.util;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.lc.nlp4han.ml.util.InputStreamFactory;
 
 /**
  * 获取输入文件流的工厂类

@@ -11,6 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.ml.util.FileInputStreamFactory;
+
 /**
  * 预处理操作的测试
  * @author 王馨苇

@@ -11,6 +11,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.ml.util.FileInputStreamFactory;
+
 
 /**
  * 测试树到动作再到树是否合法

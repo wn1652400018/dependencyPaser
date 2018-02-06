@@ -14,6 +14,7 @@ import java.util.Map;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.util.EventTrainer;
+import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.TrainerFactory;
