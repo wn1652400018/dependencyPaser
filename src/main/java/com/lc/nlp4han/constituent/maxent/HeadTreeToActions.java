@@ -3,6 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
+
 /**
  * 根据句法树得到动作序列
  * @author 王馨苇

@@ -11,6 +11,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
+import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 
 
@@ -24,7 +28,7 @@ public class Tree2Action2TreeTest{
 	private URL is;
 	private PlainTextByTreeStream lineStream ;
 	private String txt ;
-	private PhraseGenerateTree pgt ;
+	private BracketExpUtil pgt ;
 	private TreeToHeadTree ttht;
 	private TreeNode tree ;
     private HeadTreeNode headTree;
@@ -41,7 +45,7 @@ public class Tree2Action2TreeTest{
 		is = Tree2Action2TreeTest.class.getClassLoader().getResource("com/lc/nlp4han/constituent/maxent/wsj_0015new.mrg");
 		lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(new File(is.getFile())), "utf8");
 		txt = lineStream.read();
-		pgt = new PhraseGenerateTree();
+		pgt = new BracketExpUtil();
 		ttht = new TreeToHeadTree();
 		tree = pgt.generateTree(txt);
         headTree = ttht.treeToHeadTree(tree);

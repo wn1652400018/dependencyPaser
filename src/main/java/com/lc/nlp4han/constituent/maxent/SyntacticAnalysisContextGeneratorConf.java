@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
+
 /**
  * 根据配置文件生成特征
  * @author 王馨苇

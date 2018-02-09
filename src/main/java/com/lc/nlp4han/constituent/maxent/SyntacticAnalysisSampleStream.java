@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.FilterObjectStream;
 import com.lc.nlp4han.ml.util.ObjectStream;
 
@@ -34,7 +37,7 @@ public class SyntacticAnalysisSampleStream extends FilterObjectStream<String,Syn
 	public SyntacticAnalysisSample<HeadTreeNode> read() throws IOException {
 		String sentence = samples.read();	
 		SyntacticAnalysisSample<HeadTreeNode> sample = null;
-		PhraseGenerateTree pgt = new PhraseGenerateTree();
+		BracketExpUtil pgt = new BracketExpUtil();
 		TreeToHeadTree ttht = new TreeToHeadTree();
 		HeadTreeToActions tta = new HeadTreeToActions();
 		if(sentence != null){

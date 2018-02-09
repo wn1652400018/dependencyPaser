@@ -3,6 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.HashMap;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
+
 /**
  * 生成头结点
  * @author 王馨苇

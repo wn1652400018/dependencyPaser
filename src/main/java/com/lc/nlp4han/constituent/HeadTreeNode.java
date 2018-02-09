@@ -1,8 +1,14 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 带中心词的成分树节点
+ * 
+ * @author 刘小峰
+ *
+ */
 public class HeadTreeNode extends TreeNode{
 
 	private String headWords;
@@ -74,10 +80,10 @@ public class HeadTreeNode extends TreeNode{
 	@Override
 	public String toString() {
 		if(super.children.size() == 0){
-			return " "+this.nodename+"["+this.getWordIndex()+"]";
+			return " " + this.nodename + "[" + this.getWordIndex() + "]";
 		}else{
 			String treestr = "";
-			treestr = "("+this.nodename+"{"+this.headWords+"["+this.headWordsPos+"]}";
+			treestr = "(" + this.nodename + "{" + this.headWords + "[" + this.headWordsPos + "]}";
 			
 			for (HeadTreeNode node:getChildren()) {
 				treestr += node.toString();
@@ -93,10 +99,10 @@ public class HeadTreeNode extends TreeNode{
 	 */
 	public String toBracket(){
 		if(this.children.size() == 0){
-			return " "+this.nodename+"["+getWordIndex()+"]";
+			return " " + this.nodename + "[" + getWordIndex() + "]";
 		}else{
 			String treestr = "";
-			treestr = "("+this.nodename;
+			treestr = "(" + this.nodename;
 			for (TreeNode node:this.children) {
 				treestr += node.toBracket();
 			}

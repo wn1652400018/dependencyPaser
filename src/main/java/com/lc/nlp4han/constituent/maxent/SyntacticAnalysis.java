@@ -2,6 +2,9 @@ package com.lc.nlp4han.constituent.maxent;
 
 import java.util.List;
 
+import com.lc.nlp4han.constituent.ConstituentTree;
+import com.lc.nlp4han.constituent.TreeNode;
+
 /**
  * 句法分析器
  * @author 王馨苇

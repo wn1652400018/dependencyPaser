@@ -9,6 +9,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.model.Event;
 
 
@@ -19,7 +22,7 @@ import com.lc.nlp4han.ml.model.Event;
  */
 public class SyntacticAnalysisSampleEventTest {
 
-	private PhraseGenerateTree pgt;
+	private BracketExpUtil pgt;
 	private TreeToHeadTree ttht;
 	private TreeNode tree;
     private HeadTreeNode headTree;
@@ -137,7 +140,7 @@ public class SyntacticAnalysisSampleEventTest {
 	
 	@Before
 	public void setUp() throws CloneNotSupportedException, IOException{
-		pgt = new PhraseGenerateTree();
+		pgt = new BracketExpUtil();
 		ttht = new TreeToHeadTree();
 		tree = pgt.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
 		headTree = ttht.treeToHeadTree(tree);

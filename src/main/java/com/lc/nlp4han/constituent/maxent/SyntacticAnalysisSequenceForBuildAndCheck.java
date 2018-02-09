@@ -3,6 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.TreeNode;
+
 
 public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> implements Comparable<SyntacticAnalysisSequenceForBuildAndCheck<T>> {
 	private double score;

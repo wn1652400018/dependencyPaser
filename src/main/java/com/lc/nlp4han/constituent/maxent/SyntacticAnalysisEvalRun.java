@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;

@@ -7,6 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
+import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 
 /**
@@ -38,7 +41,7 @@ public class TreePreTreatment{
 	public static void pretreatment(String frompath,String topath) throws UnsupportedOperationException, FileNotFoundException, IOException{
 		//读取一颗树
 		PlainTextByTreeStream lineStream = null;
-		PhraseGenerateTree pgt = new PhraseGenerateTree();		
+		BracketExpUtil pgt = new BracketExpUtil();		
 		//创建输出流
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(topath)));
 		lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(new File(frompath)), "utf8");

@@ -2,6 +2,8 @@ package com.lc.nlp4han.constituent.maxent;
 
 import java.util.List;
 
+import com.lc.nlp4han.constituent.TreeNode;
+
 
 /**
  * 词性标注器

@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.TreeNode;
+
 
 /**
  * 测试计算指标是否正确
@@ -13,7 +16,7 @@ import org.junit.Test;
  */
 public class SyntacticAnalysisMeasureTest {
 
-	private PhraseGenerateTree pgt;
+	private BracketExpUtil pgt;
 	private TreeNode treeRef1;
 	private TreeNode treePre1;
 	private SyntacticAnalysisMeasure measure1;
@@ -23,7 +26,7 @@ public class SyntacticAnalysisMeasureTest {
 	
 	@Before
 	public void setUp() throws CloneNotSupportedException{
-		pgt = new PhraseGenerateTree();
+		pgt = new BracketExpUtil();
 		measure1 = new SyntacticAnalysisMeasure();
 		//两棵树不同
 		treeRef1 = pgt.generateTree("((S(NP(NN Measuring)(NNS cups))(VP(MD may)(ADVP(RB soon))(VP(VB be)(VP(VBN replaced)(PP(IN by)(NP(NNS tablespoons)))(PP(IN in)(NP(DT the)(NN laundry)(NN room))))))(. .)))");

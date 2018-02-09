@@ -1,7 +1,11 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 /**
- * 评估需要的工具类
+ * 成分句法分析用的评价结构
+ * 
+ * 一棵子树由根节点非终结符和该子树在句子中的跨度构成
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -11,7 +15,7 @@ public class EvalStructure{
 	private int begin;
 	private int end;
 	
-	public EvalStructure(String nonterminal,int begin,int end){
+	public EvalStructure(String nonterminal, int begin, int end){
 		this.nonterminal = nonterminal;
 		this.begin = begin;
 		this.end = end;

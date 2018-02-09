@@ -8,6 +8,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.EvalStructure;
+import com.lc.nlp4han.constituent.TreeNode;
+import com.lc.nlp4han.constituent.TreeToEvalStructure;
+
 
 /**
  * 测试将一颗完整的树转成 nonterminal begin end 的形式
@@ -16,7 +21,7 @@ import org.junit.Test;
  */
 public class TreeToEvalStructureTest {
 
-	private PhraseGenerateTree pgt;
+	private BracketExpUtil pgt;
 	private TreeNode tree1;
 	private List<EvalStructure> pre1;
 	private List<EvalStructure> result1;
@@ -28,7 +33,7 @@ public class TreeToEvalStructureTest {
 
 	@Before
 	public void setUp() throws CloneNotSupportedException{
-		pgt = new PhraseGenerateTree();
+		pgt = new BracketExpUtil();
 		ttn1 = new TreeToEvalStructure();
 		ttn2 = new TreeToEvalStructure();
 		result1 = new ArrayList<>();

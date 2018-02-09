@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.TreeNode;
+
 
 /**
  * 样本类

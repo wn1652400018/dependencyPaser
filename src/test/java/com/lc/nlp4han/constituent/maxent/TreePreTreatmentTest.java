@@ -11,6 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
+import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 
 /**
@@ -25,14 +28,14 @@ public class TreePreTreatmentTest{
 	private URL url1;
 	private URL url2 ;
 	private String tree = "";
-	private PhraseGenerateTree pgt ;
+	private BracketExpUtil pgt ;
 	private String after = "";
 	private String begin = "";
 	private String line = "";
 	
 	@Before
 	public void setUP() throws UnsupportedOperationException, FileNotFoundException, IOException{
-		pgt = new PhraseGenerateTree();	
+		pgt = new BracketExpUtil();	
 		url1 = TreePreTreatmentTest.class.getClassLoader().getResource("com/lc/nlp4han/constituent/maxent/wsj_0015.mrg");
 		url2 = TreePreTreatmentTest.class.getClassLoader().getResource("com/lc/nlp4han/constituent/maxent/wsj_0015new.mrg");
 		lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(new File(url1.getFile())), "utf8");

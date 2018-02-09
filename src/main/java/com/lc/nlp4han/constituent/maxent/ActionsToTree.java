@@ -3,6 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.TreeNode;
+
 /**
  * 将动作序列转成一棵树
  * @author 王馨苇

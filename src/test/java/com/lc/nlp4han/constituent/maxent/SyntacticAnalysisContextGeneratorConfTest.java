@@ -8,6 +8,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.TreeNode;
+
 /**
  * 对特征生成类的测试
  * @author 王馨苇
@@ -15,7 +19,7 @@ import org.junit.Test;
  */
 public class SyntacticAnalysisContextGeneratorConfTest{
 
-	private PhraseGenerateTree pgt;
+	private BracketExpUtil pgt;
 	private TreeToHeadTree ttht;
 	private TreeNode tree;
     private HeadTreeNode headTree;
@@ -108,7 +112,7 @@ public class SyntacticAnalysisContextGeneratorConfTest{
 
 	@Before
 	public void setUP() throws CloneNotSupportedException, IOException{
-		pgt = new PhraseGenerateTree();
+		pgt = new BracketExpUtil();
 		ttht = new TreeToHeadTree();
 		tree = pgt.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
         headTree = ttht.treeToHeadTree(tree);

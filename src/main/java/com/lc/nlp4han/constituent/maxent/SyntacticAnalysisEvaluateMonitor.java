@@ -1,5 +1,6 @@
 package com.lc.nlp4han.constituent.maxent;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.ml.util.EvaluationMonitor;
 
 /**

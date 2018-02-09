@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.TreeNode;
+
 /**
  * 测试生成头结点的方法
  * @author 王馨苇
@@ -12,7 +16,7 @@ import org.junit.Test;
  */
 public class GenerateHeadWordsTest {
 
-	private PhraseGenerateTree pgt;
+	private BracketExpUtil pgt;
 	private TreeToHeadTree ttht;
 	private TreeNode tree1;
 	private HeadTreeNode headTree1;
@@ -23,7 +27,7 @@ public class GenerateHeadWordsTest {
 	
 	@Before
 	public void setUP() throws CloneNotSupportedException{
-		pgt = new PhraseGenerateTree();
+		pgt = new BracketExpUtil();
 		ttht = new TreeToHeadTree();
 		tree1 = pgt.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
 		headTree1 = ttht.treeToHeadTree(tree1);

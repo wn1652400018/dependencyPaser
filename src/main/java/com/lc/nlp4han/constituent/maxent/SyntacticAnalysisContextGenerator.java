@@ -2,6 +2,8 @@ package com.lc.nlp4han.constituent.maxent;
 
 import java.util.List;
 
+import com.lc.nlp4han.constituent.TreeNode;
+
 /**
  * 特征生成接口
  * @author 王馨苇

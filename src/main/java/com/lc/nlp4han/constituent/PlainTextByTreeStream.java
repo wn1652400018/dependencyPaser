@@ -1,4 +1,4 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +11,9 @@ import com.lc.nlp4han.ml.util.InputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
- * 实现ObjectStream，完成其中的read操作，每次读取两个空行之间的内容
- * ObjectStream<String>接口ObjectStream<T>
+ * 实现ObjectStream，完成其中的read操作，每次读取一棵成分树的括号表达式字符串
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -47,11 +48,11 @@ public class PlainTextByTreeStream  implements ObjectStream<String>{
 		this.channel = null;
 		this.reset();
 	}
+	
 	/**
 	 * 关闭文件
 	 */
 	public void close() throws IOException {
-		// TODO Auto-generated method stub
 		if (this.in != null && this.channel == null) {
 			this.in.close();
 		} else if (this.channel != null) {
@@ -61,10 +62,10 @@ public class PlainTextByTreeStream  implements ObjectStream<String>{
 
 	/**
 	 * 读取训练语料若干行括号表达式表示树，拼接在一行形成括号表达式
+	 * 
 	 * @return 拼接后的结果
 	 */
 	public String read() throws IOException {
-		// 一次读取n行,jie
 		String line = "";
 		String readContent = "";
 		int left = 0;
@@ -81,19 +82,20 @@ public class PlainTextByTreeStream  implements ObjectStream<String>{
 						right++;
 					}
 				}
+				
 				if(left == right){
 					break;
 				}
 			}
 		}
+		
 		return readContent;
 	}
 
 	/**
 	 * 重置读取的位置
 	 */
-	public void reset() throws IOException, UnsupportedOperationException {
-		
+	public void reset() throws IOException, UnsupportedOperationException {	
 		if (this.inputStreamFactory != null) {
 			this.in = new BufferedReader(
 					new InputStreamReader(this.inputStreamFactory.createInputStream(), this.encoding));

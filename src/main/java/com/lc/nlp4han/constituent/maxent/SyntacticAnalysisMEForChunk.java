@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.util.EventTrainer;

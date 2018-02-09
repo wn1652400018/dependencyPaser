@@ -2,6 +2,8 @@ package com.lc.nlp4han.constituent.maxent;
 
 import java.util.List;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
+
 /**
  * 序列验证实现类
  * @author 王馨苇

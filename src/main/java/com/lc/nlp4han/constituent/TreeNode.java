@@ -1,23 +1,28 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 树结构
+ * 短语结构树节点
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
 public class TreeNode implements Cloneable{
-
 	//节点名称
 	protected String nodename;
+	
 	//父节点
 	protected TreeNode parent;
+	
 	//子节点
 	protected List<TreeNode> children = new ArrayList<TreeNode>();
+	
 	//当前父节点下的第几颗子树
 	private int index;
+	
 	//标记当前节点是否是空节点或者标记当前节点是否被剪枝
 	private boolean flag;
 	
@@ -53,15 +58,18 @@ public class TreeNode implements Cloneable{
 	public void addChild(String children){
 		this.children.add(new TreeNode(children));
 	}
+	
 	public void addChild(TreeNode children){
 		this.children.add(children);
 	}
+	
 	//添加数个孩子
 	public void addChild(TreeNode[] children){
 		for (TreeNode treeNode : children) {
 			this.addChild(treeNode);
 		}
 	}
+	
 	public void addChild(String[] children){
 		for (String treeNode : children) {
 			this.addChild(treeNode);
@@ -110,6 +118,7 @@ public class TreeNode implements Cloneable{
 	public int getChildrenNum(){
 		return this.children.size();
 	}
+	
 	//节点名称
 	public String getNodeName(){
 		return this.nodename;
@@ -139,32 +148,36 @@ public class TreeNode implements Cloneable{
 	@Override
 	public String toString() {
 		if(this.children.size() == 0){
-			return " "+this.nodename;
+			return " " + this.nodename;
 		}else{
 			String treestr = "";
-			treestr = "("+this.nodename;
+			treestr = "(" + this.nodename;
+			
 			for (TreeNode node:this.children) {
 				treestr += node.toString();
 			}
+			
 			treestr += ")";
+			
 			return treestr;
 		}
 	}
 	
 	/**
-	 * 输出没有换行的括号表达式形式
+	 * 输出为一行的括号表达式形式，带词的位置
 	 * @return
 	 */
 	public String toBracket() {
 		if(this.children.size() == 0){
-			return " "+this.nodename+"["+this.wordindex+"]";
+			return " " + this.nodename + "[" + this.wordindex + "]";
 		}else{
 			String treestr = "";
-			treestr = "("+this.nodename;
+			treestr = "(" + this.nodename;
 			for (TreeNode node:this.children) {
 				treestr += node.toString();
 			}
 			treestr += ")";
+			
 			return treestr;
 		}
 	}
@@ -175,11 +188,11 @@ public class TreeNode implements Cloneable{
 	 */
 	public String toNoNoneBracket() {
 		if(this.children.size() == 0 && this.flag == true){
-			return " "+this.nodename;
+			return " " + this.nodename;
 		}else{
 			String treestr = "";
 			if(this.flag == true){
-				treestr = "("+this.nodename;
+				treestr = "(" + this.nodename;
 			}	
 			for (TreeNode node:this.children) {
 				
@@ -195,7 +208,6 @@ public class TreeNode implements Cloneable{
 	
 	@Override
 	public boolean equals(Object obj) {
-
 		TreeNode node = (TreeNode)obj;
 		if(this.toString().equals(node.toString())){
 			return true;
@@ -215,13 +227,13 @@ public class TreeNode implements Cloneable{
 	 */
 	public String toNoNoneSample(){
 		if(this.children.size() == 0 && this.flag == true){
-			return " "+this.nodename+"["+this.wordindex+"]";
+			return " " + this.nodename + "[" + this.wordindex+"]";
 		}else{
 			String treestr = "";
 			if(this.flag == true){
-				treestr = "("+this.nodename;
+				treestr = "(" + this.nodename;
 			}	
-			for (TreeNode node:this.children) {
+			for (TreeNode node: this.children) {
 				
 				treestr += node.toNoNoneSample();
 			}
@@ -235,23 +247,24 @@ public class TreeNode implements Cloneable{
 	
 	/**
 	 * 输出有缩进和换行的括号表达式
+	 * 
 	 * @param level 缩进的空格数
 	 */
 	public static String printTree(TreeNode tree, int level){		
 		if(tree.getChildrenNum() == 1 && tree.getFirstChild().getChildrenNum() == 0){
-			return "("+tree.getNodeName()+" "+tree.getFirstChild().getNodeName()+")";
+			return "(" + tree.getNodeName() + " " + tree.getFirstChild().getNodeName() + ")";
 		}else if(tree.getChildrenNum()== 1 && tree.getFirstChild().getChildrenNum() == 1 && tree.getFirstChild().getFirstChild().getChildrenNum() == 0){
-			return "("+tree.getNodeName()+" "+"("+tree.getFirstChild().getNodeName()+" "+tree.getFirstChild().getFirstChild().getNodeName()+")"+")";
+			return "(" + tree.getNodeName() + " " + "(" + tree.getFirstChild().getNodeName() + " " + tree.getFirstChild().getFirstChild().getNodeName() + ")" + ")";
 		}else if(tree.getChildrenNum() > 1 && firstChildIsPosAndWord(tree)){
 			String str = "";
-			str += "("+tree.getNodeName();
-			str += " "+"("+tree.getFirstChild().getNodeName()+" "+tree.getFirstChild().getFirstChild().getNodeName()+")"+"\n";
+			str += "(" + tree.getNodeName();
+			str += " " + "(" + tree.getFirstChild().getNodeName() + " " + tree.getFirstChild().getFirstChild().getNodeName() + ")" + "\n";
 			String s = "";
 			for (int i = 1; i < tree.getChildrenNum(); i++) {
 				for (int j = 0; j < level; j++) {
 					s += "	";
 				}
-				s += printTree(tree.getIChild(i),level+1);
+				s += printTree(tree.getIChild(i), level+1);
 				if(i == tree.getChildrenNum()-1){
 					s += ")";
 				}else{
@@ -261,27 +274,27 @@ public class TreeNode implements Cloneable{
 			return str + s;
 		}else if(tree.getChildrenNum() > 1  && allChildrenIsPosAndWord(tree)){
 			String str = "";
-			str += "("+tree.getNodeName();
+			str += "(" + tree.getNodeName();
 			for (int i = 0; i < tree.getChildrenNum(); i++) {
 				if(tree.getIChild(i).getChildrenNum() == 1 && tree.getFirstChild().getFirstChild().getChildrenNum() == 0){
 					if(i == tree.getChildrenNum()-1){
-						str += " "+"("+tree.getIChild(i).getNodeName()+" "+tree.getIChild(i).getFirstChild().getNodeName()+")"+")";
+						str += " " + "(" + tree.getIChild(i).getNodeName() + " " + tree.getIChild(i).getFirstChild().getNodeName() + ")" + ")";
 						return str;
 					}else{
-						str += " "+"("+tree.getIChild(i).getNodeName()+" "+tree.getIChild(i).getFirstChild().getNodeName()+")";
+						str += " " + "(" + tree.getIChild(i).getNodeName() + " " + tree.getIChild(i).getFirstChild().getNodeName() + ")";
 					}
 				}
 			}
 			return str;
 		}else{
 			String treeStr = "";
-			treeStr = "("+tree.getNodeName();
+			treeStr = "(" + tree.getNodeName();
 			treeStr += "\n";
 			for (int i = 0; i < tree.getChildrenNum(); i++) {
 				for (int j = 0; j < level; j++) {
 					treeStr += "	";
 				}
-				treeStr += printTree(tree.getIChild(i),level+1);
+				treeStr += printTree(tree.getIChild(i), level+1);
 				if(i == tree.getChildrenNum()-1){
 					treeStr += ")";
 				}else{
@@ -294,6 +307,7 @@ public class TreeNode implements Cloneable{
 	
 	/**
 	 * 判断是否当前节点下所有的节点都是词性标记和词的结构
+	 * 
 	 * @param tree
 	 * @return
 	 */

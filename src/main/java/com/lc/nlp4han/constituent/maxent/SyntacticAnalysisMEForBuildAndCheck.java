@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.ConstituentTree;
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
+import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.util.EventTrainer;
@@ -286,7 +291,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 		}else{
 			for (int i = 0; i < alltree.size(); i++) {
 				HeadTreeToActions tta = new HeadTreeToActions();
-				PhraseGenerateTree pgt = new PhraseGenerateTree();
+				BracketExpUtil pgt = new BracketExpUtil();
 				TreeToHeadTree ttht = new TreeToHeadTree();
 				TreeNode node = pgt.generateTree("("+alltree.get(i).toBracket()+")");
 				HeadTreeNode headTree = ttht.treeToHeadTree(node);
@@ -336,7 +341,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 		allTree.add(chunkTree);
 		HeadTreeNode headTreeNode = tagBuildAndCheck(allTree,null);
 		ConstituentTree constituent = new ConstituentTree();
-		constituent.setTreeNode(headTreeNode);
+		constituent.setRoot(headTreeNode);
 		return constituent;
 	}
 	/**
@@ -396,7 +401,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	 */
 	@Override
 	public String syntacticBracket(List<HeadTreeNode> chunkTree) {
-		HeadTreeNode node = (HeadTreeNode) syntacticTree(chunkTree).getTreeNode();
+		HeadTreeNode node = (HeadTreeNode) syntacticTree(chunkTree).getRoot();
 		return HeadTreeNode.printTree(node, 1);
 	}
 	/**
@@ -408,7 +413,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	 */
 	@Override
 	public String syntacticBracket(String[] words,String[] poses, String[] chunkTag) {
-		HeadTreeNode node = (HeadTreeNode) syntacticTree(words,poses,chunkTag).getTreeNode();
+		HeadTreeNode node = (HeadTreeNode) syntacticTree(words,poses,chunkTag).getRoot();
 		return HeadTreeNode.printTree(node, 1);
 	}
 	/**
@@ -418,7 +423,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	 */
 	@Override
 	public String syntacticBracket(String sentence) {
-		HeadTreeNode node = (HeadTreeNode) syntacticTree(sentence).getTreeNode();
+		HeadTreeNode node = (HeadTreeNode) syntacticTree(sentence).getRoot();
 		return HeadTreeNode.printTree(node, 1);
 	}
 	@Override
@@ -429,7 +434,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 		List<ConstituentTree> constituent = new ArrayList<>();
 		for (int i = 0; i < headTreeNode.size(); i++) {
 			ConstituentTree con = new ConstituentTree();
-			con.setTreeNode(headTreeNode.get(i));
+			con.setRoot(headTreeNode.get(i));
 			constituent.add(con);
 		}
 		return constituent.toArray(new ConstituentTree[constituent.size()]);

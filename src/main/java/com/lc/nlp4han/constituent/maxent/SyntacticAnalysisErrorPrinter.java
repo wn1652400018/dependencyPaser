@@ -3,6 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
+
 /**
  * 错误打印类
  * @author 王馨苇
