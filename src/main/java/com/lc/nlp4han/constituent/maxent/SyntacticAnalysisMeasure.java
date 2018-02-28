@@ -40,10 +40,8 @@ public class SyntacticAnalysisMeasure {
 	 * @throws CloneNotSupportedException 
 	 */
 	public void update(TreeNode treeRef,TreeNode treePre) throws CloneNotSupportedException{
-		TreeToEvalStructure ttn1 = new TreeToEvalStructure();
-		List<EvalStructure> etRef = ttn1.getNonterminalAndSpan(treeRef);
-		TreeToEvalStructure ttn2 = new TreeToEvalStructure();
-		List<EvalStructure> etPre = ttn2.getNonterminalAndSpan(treePre);
+		List<EvalStructure> etRef = TreeToEvalStructure.getNonterminalAndSpan(treeRef);
+		List<EvalStructure> etPre = TreeToEvalStructure.getNonterminalAndSpan(treePre);
 		int trueSentencetemp = 0;	
 		int CBs_2_temp = 0;
 		for (int j = 0; j < etPre.size(); j++) {

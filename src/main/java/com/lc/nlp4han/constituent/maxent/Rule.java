@@ -3,7 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.List;
 
 /**
- * 存储规则集的右部和方向
+ * 规则的结构设计类
+ * 说明：该规则包含规则的右部和遍历的方向
  * @author 王馨苇
  *
  */

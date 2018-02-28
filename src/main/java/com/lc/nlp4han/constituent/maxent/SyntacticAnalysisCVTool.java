@@ -13,7 +13,7 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.pos.word.POSTaggerWordME;
 
 /**
- * 英文句法分析交叉验证
+ * 英文句法分析交叉验证运行类
  * @author 王馨苇
  *
  */
@@ -31,7 +31,15 @@ public class SyntacticAnalysisCVTool {
         this.listeners = listeners;
     }
     
-    public void evaluate(ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException{
+    /**
+     * 十折交叉验证进行评估
+     * @param samples 样本流
+     * @param nFolds 几折交叉验证
+     * @param contextGen 特征生成
+     * @param aghw 生成头结点
+     * @throws IOException
+     */
+    public void evaluate(ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) throws IOException{
     	CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>> partitioner = new CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>>(samples, nFolds);
 		int run = 1;
 		//小于折数的时候
@@ -47,10 +55,10 @@ public class SyntacticAnalysisCVTool {
 			ModelWrapper checkmodel = SyntacticAnalysisMEForBuildAndCheck.trainForCheck(languageCode, trainingSampleStream, params, contextGen);
 
 			POSTaggerWordME postagger = new POSTaggerWordME(posmodel);	
-	        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen);
-	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen);
+	        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
+	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen, aghw);
 	        
-			SyntacticAnalysisEvaluatorForByStep evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger,chunktagger,buildandchecktagger, listeners);
+			SyntacticAnalysisEvaluatorForByStep evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger,chunktagger,buildandchecktagger, aghw, listeners);
 			SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
 			
 			evaluator.setMeasure(measure);
@@ -63,7 +71,7 @@ public class SyntacticAnalysisCVTool {
     }
     
     private static void usage(){
-    	System.out.println(SyntacticAnalysisCVTool.class.getName() + " -data <corpusFile> -encoding <encoding> -type<algorithm>" + "[-cutoff <num>] [-iters <num>] [-folds <nFolds>] ");
+    	System.out.println(SyntacticAnalysisCVTool.class.getName() + " -data <corpusFile> -encoding <encoding> -type <algorithm>" + "[-cutoff <num>] [-iters <num>] [-folds <nFolds>] ");
     }
     
     public static void main(String[] args) throws IOException {
@@ -119,10 +127,11 @@ public class SyntacticAnalysisCVTool {
         params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
         
         SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen = new SyntacticAnalysisContextGeneratorConf();
+        AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
         System.out.println(contextGen);
         ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(corpusFile), encoding);       
-        ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream);
+        ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);
         SyntacticAnalysisCVTool run = new SyntacticAnalysisCVTool("zh",params);
-        run.evaluate(sampleStream,folds,contextGen);
+        run.evaluate(sampleStream,folds,contextGen, aghw);
 	}
 }

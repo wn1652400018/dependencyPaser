@@ -3,30 +3,31 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.ChunkTreeCombineUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 
 /**
- * 根据句法树得到动作序列
+ * 将带头结点的句法树转换成动作序列
  * @author 王馨苇
  *
  */
 public class HeadTreeToActions {
 
-	private AbsractGenerateHeadWords<HeadTreeNode> aghw = new ConcreteGenerateHeadWords(); 
 	//动作序列
-	private List<String> actions = new ArrayList<String>();
+	private static List<String> actions = new ArrayList<String>();
 	//第一步POS后得到的n颗子树
-	private List<HeadTreeNode> posTree = new ArrayList<HeadTreeNode>();
+	private static List<HeadTreeNode> posTree = new ArrayList<HeadTreeNode>();
 	//记录第二部CHUNK后得到的n棵子树
-	private List<HeadTreeNode> chunkTree = new ArrayList<HeadTreeNode>();
+	private static List<HeadTreeNode> chunkTree = new ArrayList<HeadTreeNode>();
 	//第三部得到的列表
-	private List<List<HeadTreeNode>> buildAndCheckTree = new ArrayList<List<HeadTreeNode>>();
+	private static List<List<HeadTreeNode>> buildAndCheckTree = new ArrayList<List<HeadTreeNode>>();
+	private static int i = 0;//List<TreeNode> subTree中的index
 		
 	/**
 	 * 第一步POS
 	 * @param tree 一棵树
 	 */
-	public void getActionPOS(HeadTreeNode tree){
+	public static void getActionPOS(HeadTreeNode tree){
 
 		//如果是叶子节点，肯定是具体的词，父节点是词性
 		if(tree.getChildren().size() == 0){
@@ -46,7 +47,7 @@ public class HeadTreeToActions {
 	 * @param subTree 第一步POS后得到的若干子树
 	 * @throws CloneNotSupportedException 
 	 */
-	public void getActionCHUNK(HeadTreeNode tree,List<HeadTreeNode> subTree) throws CloneNotSupportedException{
+	public static void getActionCHUNK(HeadTreeNode tree,List<HeadTreeNode> subTree) throws CloneNotSupportedException{
 		//为了防止原来的tree被修改
 		HeadTreeNode treeCopy = (HeadTreeNode) tree.clone();
 		//如果当前节点只有一颗子树，这子树可能就是具体的词了，但也存在特殊：（NP(NN chairman)）
@@ -105,58 +106,13 @@ public class HeadTreeToActions {
 			}
 		}
 	}
-	
-	/**
-	 * 第二部得到的CHUNK进行合并，就是合并start和join部分
-	 * @param subTree 第二部CHUNK得到的若干棵子树
-	 * @return
-	 */
-	public List<HeadTreeNode> combine(List<HeadTreeNode> subTree){
-		List<HeadTreeNode> combineChunk = new ArrayList<HeadTreeNode>();
-		//遍历所有子树
-		for (int i = 0; i < subTree.size(); i++) {
-			//当前子树的根节点是start标记的
-			if(subTree.get(i).getNodeName().split("_")[0].equals("start")){
-				//只要是start标记的就去掉root中的start，生成一颗新的子树，
-				//因为有些结构，如（NP(NN chairman)），只有start没有join部分，
-				//所以遇到start就生成新的子树
-				HeadTreeNode node = new HeadTreeNode(subTree.get(i).getNodeName().split("_")[1]);
-				node.addChild(subTree.get(i).getFirstChild());
-				node.setHeadWords(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[0]);
-				node.setHeadWordsPos(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[1]);
-				subTree.get(i).getFirstChild().setParent(node);
-				for (int j = i+1; j < subTree.size(); j++) {
-					//判断start后是否有join如果有，就和之前的start合并
-					if(subTree.get(j).getNodeName().split("_")[0].equals("join")){
-						node.addChild(subTree.get(j).getFirstChild());
-						subTree.get(j).getFirstChild().setParent(node);
-					}else if(subTree.get(j).getNodeName().split("_")[0].equals("start") ||
-							subTree.get(j).getNodeName().split("_")[0].equals("other")){
-						break;
-					}
-					node.setHeadWords(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[0]);
-					node.setHeadWordsPos(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[1]);
-				}
-				//将一颗合并过的完整子树加入列表
-				combineChunk.add(node);
-				//标记为other的，去掉other
-			}else if(subTree.get(i).getNodeName().equals("other")){
-				subTree.get(i).getFirstChild().setParent(null);
-				subTree.get(i).getFirstChild().setHeadWords(subTree.get(i).getChildren().get(0).getHeadWords());
-				subTree.get(i).getFirstChild().setHeadWordsPos(subTree.get(i).getChildren().get(0).getHeadWordsPos());
-				combineChunk.add(subTree.get(i).getFirstChild());
-			}
-		}
-		return combineChunk;
-	}
 
-	int i = 0;//List<TreeNode> subTree中的index
 	/**
 	 * 第三步：build和check
 	 * @param tree 一棵完整的句法树
 	 * @param subTree 第二步CHUNK得到的若干颗子树进行合并之后的若干颗子树
 	 */
-	public void getActionBUILDandCHECK(HeadTreeNode tree,List<HeadTreeNode> subTree){
+	public static void getActionBUILDandCHECK(HeadTreeNode tree,List<HeadTreeNode> subTree){
 		
 		//这里的subTree用于判断，定义一个subTree的副本用于过程中的改变
 		//这里的TreeNode实现了克隆的接口，这里也就是深拷贝
@@ -272,18 +228,21 @@ public class HeadTreeToActions {
 	}
 	
 	/**
-	 * 由树生成动作
+	 * 由句法树生成动作序列
+	 * 说明：在chunk步骤之后要合并，合并时候需要重新生成头结点
 	 * @param tree 树
+	 * @param aghw 生成头结点的对象
 	 * @throws CloneNotSupportedException
 	 */
-	public SyntacticAnalysisSample<HeadTreeNode> treeToAction(HeadTreeNode tree) throws CloneNotSupportedException{
+	public static SyntacticAnalysisSample<HeadTreeNode> headTreeToAction(HeadTreeNode tree, AbstractGenerateHeadWords aghw) throws CloneNotSupportedException{
+		i = 0;
 		posTree.clear();
 		chunkTree.clear();
 		buildAndCheckTree.clear();
 		actions.clear();
 		getActionPOS(tree);		
 		getActionCHUNK(tree, posTree);
-		getActionBUILDandCHECK(tree, combine(chunkTree));
+		getActionBUILDandCHECK(tree, ChunkTreeCombineUtil.combineToHeadTree(chunkTree,aghw));
 		return new SyntacticAnalysisSample<HeadTreeNode>(posTree,chunkTree,buildAndCheckTree,actions);
 	}
 }

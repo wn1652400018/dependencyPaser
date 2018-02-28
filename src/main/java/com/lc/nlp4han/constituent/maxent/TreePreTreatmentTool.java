@@ -4,11 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * 树预处理运行工具类
+ * 句法树预处理运行类
  * @author 王馨苇
  *
  */
-public class TreePreTreatmentTools {
+public class TreePreTreatmentTool {
 
 	public static void main(String[] args) throws UnsupportedOperationException, FileNotFoundException, IOException {
 		String cmd = args[0];

@@ -13,7 +13,8 @@ import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 
 /**
- * 训练语料中树的初始化处理
+ * 句法树的初始化处理
+ * 说明：去除句法树中的空节点，去除节点命名中的功能标记
  * @author 王馨苇
  *
  */
@@ -40,18 +41,17 @@ public class TreePreTreatment{
 	 */
 	public static void pretreatment(String frompath,String topath) throws UnsupportedOperationException, FileNotFoundException, IOException{
 		//读取一颗树
-		PlainTextByTreeStream lineStream = null;
-		BracketExpUtil pgt = new BracketExpUtil();		
+		PlainTextByTreeStream lineStream = null;	
 		//创建输出流
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(topath)));
 		lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(new File(frompath)), "utf8");
 		String tree = "";
 		while((tree = lineStream.read()) != ""){
-			TreeNode node = pgt.generateTree(tree);
+			TreeNode node = BracketExpUtil.generateTree(tree);
 			//对树进行遍历
 			travelTree(node);	
 			String newTreeStr = node.toNoNoneSample();
-			TreeNode newTree = pgt.generateTree("("+newTreeStr+")");
+			TreeNode newTree = BracketExpUtil.generateTree("("+newTreeStr+")");
 			bw.write("("+TreeNode.printTree(newTree, 1)+")");
 			bw.newLine();
 		}

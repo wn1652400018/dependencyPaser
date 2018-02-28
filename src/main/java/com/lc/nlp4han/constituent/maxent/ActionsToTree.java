@@ -3,6 +3,7 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.ChunkTreeCombineUtil;
 import com.lc.nlp4han.constituent.TreeNode;
 
 /**
@@ -13,12 +14,12 @@ import com.lc.nlp4han.constituent.TreeNode;
 public class ActionsToTree {
 	
 	/**
-	 * 第一步pos
+	 * 第一步词性标注
 	 * @param words 词语
 	 * @param actions 动作序列
 	 * @return
 	 */
-	public List<TreeNode> getPosTree(List<String> words,List<String> actions){
+	private static List<TreeNode> getPosTree(List<String> words,List<String> actions){
 		//第一步pos
 		List<TreeNode> postree = new ArrayList<TreeNode>();
 		for (int i = 0; i < words.size(); i++) {
@@ -33,12 +34,12 @@ public class ActionsToTree {
 	}
 
 	/**
-	 * 第二步chunk
+	 * 第二步chunk标记
 	 * @param words 词语
 	 * @param actions 动作序列
 	 * @return
 	 */
-	public List<TreeNode> getChunkTree(List<TreeNode> postree,List<String> actions){
+	private static List<TreeNode> getChunkTree(List<TreeNode> postree,List<String> actions){
 		//第二部chunk
 		//不用在这里设置头结点
 		List<TreeNode> chunktree = new ArrayList<TreeNode>();
@@ -53,53 +54,13 @@ public class ActionsToTree {
 	}
 	
 	/**
-	 * chunk步得到的结果进行合并
-	 * @param chunktree chunk子树
-	 * @return
-	 */
-	public List<TreeNode> combine(List<TreeNode> chunktree){
-		//第三部合并
-		//需要为合并后的结点设置头结点
-		List<TreeNode> combine = new ArrayList<TreeNode>();
-		//遍历所有子树
-		for (int i = 0; i < chunktree.size(); i++) {		
-			//当前子树的根节点是start标记的		
-			if(chunktree.get(i).getNodeName().split("_")[0].equals("start")){			
-				//只要是start标记的就去掉root中的start，生成一颗新的子树，		
-				//因为有些结构，如（NP(NN chairman)），只有start没有join部分，
-				//所以遇到start就生成新的子树
-				TreeNode node = new TreeNode(chunktree.get(i).getNodeName().split("_")[1]);			
-				node.addChild(chunktree.get(i).getFirstChild());	
-				chunktree.get(i).getChildren().get(0).setParent(node);			
-				for (int j = i+1; j < chunktree.size(); j++) {			
-					//判断start后是否有join如果有，就和之前的start合并				
-					if(chunktree.get(j).getNodeName().split("_")[0].equals("join")){					
-						node.addChild(chunktree.get(j).getFirstChild());					
-						chunktree.get(j).getFirstChild().setParent(node);				
-					}else if(chunktree.get(j).getNodeName().split("_")[0].equals("start") ||					
-							chunktree.get(j).getNodeName().split("_")[0].equals("other")){				
-						break;				
-					}			
-				}
-				//将一颗合并过的完整子树加入列表
-				combine.add(node);
-				//标记为other的，去掉other		 
-			}else if(chunktree.get(i).getNodeName().equals("other")){										
-				chunktree.get(i).getFirstChild().setParent(null);	
-				combine.add(chunktree.get(i).getFirstChild());		
-			}
-		}
-		return combine;
-	}
-	
-	/**
 	 * build和check步得到完整的树
 	 * @param len 词语的长度，作用是根据这个长度计算出当前应从动作序列中的哪个位置开始
 	 * @param combine combine之后的子树
 	 * @param actions 动作序列
 	 * @return
 	 */
-	public TreeNode getTree(int len,List<TreeNode> combine,List<String> actions){
+	private static TreeNode getTree(int len,List<TreeNode> combine,List<String> actions){
 		//第四部build和check
 		int j = 0;
 		//遍历上一步得到的combine，根据action进行操作
@@ -151,14 +112,14 @@ public class ActionsToTree {
 	 * @param actions 动作序列
 	 * @return
 	 */
-	public TreeNode actionsToTree(List<String> words,List<String> actions){
+	public static TreeNode actionsToTree(List<String> words,List<String> actions){
 		//第一步pos
 		List<TreeNode> postree = getPosTree(words,actions);
 		//第二部chunk
 		List<TreeNode> chunktree = getChunkTree(postree,actions);
 		//第三部合并
 		//需要为合并后的结点设置头结点
-		List<TreeNode> combine = combine(chunktree);
+		List<TreeNode> combine = ChunkTreeCombineUtil.combineToTree(chunktree);
 		//第四部build和check
 		TreeNode tree = getTree(words.size(),combine,actions);
 		return tree;

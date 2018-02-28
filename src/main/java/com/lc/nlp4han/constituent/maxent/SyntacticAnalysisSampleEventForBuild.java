@@ -45,9 +45,7 @@ public class SyntacticAnalysisSampleEventForBuild extends AbstractEventStream<Sy
 	/**
 	 * 事件生成
 	 * @param words 词语序列
-	 * @param posTree pos得到的子树
-	 * @param chunkTree chunk得到的子树
-	 * @param buildAndCheck buildAndCheck得到的子树
+	 * @param buildAndCheckTree buildAndCheck得到的子树
 	 * @param actions 动作序列
 	 * @param ac
 	 * @return

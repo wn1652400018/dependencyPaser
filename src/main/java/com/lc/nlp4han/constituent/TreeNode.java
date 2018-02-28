@@ -23,7 +23,11 @@ public class TreeNode implements Cloneable{
 	//当前父节点下的第几颗子树
 	private int index;
 	
-	//标记当前节点是否是空节点或者标记当前节点是否被剪枝
+	/**
+	 * 在句法分析的去除空节点的预处理步骤中：用来标记当前节点是否是空节点
+	 * 在语义分析的去除空节点的预处理步骤中：用来标记当前节点是否是空节点
+	 * 在语义分析的剪枝的预处理步骤中：用来标记当前节点是否已被剪枝
+	 */
 	private boolean flag;
 	
 	private int wordindex;

@@ -5,7 +5,13 @@ import java.util.List;
 
 import com.lc.nlp4han.constituent.TreeNode;
 
-
+/**
+ * buildAndCheck步的序列
+ * 说明：序列中的每一个元素都是该类的对象，包含下述所有信息
+ * @author 王馨苇
+ *
+ * @param <T> 树中节点的类型
+ */
 public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> implements Comparable<SyntacticAnalysisSequenceForBuildAndCheck<T>> {
 	private double score;
 	private double scorecheck;

@@ -15,7 +15,7 @@ import com.lc.nlp4han.segpos.WordSegAndPosContextGeneratorConf;
 import com.lc.nlp4han.segpos.WordSegAndPosME;
 
 /**
- * 中文句法分析交叉验证
+ * 中文句法分析交叉验证运行类
  * @author 王馨苇
  *
  */
@@ -33,7 +33,7 @@ public class SyntacticAnalysisForChinaCVTool {
         this.listeners = listeners;
     }
     
-    public void evaluate(ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException{
+    public void evaluate(ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,AbstractGenerateHeadWords aghw) throws IOException{
     	CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>> partitioner = new CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>>(samples, nFolds);
 		int run = 1;
 		//小于折数的时候
@@ -49,10 +49,10 @@ public class SyntacticAnalysisForChinaCVTool {
 
 			WordSegAndPosContextGenerator generator = new WordSegAndPosContextGeneratorConf();
 			WordSegAndPosME postagger = new WordSegAndPosME(posmodel, generator);	
-	        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen);
-	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen);
+	        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
+	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen, aghw);
 	        
-	        SyntacticAnalysisEvaluatorForChina evaluator = new SyntacticAnalysisEvaluatorForChina(postagger,chunktagger,buildandchecktagger, listeners);
+	        SyntacticAnalysisEvaluatorForChina evaluator = new SyntacticAnalysisEvaluatorForChina(postagger,chunktagger,buildandchecktagger, aghw, listeners);
 			SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
 			
 			evaluator.setMeasure(measure);
@@ -65,7 +65,7 @@ public class SyntacticAnalysisForChinaCVTool {
     }
     
     private static void usage(){
-    	System.out.println(SyntacticAnalysisForChinaCVTool.class.getName() + " -data <corpusFile> -encoding <encoding> -type<algorithm>" + "[-cutoff <num>] [-iters <num>] [-folds <nFolds>] ");
+    	System.out.println(SyntacticAnalysisForChinaCVTool.class.getName() + " -data <corpusFile> -encoding <encoding> -type <algorithm>" + "[-cutoff <num>] [-iters <num>] [-folds <nFolds>] ");
     }
     
     public static void main(String[] args) throws IOException {
@@ -121,10 +121,11 @@ public class SyntacticAnalysisForChinaCVTool {
         params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
         
         SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen = new SyntacticAnalysisContextGeneratorConf();
+        AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
         System.out.println(contextGen);
         ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(corpusFile), encoding);       
-        ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream);
+        ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);
         SyntacticAnalysisForChinaCVTool run = new SyntacticAnalysisForChinaCVTool("zh",params);
-        run.evaluate(sampleStream,folds,contextGen);
+        run.evaluate(sampleStream,folds,contextGen, aghw);
 	}
 }

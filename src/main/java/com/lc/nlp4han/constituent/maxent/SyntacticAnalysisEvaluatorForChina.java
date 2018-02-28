@@ -23,18 +23,21 @@ public class SyntacticAnalysisEvaluatorForChina extends Evaluator<SyntacticAnaly
 	private SyntacticAnalysisMEForChunk chunktagger;
 	private SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger;
 	private SyntacticAnalysisMeasure measure;
+	private AbstractGenerateHeadWords aghw;
 	
-	public SyntacticAnalysisEvaluatorForChina(WordSegAndPosME postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger) {
+	public SyntacticAnalysisEvaluatorForChina(WordSegAndPosME postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractGenerateHeadWords aghw) {
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;
 		this.buildAndChecktagger = buildAndChecktagger;
+		this.aghw = aghw;
 	}
 	
-	public SyntacticAnalysisEvaluatorForChina(WordSegAndPosME postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger,SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
+	public SyntacticAnalysisEvaluatorForChina(WordSegAndPosME postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractGenerateHeadWords aghw,SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
 		super(evaluateMonitors);
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;
 		this.buildAndChecktagger = buildAndChecktagger;
+		this.aghw = aghw;
 	}
 	
 	/**
@@ -63,9 +66,8 @@ public class SyntacticAnalysisEvaluatorForChina extends Evaluator<SyntacticAnaly
 			try {
 				List<String> words = sample.getWords();
 				List<String> actionsRef = sample.getActions();
-				ActionsToTree att = new ActionsToTree();
 				//参考样本没有保存完整的一棵树，需要将动作序列转成一颗完整的树
-				TreeNode treeRef = att.actionsToTree(words, actionsRef);
+				TreeNode treeRef = ActionsToTree.actionsToTree(words, actionsRef);
 				String[][] poses = postagger.tag(5, words.toArray(new String[words.size()]));
 				List<List<HeadTreeNode>> posTree = toPosTree(words.toArray(new String[words.size()]), poses);
 				List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(20, posTree, null);	
@@ -74,8 +76,7 @@ public class SyntacticAnalysisEvaluatorForChina extends Evaluator<SyntacticAnaly
 					samplePre = new SyntacticAnalysisSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 					measure.countNodeDecodeTrees(treePre);
 				}else{
-					HeadTreeToActions tta = new HeadTreeToActions();
-					samplePre = tta.treeToAction(treePre);
+					samplePre = HeadTreeToActions.headTreeToAction(treePre,aghw);
 					measure.update(treeRef, treePre);
 				}	
 			} catch(Exception e){
