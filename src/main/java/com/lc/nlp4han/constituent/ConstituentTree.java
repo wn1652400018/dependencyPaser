@@ -9,6 +9,16 @@ public class ConstituentTree {
 
 	private TreeNode root;
 	
+	public ConstituentTree()
+	{
+		
+	}
+	
+	public ConstituentTree(TreeNode rootNode)
+	{
+		this.root = rootNode;
+	}
+	
 	public void setRoot(TreeNode treeNode){
 		this.root = treeNode;
 	}
