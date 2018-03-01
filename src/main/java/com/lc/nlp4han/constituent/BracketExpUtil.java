@@ -65,7 +65,7 @@ public class BracketExpUtil {
 	 * @param bracketStr 括号表达式
 	 * @return
 	 */
-	private static List<String> stringToList(String bracketStr){
+	public static List<String> stringToList(String bracketStr){
 		List<String> parts = new ArrayList<String>();
         for (int index = 0; index < bracketStr.length(); ++index) {
             if (bracketStr.charAt(index) == '(' || bracketStr.charAt(index) == ')' || bracketStr.charAt(index) == ' ') {

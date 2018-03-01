@@ -40,48 +40,49 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 
     private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
     
-    private AbsractGenerateHeadWords<HeadTreeNode> aghw = new ConcreteGenerateHeadWords(); 
+    private AbstractGenerateHeadWords aghw ; 
 	
 	/**
 	 * 构造函数，初始化工作
 	 * @param model 模型
 	 * @param contextGen 特征
+	 * @param aghw 生成头结点，build后check为yes时候进行合并的时候需要
 	 */
-	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper buildmodel, ModelWrapper checkmodel,SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) {
-		init(buildmodel ,checkmodel, contextGen);
+	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper buildmodel, ModelWrapper checkmodel,SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
+		init(buildmodel ,checkmodel, contextGen, aghw);
 	}
     /**
      * 初始化工作
      * @param model 模型
      * @param contextGen 特征
+     * @param aghw 生成头结点，build后check为yes时候进行合并的时候需要
      */
-	private void init(ModelWrapper buildmodel, ModelWrapper checkmodel, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) {
+	private void init(ModelWrapper buildmodel, ModelWrapper checkmodel, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
 		int beamSize = SyntacticAnalysisMEForBuildAndCheck.DEFAULT_BEAM_SIZE;
 
         contextGenerator = contextGen;
         size = beamSize;
         sequenceValidator = new DefaultSyntacticAnalysisSequenceValidator();
-     
+        this.aghw = aghw;
         this.model = new SyntacticAnalysisBeamSearch(beamSize,buildmodel.getModel(),
-                    checkmodel.getModel(), 0);
+                    checkmodel.getModel(), 0, aghw);
 	}
 	
 	/**
 	 * 训练模型
 	 * @param file 训练文件
-	 * @param params 训练
+	 * @param params 训练模型的参数配置
 	 * @param contextGen 特征
 	 * @param encoding 编码
+	 * @param aghw 生成头结点的方法
 	 * @return 模型和模型信息的包裹结果
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
 	 */
 	public static ModelWrapper trainForBuild(File file, TrainingParameters params, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
-			String encoding){
+			String encoding, AbstractGenerateHeadWords aghw){
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream);
+			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);
 			model = SyntacticAnalysisMEForBuildAndCheck.trainForBuild("zh", sampleStream, params, contextGen);
 			return model;
 		} catch (FileNotFoundException e) {
@@ -95,12 +96,11 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	/**
 	 * 训练模型
 	 * @param languageCode 编码
-	 * @param sampleStream 文件流
+	 * @param sampleStream 样本流
+	 * @param params 训练模型需要设置的参数
 	 * @param contextGen 特征
-	 * @param encoding 编码
 	 * @return 模型和模型信息的包裹结果
 	 * @throws IOException 
-	 * @throws FileNotFoundException 
 	 */
 	public static ModelWrapper trainForBuild(String languageCode, ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream, TrainingParameters params,
 			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException {
@@ -126,19 +126,20 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	 * 训练build模型，并将模型写出
 	 * @param file 训练的文本
 	 * @param buildmodelFile 模型文件
-	 * @param params 训练的参数配置
+	 * @param params 训练模型需要设置的参数
 	 * @param contextGen 上下文 产生器
 	 * @param encoding 编码方式
+	 * @param aghw 生成头结点的方法
 	 * @return
 	 */
 	public static ModelWrapper trainForBuild(File file, File buildmodelFile, 
 			TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding) {
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractGenerateHeadWords aghw) {
 		OutputStream modelOut = null;
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream);
+			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream,aghw);
 			model = SyntacticAnalysisMEForBuildAndCheck.trainForBuild("zh", sampleStream, params, contextGen);
 			modelOut = new BufferedOutputStream(new FileOutputStream(buildmodelFile));           
             model.serialize(modelOut);
@@ -162,19 +163,18 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	/**
 	 * 训练模型
 	 * @param file 训练文件
-	 * @param params 训练
+	 * @param params 训练模型的参数配置信息
 	 * @param contextGen 特征
 	 * @param encoding 编码
+	 * @param aghw 生成头结点的方法
 	 * @return 模型和模型信息的包裹结果
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
 	 */
 	public static ModelWrapper trainForCheck(File file, TrainingParameters params, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
-			String encoding){
+			String encoding, AbstractGenerateHeadWords aghw){
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream);
+			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream,aghw);
 			model = SyntacticAnalysisMEForBuildAndCheck.trainForCheck("zh", sampleStream, params, contextGen);
 			return model;
 		} catch (FileNotFoundException e) {
@@ -188,12 +188,11 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	/**
 	 * 训练模型
 	 * @param languageCode 编码
-	 * @param sampleStream 文件流
+	 * @param sampleStream 样本流
+	 * @param params 训练模型的参数配置信息
 	 * @param contextGen 特征
-	 * @param encoding 编码
 	 * @return 模型和模型信息的包裹结果
 	 * @throws IOException 
-	 * @throws FileNotFoundException 
 	 */
 	public static ModelWrapper trainForCheck(String languageCode, ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream, TrainingParameters params,
 			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException {
@@ -221,19 +220,20 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	 * 训练模型，并将模型写出
 	 * @param file 训练的文本
 	 * @param checkmodelFile 模型文件
-	 * @param params 训练的参数配置
+	 * @param params 训练模型的参数配置信息
 	 * @param contextGen 上下文 产生器
 	 * @param encoding 编码方式
+	 * @param aghw 生成头结点的方法
 	 * @return
 	 */
 	public static ModelWrapper trainForCheck(File file, File checkmodelFile, 
 			TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding) {
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractGenerateHeadWords aghw) {
 		OutputStream modelOut = null;
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream);
+			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);
 			model = SyntacticAnalysisMEForBuildAndCheck.trainForBuild("zh", sampleStream, params, contextGen);
 			modelOut = new BufferedOutputStream(new FileOutputStream(checkmodelFile));           
             model.serialize(modelOut);
@@ -290,12 +290,9 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 			return null;
 		}else{
 			for (int i = 0; i < alltree.size(); i++) {
-				HeadTreeToActions tta = new HeadTreeToActions();
-				BracketExpUtil pgt = new BracketExpUtil();
-				TreeToHeadTree ttht = new TreeToHeadTree();
-				TreeNode node = pgt.generateTree("("+alltree.get(i).toBracket()+")");
-				HeadTreeNode headTree = ttht.treeToHeadTree(node);
-				SyntacticAnalysisSample<HeadTreeNode> sample = tta.treeToAction(headTree);
+				TreeNode node = BracketExpUtil.generateTree("("+alltree.get(i).toBracket()+")");
+				HeadTreeNode headTree = TreeToHeadTree.treeToHeadTree(node,aghw);
+				SyntacticAnalysisSample<HeadTreeNode> sample = HeadTreeToActions.headTreeToAction(headTree,aghw);
 				kActions.add(sample.getActions());	
 			}
 			return kActions;
@@ -312,7 +309,6 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	 */
 	public List<String> tagActions(int k, List<List<HeadTreeNode>> chunkTree, Object[] ac) throws CloneNotSupportedException{
 		List<List<String>> kActions = tagKactions(1,chunkTree,null);
-		
 		return kActions.get(0);
 	}
 	

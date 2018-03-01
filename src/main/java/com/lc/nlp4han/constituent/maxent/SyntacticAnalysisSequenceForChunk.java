@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Chunk步的序列
+ * 说明：序列中的每一个元素都是该类的对象，包含下述所有信息
+ * @author 王馨苇
+ *
+ */
 public class SyntacticAnalysisSequenceForChunk implements Comparable<SyntacticAnalysisSequenceForChunk> {
 	private double score;
 	private List<String> outcomes;

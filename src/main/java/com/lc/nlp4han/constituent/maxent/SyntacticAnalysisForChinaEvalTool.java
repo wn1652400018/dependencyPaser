@@ -20,10 +20,10 @@ import com.lc.nlp4han.segpos.WordSegAndPosME;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisForChinaEvalRun {
+public class SyntacticAnalysisForChinaEvalTool {
 
 	private static void usage(){
-		System.out.println(SyntacticAnalysisForChinaEvalRun.class.getName() + 
+		System.out.println(SyntacticAnalysisForChinaEvalTool.class.getName() + 
 				"-data <corpusFile> -type <algorithom>"
 				+ "-gold <goldFile> -error <errorFile> -encoding <encoding>" + " [-cutoff <num>] [-iters <num>]");
 	}
@@ -31,17 +31,19 @@ public class SyntacticAnalysisForChinaEvalRun {
 	public static void eval(File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException{
 		long start = System.currentTimeMillis();
 		SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen = new SyntacticAnalysisContextGeneratorConf();
+		System.out.println(contextGen);
+		AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
 		ModelWrapper posmodel = new ModelWrapper(new File("data\\model\\pos\\posmodelbinary.bin"));
 		
-		ModelWrapper chunkmodel= SyntacticAnalysisMEForChunk.train(trainFile, params, contextGen, encoding);
-		ModelWrapper buildmodel = SyntacticAnalysisMEForBuildAndCheck.trainForBuild(trainFile, params, contextGen, encoding);
-		ModelWrapper checkmodel = SyntacticAnalysisMEForBuildAndCheck.trainForCheck(trainFile, params, contextGen, encoding);
+		ModelWrapper chunkmodel= SyntacticAnalysisMEForChunk.train(trainFile, params, contextGen, encoding, aghw);
+		ModelWrapper buildmodel = SyntacticAnalysisMEForBuildAndCheck.trainForBuild(trainFile, params, contextGen, encoding, aghw);
+		ModelWrapper checkmodel = SyntacticAnalysisMEForBuildAndCheck.trainForCheck(trainFile, params, contextGen, encoding, aghw);
         System.out.println("训练时间： " + (System.currentTimeMillis() - start));
         
         WordSegAndPosContextGenerator generator = new WordSegAndPosContextGeneratorConf();
 		WordSegAndPosME postagger = new WordSegAndPosME(posmodel, generator);	
-        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen);
-        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen);
+        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
+        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen, aghw);
         
         SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
         SyntacticAnalysisEvaluatorForChina evaluator = null;
@@ -49,13 +51,13 @@ public class SyntacticAnalysisForChinaEvalRun {
         if(errorFile != null){
         	System.out.println("Print error to file " + errorFile);
         	printer = new SyntacticAnalysisErrorPrinter(new FileOutputStream(errorFile));    	
-        	evaluator = new SyntacticAnalysisEvaluatorForChina(postagger,chunktagger,buildandchecktagger,printer);
+        	evaluator = new SyntacticAnalysisEvaluatorForChina(postagger,chunktagger,buildandchecktagger, aghw,printer);
         }else{
-        	evaluator = new SyntacticAnalysisEvaluatorForChina(postagger,chunktagger,buildandchecktagger);
+        	evaluator = new SyntacticAnalysisEvaluatorForChina(postagger,chunktagger,buildandchecktagger, aghw);
         }
         evaluator.setMeasure(measure);
         ObjectStream<String> linesStream = new PlainTextByLineStream(new FileInputStreamFactory(goldFile), encoding);
-        ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(linesStream);
+        ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(linesStream, aghw);
         evaluator.evaluate(sampleStream);
         SyntacticAnalysisMeasure measureRes = evaluator.getMeasure();
         System.out.println("标注时间： " + (System.currentTimeMillis() - start));

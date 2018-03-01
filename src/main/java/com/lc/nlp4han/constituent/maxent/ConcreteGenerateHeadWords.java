@@ -6,11 +6,12 @@ import java.util.List;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 
 /**
- * 生成头结点
+ * 具体的生成头结点的实现类
+ * 参考：Collins 1999论文
  * @author 王馨苇
  *
  */
-public class ConcreteGenerateHeadWords extends AbsractGenerateHeadWords<HeadTreeNode>{
+public class ConcreteGenerateHeadWords extends AbstractGenerateHeadWords{
 
 	/**
 	 * 为并列结构生成头结点

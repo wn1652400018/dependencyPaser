@@ -2,62 +2,24 @@ package com.lc.nlp4han.constituent.maxent;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 
 
 /**
- * 测试树到动作再到树是否合法
+ * 测试句法树转换成动作序列，再将动作序列转换成句法树，比较原句法树和转换得到的句法树是否一致
  * @author 王馨苇
  *
  */
 public class Tree2Action2TreeTest{
 
-	private URL is;
-	private PlainTextByTreeStream lineStream ;
-	private String txt ;
-	private BracketExpUtil pgt ;
-	private TreeToHeadTree ttht;
-	private TreeNode tree ;
-    private HeadTreeNode headTree;
-	private HeadTreeToActions tta ;
-	private SyntacticAnalysisSample<HeadTreeNode> sample ;
-	private List<String> words ;
-	private List<String> actions ;
-
-	private ActionsToTree att ;
-	private TreeNode newTree ;
-	
-	@Before
-	public void setUP() throws UnsupportedOperationException, FileNotFoundException, IOException, CloneNotSupportedException{
-		is = Tree2Action2TreeTest.class.getClassLoader().getResource("com/lc/nlp4han/constituent/maxent/wsj_0015new.mrg");
-		lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(new File(is.getFile())), "utf8");
-		txt = lineStream.read();
-		pgt = new BracketExpUtil();
-		ttht = new TreeToHeadTree();
-		tree = pgt.generateTree(txt);
-        headTree = ttht.treeToHeadTree(tree);
-		tta = new HeadTreeToActions();
-		sample = tta.treeToAction(headTree);
-		words = sample.getWords();
-		actions = sample.getActions();
-
-		att = new ActionsToTree();
-		newTree = att.actionsToTree(words, actions);
-	}
-	
 	/**
 	 * 测试由句法树到动作序列，再从动作序列到句法树的过程
 	 * @throws FileNotFoundException
@@ -66,7 +28,21 @@ public class Tree2Action2TreeTest{
 	 */
 	@Test
 	public void testTreeToActions() throws FileNotFoundException, IOException, CloneNotSupportedException{
-		assertEquals(tree, newTree);
-	}	
-	
+		
+		AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
+		//节点有多个子节点
+		//1 一个子节点 
+		//2 两个子节点
+		//3  大于两个子节点
+		String treestr = "((S(NP(NNP Mr.)(NNP Vinken))(VP(VBZ is)(NP(NP(NN chairman))(PP(IN of) "
+				+ "(NP(NP(NNP Elsevier)(NNP N.V.))(, ,)"
+				+ "(NP(DT the)(NNP Dutch)(VBG publishing)(NN group))))))(. .)))";
+		TreeNode tree = BracketExpUtil.generateTree(treestr);
+		HeadTreeNode headTree = TreeToHeadTree.treeToHeadTree(tree,aghw);		
+		SyntacticAnalysisSample<HeadTreeNode> sample = HeadTreeToActions.headTreeToAction(headTree,aghw);
+		List<String>words = sample.getWords();
+		List<String>actions = sample.getActions();
+		TreeNode resulttree = ActionsToTree.actionsToTree(words, actions); 
+		assertEquals(tree, resulttree);
+	}		
 }

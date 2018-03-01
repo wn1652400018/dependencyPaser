@@ -11,7 +11,8 @@ import com.lc.nlp4han.ml.util.InputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
- * 实现ObjectStream，完成其中的read操作，每次读取一棵成分树的括号表达式字符串
+ * 从训练语料中读取完整的树
+ * 说明：每次读取一颗完整的树是根据括号的匹配情况来判断
  * 
  * @author 刘小峰
  * @author 王馨苇

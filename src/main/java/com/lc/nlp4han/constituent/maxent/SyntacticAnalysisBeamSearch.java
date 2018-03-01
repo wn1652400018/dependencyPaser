@@ -16,7 +16,7 @@ import com.lc.nlp4han.ml.util.Cache;
  */
 public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceClassificationModel<HeadTreeNode>{
 
-	private AbsractGenerateHeadWords<HeadTreeNode> aghw = new ConcreteGenerateHeadWords(); 
+	private AbstractGenerateHeadWords aghw ; 
 	public static final String BEAM_SIZE_PARAMETER = "BeamSize";
 	private static final Object[] EMPTY_ADDITIONAL_CONTEXT = new Object[0];
 	protected int size;
@@ -28,12 +28,12 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	private double[] chunkprobs;
 	private Cache<String[], double[]> contextsCache;
 
-	public SyntacticAnalysisBeamSearch(int size, ClassificationModel buildmodel, ClassificationModel checkmodel) {
-		this(size, buildmodel, checkmodel, 0);
+	public SyntacticAnalysisBeamSearch(int size, ClassificationModel buildmodel, ClassificationModel checkmodel, AbstractGenerateHeadWords aghw) {
+		this(size, buildmodel, checkmodel, 0, aghw);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public SyntacticAnalysisBeamSearch(int size, ClassificationModel buildmodel, ClassificationModel checkmodel, int cacheSize) {
+	public SyntacticAnalysisBeamSearch(int size, ClassificationModel buildmodel, ClassificationModel checkmodel, int cacheSize, AbstractGenerateHeadWords aghw) {
 		this.size = size;
 		this.buildmodel = buildmodel;
 		this.checkmodel = checkmodel;
@@ -42,6 +42,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 		}
 
 		this.buildprobs = new double[buildmodel.getNumOutcomes()];
+		this.aghw = aghw;
 	}
 	
 	public SyntacticAnalysisBeamSearch(int size, ClassificationModel chunkmodel) {

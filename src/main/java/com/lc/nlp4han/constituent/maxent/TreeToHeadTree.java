@@ -1,30 +1,29 @@
 package com.lc.nlp4han.constituent.maxent;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
 
 /**
- * 
+ * 将不含头结点的句法树，转换成包含头结点的句法树
  * @author 王馨苇
  *
  */
 public class TreeToHeadTree {
-
-	private AbsractGenerateHeadWords<HeadTreeNode> aghw = new ConcreteGenerateHeadWords(); 
+	
 	/**
 	 * 将一颗无头结点的树转成带头结点的树
 	 * @param treeNode
 	 * @return
 	 */
-	public HeadTreeNode treeToHeadTree(TreeNode treeNode){
+	public static HeadTreeNode treeToHeadTree(TreeNode treeNode, AbstractGenerateHeadWords aghw){
 		String treeStr = "("+treeNode.toNoNoneSample()+")";
-		treeStr = format(treeStr);
+		treeStr = BracketExpUtil.format(treeStr);
 		int indexTree;//记录当前是第几颗子树
-		List<String> parts = stringToList(treeStr); 
+		List<String> parts = BracketExpUtil.stringToList(treeStr); 
         Stack<HeadTreeNode> tree = new Stack<HeadTreeNode>();
         for (int i = 0; i < parts.size(); i++) {
 			if(!parts.get(i).equals(")") && !parts.get(i).equals(" ")){
@@ -72,50 +71,5 @@ public class TreeToHeadTree {
 		}
         HeadTreeNode treeStruct = tree.pop();
         return treeStruct;
-	}
-	
-	/**
-	 * 将括号表达式去掉空格转成列表的形式
-	 * @param treeStr 括号表达式
-	 * @return
-	 */
-	public List<String> stringToList(String treeStr){
-
-		List<String> parts = new ArrayList<String>();
-        for (int index = 0; index < treeStr.length(); ++index) {
-            if (treeStr.charAt(index) == '(' || treeStr.charAt(index) == ')' || treeStr.charAt(index) == ' ') {
-                parts.add(Character.toString(treeStr.charAt(index)));
-            } else {
-                for (int i = index + 1; i < treeStr.length(); ++i) {
-                    if (treeStr.charAt(i) == '(' || treeStr.charAt(i) == ')' || treeStr.charAt(i) == ' ') {
-                        parts.add(treeStr.substring(index, i));
-                        index = i - 1;
-                        break;
-                    }
-                }
-            }
-        }
-        return parts;
-	}
-	
-	/**
-	 * 格式化为形如：(A(B1(C1 d1)(C2 d2))(B2 d3)) 的括号表达式。叶子及其父节点用一个空格分割，其他字符紧密相连。
-	 * @param tree 从训练语料拼接出的一棵树
-	 */
-	public String format(String tree){
-		//去除最外围的括号
-        tree = tree.substring(1, tree.length() - 1).trim();
-        //所有空白符替换成一位空格
-        tree = tree.replaceAll("\\s+", " ");
-        //去掉 ( 和 ) 前的空格
-        String newTree = "";
-        for (int c = 0; c < tree.length(); ++c) {
-            if (tree.charAt(c) == ' ' && (tree.charAt(c + 1) == '(' || tree.charAt(c + 1) == ')')) {
-                continue;
-            } else {
-                newTree = newTree + (tree.charAt(c));
-            }
-        }
-        return newTree;
 	}
 }

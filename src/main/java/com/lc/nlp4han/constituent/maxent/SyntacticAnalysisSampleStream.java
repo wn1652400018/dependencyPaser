@@ -21,12 +21,14 @@ public class SyntacticAnalysisSampleStream extends FilterObjectStream<String,Syn
 
 	
 	private Logger logger = Logger.getLogger(SyntacticAnalysisSampleStream.class.getName());
+	private AbstractGenerateHeadWords aghw ;
 	/**
 	 * 构造
 	 * @param samples 样本流
 	 */
-	public SyntacticAnalysisSampleStream(ObjectStream<String> samples) {
+	public SyntacticAnalysisSampleStream(ObjectStream<String> samples, AbstractGenerateHeadWords aghw) {
 		super(samples);
+		this.aghw = aghw;
 	}
 
 	/**
@@ -37,15 +39,12 @@ public class SyntacticAnalysisSampleStream extends FilterObjectStream<String,Syn
 	public SyntacticAnalysisSample<HeadTreeNode> read() throws IOException {
 		String sentence = samples.read();	
 		SyntacticAnalysisSample<HeadTreeNode> sample = null;
-		BracketExpUtil pgt = new BracketExpUtil();
-		TreeToHeadTree ttht = new TreeToHeadTree();
-		HeadTreeToActions tta = new HeadTreeToActions();
 		if(sentence != null){
 			if(sentence.compareTo("") != 0){
 				try{
-					TreeNode tree = pgt.generateTree(sentence);
-					HeadTreeNode headtree = ttht.treeToHeadTree(tree);
-					sample = tta.treeToAction(headtree);
+					TreeNode tree = BracketExpUtil.generateTree(sentence);
+					HeadTreeNode headtree = TreeToHeadTree.treeToHeadTree(tree,aghw);
+					sample = HeadTreeToActions.headTreeToAction(headtree,aghw);
 				}catch(Exception e){
 					if (logger.isLoggable(Level.WARNING)) {						
 	                    logger.warning("Error during parsing, ignoring sentence: " + sentence);

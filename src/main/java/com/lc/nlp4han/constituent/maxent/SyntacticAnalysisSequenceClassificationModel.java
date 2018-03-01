@@ -6,7 +6,7 @@ import com.lc.nlp4han.constituent.TreeNode;
 
 
 /**
- * 得到结果序列的接口
+ * 句法分析序列分类模型
  * @author 王馨苇
  *
  */

@@ -1,7 +1,7 @@
 package com.lc.nlp4han.constituent;
 
 /**
- * 成分树
+ * 成分树结构设计
  * @author 王馨苇
  *
  */
@@ -21,6 +21,4 @@ public class ConstituentTree {
 	public String toString() {
 		return root.toString();
 	}
-	
-	
 }

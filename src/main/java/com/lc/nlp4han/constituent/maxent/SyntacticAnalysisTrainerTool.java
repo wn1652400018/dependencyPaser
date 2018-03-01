@@ -8,7 +8,7 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
 
 
 /**
- * 句法分析训练类
+ * 句法分析训练模型运行类
  * @author 王馨苇
  *
  */
@@ -16,7 +16,7 @@ public class SyntacticAnalysisTrainerTool {
 
 	private static void usage(){
 		System.out.println(SyntacticAnalysisTrainerTool.class.getName()+"-data <corpusFile> -chunkmodel <chunkmodelFile> -buildmodel <buildmodelFile> -checkmodel <checkmodelFile> -type <algorithom>"
-				+ "-encoding"+"[-cutoff <num>] [-iters <num>]");
+				+ "-encoding <encoding>"+"[-cutoff <num>] [-iters <num>]");
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -77,13 +77,15 @@ public class SyntacticAnalysisTrainerTool {
         }
         
         SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen = new SyntacticAnalysisContextGeneratorConf();
+        System.out.println(contextGen);
         TrainingParameters params = TrainingParameters.defaultParams();
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
         params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
         
-        SyntacticAnalysisMEForChunk.train(corpusFile, chunkmodelFile,params, contextGen, encoding);
-		SyntacticAnalysisMEForBuildAndCheck.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding);
-		SyntacticAnalysisMEForBuildAndCheck.trainForCheck(corpusFile, checkmodelFile, params, contextGen, encoding);
+        AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
+        SyntacticAnalysisMEForChunk.train(corpusFile, chunkmodelFile,params, contextGen, encoding, aghw);
+		SyntacticAnalysisMEForBuildAndCheck.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding, aghw);
+		SyntacticAnalysisMEForBuildAndCheck.trainForCheck(corpusFile, checkmodelFile, params, contextGen, encoding, aghw);
 	}
 }
