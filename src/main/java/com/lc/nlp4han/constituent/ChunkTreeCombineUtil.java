@@ -3,9 +3,6 @@ package com.lc.nlp4han.constituent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lc.nlp4han.constituent.maxent.AbstractGenerateHeadWords;
-import com.lc.nlp4han.constituent.maxent.HeadWordsRuleSet;
-
 /**
  * 合并chunk子树
  * @author 王馨苇

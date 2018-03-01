@@ -1,9 +1,7 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.util.HashMap;
 import java.util.List;
-
-import com.lc.nlp4han.constituent.HeadTreeNode;
 
 /**
  * 生成头结点的抽象模板类
@@ -25,7 +23,7 @@ public abstract class AbstractGenerateHeadWords{
 	 * @param specialRules 生成头结点的特殊规则
 	 * @return
 	 */
-	protected abstract String generateHeadWordsForSpecialRules(HeadTreeNode node,HashMap<String,List<Rule>> specialRules);
+	protected abstract String generateHeadWordsForSpecialRules(HeadTreeNode node,HashMap<String,List<HeadRule>> specialRules);
 	
 	/**
 	 * 为一般规则生成头结点
@@ -33,7 +31,7 @@ public abstract class AbstractGenerateHeadWords{
 	 * @param normalRules 生成头结点的一般规则
 	 * @return
 	 */
-	protected abstract String generateHeadWordsForNormalRules(HeadTreeNode node,HashMap<String,Rule> normalRules);
+	protected abstract String generateHeadWordsForNormalRules(HeadTreeNode node,HashMap<String,HeadRule> normalRules);
 
 	/**
 	 * 合并生成头结点的所有方法，提取头结点
@@ -42,7 +40,7 @@ public abstract class AbstractGenerateHeadWords{
 	 * @param specialRules 生成头结点的特殊规则
 	 * @return
 	 */
-	public String extractHeadWords(HeadTreeNode node, HashMap<String,Rule> normalRules,HashMap<String,List<Rule>> specialRules){
+	public String extractHeadWords(HeadTreeNode node, HashMap<String,HeadRule> normalRules,HashMap<String,List<HeadRule>> specialRules){
 		String headWords = null;
 		headWords = generateHeadWordsForCordinator(node);
 		

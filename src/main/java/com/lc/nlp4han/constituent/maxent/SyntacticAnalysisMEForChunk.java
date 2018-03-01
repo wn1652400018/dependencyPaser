@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
 import com.lc.nlp4han.constituent.ChunkTreeCombineUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;

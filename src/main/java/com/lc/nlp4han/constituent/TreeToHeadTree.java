@@ -1,11 +1,7 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.util.List;
 import java.util.Stack;
-
-import com.lc.nlp4han.constituent.BracketExpUtil;
-import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.TreeNode;
 
 /**
  * 将不含头结点的句法树，转换成包含头结点的句法树

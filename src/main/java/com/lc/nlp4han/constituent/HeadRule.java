@@ -1,4 +1,4 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.util.List;
 
@@ -8,12 +8,12 @@ import java.util.List;
  * @author 王馨苇
  *
  */
-public class Rule {
+public class HeadRule {
 
 	private List<String> rightRules;
 	private String direction;
 	
-	public Rule(List<String> rightRules, String direction){
+	public HeadRule(List<String> rightRules, String direction){
 		this.direction = direction;
 		this.rightRules = rightRules;
 	}
