@@ -1,10 +1,6 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.util.List;
-
-import com.lc.nlp4han.constituent.EvalStructure;
-import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.TreeToEvalStructure;
 
 /**
  * 句法分析指标计算

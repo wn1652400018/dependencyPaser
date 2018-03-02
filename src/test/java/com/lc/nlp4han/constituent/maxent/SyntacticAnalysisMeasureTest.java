@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
 import com.lc.nlp4han.constituent.TreeNode;
 
 
