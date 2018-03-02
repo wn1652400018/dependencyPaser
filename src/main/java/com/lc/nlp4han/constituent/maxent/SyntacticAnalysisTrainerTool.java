@@ -3,6 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.io.File;
 import java.io.IOException;
 
+import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 

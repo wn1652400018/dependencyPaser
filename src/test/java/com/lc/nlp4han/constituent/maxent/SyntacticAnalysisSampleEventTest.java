@@ -9,9 +9,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
 import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
+import com.lc.nlp4han.constituent.TreeToHeadTree;
 import com.lc.nlp4han.ml.model.Event;
 
 

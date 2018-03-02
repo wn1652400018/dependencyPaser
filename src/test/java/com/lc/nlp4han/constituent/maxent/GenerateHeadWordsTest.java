@@ -4,9 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
 import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
+import com.lc.nlp4han.constituent.TreeToHeadTree;
 
 /**
  * 测试生成头结点的方法

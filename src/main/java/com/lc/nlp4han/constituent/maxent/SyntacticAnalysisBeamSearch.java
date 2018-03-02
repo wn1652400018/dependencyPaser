@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
 import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.HeadWordsRuleSet;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.util.Cache;
 

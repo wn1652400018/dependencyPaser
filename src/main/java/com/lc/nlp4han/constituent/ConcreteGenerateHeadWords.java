@@ -1,9 +1,7 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.util.HashMap;
 import java.util.List;
-
-import com.lc.nlp4han.constituent.HeadTreeNode;
 
 /**
  * 具体的生成头结点的实现类
@@ -48,7 +46,7 @@ public class ConcreteGenerateHeadWords extends AbstractGenerateHeadWords{
 	 * @return
 	 */
 	@Override
-	public String generateHeadWordsForSpecialRules(HeadTreeNode node, HashMap<String, List<Rule>> specialRules) {
+	public String generateHeadWordsForSpecialRules(HeadTreeNode node, HashMap<String, List<HeadRule>> specialRules) {
 		String currNodeName = node.getNodeName();
 		//如果最后一个是POS，返回最后一个
 		if(node.getChildren().get(node.getChildren().size() - 1).getNodeName().equals("POS")){
@@ -89,7 +87,7 @@ public class ConcreteGenerateHeadWords extends AbstractGenerateHeadWords{
 	 * @return
 	 */
 	@Override
-	public String generateHeadWordsForNormalRules(HeadTreeNode node, HashMap<String, Rule> normalRules) {
+	public String generateHeadWordsForNormalRules(HeadTreeNode node, HashMap<String, HeadRule> normalRules) {
 		String currentNodeName = node.getNodeName();
 		if(normalRules.containsKey(currentNodeName)){
 			if(normalRules.get(currentNodeName).getDirection().equals("left")){

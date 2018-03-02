@@ -1,4 +1,4 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
