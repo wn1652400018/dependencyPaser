@@ -46,7 +46,7 @@ public class SyntacticAnalysisForChinaEvalTool {
         WordSegAndPosContextGenerator generator = new WordSegAndPosContextGeneratorConf();
 		WordSegAndPosME postagger = new WordSegAndPosME(posmodel, generator);	
         SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
-        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen, aghw);
+        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(posmodel, chunkmodel, buildmodel,checkmodel,contextGen, aghw);
         
         SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
         SyntacticAnalysisEvaluatorForChina evaluator = null;

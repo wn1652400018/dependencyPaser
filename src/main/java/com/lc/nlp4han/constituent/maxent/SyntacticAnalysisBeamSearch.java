@@ -35,7 +35,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public SyntacticAnalysisBeamSearch(int size, ClassificationModel buildmodel, ClassificationModel checkmodel, int cacheSize, AbstractGenerateHeadWords aghw) {
+	public SyntacticAnalysisBeamSearch(int size,  ClassificationModel buildmodel, ClassificationModel checkmodel, int cacheSize, AbstractGenerateHeadWords aghw) {
 		this.size = size;
 		this.buildmodel = buildmodel;
 		this.checkmodel = checkmodel;
@@ -64,7 +64,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	/**
 	 * 为一步训练得到的模型生成的构造函数
 	 * @param size
-	 * @param chunkmodel
+	 * @param model
 	 * @param cacheSize
 	 * @param flag 字符串类型的标记，证明是一步训练的句法模型
 	 */

@@ -53,7 +53,7 @@ public class SyntacticAnalysisForChinaCVTool {
 			WordSegAndPosContextGenerator generator = new WordSegAndPosContextGeneratorConf();
 			WordSegAndPosME postagger = new WordSegAndPosME(posmodel, generator);	
 	        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
-	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen, aghw);
+	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(posmodel, chunkmodel, buildmodel,checkmodel,contextGen, aghw);
 	        
 	        SyntacticAnalysisEvaluatorForChina evaluator = new SyntacticAnalysisEvaluatorForChina(postagger,chunktagger,buildandchecktagger, aghw, listeners);
 			SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
