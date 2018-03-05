@@ -10,7 +10,6 @@ import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.pos.CorpusStat;
-import com.lc.nlp4han.pos.POSModelRef;
 import com.lc.nlp4han.pos.POSTagger;
 import com.lc.nlp4han.pos.WordPOSMeasure;
 import com.lc.nlp4han.pos.word.WordPOSSample;

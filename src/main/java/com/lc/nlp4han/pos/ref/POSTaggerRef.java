@@ -1,6 +1,5 @@
 package com.lc.nlp4han.pos.ref;
 
-import com.lc.nlp4han.pos.POSModelRef;
 import com.lc.nlp4han.pos.POSTagger;
 
 /**
