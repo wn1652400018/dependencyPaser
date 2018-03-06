@@ -13,8 +13,8 @@ import java.util.Map;
 
 import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
 import com.lc.nlp4han.constituent.BracketExpUtil;
-import com.lc.nlp4han.constituent.ConstituentTree;
 import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.HeadWordsRuleSet;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.constituent.TreeToHeadTree;
@@ -26,7 +26,6 @@ import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
-import com.lc.nlp4han.pos.word.POSTaggerWordME;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
@@ -34,7 +33,7 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMEForBuildAndCheck implements ConstituentParser<HeadTreeNode>{
+public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisForBuildAndCheck<HeadTreeNode>{
 	public static final int DEFAULT_BEAM_SIZE = 20;
 	private SyntacticAnalysisContextGenerator<HeadTreeNode> contextGenerator;
 	@SuppressWarnings("unused")
@@ -44,16 +43,15 @@ public class SyntacticAnalysisMEForBuildAndCheck implements ConstituentParser<He
     private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
     
     private AbstractGenerateHeadWords aghw ; 
-	private POSTaggerWordME postagger ;
-	private SyntacticAnalysisMEForChunk chunktagger ;
+
 	/**
 	 * 构造函数，初始化工作
 	 * @param model 模型
 	 * @param contextGen 特征
 	 * @param aghw 生成头结点，build后check为yes时候进行合并的时候需要
 	 */
-	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper posmodel, ModelWrapper chunkmodel, ModelWrapper buildmodel, ModelWrapper checkmodel,SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
-		init(posmodel, chunkmodel, buildmodel ,checkmodel, contextGen, aghw);
+	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper buildmodel, ModelWrapper checkmodel,SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
+		init(buildmodel ,checkmodel, contextGen, aghw);
 	}
     /**
      * 初始化工作
@@ -61,15 +59,13 @@ public class SyntacticAnalysisMEForBuildAndCheck implements ConstituentParser<He
      * @param contextGen 特征
      * @param aghw 生成头结点，build后check为yes时候进行合并的时候需要
      */
-	private void init(ModelWrapper posmodel, ModelWrapper chunkmodel, ModelWrapper buildmodel, ModelWrapper checkmodel, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
+	private void init(ModelWrapper buildmodel, ModelWrapper checkmodel, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
 		int beamSize = SyntacticAnalysisMEForBuildAndCheck.DEFAULT_BEAM_SIZE;
 
         contextGenerator = contextGen;
         size = beamSize;
         sequenceValidator = new DefaultSyntacticAnalysisSequenceValidator();
         this.aghw = aghw;
-        postagger = new POSTaggerWordME(posmodel);
-        chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel, contextGen, aghw);
         this.model = new SyntacticAnalysisBeamSearch(beamSize,buildmodel.getModel(),
                     checkmodel.getModel(), 0, aghw);
 	}
@@ -332,58 +328,90 @@ public class SyntacticAnalysisMEForBuildAndCheck implements ConstituentParser<He
 			return buildAndCheckTree.get(0);
 		}
 	}
+
+	/**
+	 * 将分词序列，词性序列和chunk标记序列，转换成chunk子树序列
+	 * @param words 分词序列
+	 * @param poses 词性序列
+	 * @param chunkTag 语块标记序列
+	 * @return
+	 */
+	private List<HeadTreeNode> toChunkTreeList(String[] words, String[] poses, String[] chunkTag){
+		List<HeadTreeNode> chunkTree = new ArrayList<>();
+		for (int i = 0; i < chunkTag.length; i++) {
+			if(chunkTag[i].equals("O")){
+				HeadTreeNode pos = new HeadTreeNode(poses[i]);
+				pos.addChild(new HeadTreeNode(words[i]));
+				pos.setHeadWords(words[i]);
+				chunkTree.add(pos);
+			}else if(chunkTag[i].endsWith("B")){
+				HeadTreeNode node = new HeadTreeNode(chunkTag[i].split("_")[0]);
+				int j ;
+				for (j = i; j < chunkTag.length; j++) {
+					HeadTreeNode pos = new HeadTreeNode(poses[j]);
+					pos.addChild(new HeadTreeNode(words[j]));
+					pos.setHeadWords(words[j]);
+					node.addChild(pos);
+					if(chunkTag[j].endsWith("E")){
+						break;
+					}
+				}
+				node.setHeadWords(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()));
+				chunkTree.add(node);
+				i = j;
+			}
+		}
+		return chunkTree;
+	}
+	
 	/**
 	 * 得到句法树
 	 * @param chunkTree chunk子树序列
 	 * @return
 	 */
-	public ConstituentTree syntacticTree(List<HeadTreeNode> chunkTree) {
+	@Override
+	public HeadTreeNode syntacticTree(List<HeadTreeNode> chunkTree) {
 		List<List<HeadTreeNode>> allTree = new ArrayList<>();
 		allTree.add(chunkTree);
 		HeadTreeNode headTreeNode = tagBuildAndCheck(allTree,null);
-		ConstituentTree constituent = new ConstituentTree();
-		constituent.setRoot(headTreeNode);
-		return constituent;
+		return headTreeNode;
 	}
 	
 	/**
-	 * 由chunk子树得到K颗最好的成分树
-	 * @param k 最好的成分树的个数
+	 * 得到句法树
+	 * @param words 词语
+	 * @param poses 词性标记
+	 * @param chunkTag chunk标记
+	 * @return
+	 */
+	@Override
+	public HeadTreeNode syntacticTree(String[] words, String[] poses, String[] chunkTag) {
+		List<HeadTreeNode> chunkTree = toChunkTreeList(words,poses,chunkTag);
+		return syntacticTree(chunkTree);
+	}
+	
+	/**
+	 * 得到句法树
+	 * @param sentence 由词语词性标记和chunk标记组成的句子,输入的格式[wods/pos word/pos...]tag
+	 * @return
+	 */
+	@Override
+	public HeadTreeNode syntacticTree(String sentence) {
+		return syntacticTree(1,sentence).get(0);
+	}
+	
+	/**
+	 * 得到最好的K个句法树
+	 * @param k 最好的K个结果
 	 * @param chunkTree chunk子树序列
 	 * @return
 	 */
-	public ConstituentTree[] syntacticTree(int k, List<HeadTreeNode> chunkTree) {
+	@Override
+	public List<HeadTreeNode> syntacticTree(int k, List<HeadTreeNode> chunkTree) {
 		List<List<HeadTreeNode>> allTree = new ArrayList<>();
 		allTree.add(chunkTree);
 		List<HeadTreeNode> headTreeNode = tagBuildAndCheck(k,allTree,null);
-		List<ConstituentTree> constituent = new ArrayList<>();
-		for (int i = 0; i < headTreeNode.size(); i++) {
-			ConstituentTree con = new ConstituentTree();
-			con.setRoot(headTreeNode.get(i));
-			constituent.add(con);
-		}
-		return constituent.toArray(new ConstituentTree[constituent.size()]);
-	}
-
-	/**
-	 * 得到句法树
-	 * @param words 分词序列
-	 * @param poses 词性标记
-	 * @return
-	 */
-	@Override
-	public ConstituentTree parseTree(String[] words, String[] poses) {
-		return parseKTree(1,words,poses)[0];
-	}
-	
-	/**
-	 * 得到句法树
-	 * @param words 分词序列
-	 * @return
-	 */
-	@Override
-	public ConstituentTree parseTree(String[] words) {
-		return parseKTree(1,words)[0];
+		return headTreeNode;
 	}
 	
 	/**
@@ -391,51 +419,111 @@ public class SyntacticAnalysisMEForBuildAndCheck implements ConstituentParser<He
 	 * @param k 最好的K个结果
 	 * @param words 词语
 	 * @param poses 词性标记
+	 * @param chunkTag chunk标记
 	 * @return
 	 */
 	@Override
-	public ConstituentTree[] parseKTree(int k, String[] words, String[] poses) {
-        //转换成chunk子树序列
-		//(1)将poses转换成二维
-		String[][] kposes = new String[1][poses.length];
-		for (int i = 0; i < kposes.length; i++) {
-			for (int j = 0; j < kposes[i].length; j++) {
-				kposes[i][j] = poses[j];
-			}
-		}
-		List<List<HeadTreeNode>> posTree = SyntacticAnalysisSample.toPosTree(words, kposes);
-		List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(k, posTree, null);
-		List<HeadTreeNode> headTreeNode = tagBuildAndCheck(k,chunkTree,null);
-		List<ConstituentTree> constituent = new ArrayList<>();
-		for (int i = 0; i < headTreeNode.size(); i++) {
-			ConstituentTree con = new ConstituentTree();
-			con.setRoot(headTreeNode.get(i));
-			constituent.add(con);
-		}
-		return constituent.toArray(new ConstituentTree[constituent.size()]);
+	public List<HeadTreeNode> syntacticTree(int k, String[] words, String[] poses, String[] chunkTag) {
+		List<HeadTreeNode> chunkTree = toChunkTreeList(words,poses,chunkTag);
+		return syntacticTree(k,chunkTree);
 	}
 	
 	/**
 	 * 得到最好的K个句法树
 	 * @param k 最好的K个结果
-	 * @param words 分词序列
+	 * @param sentence 由词语词性标记和chunk标记组成的句子
 	 * @return
 	 */
 	@Override
-	public ConstituentTree[] parseKTree(int k, String[] words) {
-		// 得到K个最好的词性标注序列
-		String[][] kposes = postagger.tag(words,k);
-		List<List<HeadTreeNode>> posTree = SyntacticAnalysisSample.toPosTree(words, kposes);
-		//转换成chunk子树序列
-		List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(k, posTree, null);
-		List<HeadTreeNode> headTreeNode = tagBuildAndCheck(k,chunkTree,null);
-		List<ConstituentTree> constituent = new ArrayList<>();
-		for (int i = 0; i < headTreeNode.size(); i++) {
-			ConstituentTree con = new ConstituentTree();
-			con.setRoot(headTreeNode.get(i));
-			constituent.add(con);
+	public List<HeadTreeNode> syntacticTree(int k, String sentence) {
+		List<String> chunkTags = new ArrayList<>();
+		List<String> words = new ArrayList<>();
+		List<String> poses = new ArrayList<>();
+		
+		boolean isInChunk = false;							//当前词是否在组块中
+		List<String> wordTagsInChunk = new ArrayList<>();	//临时存储在组块中的词与词性
+		String[] wordTag = null;							//词与词性标注
+		String chunk = null;								//组块的标签
+		String[] content = sentence.split("\\s+");
+		for(String string : content) {
+			if(isInChunk) {	//当前词在组块中
+				if(string.contains("]")) {//当前词是组块的结束
+					String[] strings = string.split("]");
+					wordTagsInChunk.add(strings[0]);
+					chunk = strings[1];
+					isInChunk = false;
+				}else {
+					wordTagsInChunk.add(string);
+				}
+			}else {//当前词不在组块中
+				if(wordTagsInChunk != null && chunk != null) {//上一个组块中的词未处理，先处理上一个组块中的词	
+					wordTag = wordTagsInChunk.get(0).split("/");
+					words.add(wordTag[0]);
+					poses.add(wordTag[1]);
+					chunkTags.add(chunk + "_B");
+					
+					if(wordTagsInChunk.size() > 2) {
+						for(int i = 1; i < wordTagsInChunk.size() - 1; i++) {
+							wordTag = wordTagsInChunk.get(i).split("/");
+							words.add(wordTag[0]);
+							poses.add(wordTag[1]);
+							chunkTags.add(chunk + "_I");
+						}
+					}
+					wordTag = wordTagsInChunk.get(wordTagsInChunk.size() - 1).split("/");
+					words.add(wordTag[0]);
+					poses.add(wordTag[1]);
+					chunkTags.add(chunk + "_E");
+					
+					wordTagsInChunk = new ArrayList<>();
+					chunk = null;
+					
+					if(string.startsWith("[")) {
+						wordTagsInChunk.add(string.replace("[", ""));
+						isInChunk = true;
+					}else {
+						wordTag = string.split("/");
+						words.add(wordTag[0]);
+						poses.add(wordTag[1]);
+						chunkTags.add("O");
+					}
+					
+				}else {
+					if(string.startsWith("[")) {
+						wordTagsInChunk.add(string.replace("[", ""));
+						isInChunk = true;
+					}else {
+						wordTag = string.split("/");
+						words.add(wordTag[0]);
+						poses.add(wordTag[1]);
+						chunkTags.add("O");
+					}
+				}
+			}
 		}
-		return constituent.toArray(new ConstituentTree[constituent.size()]);
+		
+		//句子结尾是组块，进行解析
+		if(wordTagsInChunk != null && chunk != null) {
+			wordTag = wordTagsInChunk.get(0).split("/");
+			words.add(wordTag[0]);
+			poses.add(wordTag[1]);
+			chunkTags.add(chunk + "_B");
+			
+			if(wordTagsInChunk.size() > 2) {
+				for(int i = 1; i < wordTagsInChunk.size() - 1; i++) {
+					wordTag = wordTagsInChunk.get(i).split("/");
+					words.add(wordTag[0]);
+					poses.add(wordTag[1]);
+					chunkTags.add(chunk + "_I");
+				}
+			}
+			wordTag = wordTagsInChunk.get(wordTagsInChunk.size() - 1).split("/");
+			words.add(wordTag[0]);
+			poses.add(wordTag[1]);
+			chunkTags.add(chunk + "_E");
+		}
+		return syntacticTree(k,words.toArray(new String[words.size()]),poses.toArray(new String[poses.size()]),
+				chunkTags.toArray(new String[chunkTags.size()]));
 	}
 }
 

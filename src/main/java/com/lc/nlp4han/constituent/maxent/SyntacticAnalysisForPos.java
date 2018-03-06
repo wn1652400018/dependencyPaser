@@ -11,19 +11,6 @@ import com.lc.nlp4han.constituent.TreeNode;
  *
  */
 public interface SyntacticAnalysisForPos<T extends TreeNode> {
-
-	/**
-	 * 得到词性标注的结果
-	 * @param words 分词数组
-	 * @return
-	 */
-	String[] pos(String[] words);
-	/**
-	 * 得到词性标注结果
-	 * @param sentence 分词的句子
-	 * @return
-	 */
-	String[] pos(String sentence);
 	
 	/**
 	 * 得到词性标注子树序列
@@ -31,10 +18,27 @@ public interface SyntacticAnalysisForPos<T extends TreeNode> {
 	 * @return
 	 */
 	List<T> posTree(String[] words);
+	
 	/**
 	 * 得到词性标注子树序列
+	 * @param sentence 分词句子
+	 * @return
+	 */
+	List<T> posTree(String sentence);
+	
+	/**
+	 * 得到最好的K个词性标注子树序列
+	 * @param k 最好的K个结果
+	 * @param words 分词数组
+	 * @return
+	 */
+	List<List<T>> posTree(int k, String[] words);
+	
+	/**
+	 * 得到最好的K个词性标注子树序列
+	 * @param k 最好的K个结果
 	 * @param sentece 分词句子
 	 * @return
 	 */
-	List<T> posTree(String sentece);
+	List<List<T>> posTree(int k, String sentence);
 }

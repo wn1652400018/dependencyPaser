@@ -10,7 +10,6 @@ import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.Evaluator;
-import com.lc.nlp4han.pos.word.POSTaggerWordME;
 
 /**
  * 对分步骤训练句法分析模型进行评估的类
@@ -20,20 +19,20 @@ import com.lc.nlp4han.pos.word.POSTaggerWordME;
 public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnalysisSample<HeadTreeNode>>{
 
 	private Logger logger = Logger.getLogger(SyntacticAnalysisEvaluatorForByStep.class.getName());
-	private POSTaggerWordME postagger;
+	private SyntacticAnalysisForPos<HeadTreeNode> postagger;
 	private SyntacticAnalysisMEForChunk chunktagger;
 	private SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger;
 	private SyntacticAnalysisMeasure measure;
 	private AbstractGenerateHeadWords aghw;
 	
-	public SyntacticAnalysisEvaluatorForByStep(POSTaggerWordME postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractGenerateHeadWords aghw) {
+	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractGenerateHeadWords aghw) {
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;
 		this.buildAndChecktagger = buildAndChecktagger;
 		this.aghw = aghw;
 	}
 	
-	public SyntacticAnalysisEvaluatorForByStep(POSTaggerWordME postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractGenerateHeadWords aghw, SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
+	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractGenerateHeadWords aghw, SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
 		super(evaluateMonitors);
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;
@@ -70,8 +69,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 				List<String> actionsRef = sample.getActions();
 				//参考样本没有保存完整的一棵树，需要将动作序列转成一颗完整的树
 				TreeNode treeRef = ActionsToTree.actionsToTree(words, actionsRef);
-				String[][] posres = postagger.tag(words.toArray(new String[words.size()]),20);
-				List<List<HeadTreeNode>> posTree = SyntacticAnalysisSample.toPosTree(words.toArray(new String[words.size()]), posres);
+				List<List<HeadTreeNode>> posTree = postagger.posTree(20,words.toArray(new String[words.size()]));
 				List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(20, posTree, null);	
 				treePre = buildAndChecktagger.tagBuildAndCheck(chunkTree, null);
 				if(treePre == null){
