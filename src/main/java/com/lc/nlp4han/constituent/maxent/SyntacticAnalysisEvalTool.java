@@ -13,7 +13,6 @@ import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.ml.util.TrainingParameters;
-import com.lc.nlp4han.pos.word.POSTaggerWordME;
 
 /**
  * 英文句法分析评估运行类
@@ -24,11 +23,11 @@ public class SyntacticAnalysisEvalTool {
 
 	private static void usage(){
 		System.out.println(SyntacticAnalysisEvalTool.class.getName() + 
-				"-data <corpusFile> -type <algorithom>"
+				"-data <corpusFile> -type <algorithom> -postagger <postagger>"
 				+ "-gold <goldFile> -error <errorFile> -encoding <encoding>" + " [-cutoff <num>] [-iters <num>]");
 	}
 	
-	public static void eval(File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException{
+	public static void eval(String postaggertype, File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException{
 		long start = System.currentTimeMillis();
 		SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen = new SyntacticAnalysisContextGeneratorConf();
 		System.out.println(contextGen);
@@ -38,8 +37,12 @@ public class SyntacticAnalysisEvalTool {
 		ModelWrapper buildmodel = SyntacticAnalysisMEForBuildAndCheck.trainForBuild(trainFile, params, contextGen, encoding, aghw);
 		ModelWrapper checkmodel = SyntacticAnalysisMEForBuildAndCheck.trainForCheck(trainFile, params, contextGen, encoding, aghw);
         System.out.println("训练时间： " + (System.currentTimeMillis() - start));
-        
-        POSTaggerWordME postagger = new POSTaggerWordME(posmodel);	
+        SyntacticAnalysisForPos<HeadTreeNode> postagger;
+        if(postaggertype.equals("china")){
+			postagger = new SyntacticAnalysisMEForPosChina(posmodel);
+        }else{
+        	postagger = new SyntacticAnalysisMEForPosEnglish(posmodel);
+        }	
         SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
         SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen, aghw);
         
@@ -60,7 +63,6 @@ public class SyntacticAnalysisEvalTool {
         SyntacticAnalysisMeasure measureRes = evaluator.getMeasure();
         System.out.println("标注时间： " + (System.currentTimeMillis() - start));
         System.out.println(measureRes);
-        
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -73,6 +75,7 @@ public class SyntacticAnalysisEvalTool {
         String errorFile = null;
         String encoding = "UTF-8";
         String type = "MAXENT";
+        String postagger = "english";
         int cutoff = 3;
         int iters = 100;
         for (int i = 0; i < args.length; i++)
@@ -85,6 +88,11 @@ public class SyntacticAnalysisEvalTool {
             else if (args[i].equals("-type"))
             {
                 type = args[i + 1];
+                i++;
+            }
+            else if (args[i].equals("-postagger"))
+            {
+                postagger = args[i + 1];
                 i++;
             }
             else if (args[i].equals("-gold"))
@@ -120,9 +128,9 @@ public class SyntacticAnalysisEvalTool {
         params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
         if (errorFile != null)
         {
-            eval(new File(trainFile), params, new File(goldFile), encoding, new File(errorFile));
+            eval(postagger, new File(trainFile), params, new File(goldFile), encoding, new File(errorFile));
         }
         else
-            eval(new File(trainFile), params, new File(goldFile), encoding, null);
+            eval(postagger, new File(trainFile), params, new File(goldFile), encoding, null);
 	}
 }

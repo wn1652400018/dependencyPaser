@@ -13,7 +13,6 @@ import java.util.Map;
 
 import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
 import com.lc.nlp4han.constituent.BracketExpUtil;
-import com.lc.nlp4han.constituent.ConstituentTree;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.HeadWordsRuleSet;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;
@@ -34,7 +33,7 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<HeadTreeNode>{
+public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisForBuildAndCheck<HeadTreeNode>{
 	public static final int DEFAULT_BEAM_SIZE = 20;
 	private SyntacticAnalysisContextGenerator<HeadTreeNode> contextGenerator;
 	@SuppressWarnings("unused")
@@ -44,7 +43,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
     private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
     
     private AbstractGenerateHeadWords aghw ; 
-	
+
 	/**
 	 * 构造函数，初始化工作
 	 * @param model 模型
@@ -329,34 +328,15 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 			return buildAndCheckTree.get(0);
 		}
 	}
+
 	/**
-	 * 得到句法树
-	 * @param chunkTree chunk子树序列
+	 * 将分词序列，词性序列和chunk标记序列，转换成chunk子树序列
+	 * @param words 分词序列
+	 * @param poses 词性序列
+	 * @param chunkTag 语块标记序列
 	 * @return
 	 */
-	@Override
-	public ConstituentTree syntacticTree(List<HeadTreeNode> chunkTree) {
-		List<List<HeadTreeNode>> allTree = new ArrayList<>();
-		allTree.add(chunkTree);
-		HeadTreeNode headTreeNode = tagBuildAndCheck(allTree,null);
-		ConstituentTree constituent = new ConstituentTree();
-		constituent.setRoot(headTreeNode);
-		return constituent;
-	}
-	/**
-	 * 得到句法树
-	 * @param words 词语
-	 * @param poses 词性标记
-	 * @param chunkTag chunk标记
-	 * @return
-	 */
-	@Override
-	public ConstituentTree syntacticTree(String[] words, String[] poses, String[] chunkTag) {
-		List<HeadTreeNode> chunkTree = toChunkTreeList(words,poses,chunkTag);
-		return syntacticTree(chunkTree);
-	}
-	
-	public List<HeadTreeNode> toChunkTreeList(String[] words, String[] poses, String[] chunkTag){
+	private List<HeadTreeNode> toChunkTreeList(String[] words, String[] poses, String[] chunkTag){
 		List<HeadTreeNode> chunkTree = new ArrayList<>();
 		for (int i = 0; i < chunkTag.length; i++) {
 			if(chunkTag[i].equals("O")){
@@ -386,66 +366,76 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysis<He
 	
 	/**
 	 * 得到句法树
-	 * @param sentence 由词语词性标记和chunk标记组成的句子,输入的格式[wods/pos word/pos...]tag
-	 * @return
-	 */
-	@Override
-	public ConstituentTree syntacticTree(String sentence) {	
-		return syntacticTree(1,sentence)[0];
-	}
-	/**
-	 * 得到句法树的括号表达式
 	 * @param chunkTree chunk子树序列
 	 * @return
 	 */
 	@Override
-	public String syntacticBracket(List<HeadTreeNode> chunkTree) {
-		HeadTreeNode node = (HeadTreeNode) syntacticTree(chunkTree).getRoot();
-		return HeadTreeNode.printTree(node, 1);
+	public HeadTreeNode syntacticTree(List<HeadTreeNode> chunkTree) {
+		List<List<HeadTreeNode>> allTree = new ArrayList<>();
+		allTree.add(chunkTree);
+		HeadTreeNode headTreeNode = tagBuildAndCheck(allTree,null);
+		return headTreeNode;
 	}
+	
 	/**
-	 * 得到句法树的括号表达式
+	 * 得到句法树
 	 * @param words 词语
 	 * @param poses 词性标记
 	 * @param chunkTag chunk标记
 	 * @return
 	 */
 	@Override
-	public String syntacticBracket(String[] words,String[] poses, String[] chunkTag) {
-		HeadTreeNode node = (HeadTreeNode) syntacticTree(words,poses,chunkTag).getRoot();
-		return HeadTreeNode.printTree(node, 1);
+	public HeadTreeNode syntacticTree(String[] words, String[] poses, String[] chunkTag) {
+		List<HeadTreeNode> chunkTree = toChunkTreeList(words,poses,chunkTag);
+		return syntacticTree(chunkTree);
 	}
+	
 	/**
-	 * 得到句法树的括号表达式
-	 * @param sentence 由词语词性标记和chunk标记组成的句子
+	 * 得到句法树
+	 * @param sentence 由词语词性标记和chunk标记组成的句子,输入的格式[wods/pos word/pos...]tag
 	 * @return
 	 */
 	@Override
-	public String syntacticBracket(String sentence) {
-		HeadTreeNode node = (HeadTreeNode) syntacticTree(sentence).getRoot();
-		return HeadTreeNode.printTree(node, 1);
+	public HeadTreeNode syntacticTree(String sentence) {
+		return syntacticTree(1,sentence).get(0);
 	}
+	
+	/**
+	 * 得到最好的K个句法树
+	 * @param k 最好的K个结果
+	 * @param chunkTree chunk子树序列
+	 * @return
+	 */
 	@Override
-	public ConstituentTree[] syntacticTree(int k, List<HeadTreeNode> chunkTree) {
+	public List<HeadTreeNode> syntacticTree(int k, List<HeadTreeNode> chunkTree) {
 		List<List<HeadTreeNode>> allTree = new ArrayList<>();
 		allTree.add(chunkTree);
 		List<HeadTreeNode> headTreeNode = tagBuildAndCheck(k,allTree,null);
-		List<ConstituentTree> constituent = new ArrayList<>();
-		for (int i = 0; i < headTreeNode.size(); i++) {
-			ConstituentTree con = new ConstituentTree();
-			con.setRoot(headTreeNode.get(i));
-			constituent.add(con);
-		}
-		return constituent.toArray(new ConstituentTree[constituent.size()]);
+		return headTreeNode;
 	}
+	
+	/**
+	 * 得到最好的K个句法树
+	 * @param k 最好的K个结果
+	 * @param words 词语
+	 * @param poses 词性标记
+	 * @param chunkTag chunk标记
+	 * @return
+	 */
 	@Override
-	public ConstituentTree[] syntacticTree(int k, String[] words, String[] poses, String[] chunkTag) {
+	public List<HeadTreeNode> syntacticTree(int k, String[] words, String[] poses, String[] chunkTag) {
 		List<HeadTreeNode> chunkTree = toChunkTreeList(words,poses,chunkTag);
 		return syntacticTree(k,chunkTree);
 	}
 	
+	/**
+	 * 得到最好的K个句法树
+	 * @param k 最好的K个结果
+	 * @param sentence 由词语词性标记和chunk标记组成的句子
+	 * @return
+	 */
 	@Override
-	public ConstituentTree[] syntacticTree(int k, String sentence) {
+	public List<HeadTreeNode> syntacticTree(int k, String sentence) {
 		List<String> chunkTags = new ArrayList<>();
 		List<String> words = new ArrayList<>();
 		List<String> poses = new ArrayList<>();

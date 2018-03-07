@@ -28,7 +28,7 @@ public class HeadTreeToActions {
 	 * 第一步POS
 	 * @param tree 一棵树
 	 */
-	public static void getActionPOS(HeadTreeNode tree){
+	private static void getActionPOS(HeadTreeNode tree){
 
 		//如果是叶子节点，肯定是具体的词，父节点是词性
 		if(tree.getChildren().size() == 0){
@@ -48,7 +48,7 @@ public class HeadTreeToActions {
 	 * @param subTree 第一步POS后得到的若干子树
 	 * @throws CloneNotSupportedException 
 	 */
-	public static void getActionCHUNK(HeadTreeNode tree,List<HeadTreeNode> subTree) throws CloneNotSupportedException{
+	private static void getActionCHUNK(HeadTreeNode tree,List<HeadTreeNode> subTree) throws CloneNotSupportedException{
 		//为了防止原来的tree被修改
 		HeadTreeNode treeCopy = (HeadTreeNode) tree.clone();
 		//如果当前节点只有一颗子树，这子树可能就是具体的词了，但也存在特殊：（NP(NN chairman)）
@@ -113,7 +113,7 @@ public class HeadTreeToActions {
 	 * @param tree 一棵完整的句法树
 	 * @param subTree 第二步CHUNK得到的若干颗子树进行合并之后的若干颗子树
 	 */
-	public static void getActionBUILDandCHECK(HeadTreeNode tree,List<HeadTreeNode> subTree){
+	private static void getActionBUILDandCHECK(HeadTreeNode tree,List<HeadTreeNode> subTree){
 		
 		//这里的subTree用于判断，定义一个subTree的副本用于过程中的改变
 		//这里的TreeNode实现了克隆的接口，这里也就是深拷贝
