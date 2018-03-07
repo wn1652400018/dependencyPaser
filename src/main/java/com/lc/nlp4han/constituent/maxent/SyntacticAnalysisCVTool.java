@@ -3,8 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.io.File;
 import java.io.IOException;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
-import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
+import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
 import com.lc.nlp4han.ml.util.CrossValidationPartitioner;
@@ -42,7 +42,7 @@ public class SyntacticAnalysisCVTool {
      * @param aghw 生成头结点
      * @throws IOException
      */
-    public void evaluate(String postaggertype ,ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) throws IOException{
+    public void evaluate(String postaggertype ,ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) throws IOException{
     	CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>> partitioner = new CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>>(samples, nFolds);
 		int run = 1;
 		//小于折数的时候
@@ -142,7 +142,7 @@ public class SyntacticAnalysisCVTool {
         
         
         SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen = new SyntacticAnalysisContextGeneratorConf();
-        AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
+        AbstractHeadGenerator aghw = new HeadGeneratorCollins();
         System.out.println(contextGen);
         ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(corpusFile), encoding);       
         ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);

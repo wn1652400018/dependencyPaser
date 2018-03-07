@@ -15,7 +15,7 @@ public class TreeToHeadTree {
 	 * @param treeNode
 	 * @return
 	 */
-	public static HeadTreeNode treeToHeadTree(TreeNode treeNode, AbstractGenerateHeadWords aghw){
+	public static HeadTreeNode treeToHeadTree(TreeNode treeNode, AbstractHeadGenerator aghw){
 		String treeStr = "("+treeNode.toNoNoneSample()+")";
 		treeStr = BracketExpUtil.format(treeStr);
 		int indexTree;//记录当前是第几颗子树

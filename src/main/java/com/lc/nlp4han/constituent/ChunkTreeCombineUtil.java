@@ -16,7 +16,7 @@ public class ChunkTreeCombineUtil {
 	 * @param subTree 第二部CHUNK得到的若干棵子树
 	 * @return
 	 */
-	public static List<HeadTreeNode> combineToHeadTree(List<HeadTreeNode> subTree,AbstractGenerateHeadWords aghw){
+	public static List<HeadTreeNode> combineToHeadTree(List<HeadTreeNode> subTree,AbstractHeadGenerator aghw){
 		List<HeadTreeNode> combineChunk = new ArrayList<HeadTreeNode>();
 		//遍历所有子树
 		for (int i = 0; i < subTree.size(); i++) {

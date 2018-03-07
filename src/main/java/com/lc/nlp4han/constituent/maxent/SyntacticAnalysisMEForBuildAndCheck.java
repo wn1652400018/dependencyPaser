@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.HeadWordsRuleSet;
@@ -42,7 +42,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 
     private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
     
-    private AbstractGenerateHeadWords aghw ; 
+    private AbstractHeadGenerator aghw ; 
 
 	/**
 	 * 构造函数，初始化工作
@@ -50,7 +50,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 * @param contextGen 特征
 	 * @param aghw 生成头结点，build后check为yes时候进行合并的时候需要
 	 */
-	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper buildmodel, ModelWrapper checkmodel,SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
+	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper buildmodel, ModelWrapper checkmodel,SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
 		init(buildmodel ,checkmodel, contextGen, aghw);
 	}
     /**
@@ -59,7 +59,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
      * @param contextGen 特征
      * @param aghw 生成头结点，build后check为yes时候进行合并的时候需要
      */
-	private void init(ModelWrapper buildmodel, ModelWrapper checkmodel, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
+	private void init(ModelWrapper buildmodel, ModelWrapper checkmodel, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
 		int beamSize = SyntacticAnalysisMEForBuildAndCheck.DEFAULT_BEAM_SIZE;
 
         contextGenerator = contextGen;
@@ -80,7 +80,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 * @return 模型和模型信息的包裹结果
 	 */
 	public static ModelWrapper trainForBuild(File file, TrainingParameters params, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
-			String encoding, AbstractGenerateHeadWords aghw){
+			String encoding, AbstractHeadGenerator aghw){
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
@@ -136,7 +136,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 */
 	public static ModelWrapper trainForBuild(File file, File buildmodelFile, 
 			TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractGenerateHeadWords aghw) {
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw) {
 		OutputStream modelOut = null;
 		ModelWrapper model = null;
 		try {
@@ -172,7 +172,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 * @return 模型和模型信息的包裹结果
 	 */
 	public static ModelWrapper trainForCheck(File file, TrainingParameters params, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
-			String encoding, AbstractGenerateHeadWords aghw){
+			String encoding, AbstractHeadGenerator aghw){
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
@@ -230,7 +230,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 */
 	public static ModelWrapper trainForCheck(File file, File checkmodelFile, 
 			TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractGenerateHeadWords aghw) {
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw) {
 		OutputStream modelOut = null;
 		ModelWrapper model = null;
 		try {

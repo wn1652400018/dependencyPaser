@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
 import com.lc.nlp4han.constituent.TreeNode;
@@ -23,16 +23,16 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 	private SyntacticAnalysisMEForChunk chunktagger;
 	private SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger;
 	private SyntacticAnalysisMeasure measure;
-	private AbstractGenerateHeadWords aghw;
+	private AbstractHeadGenerator aghw;
 	
-	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractGenerateHeadWords aghw) {
+	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw) {
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;
 		this.buildAndChecktagger = buildAndChecktagger;
 		this.aghw = aghw;
 	}
 	
-	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractGenerateHeadWords aghw, SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
+	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw, SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
 		super(evaluateMonitors);
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;

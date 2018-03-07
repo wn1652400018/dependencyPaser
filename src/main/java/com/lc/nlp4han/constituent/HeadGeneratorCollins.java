@@ -9,7 +9,7 @@ import java.util.List;
  * @author 王馨苇
  *
  */
-public class ConcreteGenerateHeadWords extends AbstractGenerateHeadWords{
+public class HeadGeneratorCollins extends AbstractHeadGenerator{
 
 	/**
 	 * 为并列结构生成头结点

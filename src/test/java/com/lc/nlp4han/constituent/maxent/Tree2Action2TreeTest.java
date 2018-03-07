@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
-import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
+import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.constituent.TreeToHeadTree;
@@ -32,7 +32,7 @@ public class Tree2Action2TreeTest{
 	@Test
 	public void testTreeToActions() throws FileNotFoundException, IOException, CloneNotSupportedException{
 		
-		AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
+		AbstractHeadGenerator aghw = new HeadGeneratorCollins();
 		//节点有多个子节点
 		//1 一个子节点 
 		//2 两个子节点

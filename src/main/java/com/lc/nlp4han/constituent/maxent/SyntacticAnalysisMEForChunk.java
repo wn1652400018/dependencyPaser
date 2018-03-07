@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.ChunkTreeCombineUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;
@@ -40,7 +40,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 
     private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
     
-    private AbstractGenerateHeadWords aghw ; 
+    private AbstractHeadGenerator aghw ; 
 	
 	/**
 	 * 构造函数，初始化工作
@@ -48,7 +48,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @param contextGen 特征
 	 * @param aghw 生成头结点,chunk步合并的时候需要
 	 */
-	public SyntacticAnalysisMEForChunk(ModelWrapper model, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
+	public SyntacticAnalysisMEForChunk(ModelWrapper model, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
 		init(model , contextGen, aghw);
 	}
     /**
@@ -57,7 +57,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
      * @param contextGen 特征
      * @param aghw 生成头结点，chunk步合并的时候需要
      */
-	private void init(ModelWrapper model, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
+	private void init(ModelWrapper model, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
 		int beamSize = SyntacticAnalysisMEForChunk.DEFAULT_BEAM_SIZE;
 
         contextGenerator = contextGen;
@@ -78,7 +78,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return 模型和模型信息的包裹结果
 	 */
 	public static ModelWrapper train(File file, TrainingParameters params, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
-			String encoding, AbstractGenerateHeadWords aghw){
+			String encoding, AbstractHeadGenerator aghw){
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
@@ -132,7 +132,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	public static ModelWrapper train(File file, File modelFile, TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractGenerateHeadWords aghw) {
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw) {
 		OutputStream modelOut = null;
 		ModelWrapper model = null;
 		try {

@@ -9,9 +9,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
-import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
+import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.constituent.TreeToHeadTree;
@@ -26,7 +26,7 @@ import com.lc.nlp4han.ml.model.Event;
 public class SyntacticAnalysisSampleEventTest {
 
 	private List<Event> events ;
-	private AbstractGenerateHeadWords aghw ;
+	private AbstractHeadGenerator aghw ;
 	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator ;
 	private TreeNode tree ;
 	private HeadTreeNode headTree ;
@@ -39,7 +39,7 @@ public class SyntacticAnalysisSampleEventTest {
 	@Before
 	public void setUp() throws IOException, CloneNotSupportedException{
 		events = new ArrayList<Event>();
-		aghw = new ConcreteGenerateHeadWords();
+		aghw = new HeadGeneratorCollins();
 		generator = new SyntacticAnalysisContextGeneratorConf();
 		tree = BracketExpUtil.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
 		headTree = TreeToHeadTree.treeToHeadTree(tree,aghw);

@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
-import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
+import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.constituent.TreeToHeadTree;
@@ -21,7 +21,7 @@ public class GenerateHeadWordsTest {
 	@Test
 	public void testGenerateHeadWords(){
 
-		AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();	
+		AbstractHeadGenerator aghw = new HeadGeneratorCollins();	
 		TreeNode tree1 = BracketExpUtil.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
 		HeadTreeNode headTree1 = TreeToHeadTree.treeToHeadTree(tree1,aghw);
 		String result1 = "(S{saw[VBD]}(NP{I[PRP]}(PRP{I[PRP]} I[0]))(VP{saw[VBD]}(VP{saw[VBD]}(VBD{saw[VBD]} saw[1])(NP{man[NN]}(DT{the[DT]} the[2])"
