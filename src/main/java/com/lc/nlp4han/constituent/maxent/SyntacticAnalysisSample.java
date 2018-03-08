@@ -136,7 +136,7 @@ public class SyntacticAnalysisSample<T extends TreeNode> {
 	 * @param actions 动作序列
 	 * @return
 	 */
-	public static TreeNode toSample(List<String> words ,List<String> actions){
+	public static TreeNode toTree(List<String> words ,List<String> actions){
 		TreeNode tree = ActionsToTree.actionsToTree(words, actions);
 		return tree;
 	}
