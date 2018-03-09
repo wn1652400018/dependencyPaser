@@ -85,9 +85,9 @@ public class SyntacticAnalysisTrainerTool {
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
         params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
         
-        AbstractHeadGenerator aghw = new HeadGeneratorCollins();
-        SyntacticAnalysisMEForChunk.train(corpusFile, chunkmodelFile,params, contextGen, encoding, aghw);
-		SyntacticAnalysisMEForBuildAndCheck.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding, aghw);
-		SyntacticAnalysisMEForBuildAndCheck.trainForCheck(corpusFile, checkmodelFile, params, contextGen, encoding, aghw);
+        AbstractHeadGenerator headGenerator = new HeadGeneratorCollins();
+        SyntacticAnalysisMEForChunk.train(corpusFile, chunkmodelFile,params, contextGen, encoding, headGenerator);
+		SyntacticAnalysisMEForBuildAndCheck.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding, headGenerator);
+		SyntacticAnalysisMEForBuildAndCheck.trainForCheck(corpusFile, checkmodelFile, params, contextGen, encoding, headGenerator);
 	}
 }
