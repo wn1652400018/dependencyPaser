@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.HeadWordsRuleSet;
+import com.lc.nlp4han.constituent.HeadRuleSet;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.util.Cache;
 
@@ -465,7 +465,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 												copy.get(k).getChildren().get(0).setParent(combine);
 											}
 											//设置头结点
-											combine.setHeadWords(aghw.extractHeadWords(combine, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()));
+											combine.setHeadWords(aghw.extractHeadWords(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 											copy.set(record,combine);
 											//删除用于合并的那些位置上的
 											for (int k = numSeq; k >= record+1; k--) {
@@ -545,7 +545,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 												copy.get(k).getChildren().get(0).setParent(combine);
 											}
 											//设置头结点
-											combine.setHeadWords(aghw.extractHeadWords(combine, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()));
+											combine.setHeadWords(aghw.extractHeadWords(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 											copy.set(record,combine);
 											//删除用于合并的那些位置上的
 											for (int k = numSeq; k >= record+1; k--) {

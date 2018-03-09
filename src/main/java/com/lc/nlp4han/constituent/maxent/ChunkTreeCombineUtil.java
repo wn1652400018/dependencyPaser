@@ -1,7 +1,12 @@
-package com.lc.nlp4han.constituent;
+package com.lc.nlp4han.constituent.maxent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
+import com.lc.nlp4han.constituent.HeadTreeNode;
+import com.lc.nlp4han.constituent.HeadRuleSet;
+import com.lc.nlp4han.constituent.TreeNode;
 
 /**
  * 合并chunk子树
@@ -27,8 +32,8 @@ public class ChunkTreeCombineUtil {
 				//所以遇到start就生成新的子树
 				HeadTreeNode node = new HeadTreeNode(subTree.get(i).getNodeName().split("_")[1]);
 				node.addChild(subTree.get(i).getFirstChild());
-				node.setHeadWords(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[0]);
-				node.setHeadWordsPos(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[1]);
+				node.setHeadWords(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()).split("_")[0]);
+				node.setHeadWordsPos(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()).split("_")[1]);
 				subTree.get(i).getFirstChild().setParent(node);
 				for (int j = i+1; j < subTree.size(); j++) {
 					//判断start后是否有join如果有，就和之前的start合并
@@ -39,8 +44,8 @@ public class ChunkTreeCombineUtil {
 							subTree.get(j).getNodeName().split("_")[0].equals("other")){
 						break;
 					}
-					node.setHeadWords(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[0]);
-					node.setHeadWordsPos(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[1]);
+					node.setHeadWords(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()).split("_")[0]);
+					node.setHeadWordsPos(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()).split("_")[1]);
 				}
 				//将一颗合并过的完整子树加入列表
 				combineChunk.add(node);

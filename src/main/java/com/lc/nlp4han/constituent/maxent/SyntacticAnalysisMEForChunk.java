@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
-import com.lc.nlp4han.constituent.ChunkTreeCombineUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.model.ClassificationModel;

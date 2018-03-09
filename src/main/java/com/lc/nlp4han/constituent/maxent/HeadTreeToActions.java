@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
-import com.lc.nlp4han.constituent.ChunkTreeCombineUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 
 /**

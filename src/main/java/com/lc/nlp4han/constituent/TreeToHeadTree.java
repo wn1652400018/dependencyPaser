@@ -59,8 +59,8 @@ public class TreeToHeadTree {
 					node.setHeadWordsPos(node.getNodeName());
 				//(2)为非终结符，且不是词性标记的时候，由规则推出
 				}else if(!node.isLeaf()){
-					node.setHeadWords(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[0]);
-					node.setHeadWordsPos(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[1]);
+					node.setHeadWords(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()).split("_")[0]);
+					node.setHeadWordsPos(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()).split("_")[1]);
 				}
 				tree.push(node);
 			}

@@ -14,7 +14,7 @@ import java.util.Map;
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.HeadWordsRuleSet;
+import com.lc.nlp4han.constituent.HeadRuleSet;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.constituent.TreeToHeadTree;
@@ -356,7 +356,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 						break;
 					}
 				}
-				node.setHeadWords(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()));
+				node.setHeadWords(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 				chunkTree.add(node);
 				i = j;
 			}
