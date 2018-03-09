@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
-import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
+import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
@@ -31,7 +31,7 @@ public class SyntacticAnalysisEvalTool {
 		long start = System.currentTimeMillis();
 		SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen = new SyntacticAnalysisContextGeneratorConf();
 		System.out.println(contextGen);
-		AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
+		AbstractHeadGenerator aghw = new HeadGeneratorCollins();
 		ModelWrapper posmodel = new ModelWrapper(new File("data\\model\\pos\\en-pos-maxent.bin"));		
 		ModelWrapper chunkmodel= SyntacticAnalysisMEForChunk.train(trainFile, params, contextGen, encoding, aghw);
 		ModelWrapper buildmodel = SyntacticAnalysisMEForBuildAndCheck.trainForBuild(trainFile, params, contextGen, encoding, aghw);

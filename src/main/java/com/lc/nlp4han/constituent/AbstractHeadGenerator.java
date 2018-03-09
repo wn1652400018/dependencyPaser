@@ -8,7 +8,7 @@ import java.util.List;
  * @author 王馨苇
  *
  */
-public abstract class AbstractGenerateHeadWords{
+public abstract class AbstractHeadGenerator{
 	
 	/**
 	 * 为并列结构生成头结点

@@ -9,7 +9,7 @@ import java.util.List;
  * @author 王馨苇
  *
  */
-public class HeadWordsRuleSet {
+public class HeadRuleSet {
 
 	private static List<String> ADJP = new ArrayList<String>();
 	private static List<String> ADVP = new ArrayList<String>();

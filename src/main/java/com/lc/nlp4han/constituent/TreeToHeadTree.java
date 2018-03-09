@@ -15,7 +15,7 @@ public class TreeToHeadTree {
 	 * @param treeNode
 	 * @return
 	 */
-	public static HeadTreeNode treeToHeadTree(TreeNode treeNode, AbstractGenerateHeadWords aghw){
+	public static HeadTreeNode treeToHeadTree(TreeNode treeNode, AbstractHeadGenerator aghw){
 		String treeStr = "("+treeNode.toNoNoneSample()+")";
 		treeStr = BracketExpUtil.format(treeStr);
 		int indexTree;//记录当前是第几颗子树
@@ -59,8 +59,8 @@ public class TreeToHeadTree {
 					node.setHeadWordsPos(node.getNodeName());
 				//(2)为非终结符，且不是词性标记的时候，由规则推出
 				}else if(!node.isLeaf()){
-					node.setHeadWords(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[0]);
-					node.setHeadWordsPos(aghw.extractHeadWords(node, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()).split("_")[1]);
+					node.setHeadWords(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()).split("_")[0]);
+					node.setHeadWordsPos(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()).split("_")[1]);
 				}
 				tree.push(node);
 			}

@@ -11,8 +11,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.lc.nlp4han.pos.POSModelRef;
-
 /**
  * 基准词性标注器训练程序
  * 

@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.HeadWordsRuleSet;
+import com.lc.nlp4han.constituent.HeadRuleSet;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.util.Cache;
 
@@ -18,7 +18,7 @@ import com.lc.nlp4han.ml.util.Cache;
  */
 public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceClassificationModel<HeadTreeNode>{
 
-	private AbstractGenerateHeadWords aghw ; 
+	private AbstractHeadGenerator aghw ; 
 	public static final String BEAM_SIZE_PARAMETER = "BeamSize";
 	private static final Object[] EMPTY_ADDITIONAL_CONTEXT = new Object[0];
 	protected int size;
@@ -30,12 +30,12 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	private double[] chunkprobs;
 	private Cache<String[], double[]> contextsCache;
 
-	public SyntacticAnalysisBeamSearch(int size, ClassificationModel buildmodel, ClassificationModel checkmodel, AbstractGenerateHeadWords aghw) {
+	public SyntacticAnalysisBeamSearch(int size, ClassificationModel buildmodel, ClassificationModel checkmodel, AbstractHeadGenerator aghw) {
 		this(size, buildmodel, checkmodel, 0, aghw);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public SyntacticAnalysisBeamSearch(int size,  ClassificationModel buildmodel, ClassificationModel checkmodel, int cacheSize, AbstractGenerateHeadWords aghw) {
+	public SyntacticAnalysisBeamSearch(int size,  ClassificationModel buildmodel, ClassificationModel checkmodel, int cacheSize, AbstractHeadGenerator aghw) {
 		this.size = size;
 		this.buildmodel = buildmodel;
 		this.checkmodel = checkmodel;
@@ -465,7 +465,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 												copy.get(k).getChildren().get(0).setParent(combine);
 											}
 											//设置头结点
-											combine.setHeadWords(aghw.extractHeadWords(combine, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()));
+											combine.setHeadWords(aghw.extractHeadWords(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 											copy.set(record,combine);
 											//删除用于合并的那些位置上的
 											for (int k = numSeq; k >= record+1; k--) {
@@ -545,7 +545,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 												copy.get(k).getChildren().get(0).setParent(combine);
 											}
 											//设置头结点
-											combine.setHeadWords(aghw.extractHeadWords(combine, HeadWordsRuleSet.getNormalRuleSet(), HeadWordsRuleSet.getSpecialRuleSet()));
+											combine.setHeadWords(aghw.extractHeadWords(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 											copy.set(record,combine);
 											//删除用于合并的那些位置上的
 											for (int k = numSeq; k >= record+1; k--) {

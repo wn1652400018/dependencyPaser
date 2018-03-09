@@ -3,7 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
+import com.lc.nlp4han.constituent.ConstituentParser;
 import com.lc.nlp4han.constituent.ConstituentTree;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.ml.util.ModelWrapper;
@@ -20,7 +21,7 @@ public class ConstituentParserME implements ConstituentParser{
 	private SyntacticAnalysisMEForBuildAndCheck  buildAndChecktagger;
 	
 	public ConstituentParserME(SyntacticAnalysisForPos<HeadTreeNode> postagger, ModelWrapper chunkmodel, ModelWrapper buildmodel, ModelWrapper checkmodel,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractGenerateHeadWords aghw) {
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
 		this.postagger = postagger;
 		this.chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
 		this.buildAndChecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel, checkmodel, contextGen, aghw);

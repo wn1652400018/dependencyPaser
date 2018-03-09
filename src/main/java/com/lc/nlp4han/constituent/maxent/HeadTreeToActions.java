@@ -3,8 +3,7 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
-import com.lc.nlp4han.constituent.ChunkTreeCombineUtil;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 
 /**
@@ -235,7 +234,7 @@ public class HeadTreeToActions {
 	 * @param aghw 生成头结点的对象
 	 * @throws CloneNotSupportedException
 	 */
-	public static SyntacticAnalysisSample<HeadTreeNode> headTreeToAction(HeadTreeNode tree, AbstractGenerateHeadWords aghw) throws CloneNotSupportedException{
+	public static SyntacticAnalysisSample<HeadTreeNode> headTreeToAction(HeadTreeNode tree, AbstractHeadGenerator aghw) throws CloneNotSupportedException{
 		i = 0;
 		posTree.clear();
 		chunkTree.clear();

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
@@ -23,12 +23,12 @@ public class SyntacticAnalysisSampleStream extends FilterObjectStream<String,Syn
 
 	
 	private Logger logger = Logger.getLogger(SyntacticAnalysisSampleStream.class.getName());
-	private AbstractGenerateHeadWords aghw ;
+	private AbstractHeadGenerator aghw ;
 	/**
 	 * 构造
 	 * @param samples 样本流
 	 */
-	public SyntacticAnalysisSampleStream(ObjectStream<String> samples, AbstractGenerateHeadWords aghw) {
+	public SyntacticAnalysisSampleStream(ObjectStream<String> samples, AbstractHeadGenerator aghw) {
 		super(samples);
 		this.aghw = aghw;
 	}

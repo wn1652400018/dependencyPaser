@@ -3,8 +3,8 @@ package com.lc.nlp4han.constituent.maxent;
 import java.io.File;
 import java.io.IOException;
 
-import com.lc.nlp4han.constituent.AbstractGenerateHeadWords;
-import com.lc.nlp4han.constituent.ConcreteGenerateHeadWords;
+import com.lc.nlp4han.constituent.AbstractHeadGenerator;
+import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 
@@ -85,9 +85,9 @@ public class SyntacticAnalysisTrainerTool {
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
         params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
         
-        AbstractGenerateHeadWords aghw = new ConcreteGenerateHeadWords();
-        SyntacticAnalysisMEForChunk.train(corpusFile, chunkmodelFile,params, contextGen, encoding, aghw);
-		SyntacticAnalysisMEForBuildAndCheck.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding, aghw);
-		SyntacticAnalysisMEForBuildAndCheck.trainForCheck(corpusFile, checkmodelFile, params, contextGen, encoding, aghw);
+        AbstractHeadGenerator headGenerator = new HeadGeneratorCollins();
+        SyntacticAnalysisMEForChunk.train(corpusFile, chunkmodelFile,params, contextGen, encoding, headGenerator);
+		SyntacticAnalysisMEForBuildAndCheck.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding, headGenerator);
+		SyntacticAnalysisMEForBuildAndCheck.trainForCheck(corpusFile, checkmodelFile, params, contextGen, encoding, headGenerator);
 	}
 }

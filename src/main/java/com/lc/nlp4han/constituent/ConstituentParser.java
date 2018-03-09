@@ -1,6 +1,4 @@
-package com.lc.nlp4han.constituent.maxent;
-
-import com.lc.nlp4han.constituent.ConstituentTree;
+package com.lc.nlp4han.constituent;
 
 /**
  * 成分树分析器
