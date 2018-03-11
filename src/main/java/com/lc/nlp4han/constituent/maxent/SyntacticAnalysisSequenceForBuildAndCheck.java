@@ -49,7 +49,7 @@ public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> imple
 		this.begin = s.begin;
 	}
 
-	public SyntacticAnalysisSequenceForBuildAndCheck(SyntacticAnalysisSequenceForBuildAndCheck<T> s,double p,double checkp) {
+	public SyntacticAnalysisSequenceForBuildAndCheck(SyntacticAnalysisSequenceForBuildAndCheck<T> s, double p, double checkp) {
 		this.probs = new ArrayList<>(s.probs.size() + 1);
 		this.probs.addAll(s.probs);
 		this.probs.add(Double.valueOf(p));
@@ -61,7 +61,7 @@ public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> imple
 		this.begin = s.begin;
 	}
 
-	public SyntacticAnalysisSequenceForBuildAndCheck(SyntacticAnalysisSequenceForBuildAndCheck<T> s,List<T> tree,double p, double pcheck, int begin) {
+	public SyntacticAnalysisSequenceForBuildAndCheck(SyntacticAnalysisSequenceForBuildAndCheck<T> s, List<T> tree, double p, double pcheck, int begin) {
 		this.tree = tree;
 		this.probs = new ArrayList<>(s.probs.size() + 1);
 		this.probs.addAll(s.probs);

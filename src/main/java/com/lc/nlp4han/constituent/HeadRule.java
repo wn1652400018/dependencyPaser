@@ -22,6 +22,23 @@ public class HeadRule {
 		return this.rightRules;
 	}
 	
+	/**
+	 * 右部规则中的第I个
+	 * @param i
+	 * @return
+	 */
+	public String getIRightRule(int i){
+		return this.rightRules.get(i);
+	}
+	
+	/**
+	 * 右部规则的长度
+	 * @return
+	 */
+	public int getRightRulesSize(){
+		return this.rightRules.size();
+	}
+	
 	public String getDirection(){
 		return this.direction;
 	}

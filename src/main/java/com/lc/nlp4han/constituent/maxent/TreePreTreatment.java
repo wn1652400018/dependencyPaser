@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
 
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;
@@ -19,17 +18,6 @@ import com.lc.nlp4han.ml.util.FileInputStreamFactory;
  *
  */
 public class TreePreTreatment{
-
-	
-	private static HashSet<Character> hsalbdigit = new HashSet<>();
-	
-	static{
-		//罗列了半角和全角的情况
-		String albdigits = "０１２３４５６７８９0123456789";
-		for (int i = 0; i < albdigits.length(); i++) {
-			hsalbdigit.add(albdigits.charAt(i));
-		}
-	}
 	
 	/**
 	 * 预处理
@@ -39,7 +27,7 @@ public class TreePreTreatment{
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static void pretreatment(String frompath,String topath) throws UnsupportedOperationException, FileNotFoundException, IOException{
+	public static void pretreatment(String frompath, String topath) throws UnsupportedOperationException, FileNotFoundException, IOException{
 		//读取一颗树
 		PlainTextByTreeStream lineStream = null;	
 		//创建输出流
@@ -49,7 +37,7 @@ public class TreePreTreatment{
 		while((tree = lineStream.read()) != ""){
 			TreeNode node = BracketExpUtil.generateTree(tree);
 			//对树进行遍历
-			travelTree(node);	
+			deleteNone(node);	
 			String newTreeStr = node.toNoNoneSample();
 			TreeNode newTree = BracketExpUtil.generateTree("("+newTreeStr+")");
 			bw.write("("+TreeNode.printTree(newTree, 1)+")");
@@ -58,55 +46,46 @@ public class TreePreTreatment{
 		bw.close();
 		lineStream.close();
 	}
-	
-	//判断是否是数字【中文数字，阿拉伯数字（全角和半角）】
-	private static boolean isDigit(char c){
-		if(hsalbdigit.contains(c)){
-			return true;
-		}else{
-			return false;
-		}	
-	}
 
 	/**
-	 * 对树进行遍历删除NONE【这里的删除试将属性flag设置为false】
+	 * 对树进行遍历删除NONE【这里的删除是将属性flag设置为false】
 	 * @param node 一棵树
 	 */
-	public static void travelTree(TreeNode node){
-		if(node.getChildren().size() != 0){
+	public static void deleteNone(TreeNode node){
+		if(node.getChildrenNum() != 0){
 			for (TreeNode treenode:node.getChildren()) {
-				travelTree(treenode);
+				deleteNone(treenode);
 			}
 		}		
 		if(!node.isLeaf()){
 			if(node.getNodeName().contains("NONE")){
 				//该节点的父节点只有空节点一个孩子
-				if(node.getParent().getChildren().size() > 1){
+				if(node.getParent().getChildrenNum() > 1){
 					//将NONE和NONE的子节点标记位false
 					node.setFlag(false);
-					node.getChildren().get(0).setFlag(false);	
+					node.getFirstChild().setFlag(false);	
 					//(SBAR(-NONE- 0)(S(-NONE- *T*-1)))
-					if(node.getParent().getChildren().size() == 2){
+					if(node.getParent().getChildrenNum() == 2){
 						node.getParent().setFlag(false);
-						if(node.getParent().getChildren().get(1).getChildren().size() == 1){
-							if(node.getParent().getChildren().get(1).getChildren().get(0).getNodeName().contains("NONE")){
-								node.getParent().getChildren().get(1).setFlag(false);
-								node.getParent().getChildren().get(1).getChildren().get(0).setFlag(false);
-								node.getParent().getChildren().get(1).getChildren().get(0).getChildren().get(0).setFlag(false);
+						if(node.getParent().getIChild(1).getChildrenNum() == 1){
+							if(node.getParent().getIChild(1).getFirstChildName().contains("NONE")){
+								node.getParent().getIChild(1).setFlag(false);
+								node.getParent().getIChild(1).getFirstChild().setFlag(false);
+								node.getParent().getIChild(1).getFirstChild().getFirstChild().setFlag(false);
 								//(VP (VBD reported) (SBAR (-NONE- 0) (S (-NONE- *T*-1) )))变为(VBD reported)
-								if(node.getParent().getParent().getChildren().size() == 2){
+								if(node.getParent().getParent().getChildrenNum() == 2){
 									node.getParent().getParent().setFlag(false);
 								}
 							}
 						}
 					}
-				}else if(node.getParent().getChildren().size() == 1){
+				}else if(node.getParent().getChildrenNum() == 1){
 					//将NONE和NONE的子节点和父节点标记位false
 					node.setFlag(false);
-					node.getChildren().get(0).setFlag(false);
+					node.getFirstChild().setFlag(false);
 					node.getParent().setFlag(false);
 					//(S(NP(-NONE- *-1))(VP(To to)(VP ....)))
-					if(node.getParent().getParent().getChildren().size() == 2){
+					if(node.getParent().getParent().getChildrenNum() == 2){
 						node.getParent().getParent().setFlag(false);
 					}
 				}
@@ -114,8 +93,8 @@ public class TreePreTreatment{
 				if(!node.getNodeName().equals("-LRB-") && !(node.getNodeName().equals("-RRB-"))){
 					node.setNewName(node.getNodeName().split("-")[0]);
 				}
-			}else if(isDigit(node.getNodeName().charAt(node.getNodeName().length()-1))){
-				if(isDigit(node.getNodeName().charAt(node.getNodeName().length()-2))){
+			}else if(IsDigitUtil.isDigit(node.getNodeName().charAt(node.getNodeName().length()-1))){
+				if(IsDigitUtil.isDigit(node.getNodeName().charAt(node.getNodeName().length()-2))){
 					node.setNewName(node.getNodeName().substring(0, node.getNodeName().length()-3));
 				}else{
 					node.setNewName(node.getNodeName().substring(0, node.getNodeName().length()-2));

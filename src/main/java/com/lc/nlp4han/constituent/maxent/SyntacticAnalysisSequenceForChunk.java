@@ -33,7 +33,7 @@ public class SyntacticAnalysisSequenceForChunk implements Comparable<SyntacticAn
 		this.lable = s.lable;
 	}
 
-	public SyntacticAnalysisSequenceForChunk(SyntacticAnalysisSequenceForChunk s, String outcome, double p,int lable) {
+	public SyntacticAnalysisSequenceForChunk(SyntacticAnalysisSequenceForChunk s, String outcome, double p, int lable) {
 		this.outcomes = new ArrayList<>(s.outcomes.size() + 1);
 		this.outcomes.addAll(s.outcomes);
 		this.outcomes.add(outcome);
@@ -44,7 +44,7 @@ public class SyntacticAnalysisSequenceForChunk implements Comparable<SyntacticAn
 		this.lable = lable;
 	}
 
-	public SyntacticAnalysisSequenceForChunk(List<String> outcomes,int lable) {
+	public SyntacticAnalysisSequenceForChunk(List<String> outcomes, int lable) {
 		this.outcomes = outcomes;
 		this.probs = Collections.nCopies(outcomes.size(), ONE);
 		this.lable = lable;

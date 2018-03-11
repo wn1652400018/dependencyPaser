@@ -25,14 +25,14 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 	private SyntacticAnalysisMeasure measure;
 	private AbstractHeadGenerator aghw;
 	
-	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw) {
+	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger, SyntacticAnalysisMEForChunk chunktagger, SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw) {
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;
 		this.buildAndChecktagger = buildAndChecktagger;
 		this.aghw = aghw;
 	}
 	
-	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger,SyntacticAnalysisMEForChunk chunktagger,SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw, SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
+	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger, SyntacticAnalysisMEForChunk chunktagger, SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw, SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
 		super(evaluateMonitors);
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;
@@ -72,6 +72,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 				List<List<HeadTreeNode>> posTree = postagger.posTree(20,words.toArray(new String[words.size()]));
 				List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(20, posTree, null);	
 				treePre = buildAndChecktagger.tagBuildAndCheck(chunkTree, null);
+				
 				if(treePre == null){
 					samplePre = new SyntacticAnalysisSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 					measure.countNodeDecodeTrees(treePre);

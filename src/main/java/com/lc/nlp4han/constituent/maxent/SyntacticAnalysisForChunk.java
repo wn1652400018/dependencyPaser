@@ -18,7 +18,7 @@ public interface SyntacticAnalysisForChunk<T extends TreeNode> {
 	 * @param poses 词性
 	 * @return
 	 */
-	List<T> chunkTree(String[] words,String[] poses);
+	List<T> chunkTree(String[] words, String[] poses);
 	/**
 	 * 得到chunk子树
 	 * @param wordsandposes 词语+词性组成的数组
@@ -43,7 +43,7 @@ public interface SyntacticAnalysisForChunk<T extends TreeNode> {
 	 * @param poses 词性
 	 * @return
 	 */
-	String[] chunk(String[] words,String[] poses);
+	String[] chunk(String[] words, String[] poses);
 	/**
 	 * 得到chunk结果
 	 * @param wordsandposes 词语+词性组成数组

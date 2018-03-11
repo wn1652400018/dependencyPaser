@@ -39,9 +39,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	@SuppressWarnings("unused")
 	private int size;
 	private SyntacticAnalysisSequenceClassificationModel<HeadTreeNode> model;
-
     private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
-    
     private AbstractHeadGenerator aghw ; 
 
 	/**
@@ -51,7 +49,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 * @param aghw 生成头结点，build后check为yes时候进行合并的时候需要
 	 */
 	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper buildmodel, ModelWrapper checkmodel,SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
-		init(buildmodel ,checkmodel, contextGen, aghw);
+		init(buildmodel, checkmodel, contextGen, aghw);
 	}
     /**
      * 初始化工作
@@ -66,7 +64,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
         size = beamSize;
         sequenceValidator = new DefaultSyntacticAnalysisSequenceValidator();
         this.aghw = aghw;
-        this.model = new SyntacticAnalysisBeamSearch(beamSize,buildmodel.getModel(),
+        this.model = new SyntacticAnalysisBeamSearch(beamSize, buildmodel.getModel(),
                     checkmodel.getModel(), 0, aghw);
 	}
 	
@@ -343,6 +341,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 				HeadTreeNode pos = new HeadTreeNode(poses[i]);
 				pos.addChild(new HeadTreeNode(words[i]));
 				pos.setHeadWords(words[i]);
+				pos.setHeadWordsPos(poses[i]);
 				chunkTree.add(pos);
 			}else if(chunkTag[i].endsWith("B")){
 				HeadTreeNode node = new HeadTreeNode(chunkTag[i].split("_")[0]);
@@ -351,12 +350,14 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 					HeadTreeNode pos = new HeadTreeNode(poses[j]);
 					pos.addChild(new HeadTreeNode(words[j]));
 					pos.setHeadWords(words[j]);
+					pos.setHeadWordsPos(poses[i]);
 					node.addChild(pos);
 					if(chunkTag[j].endsWith("E")){
 						break;
 					}
 				}
-				node.setHeadWords(aghw.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadWords(aghw.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadWordsPos(aghw.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 				chunkTree.add(node);
 				i = j;
 			}
@@ -386,7 +387,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 */
 	@Override
 	public HeadTreeNode syntacticTree(String[] words, String[] poses, String[] chunkTag) {
-		List<HeadTreeNode> chunkTree = toChunkTreeList(words,poses,chunkTag);
+		List<HeadTreeNode> chunkTree = toChunkTreeList(words, poses, chunkTag);
 		return syntacticTree(chunkTree);
 	}
 	
@@ -397,7 +398,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 */
 	@Override
 	public HeadTreeNode syntacticTree(String sentence) {
-		return syntacticTree(1,sentence).get(0);
+		return syntacticTree(1, sentence).get(0);
 	}
 	
 	/**
@@ -410,7 +411,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	public List<HeadTreeNode> syntacticTree(int k, List<HeadTreeNode> chunkTree) {
 		List<List<HeadTreeNode>> allTree = new ArrayList<>();
 		allTree.add(chunkTree);
-		List<HeadTreeNode> headTreeNode = tagBuildAndCheck(k,allTree,null);
+		List<HeadTreeNode> headTreeNode = tagBuildAndCheck(k, allTree, null);
 		return headTreeNode;
 	}
 	
@@ -424,8 +425,8 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 */
 	@Override
 	public List<HeadTreeNode> syntacticTree(int k, String[] words, String[] poses, String[] chunkTag) {
-		List<HeadTreeNode> chunkTree = toChunkTreeList(words,poses,chunkTag);
-		return syntacticTree(k,chunkTree);
+		List<HeadTreeNode> chunkTree = toChunkTreeList(words, poses, chunkTag);
+		return syntacticTree(k, chunkTree);
 	}
 	
 	/**
@@ -522,7 +523,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 			poses.add(wordTag[1]);
 			chunkTags.add(chunk + "_E");
 		}
-		return syntacticTree(k,words.toArray(new String[words.size()]),poses.toArray(new String[poses.size()]),
+		return syntacticTree(k,words.toArray(new String[words.size()]), poses.toArray(new String[poses.size()]),
 				chunkTags.toArray(new String[chunkTags.size()]));
 	}
 }

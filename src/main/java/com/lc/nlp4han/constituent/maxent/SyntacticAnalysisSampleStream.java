@@ -19,11 +19,12 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisSampleStream extends FilterObjectStream<String,SyntacticAnalysisSample<HeadTreeNode>>{
+public class SyntacticAnalysisSampleStream extends FilterObjectStream<String, SyntacticAnalysisSample<HeadTreeNode>>{
 
 	
 	private Logger logger = Logger.getLogger(SyntacticAnalysisSampleStream.class.getName());
 	private AbstractHeadGenerator aghw ;
+	
 	/**
 	 * 构造
 	 * @param samples 样本流

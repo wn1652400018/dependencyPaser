@@ -23,7 +23,7 @@ public abstract class AbstractHeadGenerator{
 	 * @param specialRules 生成头结点的特殊规则
 	 * @return
 	 */
-	protected abstract String generateHeadWordsForSpecialRules(HeadTreeNode node,HashMap<String,List<HeadRule>> specialRules);
+	protected abstract String generateHeadWordsForSpecialRules(HeadTreeNode node, HashMap<String,List<HeadRule>> specialRules);
 	
 	/**
 	 * 为一般规则生成头结点
@@ -31,26 +31,50 @@ public abstract class AbstractHeadGenerator{
 	 * @param normalRules 生成头结点的一般规则
 	 * @return
 	 */
-	protected abstract String generateHeadWordsForNormalRules(HeadTreeNode node,HashMap<String,HeadRule> normalRules);
+	protected abstract String generateHeadWordsForNormalRules(HeadTreeNode node, HashMap<String,HeadRule> normalRules);
 
 	/**
-	 * 合并生成头结点的所有方法，提取头结点
+	 * 合并生成头结点的所有方法，提取头结点和头结点对应的词性
 	 * @param node 子节点带头结点，父节点不带头结点的树
 	 * @param normalRules 生成头结点的一般规则
 	 * @param specialRules 生成头结点的特殊规则
 	 * @return
 	 */
-	public String extractHeadWords(HeadTreeNode node, HashMap<String,HeadRule> normalRules,HashMap<String,List<HeadRule>> specialRules){
+	private String extractHeadWordAndPos(HeadTreeNode node, HashMap<String, HeadRule> normalRules, HashMap<String,List<HeadRule>> specialRules){
 		String headWords = null;
 		headWords = generateHeadWordsForCordinator(node);
 		
 		if(headWords == null && specialRules != null){			
-			headWords = generateHeadWordsForSpecialRules(node,specialRules);	
+			headWords = generateHeadWordsForSpecialRules(node, specialRules);	
 		}
 		
 		if(headWords == null && normalRules != null){
-			headWords = generateHeadWordsForNormalRules(node,normalRules);
+			headWords = generateHeadWordsForNormalRules(node, normalRules);
 		}
 		return headWords;
+	}
+	
+	/**
+	 * 合并生成头结点的所有方法，提取头结点和头结点
+	 * @param node 子节点带头结点，父节点不带头结点的树
+	 * @param normalRules 生成头结点的一般规则
+	 * @param specialRules 生成头结点的特殊规则
+	 * @return
+	 */
+	public String extractHeadWord(HeadTreeNode node, HashMap<String,HeadRule> normalRules, HashMap<String,List<HeadRule>> specialRules){
+		
+		return extractHeadWordAndPos(node, normalRules, specialRules).split("_")[0];
+	}
+	
+	/**
+	 * 合并生成头结点的所有方法，提取头结点的词性
+	 * @param node 子节点带头结点，父节点不带头结点的树
+	 * @param normalRules 生成头结点的一般规则
+	 * @param specialRules 生成头结点的特殊规则
+	 * @return
+	 */
+	public String extractHeadWordPos(HeadTreeNode node, HashMap<String,HeadRule> normalRules,HashMap<String,List<HeadRule>> specialRules){
+		
+		return extractHeadWordAndPos(node, normalRules, specialRules).split("_")[1];
 	}
 }

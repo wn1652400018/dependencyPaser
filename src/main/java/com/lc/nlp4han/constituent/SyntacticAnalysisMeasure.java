@@ -35,7 +35,7 @@ public class SyntacticAnalysisMeasure {
 	 * @param treePre 预测的树
 	 * @throws CloneNotSupportedException 
 	 */
-	public void update(TreeNode treeRef,TreeNode treePre) throws CloneNotSupportedException{
+	public void update(TreeNode treeRef, TreeNode treePre) throws CloneNotSupportedException{
 		List<EvalStructure> etRef = TreeToEvalStructure.getNonterminalAndSpan(treeRef);
 		List<EvalStructure> etPre = TreeToEvalStructure.getNonterminalAndSpan(treePre);
 		int trueSentencetemp = 0;	

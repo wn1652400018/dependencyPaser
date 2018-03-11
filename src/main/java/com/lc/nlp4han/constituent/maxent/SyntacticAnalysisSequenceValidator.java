@@ -20,7 +20,7 @@ public interface SyntacticAnalysisSequenceValidator<T extends TreeNode> {
 	 * @param out 当前位置的结果
 	 * @return
 	 */
-	boolean validSequenceForChunk(int i, List<T> posTree,List<String> outcomes, String out);
+	boolean validSequenceForChunk(int i, List<T> posTree, List<String> outcomes, String out);
 	
 	/**
 	 * 检验build和check步骤的标记是否正确

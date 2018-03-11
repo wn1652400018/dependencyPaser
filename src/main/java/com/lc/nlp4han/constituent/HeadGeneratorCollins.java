@@ -24,17 +24,17 @@ public class HeadGeneratorCollins extends AbstractHeadGenerator{
 		boolean flag = false;
 		int record = -1;
 		//先判断是不是这种结构
-		for (int i = 0; i < node.getChildren().size() - 2; i++) {
-			if(node.getChildren().get(i).getNodeName().split("-")[0].equals(parentNonTerminal) &&
-					node.getChildren().get(i+1).getNodeName().equals("CC") &&
-					node.getChildren().get(i+2).getNodeName().split("-")[0].equals(parentNonTerminal)){
+		for (int i = 0; i < node.getChildrenNum() - 2; i++) {
+			if(node.getIChildName(i).split("-")[0].equals(parentNonTerminal) &&
+					node.getIChildName(i+1).equals("CC") &&
+					node.getIChildName(i+2).split("-")[0].equals(parentNonTerminal)){
 				flag = true;
 				record = i;
 				break;
 			}
 		}
 		if(flag == true && record != -1){
-			return node.getChildren().get(record).getHeadWords()+"_"+node.getChildren().get(record).getHeadWordsPos();
+			return node.getIChildHeadWord(record)+"_"+node.getIChildHeadWordPos(record);
 		}
 		return null;
 	}
@@ -49,32 +49,32 @@ public class HeadGeneratorCollins extends AbstractHeadGenerator{
 	public String generateHeadWordsForSpecialRules(HeadTreeNode node, HashMap<String, List<HeadRule>> specialRules) {
 		String currNodeName = node.getNodeName();
 		//如果最后一个是POS，返回最后一个
-		if(node.getChildren().get(node.getChildren().size() - 1).getNodeName().equals("POS")){
-			return node.getChildren().get(node.getChildren().size() - 1).getHeadWords()+"_"+node.getChildren().get(node.getChildren().size() - 1).getHeadWordsPos();
+		if(node.getLastChildName().equals("POS")){
+			return node.getLastChildHeadWord()+"_"+node.getLastChildHeadWordPos();
 		}
 		if(specialRules.containsKey(currNodeName)){
 			for (int k = 0; k < specialRules.get(currNodeName).size(); k++) {
 				if(specialRules.get(currNodeName).get(k).getDirection().equals("left")){
 					//用所有的子节点从左向右匹配规则中每一个
-					for (int i = 0; i < specialRules.get(currNodeName).get(k).getRightRules().size(); i++) {
-						for (int j = 0; j < node.getChildren().size(); j++) {
-							if(node.getChildren().get(j).getNodeName().equals(specialRules.get(currNodeName).get(k).getRightRules().get(i))){
-								return node.getChildren().get(j).getHeadWords()+"_"+node.getChildren().get(j).getHeadWordsPos();
+					for (int i = 0; i < specialRules.get(currNodeName).get(k).getRightRulesSize(); i++) {
+						for (int j = 0; j < node.getChildrenNum(); j++) {
+							if(node.getIChildName(j).equals(specialRules.get(currNodeName).get(k).getIRightRule(i))){
+								return node.getIChildHeadWord(j)+"_"+node.getIChildHeadWordPos(j);
 							}
 						}
 					}
 				}else if(specialRules.get(currNodeName).get(k).getDirection().equals("right")){
-					for (int i = specialRules.get(currNodeName).get(k).getRightRules().size() -1 ; i >= 0; i--) {
-						for (int j = 0; j < node.getChildren().size(); j++) {
-							if(node.getChildren().get(j).getNodeName().equals(specialRules.get(currNodeName).get(k).getRightRules().get(i))){
-								return node.getChildren().get(j).getHeadWords()+"_"+node.getChildren().get(j).getHeadWordsPos();
+					for (int i = specialRules.get(currNodeName).get(k).getRightRulesSize() -1 ; i >= 0; i--) {
+						for (int j = 0; j < node.getChildrenNum(); j++) {
+							if(node.getIChildName(j).equals(specialRules.get(currNodeName).get(k).getIRightRule(i))){
+								return node.getIChildHeadWord(j)+"_"+node.getIChildHeadWordPos(j);
 							}
 						}
 					}
 				}
 			}
 			//否则返回最后一个		
-			return node.getChildren().get(node.getChildren().size() - 1).getHeadWords()+"_"+node.getChildren().get(node.getChildren().size() - 1).getHeadWordsPos();
+			return node.getLastChildHeadWord()+"_"+node.getLastChildHeadWordPos();
 		}else{
 			return null;
 		}
@@ -92,26 +92,26 @@ public class HeadGeneratorCollins extends AbstractHeadGenerator{
 		if(normalRules.containsKey(currentNodeName)){
 			if(normalRules.get(currentNodeName).getDirection().equals("left")){
 				//用所有的子节点从左向右匹配规则中每一个
-				for (int i = 0; i < normalRules.get(currentNodeName).getRightRules().size(); i++) {
-					for (int j = 0; j < node.getChildren().size(); j++) {
-						if(node.getChildren().get(j).getNodeName().equals(normalRules.get(currentNodeName).getRightRules().get(i))){
-							return node.getChildren().get(j).getHeadWords()+"_"+node.getChildren().get(j).getHeadWordsPos();
+				for (int i = 0; i < normalRules.get(currentNodeName).getRightRulesSize(); i++) {
+					for (int j = 0; j < node.getChildrenNum(); j++) {
+						if(node.getIChildName(j).equals(normalRules.get(currentNodeName).getIRightRule(i))){
+							return node.getIChildHeadWord(j)+"_"+node.getIChildHeadWordPos(j);
 						}
 					}
 				}
 			}else if(normalRules.get(currentNodeName).getDirection().equals("right")){
-				for (int i = normalRules.get(currentNodeName).getRightRules().size() -1 ; i >= 0; i--) {
-					for (int j = 0; j < node.getChildren().size(); j++) {
-						if(node.getChildren().get(j).getNodeName().equals(normalRules.get(currentNodeName).getRightRules().get(i))){
-							return node.getChildren().get(j).getHeadWords()+"_"+node.getChildren().get(j).getHeadWordsPos();
+				for (int i = normalRules.get(currentNodeName).getRightRulesSize() -1 ; i >= 0; i--) {
+					for (int j = 0; j < node.getChildrenNum(); j++) {
+						if(node.getIChildName(j).equals(normalRules.get(currentNodeName).getIRightRule(i))){
+							return node.getIChildHeadWord(j)+"_"+node.getIChildHeadWordPos(j);
 						}
 					}
 				}
 			}
 			//如果所有的规则都没有匹配，返回最左边的第一个
-			return node.getChildren().get(0).getHeadWords()+"_"+node.getChildren().get(0).getHeadWordsPos();
+			return node.getFirstChildHeadWord()+"_"+node.getFirstChildHeadWordPos();
 		}else{
-			return node.getChildren().get(0).getHeadWords()+"_"+node.getChildren().get(0).getHeadWordsPos();
+			return node.getFirstChildHeadWord()+"_"+node.getFirstChildHeadWordPos();
 		}
 	}
 }

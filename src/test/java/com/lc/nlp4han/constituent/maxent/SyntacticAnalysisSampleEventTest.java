@@ -42,8 +42,8 @@ public class SyntacticAnalysisSampleEventTest {
 		aghw = new HeadGeneratorCollins();
 		generator = new SyntacticAnalysisContextGeneratorConf();
 		tree = BracketExpUtil.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
-		headTree = TreeToHeadTree.treeToHeadTree(tree,aghw);
-		sample = HeadTreeToActions.headTreeToAction(headTree,aghw);
+		headTree = TreeToHeadTree.treeToHeadTree(tree, aghw);
+		sample = HeadTreeToActions.headTreeToAction(headTree, aghw);
 		words = sample.getWords();
 		chunkTree = sample.getChunkTree();
 		buildAndCheckTree = sample.getBuildAndCheckTree();
@@ -51,19 +51,19 @@ public class SyntacticAnalysisSampleEventTest {
 		
 		//chunk
 		for (int i = words.size(); i < 2*words.size(); i++) {		
-			String[] context = generator.getContextForChunk(i-words.size(),chunkTree, actions, null);
+			String[] context = generator.getContextForChunk(i - words.size(), chunkTree, actions, null);
 		    events.add(new Event(actions.get(i), context));
 		}
 		
 		//buildAndCheck 两个变量i j   i控制第几个list  j控制list中的第几个
 		int j = 0;
 		for (int i = 2*words.size(); i < actions.size(); i=i+2) {
-			String[] buildContext = generator.getContextForBuild(j,buildAndCheckTree.get(i-2*words.size()), actions, null);
+			String[] buildContext = generator.getContextForBuild(j,buildAndCheckTree.get(i - 2*words.size()), actions, null);
 			events.add(new Event(actions.get(i), buildContext));
 			if(actions.get(i+1).equals("yes")){
 				int record = j-1;
 				for (int k = record; k >= 0; k--) {
-					if(buildAndCheckTree.get(i-2*words.size()).get(k).getNodeName().split("_")[0].equals("start")){
+					if(buildAndCheckTree.get(i - 2*words.size()).get(k).getNodeNameLeftPart().equals("start")){
 						j = k;
 						break;
 					}
@@ -76,17 +76,17 @@ public class SyntacticAnalysisSampleEventTest {
 		j = 0;
 		for (int i = 2*words.size(); i < actions.size(); i=i+2) {    
 			if(actions.get(i+1).equals("yes")){
-				String[] checkContext = generator.getContextForCheck(j,buildAndCheckTree.get(i+1-2*words.size()), actions, null);
+				String[] checkContext = generator.getContextForCheck(j,buildAndCheckTree.get(i + 1-2*words.size()), actions, null);
 				int record = j-1;
 				for (int k = record; k >= 0; k--) {		    
-					if(buildAndCheckTree.get(i-2*words.size()).get(k).getNodeName().split("_")[0].equals("start")){			    
+					if(buildAndCheckTree.get(i - 2*words.size()).get(k).getNodeNameLeftPart().equals("start")){			    
 						j = k;
 						break;
 						}
 				}
 				events.add(new Event(actions.get(i+1), checkContext));
 			}else if(actions.get(i+1).equals("no")){            	
-				String[] checkContext = generator.getContextForCheck(j,buildAndCheckTree.get(i+1-2*words.size()), actions, null);
+				String[] checkContext = generator.getContextForCheck(j,buildAndCheckTree.get(i + 1-2*words.size()), actions, null);
 				events.add(new Event(actions.get(i+1), checkContext));
 				j++;
 			}  

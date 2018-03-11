@@ -43,8 +43,8 @@ public class SyntacticAnalysisEvalTool {
         }else{
         	postagger = new SyntacticAnalysisMEForPosEnglish(posmodel);
         }	
-        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
-        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen, aghw);
+        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel, contextGen, aghw);
+        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel, checkmodel, contextGen, aghw);
         
         SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
         SyntacticAnalysisEvaluatorForByStep evaluator = null;
@@ -52,9 +52,9 @@ public class SyntacticAnalysisEvalTool {
         if(errorFile != null){
         	System.out.println("Print error to file " + errorFile);
         	printer = new SyntacticAnalysisErrorPrinter(new FileOutputStream(errorFile));    	
-        	evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger,chunktagger,buildandchecktagger, aghw,printer);
+        	evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger, chunktagger, buildandchecktagger, aghw, printer);
         }else{
-        	evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger,chunktagger,buildandchecktagger, aghw);
+        	evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger, chunktagger, buildandchecktagger, aghw);
         }
         evaluator.setMeasure(measure);
         ObjectStream<String> linesStream = new PlainTextByLineStream(new FileInputStreamFactory(goldFile), encoding);

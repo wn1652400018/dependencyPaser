@@ -69,7 +69,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	 * @param flag 字符串类型的标记，证明是一步训练的句法模型
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public SyntacticAnalysisBeamSearch(int size, ClassificationModel model, int cacheSize,String flag) {
+	public SyntacticAnalysisBeamSearch(int size, ClassificationModel model, int cacheSize, String flag) {
 		this.size = size;
 		this.chunkmodel = model;
 		this.buildmodel = model;
@@ -93,7 +93,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	@Override
 	public SyntacticAnalysisSequenceForChunk bestSequenceForChunk( List<List<HeadTreeNode>> posTree, Object[] ac,
 			SyntacticAnalysisContextGenerator<HeadTreeNode> generator, SyntacticAnalysisSequenceValidator<HeadTreeNode> validator) {
-		SyntacticAnalysisSequenceForChunk[] sequences = this.bestSequencesForChunk(1,posTree,ac,generator,validator);
+		SyntacticAnalysisSequenceForChunk[] sequences = this.bestSequencesForChunk(1, posTree, ac, generator, validator);
 		return sequences.length > 0 ? sequences[0] : null;
 	}
 
@@ -107,7 +107,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	 * @param validator 序列验证
 	 * @return
 	 */
-	public SyntacticAnalysisSequenceForChunk[] bestSequencesForChunk(int num,List<List<HeadTreeNode>> posTree, Object[] ac,
+	public SyntacticAnalysisSequenceForChunk[] bestSequencesForChunk(int num, List<List<HeadTreeNode>> posTree, Object[] ac,
 			double minSequenceScore, SyntacticAnalysisContextGenerator<HeadTreeNode> generator, SyntacticAnalysisSequenceValidator<HeadTreeNode> validator) {
 		//用于存放输入的K个结果中每一个得到的K个结果
 		PriorityQueue<SyntacticAnalysisSequenceForChunk> kRes = new PriorityQueue<>(this.size);
@@ -155,8 +155,8 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 					for (p = 0; p < scores.length; ++p) {
 						if(scores[p] >= min){
 							out = this.chunkmodel.getOutcome(p);
-							if(validator.validSequenceForChunk(numSeq,posTree.get(i),tmpOutcomes,out)){
-								ns = new SyntacticAnalysisSequenceForChunk(top,out,scores[p],i);
+							if(validator.validSequenceForChunk(numSeq, posTree.get(i), tmpOutcomes, out)){
+								ns = new SyntacticAnalysisSequenceForChunk(top, out, scores[p], i);
 								if(ns.getScore() > minSequenceScore){
 									next.add(ns);
 								}
@@ -166,8 +166,8 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 					if(next.size() == 0){
 						for (p = 0; p < scores.length; ++p) {	
 							out = this.chunkmodel.getOutcome(p);
-							if(validator.validSequenceForChunk(numSeq,posTree.get(i),tmpOutcomes,out)){
-								ns = new SyntacticAnalysisSequenceForChunk(top,out,scores[p],i);
+							if(validator.validSequenceForChunk(numSeq, posTree.get(i), tmpOutcomes, out)){
+								ns = new SyntacticAnalysisSequenceForChunk(top, out, scores[p], i);
 								if(ns.getScore() > minSequenceScore){
 									next.add(ns);
 								}
@@ -180,6 +180,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 				prev = next;
 				next = tmp;
 			}
+			
 			for (seqIndex = 0; seqIndex < prev.size(); ++seqIndex) {
 				if(prev.peek().getOutcomes().size() == 0){
 					prev.remove();
@@ -188,6 +189,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 				}
 			}
 		}
+		
 		if(kRes.size() == 0){
 			return null;
 		}else{
@@ -210,10 +212,10 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	 * @return
 	 */
 	@Override
-	public SyntacticAnalysisSequenceForChunk[] bestSequencesForChunk(int num,List<List<HeadTreeNode>> posTree, Object[] ac,
+	public SyntacticAnalysisSequenceForChunk[] bestSequencesForChunk(int num, List<List<HeadTreeNode>> posTree, Object[] ac,
 			SyntacticAnalysisContextGenerator<HeadTreeNode> generator, SyntacticAnalysisSequenceValidator<HeadTreeNode> validator) {
 		
-		return this.bestSequencesForChunk(num, posTree, ac, -1000.0D ,generator,validator);
+		return this.bestSequencesForChunk(num, posTree, ac, -1000.0D, generator, validator);
 	}
 
 	/**
@@ -227,7 +229,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	@Override
 	public SyntacticAnalysisSequenceForBuildAndCheck<HeadTreeNode> bestSequenceForBuildAndCheck(List<List<HeadTreeNode>> comnineChunkTree, Object[] ac,
 			SyntacticAnalysisContextGenerator<HeadTreeNode> generator, SyntacticAnalysisSequenceValidator<HeadTreeNode> validator) {
-		SyntacticAnalysisSequenceForBuildAndCheck<HeadTreeNode>[] sequences = this.bestSequencesForBuildAndCheck(1,comnineChunkTree,ac,generator,validator);
+		SyntacticAnalysisSequenceForBuildAndCheck<HeadTreeNode>[] sequences = this.bestSequencesForBuildAndCheck(1, comnineChunkTree, ac, generator, validator);
 		return sequences.length > 0 ? sequences[0] : null;
 	}
 
@@ -297,6 +299,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 									no = scoresForCheck[j];
 								}
 							}
+							
 							if(yes >= no){
 								if(temScore + scoresForBuild[p] + yes> minSequenceScore){
 									//新出的动作，加入树
@@ -308,8 +311,9 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 									if(out.split("_")[0].equals("start")){
 										HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
 										combine.setHeadWords(copy.get(0).getHeadWords());
-										combine.addChild(copy.get(0).getChildren().get(0));
-										copy.get(0).getChildren().get(0).setParent(combine);
+										combine.setHeadWordsPos(copy.get(0).getHeadWordsPos());
+										combine.addChild(copy.get(0).getFirstChild());
+										copy.get(0).getFirstChild().setParent(combine);
 										copy.set(0, combine);
 										kRes.add(new SyntacticAnalysisSequenceForBuildAndCheck<HeadTreeNode>(top,copy, scoresForBuild[p],yes,0));
 									}
@@ -323,6 +327,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 						}
 					}
 				}
+				
 				if(next.size() == 0){
 					for (p = 0; p < scoresForBuild.length; ++p) {
 						out = this.buildmodel.getOutcome(p);
@@ -345,6 +350,7 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 									no = scoresForCheck[j];
 								}
 							}
+							
 							if(yes >= no){
 								if(temScore + scoresForBuild[p] + yes> minSequenceScore){
 									//新出的动作，加入树
@@ -356,8 +362,9 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 									if(out.split("_")[0].equals("start")){
 										HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
 										combine.setHeadWords(copy.get(0).getHeadWords());
-										combine.addChild(copy.get(0).getChildren().get(0));
-										copy.get(0).getChildren().get(0).setParent(combine);
+										combine.setHeadWordsPos(copy.get(0).getHeadWordsPos());
+										combine.addChild(copy.get(0).getFirstChild());
+										copy.get(0).getFirstChild().setParent(combine);
 										copy.set(0, combine);
 										kRes.add(new SyntacticAnalysisSequenceForBuildAndCheck<HeadTreeNode>(top,copy, scoresForBuild[p],yes,0));
 									}
@@ -447,25 +454,27 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 										if(out.split("_")[0].equals("start")){
 											HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
 											combine.setHeadWords(copy.get(numSeq).getHeadWords());
-											combine.addChild(copy.get(numSeq).getChildren().get(0));
-											copy.get(numSeq).getChildren().get(0).setParent(combine);
+											combine.setHeadWordsPos(copy.get(numSeq).getHeadWordsPos());
+											combine.addChild(copy.get(numSeq).getFirstChild());
+											copy.get(numSeq).getFirstChild().setParent(combine);
 											copy.set(numSeq, combine);											
 											ns = new SyntacticAnalysisSequenceForBuildAndCheck<HeadTreeNode>(top,copy, scoresForBuild[p],yes,numSeq);
 											next.add(ns);
 										}else {
 											for (int k = numSeq-1;k >= 0; k--) {
-												if(copy.get(k).getNodeName().split("_")[0].equals("start")){
+												if(copy.get(k).getNodeNameLeftPart().equals("start")){
 													record = k;
 													break;
 												}
 											}
 											HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
 											for (int k = record; k <= numSeq; k++) {
-												combine.addChild(copy.get(k).getChildren().get(0));
-												copy.get(k).getChildren().get(0).setParent(combine);
+												combine.addChild(copy.get(k).getFirstChild());
+												copy.get(k).getFirstChild().setParent(combine);
 											}
 											//设置头结点
-											combine.setHeadWords(aghw.extractHeadWords(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+											combine.setHeadWords(aghw.extractHeadWord(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+											combine.setHeadWordsPos(aghw.extractHeadWordPos(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 											copy.set(record,combine);
 											//删除用于合并的那些位置上的
 											for (int k = numSeq; k >= record+1; k--) {
@@ -527,25 +536,27 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 										if(out.split("_")[0].equals("start")){
 											HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
 											combine.setHeadWords(copy.get(numSeq).getHeadWords());
-											combine.addChild(copy.get(numSeq).getChildren().get(0));
-											copy.get(numSeq).getChildren().get(0).setParent(combine);
+											combine.setHeadWordsPos(copy.get(numSeq).getHeadWordsPos());
+											combine.addChild(copy.get(numSeq).getFirstChild());
+											copy.get(numSeq).getFirstChild().setParent(combine);
 											copy.set(numSeq, combine);
 											ns = new SyntacticAnalysisSequenceForBuildAndCheck<HeadTreeNode>(top,copy, scoresForBuild[p],yes,numSeq);
 											next.add(ns);
 										}else {
 											for (int k = numSeq-1;k >= 0; k--) {
-												if(copy.get(k).getNodeName().split("_")[0].equals("start")){
+												if(copy.get(k).getNodeNameLeftPart().equals("start")){
 													record = k;
 													break;
 												}
 											}
 											HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
 											for (int k = record; k <= numSeq; k++) {
-												combine.addChild(copy.get(k).getChildren().get(0));
-												copy.get(k).getChildren().get(0).setParent(combine);
+												combine.addChild(copy.get(k).getFirstChild());
+												copy.get(k).getFirstChild().setParent(combine);
 											}
 											//设置头结点
-											combine.setHeadWords(aghw.extractHeadWords(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+											combine.setHeadWords(aghw.extractHeadWord(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+											combine.setHeadWordsPos(aghw.extractHeadWordPos(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 											copy.set(record,combine);
 											//删除用于合并的那些位置上的
 											for (int k = numSeq; k >= record+1; k--) {
@@ -610,6 +621,6 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 	 */
 	public SyntacticAnalysisSequenceForBuildAndCheck<HeadTreeNode>[] bestSequencesForBuildAndCheck(int num, List<List<HeadTreeNode>> comnineChunkTree,
 			Object[] ac, SyntacticAnalysisContextGenerator<HeadTreeNode> generator, SyntacticAnalysisSequenceValidator<HeadTreeNode> validator) {
-		return this.bestSequencesForBuildAndCheck(num, comnineChunkTree,ac,-1000.0D,generator,validator);
+		return this.bestSequencesForBuildAndCheck(num, comnineChunkTree, ac, -1000.0D, generator, validator);
 	}
 }

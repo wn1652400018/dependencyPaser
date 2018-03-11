@@ -313,13 +313,13 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		int index = -1;
 		for (int i = 0; i < chunkTree.size(); i++) {
 			if(chunkTree.get(i).getNodeName().contains("start")){
-				chunkTag[k] = chunkTree.get(i).getNodeName().split("_")[1];
-				wordandpos[k] += getWordAndPos(chunkTree.get(i).getChildren().get(0));
+				chunkTag[k] = chunkTree.get(i).getNodeNameRightPart();
+				wordandpos[k] += getWordAndPos(chunkTree.get(i).getFirstChild());
 				for (int j = i+1; j < chunkTag.length; j++) {
 					if(chunkTree.get(j).getNodeName().contains("start")){
 						break;
 					}else if(chunkTree.get(j).getNodeName().contains("join")){
-						wordandpos[k] += getWordAndPos(chunkTree.get(j).getChildren().get(0));
+						wordandpos[k] += getWordAndPos(chunkTree.get(j).getFirstChild());
 						index = j;
 					}
 				}
@@ -328,12 +328,13 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 				k++;
 			}else if(chunkTree.get(i).getNodeName().contains("other")){
 				chunkTag[k] = "o";
-				wordandpos[k] += getWordAndPos(chunkTree.get(i).getChildren().get(0));
+				wordandpos[k] += getWordAndPos(chunkTree.get(i).getFirstChild());
+				
 				for (int j = i+1; j < chunkTag.length; j++) {
 					if(chunkTree.get(j).getNodeName().contains("start")){
 						break;
 					}else if(chunkTree.get(j).getNodeName().contains("join")){
-						wordandpos[k] += getWordAndPos(chunkTree.get(j).getChildren().get(0));
+						wordandpos[k] += getWordAndPos(chunkTree.get(j).getFirstChild());
 						index = j;
 					}
 				}
@@ -345,15 +346,15 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		return output;
 	}
 	
-	public String getWordAndPos(HeadTreeNode tree){
+	private String getWordAndPos(HeadTreeNode tree){
 		String wordandpos = "";
-		for (int i = 0; i < tree.getChildren().size(); i++) {
-			if(i == tree.getChildren().size()-1){
-				wordandpos += tree.getChildren().get(i).getChildren().get(0).getNodeName()+"/"+
-						tree.getChildren().get(i).getNodeName();
+		for (int i = 0; i < tree.getChildrenNum(); i++) {
+			if(i == tree.getChildrenNum() - 1){
+				wordandpos += tree.getIChild(i).getFirstChildName()+"/"+
+						tree.getIChildName(i);
 			}else{
-				wordandpos += tree.getChildren().get(i).getChildren().get(0).getNodeName()+"/"+
-						tree.getChildren().get(i).getNodeName()+" ";
+				wordandpos += tree.getIChild(i).getFirstChildName()+"/"+
+						tree.getIChildName(i)+" ";
 			}
 		}
 		return wordandpos;
