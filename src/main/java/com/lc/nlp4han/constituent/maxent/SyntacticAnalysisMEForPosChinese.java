@@ -14,12 +14,12 @@ import com.lc.nlp4han.segpos.WordSegAndPosME;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMEForPosChina implements SyntacticAnalysisForPos<HeadTreeNode>{
+public class SyntacticAnalysisMEForPosChinese implements SyntacticAnalysisForPos<HeadTreeNode>{
 
 	private WordSegAndPosME postagger ;
 	private WordSegAndPosContextGenerator generator ;
 	
-	public SyntacticAnalysisMEForPosChina(ModelWrapper posmodel) throws IOException {
+	public SyntacticAnalysisMEForPosChinese(ModelWrapper posmodel) throws IOException {
 		generator = new WordSegAndPosContextGeneratorConf();
 		postagger = new WordSegAndPosME(posmodel, generator);
 	}
