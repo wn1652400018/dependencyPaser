@@ -1,4 +1,4 @@
-package com.lc.nlp4han.pos;
+package com.lc.nlp4han.pos.ref;
 
 import java.io.DataInput;
 import java.io.DataInputStream;

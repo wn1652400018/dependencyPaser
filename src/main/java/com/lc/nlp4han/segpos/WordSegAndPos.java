@@ -1,5 +1,7 @@
 package com.lc.nlp4han.segpos;
 
+import com.lc.nlp4han.segment.WordSegmenter;
+
 /**
  * 组合分词和词性标注接口
  * 
@@ -7,7 +9,7 @@ package com.lc.nlp4han.segpos;
  * @author 王馨苇
  *
  */
-public interface WordSegAndPos {
+public interface WordSegAndPos extends WordSegmenter {
 
 	/**
 	 * 对生语料进行分词和词性标记
@@ -15,13 +17,5 @@ public interface WordSegAndPos {
 	 * @return word/tag序列
 	 */
 	public String[] segmentAndTag(String words);
-	
-	
-	/**
-	 * 对生语料进行分词
-	 * @param sentence 未切分的句子
-	 * @return 切分后的词序列
-	 */
-	public String[] segment(String sentence);
 	
 }

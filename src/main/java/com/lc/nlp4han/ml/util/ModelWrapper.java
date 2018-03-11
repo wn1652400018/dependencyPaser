@@ -10,13 +10,14 @@ import java.net.URL;
 
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.SequenceClassificationModel;
-import com.lc.nlp4han.segment.maxent.WordSegmenterME;
 
 public class ModelWrapper
 {
     protected ClassificationModel model;
     protected SequenceClassificationModel<String> seqModel;
     protected int beamSize = 3;
+    
+    public static int DEFAULT_BEAM_SIZE = 3;
 
     public ModelWrapper(SequenceClassificationModel<String> seqModel)
     {
@@ -30,7 +31,7 @@ public class ModelWrapper
 
     public ModelWrapper(ClassificationModel model)
     {
-        this(model, WordSegmenterME.DEFAULT_BEAM_SIZE);
+        this(model, DEFAULT_BEAM_SIZE);
     }
 
     public ModelWrapper(ClassificationModel model, int beamSize)
@@ -86,11 +87,21 @@ public class ModelWrapper
         ModelUtil.writeModel(model, out);
     }
 
+    /**
+     * 得到分类模型
+     * 
+     * @return 分类模型
+     */
     public ClassificationModel getModel()
     {
         return model;
     }
 
+    /**
+     * 得到序列分类模型或构造序列分类模型
+     * 
+     * @return 序列分类模型
+     */
     public SequenceClassificationModel<String> getSequenceModel()
     {
         if (seqModel != null)

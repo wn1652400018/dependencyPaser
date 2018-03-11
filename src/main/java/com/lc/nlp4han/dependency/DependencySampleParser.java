@@ -14,6 +14,6 @@ public interface DependencySampleParser{
 	 * @param sentence 要解析的语句
 	 * @return 解析的结果
 	 */
-	public DependencySample parseIn(String sentence);
+	public DependencySample parse(String sentence);
 
 }

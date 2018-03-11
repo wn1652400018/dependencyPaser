@@ -38,6 +38,7 @@ public class DependencySample {
 	public DependencySample(String[] words,String[] pos,String[] dependency,String[] dependencyWords,String[] dependencyIndices){
 		this(words,pos,dependency,dependencyWords,dependencyIndices,null);
 	}
+	
 	/**
 	 * 构造
 	 * @param words 词语
@@ -49,6 +50,7 @@ public class DependencySample {
 	public DependencySample(List<String> words,List<String> pos,List<String> dependency,List<String> dependencyWords,List<String> dependencyIndices){
 		this(words,pos,dependency,dependencyWords,dependencyIndices,null);
 	}
+	
 	/**
 	 * 构造
 	 * @param words 词语
@@ -61,6 +63,7 @@ public class DependencySample {
 	public DependencySample(String[] words,String[] pos,String[] dependency,String[] dependencyWords,String[] dependencyIndices,String[][] additionalContext){
 		this(Arrays.asList(words),Arrays.asList(pos),Arrays.asList(dependency),Arrays.asList(dependencyWords),Arrays.asList(dependencyIndices),additionalContext);
 	}
+	
 	/**
 	 * 构造
 	 * @param words 词语
@@ -92,6 +95,7 @@ public class DependencySample {
         }
         this.adtionalContext = ac;
 	}
+    
     /**
      * 输出的样本的格式
      * 
@@ -110,6 +114,7 @@ public class DependencySample {
 		}
     	return sample;
     }
+    
     /**
      * 获取词语
      * @return 词语数组
@@ -117,6 +122,7 @@ public class DependencySample {
     public String[] getWords(){
     	return this.words.toArray(new String[words.size()]);
     }
+    
     /**
      * 获取词性
      * @return 词性
@@ -124,6 +130,7 @@ public class DependencySample {
     public String[] getPos(){
     	return this.pos.toArray(new String[pos.size()]);
     }
+    
     /**
      * 获取依存关系
      * @return 依存关系
@@ -131,6 +138,7 @@ public class DependencySample {
     public String[] getDependency(){
     	return this.dependency.toArray(new String[dependency.size()]);
     }
+    
     /**
      * 获取依存关系对应的词
      * @return 依存关系对应的词
@@ -138,6 +146,7 @@ public class DependencySample {
     public String[] getDependencyWords(){
     	return this.dependencyWords.toArray(new String[dependencyWords.size()]);
     }
+    
     /**
      * 获取依存关系对应的词的下标
      * @return 依存关系对应的词的下标
@@ -145,6 +154,7 @@ public class DependencySample {
     public String[] getDependencyIndices(){
     	return this.dependencyIndices.toArray(new String[dependencyIndices.size()]);
     }
+    
     /**
      * 获取额外的信息
      * @return 额外的信息
@@ -152,6 +162,7 @@ public class DependencySample {
     public String[][] getAditionalContext(){
     	return this.adtionalContext;
     }
+    
     /**
      * 重写方法
      */
