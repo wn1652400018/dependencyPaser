@@ -27,7 +27,7 @@ public class SyntacticAnalysisCVTool {
 
     private SyntacticAnalysisEvaluateMonitor[] listeners;
     
-    public SyntacticAnalysisCVTool(String languageCode,TrainingParameters trainParam,SyntacticAnalysisEvaluateMonitor... listeners){
+    public SyntacticAnalysisCVTool(String languageCode, TrainingParameters trainParam, SyntacticAnalysisEvaluateMonitor... listeners){
     	this.languageCode = languageCode;
         this.params = trainParam;
         this.listeners = listeners;
@@ -42,7 +42,7 @@ public class SyntacticAnalysisCVTool {
      * @param aghw 生成头结点
      * @throws IOException
      */
-    public void evaluate(String postaggertype ,ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) throws IOException{
+    public void evaluate(String postaggertype, ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) throws IOException{
     	CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>> partitioner = new CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>>(samples, nFolds);
 		int run = 1;
 		//小于折数的时候
@@ -63,10 +63,10 @@ public class SyntacticAnalysisCVTool {
 	        }else{
 	        	postagger = new SyntacticAnalysisMEForPosEnglish(posmodel);
 	        }
-	        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel,contextGen, aghw);
-	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel,checkmodel,contextGen, aghw);
+	        SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel, contextGen, aghw);
+	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel, checkmodel, contextGen, aghw);
 	        
-			SyntacticAnalysisEvaluatorForByStep evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger,chunktagger,buildandchecktagger, aghw, listeners);
+			SyntacticAnalysisEvaluatorForByStep evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger, chunktagger, buildandchecktagger, aghw, listeners);
 			SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
 			
 			evaluator.setMeasure(measure);
@@ -146,7 +146,7 @@ public class SyntacticAnalysisCVTool {
         System.out.println(contextGen);
         ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(corpusFile), encoding);       
         ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);
-        SyntacticAnalysisCVTool run = new SyntacticAnalysisCVTool("zh",params);
-        run.evaluate(postagger, sampleStream,folds,contextGen, aghw);
+        SyntacticAnalysisCVTool run = new SyntacticAnalysisCVTool("zh", params);
+        run.evaluate(postagger, sampleStream, folds, contextGen, aghw);
 	}
 }

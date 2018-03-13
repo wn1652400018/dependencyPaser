@@ -41,9 +41,9 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	private int size;
 	private SyntacticAnalysisSequenceClassificationModel<HeadTreeNode> model;
 
-	private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
+    private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
+    private AbstractHeadGenerator headGenerator ; 
 
-	private AbstractHeadGenerator headGenerator;
 
 	/**
 	 * 构造函数，初始化工作
@@ -55,8 +55,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 * @param aghw
 	 *            生成头结点，build后check为yes时候进行合并的时候需要
 	 */
-	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper buildmodel, ModelWrapper checkmodel,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
+	public SyntacticAnalysisMEForBuildAndCheck(ModelWrapper buildmodel, ModelWrapper checkmodel,SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
 		init(buildmodel, checkmodel, contextGen, aghw);
 	}
 
@@ -74,38 +73,39 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) {
 		int beamSize = SyntacticAnalysisMEForBuildAndCheck.DEFAULT_BEAM_SIZE;
 
-		contextGenerator = contextGen;
-		size = beamSize;
-		sequenceValidator = new DefaultSyntacticAnalysisSequenceValidator();
-		this.headGenerator = aghw;
-		this.model = new SyntacticAnalysisBeamSearch(beamSize, buildmodel.getModel(), checkmodel.getModel(), 0, aghw);
+        contextGenerator = contextGen;
+        size = beamSize;
+        sequenceValidator = new DefaultSyntacticAnalysisSequenceValidator();
+        this.headGenerator = aghw;
+        this.model = new SyntacticAnalysisBeamSearch(beamSize, buildmodel.getModel(),
+                    checkmodel.getModel(), 0, aghw);
 	}
-
+	
 	/**
 	 * 训练模型
-	 * 
-	 * @param file
-	 *            训练文件
-	 * @param params
-	 *            训练模型的参数配置
-	 * @param contextGen
-	 *            特征
-	 * @param encoding
-	 *            编码
-	 * @param aghw
-	 *            生成头结点的方法
+	 * @param file 训练文件
+	 * @param params 训练模型的参数配置
+	 * @param contextGen 特征
+	 * @param encoding 编码
+	 * @param aghw 生成头结点的方法
 	 * @return 模型和模型信息的包裹结果
-	 * @throws IOException
 	 */
-	public static ModelWrapper trainForBuild(File file, TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
-			throws IOException {
-		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-		ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream,
-				aghw);
-		ModelWrapper model = SyntacticAnalysisMEForBuildAndCheck.trainForBuild("zh", sampleStream, params, contextGen);
-		return model;
-
+	public static ModelWrapper trainForBuild(File file, TrainingParameters params, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
+			String encoding, AbstractHeadGenerator aghw){
+		ModelWrapper model = null;
+		
+		try {
+			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
+			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);
+			model = SyntacticAnalysisMEForBuildAndCheck.trainForBuild("zh", sampleStream, params, contextGen);
+			return model;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+		
+		return null;
 	}
 
 	/**
@@ -130,9 +130,11 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 		if (beamSizeString != null) {
 			beamSize = Integer.parseInt(beamSizeString);
 		}
+		
 		ClassificationModel buildModel = null;
 		Map<String, String> manifestInfoEntries = new HashMap<String, String>();
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
+		
 		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType)) {
 			ObjectStream<Event> buildes = new SyntacticAnalysisSampleEventForBuild(sampleStream, contextGen);
 			EventTrainer buildtrainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
@@ -391,6 +393,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 				HeadTreeNode pos = new HeadTreeNode(poses[i]);
 				pos.addChild(new HeadTreeNode(words[i]));
 				pos.setHeadWords(words[i]);
+				pos.setHeadWordsPos(poses[i]);
 				chunkTree.add(pos);
 			} else if (chunkTag[i].endsWith("B")) {
 				HeadTreeNode node = new HeadTreeNode(chunkTag[i].split("_")[0]);
@@ -399,13 +402,14 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 					HeadTreeNode pos = new HeadTreeNode(poses[j]);
 					pos.addChild(new HeadTreeNode(words[j]));
 					pos.setHeadWords(words[j]);
+					pos.setHeadWordsPos(poses[i]);
 					node.addChild(pos);
 					if (chunkTag[j].endsWith("E")) {
 						break;
 					}
 				}
-				node.setHeadWords(headGenerator.extractHeadWords(node, HeadRuleSet.getNormalRuleSet(),
-						HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadWords(headGenerator.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadWordsPos(headGenerator.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 				chunkTree.add(node);
 				i = j;
 			}
@@ -590,7 +594,8 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 			poses.add(wordTag[1]);
 			chunkTags.add(chunk + "_E");
 		}
-		return syntacticTree(k, words.toArray(new String[words.size()]), poses.toArray(new String[poses.size()]),
+		
+		return syntacticTree(k,words.toArray(new String[words.size()]), poses.toArray(new String[poses.size()]),
 				chunkTags.toArray(new String[chunkTags.size()]));
 	}
 }

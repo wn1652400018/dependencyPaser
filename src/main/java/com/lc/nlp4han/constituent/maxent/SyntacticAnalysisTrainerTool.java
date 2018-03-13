@@ -86,7 +86,7 @@ public class SyntacticAnalysisTrainerTool {
         params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
         
         AbstractHeadGenerator headGenerator = new HeadGeneratorCollins();
-        SyntacticAnalysisMEForChunk.train(corpusFile, chunkmodelFile,params, contextGen, encoding, headGenerator);
+        SyntacticAnalysisMEForChunk.train(corpusFile, chunkmodelFile, params, contextGen, encoding, headGenerator);
 		SyntacticAnalysisMEForBuildAndCheck.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding, headGenerator);
 		SyntacticAnalysisMEForBuildAndCheck.trainForCheck(corpusFile, checkmodelFile, params, contextGen, encoding, headGenerator);
 	}

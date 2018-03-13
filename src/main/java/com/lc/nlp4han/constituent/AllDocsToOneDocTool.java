@@ -30,8 +30,10 @@ public class AllDocsToOneDocTool {
 				return !file.getName().equals("README");
 			}			
 		});
+		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(topath)));
 		BufferedReader br = null;
+		
 		for (File file : subFiles) {
 			br = new BufferedReader(new FileReader(file));
 			String line = "";
@@ -52,7 +54,7 @@ public class AllDocsToOneDocTool {
 		if(cmd.equals("-combine")){
 			String frompath = args[1];//读文件的路径
 			String topath = args[2];//输出文件的路径
-			AllDocsToOneDocTool.allDocsToOneDocRun(frompath,topath);
+			AllDocsToOneDocTool.allDocsToOneDocRun(frompath, topath);
 		}
 	}
 }

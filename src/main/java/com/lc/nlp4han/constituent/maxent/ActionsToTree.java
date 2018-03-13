@@ -18,7 +18,7 @@ public class ActionsToTree {
 	 * @param actions 动作序列
 	 * @return
 	 */
-	private static List<TreeNode> getPosTree(List<String> words,List<String> actions){
+	private static List<TreeNode> getPosTree(List<String> words, List<String> actions){
 		//第一步pos
 		List<TreeNode> postree = new ArrayList<TreeNode>();
 		for (int i = 0; i < words.size(); i++) {
@@ -38,7 +38,7 @@ public class ActionsToTree {
 	 * @param actions 动作序列
 	 * @return
 	 */
-	private static List<TreeNode> getChunkTree(List<TreeNode> postree,List<String> actions){
+	private static List<TreeNode> getChunkTree(List<TreeNode> postree, List<String> actions){
 		//第二部chunk
 		//不用在这里设置头结点
 		List<TreeNode> chunktree = new ArrayList<TreeNode>();
@@ -59,7 +59,7 @@ public class ActionsToTree {
 	 * @param actions 动作序列
 	 * @return
 	 */
-	private static TreeNode getTree(int len,List<TreeNode> combine,List<String> actions){
+	private static TreeNode getTree(int len, List<TreeNode> combine, List<String> actions){
 		//第四部build和check
 		int j = 0;
 		//遍历上一步得到的combine，根据action进行操作
@@ -75,7 +75,7 @@ public class ActionsToTree {
 				//合并的時候是从当前的位置往前寻找，找到start
 				int currentIndex = i;
 				int preIndex = -1;//记录前面的start位置
-				while(!combine.get(i--).getNodeName().split("_")[0].equals("start")){
+				while(!combine.get(i--).getNodeNameLeftPart().equals("start")){
 					if(i < 0){
 						break;
 					}					
@@ -83,14 +83,14 @@ public class ActionsToTree {
 				preIndex = i+1;
 				//进行合并
 				//建立合并后的父节点
-				TreeNode combineNode = new TreeNode(combine.get(preIndex).getNodeName().split("_")[1]);
+				TreeNode combineNode = new TreeNode(combine.get(preIndex).getNodeNameRightPart());
 				for (int k = preIndex; k <= currentIndex; k++) {
 					combineNode.addChild(combine.get(k).getFirstChild());
 					combine.get(k).getFirstChild().setParent(combineNode);
 				}
 				combine.set(preIndex, combineNode);
 				//删除那些用于合并的join
-				for (int k = currentIndex; k >= preIndex+1; k--) {
+				for (int k = currentIndex; k >= preIndex + 1; k--) {
 					combine.remove(preIndex+1);
 				}
 				//从合并后的位置继续开始搜索
@@ -111,16 +111,16 @@ public class ActionsToTree {
 	 * @param actions 动作序列
 	 * @return
 	 */
-	public static TreeNode actionsToTree(List<String> words,List<String> actions){
+	public static TreeNode actionsToTree(List<String> words, List<String> actions){
 		//第一步pos
-		List<TreeNode> postree = getPosTree(words,actions);
+		List<TreeNode> postree = getPosTree(words, actions);
 		//第二部chunk
-		List<TreeNode> chunktree = getChunkTree(postree,actions);
+		List<TreeNode> chunktree = getChunkTree(postree, actions);
 		//第三部合并
 		//需要为合并后的结点设置头结点
 		List<TreeNode> combine = ChunkTreeCombineUtil.combineToTree(chunktree);
 		//第四部build和check
-		TreeNode tree = getTree(words.size(),combine,actions);
+		TreeNode tree = getTree(words.size(), combine, actions);
 		return tree;
 	}
 }

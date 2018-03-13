@@ -2,7 +2,6 @@ package com.lc.nlp4han.constituent.maxent;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -366,14 +365,15 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		int k = 0;
 		int index = -1;
 		for (int i = 0; i < chunkTree.size(); i++) {
-			if (chunkTree.get(i).getNodeName().contains("start")) {
-				chunkTag[k] = chunkTree.get(i).getNodeName().split("_")[1];
-				wordandpos[k] += getWordAndPos(chunkTree.get(i).getChildren().get(0));
-				for (int j = i + 1; j < chunkTag.length; j++) {
-					if (chunkTree.get(j).getNodeName().contains("start")) {
+
+			if(chunkTree.get(i).getNodeName().contains("start")){
+				chunkTag[k] = chunkTree.get(i).getNodeNameRightPart();
+				wordandpos[k] += getWordAndPos(chunkTree.get(i).getFirstChild());
+				for (int j = i+1; j < chunkTag.length; j++) {
+					if(chunkTree.get(j).getNodeName().contains("start")){
 						break;
-					} else if (chunkTree.get(j).getNodeName().contains("join")) {
-						wordandpos[k] += getWordAndPos(chunkTree.get(j).getChildren().get(0));
+					}else if(chunkTree.get(j).getNodeName().contains("join")){
+						wordandpos[k] += getWordAndPos(chunkTree.get(j).getFirstChild());
 						index = j;
 					}
 				}
@@ -382,12 +382,12 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 				k++;
 			} else if (chunkTree.get(i).getNodeName().contains("other")) {
 				chunkTag[k] = "o";
-				wordandpos[k] += getWordAndPos(chunkTree.get(i).getChildren().get(0));
-				for (int j = i + 1; j < chunkTag.length; j++) {
-					if (chunkTree.get(j).getNodeName().contains("start")) {
+				wordandpos[k] += getWordAndPos(chunkTree.get(i).getFirstChild());		
+				for (int j = i+1; j < chunkTag.length; j++) {
+					if(chunkTree.get(j).getNodeName().contains("start")){
 						break;
-					} else if (chunkTree.get(j).getNodeName().contains("join")) {
-						wordandpos[k] += getWordAndPos(chunkTree.get(j).getChildren().get(0));
+					}else if(chunkTree.get(j).getNodeName().contains("join")){
+						wordandpos[k] += getWordAndPos(chunkTree.get(j).getFirstChild());
 						index = j;
 					}
 				}
@@ -398,16 +398,16 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		}
 		return output;
 	}
-
-	public String getWordAndPos(HeadTreeNode tree) {
+	
+	private String getWordAndPos(HeadTreeNode tree){
 		String wordandpos = "";
-		for (int i = 0; i < tree.getChildren().size(); i++) {
-			if (i == tree.getChildren().size() - 1) {
-				wordandpos += tree.getChildren().get(i).getChildren().get(0).getNodeName() + "/"
-						+ tree.getChildren().get(i).getNodeName();
-			} else {
-				wordandpos += tree.getChildren().get(i).getChildren().get(0).getNodeName() + "/"
-						+ tree.getChildren().get(i).getNodeName() + " ";
+		for (int i = 0; i < tree.getChildrenNum(); i++) {
+			if(i == tree.getChildrenNum() - 1){
+				wordandpos += tree.getIChild(i).getFirstChildName()+"/"+
+						tree.getIChildName(i);
+			}else{
+				wordandpos += tree.getIChild(i).getFirstChildName()+"/"+
+						tree.getIChildName(i)+" ";
 			}
 		}
 		return wordandpos;

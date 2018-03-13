@@ -41,8 +41,9 @@ public class Tree2Action2TreeTest{
 				+ "(NP(NP(NNP Elsevier)(NNP N.V.))(, ,)"
 				+ "(NP(DT the)(NNP Dutch)(VBG publishing)(NN group))))))(. .)))";
 		TreeNode tree = BracketExpUtil.generateTree(treestr);
-		HeadTreeNode headTree = TreeToHeadTree.treeToHeadTree(tree,aghw);		
-		SyntacticAnalysisSample<HeadTreeNode> sample = HeadTreeToActions.headTreeToAction(headTree,aghw);
+		HeadTreeNode headTree = TreeToHeadTree.treeToHeadTree(tree, aghw);		
+		
+		SyntacticAnalysisSample<HeadTreeNode> sample = HeadTreeToActions.headTreeToAction(headTree, aghw);
 		List<String>words = sample.getWords();
 		List<String>actions = sample.getActions();
 		TreeNode resulttree = ActionsToTree.actionsToTree(words, actions); 

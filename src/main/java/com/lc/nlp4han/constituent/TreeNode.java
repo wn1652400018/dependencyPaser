@@ -102,11 +102,27 @@ public class TreeNode implements Cloneable{
 	}
 	
 	/**
+	 * 第一个儿子节点的名字
+	 * @return
+	 */
+	public String getFirstChildName(){
+		return this.children.get(0).getNodeName();
+	}
+	
+	/**
 	 * 获取最后一个儿子
 	 * @return
 	 */
 	public TreeNode getLastChild(){
 		return this.children.get(this.children.size()-1);
+	}
+	
+	/**
+	 * 获取最后一个儿子名字
+	 * @return
+	 */
+	public String getLastChildName(){
+		return this.children.get(this.children.size()-1).getNodeName();
 	}
 	
 	/**
@@ -118,6 +134,15 @@ public class TreeNode implements Cloneable{
 		return this.children.get(i);
 	}
 	
+	/**
+	 * 获取第i个儿子名字
+	 * @param i 儿子的序数
+	 * @return
+	 */
+	public String getIChildName(int i){
+		return this.children.get(i).getNodeName();
+	}
+	
 	//子节点的个数
 	public int getChildrenNum(){
 		return this.children.size();
@@ -126,6 +151,22 @@ public class TreeNode implements Cloneable{
 	//节点名称
 	public String getNodeName(){
 		return this.nodename;
+	}
+	
+	/**
+	 * 获取结点名称以_分开的左部分
+	 * @return
+	 */
+	public String getNodeNameLeftPart(){
+		return this.nodename.split("_")[0];
+	}
+	
+	/**
+	 * 获取结点名称以_分开的右部分
+	 * @return
+	 */
+	public String getNodeNameRightPart(){
+		return this.nodename.split("_")[1];
 	}
 	
 	//返回父节点

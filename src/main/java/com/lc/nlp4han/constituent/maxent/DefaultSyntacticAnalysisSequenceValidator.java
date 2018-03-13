@@ -74,8 +74,8 @@ public class DefaultSyntacticAnalysisSequenceValidator implements SyntacticAnaly
 				
 				return true;
 			}else if(out.split("_")[0].equals("join")){
-				if(combineChunkTree.get(i-1).getNodeName().split("_")[0].equals("start") || combineChunkTree.get(i-1).getNodeName().split("_")[0].equals("join")){
-					if(combineChunkTree.get(i-1).getNodeName().split("_")[1].equals(out.split("_")[1])){
+				if(combineChunkTree.get(i-1).getNodeNameLeftPart().equals("start") || combineChunkTree.get(i-1).getNodeNameLeftPart().equals("join")){
+					if(combineChunkTree.get(i-1).getNodeNameRightPart().equals(out.split("_")[1])){
 						return true;
 					}
 				}

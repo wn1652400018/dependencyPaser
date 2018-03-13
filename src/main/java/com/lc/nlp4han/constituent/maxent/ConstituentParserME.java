@@ -41,11 +41,14 @@ public class ConstituentParserME implements ConstituentParser{
 				kposes[i][j] = poses[j];
 			}
 		}
+		
 		List<List<HeadTreeNode>> postree = SyntacticAnalysisSample.toPosTree(words, kposes);
 		List<HeadTreeNode> chunkTree = chunktagger.tagChunk(postree, null);
 		List<List<HeadTreeNode>> kchunkTree = new ArrayList<>();
 		kchunkTree.add(chunkTree);
+		
 		HeadTreeNode headTreeNode = buildAndChecktagger.tagBuildAndCheck(kchunkTree, null);
+		
 		ConstituentTree constituent = new ConstituentTree();
 		constituent.setRoot(headTreeNode);
 		return constituent;

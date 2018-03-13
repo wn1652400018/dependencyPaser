@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
 
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;
@@ -19,16 +18,6 @@ import com.lc.nlp4han.ml.util.FileInputStreamFactory;
  */
 public class TreePreprocessTool {
 	
-private static HashSet<Character> hsalbdigit = new HashSet<>();
-	
-	static{
-		//罗列了半角和全角的情况
-		String albdigits = "０１２３４５６７８９0123456789";
-		for (int i = 0; i < albdigits.length(); i++) {
-			hsalbdigit.add(albdigits.charAt(i));
-		}
-	}
-	
 	/**
 	 * 预处理
 	 * @param frompath 要进行处理的文档路径
@@ -37,7 +26,7 @@ private static HashSet<Character> hsalbdigit = new HashSet<>();
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static void pretreatment(String frompath,String topath) throws UnsupportedOperationException, FileNotFoundException, IOException{
+	public static void pretreatment(String frompath, String topath) throws UnsupportedOperationException, FileNotFoundException, IOException{
 		//读取一颗树
 		PlainTextByTreeStream lineStream = null;	
 		//创建输出流
@@ -55,15 +44,6 @@ private static HashSet<Character> hsalbdigit = new HashSet<>();
 		}
 		bw.close();
 		lineStream.close();
-	}
-	
-	//判断是否是数字【中文数字，阿拉伯数字（全角和半角）】
-	private static boolean isDigit(char c){
-		if(hsalbdigit.contains(c)){
-			return true;
-		}else{
-			return false;
-		}	
 	}
 
 	/**
@@ -112,8 +92,8 @@ private static HashSet<Character> hsalbdigit = new HashSet<>();
 				if(!node.getNodeName().equals("-LRB-") && !(node.getNodeName().equals("-RRB-"))){
 					node.setNewName(node.getNodeName().split("-")[0]);
 				}
-			}else if(isDigit(node.getNodeName().charAt(node.getNodeName().length()-1))){
-				if(isDigit(node.getNodeName().charAt(node.getNodeName().length()-2))){
+			}else if(IsDigitUtil.isDigit(node.getNodeName().charAt(node.getNodeName().length()-1))){
+				if(IsDigitUtil.isDigit(node.getNodeName().charAt(node.getNodeName().length()-2))){
 					node.setNewName(node.getNodeName().substring(0, node.getNodeName().length()-3));
 				}else{
 					node.setNewName(node.getNodeName().substring(0, node.getNodeName().length()-2));
