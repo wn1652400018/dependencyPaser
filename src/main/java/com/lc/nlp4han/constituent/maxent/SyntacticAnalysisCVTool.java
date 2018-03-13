@@ -59,7 +59,7 @@ public class SyntacticAnalysisCVTool {
 
 			SyntacticAnalysisForPos<HeadTreeNode> postagger;
 			if(postaggertype.equals("china")){
-				postagger = new SyntacticAnalysisMEForPosChina(posmodel);
+				postagger = new SyntacticAnalysisMEForPosChinese(posmodel);
 	        }else{
 	        	postagger = new SyntacticAnalysisMEForPosEnglish(posmodel);
 	        }

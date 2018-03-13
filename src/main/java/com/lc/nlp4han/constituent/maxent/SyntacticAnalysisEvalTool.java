@@ -39,7 +39,7 @@ public class SyntacticAnalysisEvalTool {
         System.out.println("训练时间： " + (System.currentTimeMillis() - start));
         SyntacticAnalysisForPos<HeadTreeNode> postagger;
         if(postaggertype.equals("china")){
-			postagger = new SyntacticAnalysisMEForPosChina(posmodel);
+			postagger = new SyntacticAnalysisMEForPosChinese(posmodel);
         }else{
         	postagger = new SyntacticAnalysisMEForPosEnglish(posmodel);
         }	
