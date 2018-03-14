@@ -114,6 +114,9 @@ public class SRLContextGeneratorConfForIdentification extends SRLContextGenerato
 		if(pathlengthSet){
 			features.add("pathlength="+getPathLength(path));
 		}
+		if(phrasetypeSet){
+			features.add("phrasetype="+argumenttree[i].getTree().getNodeName());
+		}
 		if(headwordSet){
 			features.add("headword="+argumenttree[i].getTree().getHeadWords());
 		}
@@ -126,10 +129,6 @@ public class SRLContextGeneratorConfForIdentification extends SRLContextGenerato
 		if(predicateAndPhrasetypeSet){
 			features.add("predicateAndPhrasetype="+predicate+"|"+argumenttree[i].getTree().getNodeName());
 		}	
-
-		if(phrasetypeSet){
-			features.add("phrasetype="+argumenttree[i].getTree().getNodeName());
-		}
 		if(partialpathSet){
 			features.add("partialpath="+getPartialPath(path));
 		}

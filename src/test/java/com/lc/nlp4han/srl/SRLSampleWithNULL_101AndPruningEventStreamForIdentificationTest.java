@@ -3,8 +3,10 @@ package com.lc.nlp4han.srl;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.Test;
 
@@ -45,11 +47,16 @@ public class SRLSampleWithNULL_101AndPruningEventStreamForIdentificationTest {
 		TreeNodeWrapper<HeadTreeNode>[] argumenttree = sample.getArgumentTree();
 		TreeNodeWrapper<HeadTreeNode>[] predicatetree = sample.getPredicateTree();
 		String[] labelinfo = sample.getIdentificationLabelInfo();
-		SRLContextGenerator generator = new SRLContextGeneratorConfForIdentification();	
+		
+		Properties featureConf = new Properties();	
+		InputStream featureStream = SRLSampleWithNULL_101AndPruningEventStreamForIdentificationTest.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/srl/feature.properties");	
+		featureConf.load(featureStream);
+		SRLContextGenerator generator = new SRLContextGeneratorConfForIdentification(featureConf);	
+		
 		List<Event> events = new ArrayList<Event>();
 		for (int i = 0; i < argumenttree.length; i++) {
 			String[] context = generator.getContext(i, argumenttree, labelinfo, predicatetree);
-			events.add(new Event(labelinfo[i],context));
+			events.add(new Event(labelinfo[i], context));
 		}
 
 		List<String> result1 = new ArrayList<>();
@@ -69,16 +76,16 @@ public class SRLSampleWithNULL_101AndPruningEventStreamForIdentificationTest {
 		result2.add("predicateAndPhrasetype=shore|NP");
 		
 		List<String> result27 = new ArrayList<>();
-		result27.add("path=NP↑S↓VP↓NP↓S↓VP↓VP↓VB");
-		result27.add("pathlength=8");	
+		result27.add("path=NP↑S↓VP↓NP↓VP↓VP↓VB");
+		result27.add("pathlength=7");	
 		result27.add("headword=plan");
 		result27.add("headwordpos=NN");
 		result27.add("predicateAndHeadword=shore|plan");
 		result27.add("predicateAndPhrasetype=shore|NP");
 		
 		List<String> result29 = new ArrayList<>();
-		result29.add("path=NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
-		result29.add("pathlength=11");	
+		result29.add("path=NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB");
+		result29.add("pathlength=9");	
 		result29.add("headword=Mr.");
 		result29.add("headwordpos=NNP");
 		result29.add("predicateAndHeadword=shore|Mr.");
@@ -88,16 +95,16 @@ public class SRLSampleWithNULL_101AndPruningEventStreamForIdentificationTest {
 		List<Event> event2 = new ArrayList<Event>();
 		List<Event> event27 = new ArrayList<Event>();
 		List<Event> event29 = new ArrayList<Event>();
-		event1.add(new Event("YES",result1.toArray(new String[result1.size()])));
-		event2.add(new Event("NULL1",result2.toArray(new String[result2.size()])));
-		event27.add(new Event("YES",result27.toArray(new String[result27.size()])));
-		event29.add(new Event("NULL_1",result29.toArray(new String[result29.size()])));	
+		event1.add(new Event("YES", result1.toArray(new String[result1.size()])));
+		event2.add(new Event("NULL1", result2.toArray(new String[result2.size()])));
+		event27.add(new Event("YES", result27.toArray(new String[result27.size()])));
+		event29.add(new Event("NULL_1", result29.toArray(new String[result29.size()])));	
 		
-		assertEquals(argumenttree.length,29);
-		assertEquals(events.size(),29);
-		assertEquals(events.get(0).toString(),event1.get(0).toString());
-		assertEquals(events.get(1).toString(),event2.get(0).toString());
-		assertEquals(events.get(26).toString(),event27.get(0).toString());
-		assertEquals(events.get(28).toString(),event29.get(0).toString());
+		assertEquals(argumenttree.length, 29);
+		assertEquals(events.size(), 29);
+		assertEquals(events.get(0).toString(), event1.get(0).toString());
+		assertEquals(events.get(1).toString(), event2.get(0).toString());
+		assertEquals(events.get(26).toString(), event27.get(0).toString());
+		assertEquals(events.get(28).toString(), event29.get(0).toString());
 	}
 }

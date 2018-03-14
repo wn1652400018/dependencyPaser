@@ -3,8 +3,10 @@ package com.lc.nlp4han.srl;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.Test;
 
@@ -30,9 +32,12 @@ public class SRLSampleNoNullEventStreamForClassificationTest {
 		AbstractHeadGenerator ahg = new HeadGeneratorCollins();
 		String roles1 = "wsj/00/wsj0012.mrg 9 12 gold shore.01 i---a 4:1*10:0-ARG0 12:0,13:1-rel 14:2-ARG1";
 		AbstractParseStrategy<HeadTreeNode> ttss = new SRLParseNormal();
-		SRLContextGenerator generator = new SRLContextGeneratorConfForClassification();	
-		List<Event> events = new ArrayList<Event>();
 		
+		Properties featureConf = new Properties();	
+		InputStream featureStream = SRLSampleNoNullEventStreamForClassificationTest.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/srl/feature.properties");	
+		featureConf.load(featureStream);
+		SRLContextGenerator generator = new SRLContextGeneratorConfForClassification(featureConf);	
+			
 		TreeNode tree1 = BracketExpUtil.generateTree(""
 				+ "((S(S(NP-SBJ(NNP Mr.)(NNP Spoon))(VP(VBD said)(SBAR (-NONE- 0)(S(NP-SBJ(DT the)(NN plan))"
 				+ "(VP(VBZ is)(RB not)(NP-PRD(DT an)(NN attempt)(S(NP-SBJ(-NONE- *))(VP(TO to)(VP(VB shore)"
@@ -55,9 +60,10 @@ public class SRLSampleNoNullEventStreamForClassificationTest {
 		String[] labelfortrain = SRLSample.getLabelFromIndex(labelinfo, index);
 		TreeNodeWrapper<HeadTreeNode>[] argumenttreefortrain = SRLSample.getArgumentTreeFromIndex(argumenttree, index);
 		
+		List<Event> events = new ArrayList<Event>();
 		for (int i = 0; i < argumenttreefortrain.length; i++) {
 			String[] context = generator.getContext(i, argumenttreefortrain, labelfortrain, predicatetree);
-			events.add(new Event(labelfortrain[i],context));
+			events.add(new Event(labelfortrain[i], context));
 		}
 
 		List<String> result1 = new ArrayList<>();
@@ -75,7 +81,7 @@ public class SRLSampleNoNullEventStreamForClassificationTest {
 		result1.add("predicateAndPhrasetype=shore|NP");
 		
 		List<String> result0 = new ArrayList<>();
-		result0.add("path=NP↑S↓VP↓NP↓S↓VP↓VP↓VB");
+		result0.add("path=NP↑S↓VP↓NP↓VP↓VP↓VB");
 		result0.add("phrasetype=NP");
 		result0.add("headword=plan");
 		result0.add("headwordpos=NN");
@@ -90,11 +96,11 @@ public class SRLSampleNoNullEventStreamForClassificationTest {
 
 		List<Event> event1 = new ArrayList<Event>();
 		List<Event> event0 = new ArrayList<Event>();
-		event0.add(new Event("ARG0",result0.toArray(new String[result0.size()])));
-		event1.add(new Event("ARG1",result1.toArray(new String[result1.size()])));
+		event0.add(new Event("ARG0", result0.toArray(new String[result0.size()])));
+		event1.add(new Event("ARG1", result1.toArray(new String[result1.size()])));
 		
-		assertEquals(events.size(),2);
-		assertEquals(events.get(1).toString(),event1.get(0).toString());
-		assertEquals(events.get(0).toString(),event0.get(0).toString());
+		assertEquals(events.size(), 2);
+		assertEquals(events.get(1).toString(), event1.get(0).toString());
+		assertEquals(events.get(0).toString(), event0.get(0).toString());
 	}
 }

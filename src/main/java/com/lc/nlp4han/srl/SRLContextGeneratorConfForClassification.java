@@ -57,8 +57,7 @@ public class SRLContextGeneratorConfForClassification extends SRLContextGenerato
 		Properties featureConf = new Properties();	
 		InputStream featureStream = SRLContextGeneratorConfForClassification.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/srl/feature.properties");	
 		featureConf.load(featureStream);
-		init(featureConf);
-		
+		init(featureConf);		
 	}
 			
 	/**
@@ -172,17 +171,8 @@ public class SRLContextGeneratorConfForClassification extends SRLContextGenerato
 		if(pathSet){
 			features.add("path="+path);
 		}
-		if(subcategorizationSet){
-			features.add("subcategorization="+getSubcategorization(predicatetree[0].getTree()));
-		}
-		if(positionAndvoiceSet){
-			features.add("positionAndvoice="+position+"|"+voice);
-		}
 		if(phrasetypeSet){
 			features.add("phrasetype="+argumenttree[i].getTree().getNodeName());
-		}
-		if(predicateAndPhrasetypeSet){
-			features.add("predicateAndPhrasetype="+predicate+"|"+argumenttree[i].getTree().getNodeName());
 		}
 		if(headwordSet){
 			features.add("headword="+argumenttree[i].getTree().getHeadWords());
@@ -190,8 +180,8 @@ public class SRLContextGeneratorConfForClassification extends SRLContextGenerato
 		if(headwordposSet){
 			features.add("headwordpos="+argumenttree[i].getTree().getHeadWordsPos());
 		}
-		if(predicateAndHeadwordSet){
-			features.add("predicateAndHeadword="+predicate+"|"+argumenttree[i].getTree().getHeadWords());
+		if(subcategorizationSet){
+			features.add("subcategorization="+getSubcategorization(predicatetree[0].getTree()));
 		}
 		if(firstargumentSet){
 			features.add("firstargument="+getFirstArgument(argumenttree[i].getTree()).split("_")[0]);
@@ -205,6 +195,15 @@ public class SRLContextGeneratorConfForClassification extends SRLContextGenerato
 		if(lastargumentposSet){
 			features.add("lastargumentpos="+getLastArgument(argumenttree[i].getTree()).split("_")[1]);
 		}
+		if(positionAndvoiceSet){
+			features.add("positionAndvoice="+position+"|"+voice);
+		}	
+		if(predicateAndHeadwordSet){
+			features.add("predicateAndHeadword="+predicate+"|"+argumenttree[i].getTree().getHeadWords());
+		}
+		if(predicateAndPhrasetypeSet){
+			features.add("predicateAndPhrasetype="+predicate+"|"+argumenttree[i].getTree().getNodeName());
+		}						
 		if(predicateSet){
 			features.add("predicate="+predicate);
 		}

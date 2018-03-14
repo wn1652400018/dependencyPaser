@@ -18,8 +18,8 @@ public class SRLMeasureTest {
 		String[] pre = new String[]{"NULL","NULL","ARGM-DIS","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL","NULL"};
 		measure.update(ref, pre);
 		
-		assertEquals(measure.getPrecisionScore(),1.0,0.001);
-		assertEquals(measure.getRecallScore(),0.5,0.001);
-		assertEquals(measure.getMeasure(),0.666,0.001);
+		assertEquals(measure.getPrecisionScore(), 1.0, 0.001);
+		assertEquals(measure.getRecallScore(), 0.5, 0.001);
+		assertEquals(measure.getMeasure(), 0.666, 0.001);
 	}
 }

@@ -3,9 +3,11 @@ package com.lc.nlp4han.srl;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.Test;
 
@@ -34,8 +36,7 @@ public class SRLSampleWithNULL_101EventStreamForOneStepTest {
 				+ "(: ;)(S(NP-SBJ(NP(NNP Newsweek)(POS 's))(NN ad)(NNS pages))(VP(VBD totaled)(NP"
 				+ "(NP(CD 1,620))(, ,)(NP(NP(DT a)(NN drop))(PP(IN of)(NP (CD 3.2)(NN %)))"
 				+ "(PP-DIR(IN from)(NP(JJ last)(NN year)))))(, ,)(PP(VBG according)(PP(TO to)"
-				+ "(NP(NNP Publishers)(NNP Information)(NNP Bureau))))))(. .)))");	
-		
+				+ "(NP(NNP Publishers)(NNP Information)(NNP Bureau))))))(. .)))");			
 		TreePreTreatment.deleteNone(tree1);
 		
 		AbstractParseStrategy<HeadTreeNode> ttss = new SRLParseWithNULL_101();
@@ -46,93 +47,98 @@ public class SRLSampleWithNULL_101EventStreamForOneStepTest {
 		TreeNodeWrapper<HeadTreeNode>[] argumenttree = sample.getArgumentTree();
 		TreeNodeWrapper<HeadTreeNode>[] predicatetree = sample.getPredicateTree();
 		String[] labelinfo = sample.getLabelInfo();
-		SRLContextGenerator generator = new SRLContextGeneratorConf();
+		
+		Properties featureConf = new Properties();	
+		InputStream featureStream = SRLSampleWithNULL_101EventStreamForOneStepTest.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/srl/feature.properties");	
+		featureConf.load(featureStream);
+		SRLContextGenerator generator = new SRLContextGeneratorConf(featureConf);
+		
 		List<Event> events = new ArrayList<Event>();
 		for (int i = 0; i < argumenttree.length; i++) {
 			String[] context = generator.getContext(i, argumenttree, labelinfo, predicatetree);
-			events.add(new Event(labelinfo[i],context));
+			events.add(new Event(labelinfo[i], context));
 		}
 
-		List<String> result21 = new ArrayList<>();
-		result21.add("predicate=shore");
-		result21.add("predicatepos=VB");
-		result21.add("path=NP↑VP↓VB");
-		result21.add("pathlength=3");
-		result21.add("partialpath=NP↑VP");
-		result21.add("phrasetype=NP");
-		result21.add("position=after");
-		result21.add("voice=a");	
-		result21.add("headword=decline");
-		result21.add("headwordpos=NN");
-		result21.add("subcategorization=VP→VB PRT NP");
-		result21.add("firstargument=a");
-		result21.add("firstargumentpos=DT");
-		result21.add("lastargument=1989");
-		result21.add("lastargumentpos=CD");
-		result21.add("positionAndvoice=after|a");
-		result21.add("predicateAndpath=shore|NP↑VP↓VB");
-		result21.add("pathAndpositionAndvoice=NP↑VP↓VB|after|a");
-		result21.add("pathAndpositionAndvoiceAndpredicate=NP↑VP↓VB|after|a|shore");
-		result21.add("headwordAndpredicateAndpath=decline|shore|NP↑VP↓VB");
-		result21.add("headwordAndPhrasetype=decline|NP");
-		result21.add("predicateAndHeadword=shore|decline");
-		result21.add("predicateAndPhrasetype=shore|NP");
+		List<String> result19 = new ArrayList<>();
+		result19.add("predicate=shore");
+		result19.add("predicatepos=VB");
+		result19.add("path=NP↑VP↓VB");
+		result19.add("pathlength=3");
+		result19.add("partialpath=NP↑VP");
+		result19.add("phrasetype=NP");
+		result19.add("position=after");
+		result19.add("voice=a");	
+		result19.add("headword=decline");
+		result19.add("headwordpos=NN");
+		result19.add("subcategorization=VP→VB PRT NP");
+		result19.add("firstargument=a");
+		result19.add("firstargumentpos=DT");
+		result19.add("lastargument=1989");
+		result19.add("lastargumentpos=CD");
+		result19.add("positionAndvoice=after|a");
+		result19.add("predicateAndpath=shore|NP↑VP↓VB");
+		result19.add("pathAndpositionAndvoice=NP↑VP↓VB|after|a");
+		result19.add("pathAndpositionAndvoiceAndpredicate=NP↑VP↓VB|after|a|shore");
+		result19.add("headwordAndpredicateAndpath=decline|shore|NP↑VP↓VB");
+		result19.add("headwordAndPhrasetype=decline|NP");
+		result19.add("predicateAndHeadword=shore|decline");
+		result19.add("predicateAndPhrasetype=shore|NP");
 		
-		List<String> result22 = new ArrayList<>();
-		result22.add("predicate=shore");
-		result22.add("predicatepos=VB");
-		result22.add("path=NP↑NP↑VP↓VB");
-		result22.add("pathlength=4");
-		result22.add("partialpath=NP↑NP↑VP");
-		result22.add("phrasetype=NP");
-		result22.add("position=after");
-		result22.add("voice=a");	
-		result22.add("headword=decline");
-		result22.add("headwordpos=NN");
-		result22.add("subcategorization=VP→VB PRT NP");
-		result22.add("firstargument=a");
-		result22.add("firstargumentpos=DT");
-		result22.add("lastargument=decline");
-		result22.add("lastargumentpos=NN");
-		result22.add("positionAndvoice=after|a");
-		result22.add("predicateAndpath=shore|NP↑NP↑VP↓VB");
-		result22.add("pathAndpositionAndvoice=NP↑NP↑VP↓VB|after|a");
-		result22.add("pathAndpositionAndvoiceAndpredicate=NP↑NP↑VP↓VB|after|a|shore");
-		result22.add("headwordAndpredicateAndpath=decline|shore|NP↑NP↑VP↓VB");
-		result22.add("headwordAndPhrasetype=decline|NP");
-		result22.add("predicateAndHeadword=shore|decline");
-		result22.add("predicateAndPhrasetype=shore|NP");
+		List<String> result20 = new ArrayList<>();
+		result20.add("predicate=shore");
+		result20.add("predicatepos=VB");
+		result20.add("path=NP↑NP↑VP↓VB");
+		result20.add("pathlength=4");
+		result20.add("partialpath=NP↑NP↑VP");
+		result20.add("phrasetype=NP");
+		result20.add("position=after");
+		result20.add("voice=a");	
+		result20.add("headword=decline");
+		result20.add("headwordpos=NN");
+		result20.add("subcategorization=VP→VB PRT NP");
+		result20.add("firstargument=a");
+		result20.add("firstargumentpos=DT");
+		result20.add("lastargument=decline");
+		result20.add("lastargumentpos=NN");
+		result20.add("positionAndvoice=after|a");
+		result20.add("predicateAndpath=shore|NP↑NP↑VP↓VB");
+		result20.add("pathAndpositionAndvoice=NP↑NP↑VP↓VB|after|a");
+		result20.add("pathAndpositionAndvoiceAndpredicate=NP↑NP↑VP↓VB|after|a|shore");
+		result20.add("headwordAndpredicateAndpath=decline|shore|NP↑NP↑VP↓VB");
+		result20.add("headwordAndPhrasetype=decline|NP");
+		result20.add("predicateAndHeadword=shore|decline");
+		result20.add("predicateAndPhrasetype=shore|NP");
 		
-		List<String> result8 = new ArrayList<>();
-		result8.add("predicate=shore");
-		result8.add("predicatepos=VB");
-		result8.add("path=NP↑S↓VP↓NP↓S↓VP↓VP↓VB");
-		result8.add("pathlength=8");
-		result8.add("partialpath=NP↑S");
-		result8.add("phrasetype=NP");
-		result8.add("position=before");
-		result8.add("voice=a");	
-		result8.add("headword=plan");
-		result8.add("headwordpos=NN");
-		result8.add("subcategorization=VP→VB PRT NP");
-		result8.add("firstargument=the");
-		result8.add("firstargumentpos=DT");
-		result8.add("lastargument=plan");
-		result8.add("lastargumentpos=NN");
-		result8.add("positionAndvoice=before|a");
-		result8.add("predicateAndpath=shore|NP↑S↓VP↓NP↓S↓VP↓VP↓VB");
-		result8.add("pathAndpositionAndvoice=NP↑S↓VP↓NP↓S↓VP↓VP↓VB|before|a");
-		result8.add("pathAndpositionAndvoiceAndpredicate=NP↑S↓VP↓NP↓S↓VP↓VP↓VB|before|a|shore");
-		result8.add("headwordAndpredicateAndpath=plan|shore|NP↑S↓VP↓NP↓S↓VP↓VP↓VB");
-		result8.add("headwordAndPhrasetype=plan|NP");
-		result8.add("predicateAndHeadword=shore|plan");
-		result8.add("predicateAndPhrasetype=shore|NP");
+		List<String> result7 = new ArrayList<>();
+		result7.add("predicate=shore");
+		result7.add("predicatepos=VB");
+		result7.add("path=NP↑S↓VP↓NP↓VP↓VP↓VB");
+		result7.add("pathlength=7");
+		result7.add("partialpath=NP↑S");
+		result7.add("phrasetype=NP");
+		result7.add("position=before");
+		result7.add("voice=a");	
+		result7.add("headword=plan");
+		result7.add("headwordpos=NN");
+		result7.add("subcategorization=VP→VB PRT NP");
+		result7.add("firstargument=the");
+		result7.add("firstargumentpos=DT");
+		result7.add("lastargument=plan");
+		result7.add("lastargumentpos=NN");
+		result7.add("positionAndvoice=before|a");
+		result7.add("predicateAndpath=shore|NP↑S↓VP↓NP↓VP↓VP↓VB");
+		result7.add("pathAndpositionAndvoice=NP↑S↓VP↓NP↓VP↓VP↓VB|before|a");
+		result7.add("pathAndpositionAndvoiceAndpredicate=NP↑S↓VP↓NP↓VP↓VP↓VB|before|a|shore");
+		result7.add("headwordAndpredicateAndpath=plan|shore|NP↑S↓VP↓NP↓VP↓VP↓VB");
+		result7.add("headwordAndPhrasetype=plan|NP");
+		result7.add("predicateAndHeadword=shore|plan");
+		result7.add("predicateAndPhrasetype=shore|NP");
 		
 		List<String> result1 = new ArrayList<>();
 		result1.add("predicate=shore");
 		result1.add("predicatepos=VB");
-		result1.add("path=NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
-		result1.add("pathlength=11");
+		result1.add("path=NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB");
+		result1.add("pathlength=9");
 		result1.add("partialpath=NP↑S");
 		result1.add("phrasetype=NP");
 		result1.add("position=before");
@@ -145,10 +151,10 @@ public class SRLSampleWithNULL_101EventStreamForOneStepTest {
 		result1.add("lastargument=Spoon");
 		result1.add("lastargumentpos=NNP");
 		result1.add("positionAndvoice=before|a");
-		result1.add("predicateAndpath=shore|NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
-		result1.add("pathAndpositionAndvoice=NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB|before|a");
-		result1.add("pathAndpositionAndvoiceAndpredicate=NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB|before|a|shore");
-		result1.add("headwordAndpredicateAndpath=Mr.|shore|NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
+		result1.add("predicateAndpath=shore|NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB");
+		result1.add("pathAndpositionAndvoice=NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB|before|a");
+		result1.add("pathAndpositionAndvoiceAndpredicate=NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB|before|a|shore");
+		result1.add("headwordAndpredicateAndpath=Mr.|shore|NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB");
 		result1.add("headwordAndPhrasetype=Mr.|NP");
 		result1.add("predicateAndHeadword=shore|Mr.");
 		result1.add("predicateAndPhrasetype=shore|NP");
@@ -156,8 +162,8 @@ public class SRLSampleWithNULL_101EventStreamForOneStepTest {
 		List<String> result4 = new ArrayList<>();
 		result4.add("predicate=shore");
 		result4.add("predicatepos=VB");
-		result4.add("path=VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
-		result4.add("pathlength=9");
+		result4.add("path=VP↓S↓VP↓NP↓VP↓VP↓VB");
+		result4.add("pathlength=7");
 		result4.add("partialpath=VP");
 		result4.add("phrasetype=VP");
 		result4.add("position=before");
@@ -170,10 +176,10 @@ public class SRLSampleWithNULL_101EventStreamForOneStepTest {
 		result4.add("lastargument=1989");
 		result4.add("lastargumentpos=CD");
 		result4.add("positionAndvoice=before|a");
-		result4.add("predicateAndpath=shore|VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
-		result4.add("pathAndpositionAndvoice=VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB|before|a");
-		result4.add("pathAndpositionAndvoiceAndpredicate=VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB|before|a|shore");
-		result4.add("headwordAndpredicateAndpath=said|shore|VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
+		result4.add("predicateAndpath=shore|VP↓S↓VP↓NP↓VP↓VP↓VB");
+		result4.add("pathAndpositionAndvoice=VP↓S↓VP↓NP↓VP↓VP↓VB|before|a");
+		result4.add("pathAndpositionAndvoiceAndpredicate=VP↓S↓VP↓NP↓VP↓VP↓VB|before|a|shore");
+		result4.add("headwordAndpredicateAndpath=said|shore|VP↓S↓VP↓NP↓VP↓VP↓VB");
 		result4.add("headwordAndPhrasetype=said|VP");
 		result4.add("predicateAndHeadword=shore|said");
 		result4.add("predicateAndPhrasetype=shore|VP");
@@ -183,11 +189,11 @@ public class SRLSampleWithNULL_101EventStreamForOneStepTest {
 		List<Event> event8 = new ArrayList<Event>();
 		List<Event> event1 = new ArrayList<Event>();
 		List<Event> event4 = new ArrayList<Event>();
-		event21.add(new Event("ARG1",result21.toArray(new String[result21.size()])));
-		event22.add(new Event("NULL1",result22.toArray(new String[result22.size()])));
-		event8.add(new Event("ARG0",result8.toArray(new String[result8.size()])));
-		event1.add(new Event("NULL_1",result1.toArray(new String[result1.size()])));
-		event4.add(new Event("NULL0",result4.toArray(new String[result4.size()])));
+		event21.add(new Event("ARG1", result19.toArray(new String[result19.size()])));
+		event22.add(new Event("NULL1", result20.toArray(new String[result20.size()])));
+		event8.add(new Event("ARG0", result7.toArray(new String[result7.size()])));
+		event1.add(new Event("NULL_1", result1.toArray(new String[result1.size()])));
+		event4.add(new Event("NULL0", result4.toArray(new String[result4.size()])));
 		
 		HashSet<String> hs1 = new HashSet<>();
 		for (int i = 0; i < labelinfo.length; i++) {
@@ -200,13 +206,13 @@ public class SRLSampleWithNULL_101EventStreamForOneStepTest {
 		hs2.add("NULL1");
 		hs2.add("NULL0");
 		
-		assertEquals(hs1.toString(),hs2.toString());
-		assertEquals(argumenttree.length,76);
-		assertEquals(events.size(),76);
-		assertEquals(events.get(1).toString(),event1.get(0).toString());
-		assertEquals(events.get(8).toString(),event8.get(0).toString());
-		assertEquals(events.get(21).toString(),event21.get(0).toString());
-		assertEquals(events.get(22).toString(),event22.get(0).toString());
-		assertEquals(events.get(4).toString(),event4.get(0).toString());
+		assertEquals(hs1.toString(), hs2.toString());
+		assertEquals(argumenttree.length, 74);
+		assertEquals(events.size(), 74);
+		assertEquals(events.get(1).toString(), event1.get(0).toString());
+		assertEquals(events.get(7).toString(), event8.get(0).toString());
+		assertEquals(events.get(19).toString(), event21.get(0).toString());
+		assertEquals(events.get(20).toString(), event22.get(0).toString());
+		assertEquals(events.get(4).toString(), event4.get(0).toString());
 	}
 }
