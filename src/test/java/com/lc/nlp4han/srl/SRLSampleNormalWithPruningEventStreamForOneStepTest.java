@@ -3,9 +3,11 @@ package com.lc.nlp4han.srl;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.Test;
 
@@ -34,8 +36,7 @@ public class SRLSampleNormalWithPruningEventStreamForOneStepTest {
 				+ "(: ;)(S(NP-SBJ(NP(NNP Newsweek)(POS 's))(NN ad)(NNS pages))(VP(VBD totaled)(NP"
 				+ "(NP(CD 1,620))(, ,)(NP(NP(DT a)(NN drop))(PP(IN of)(NP (CD 3.2)(NN %)))"
 				+ "(PP-DIR(IN from)(NP(JJ last)(NN year)))))(, ,)(PP(VBG according)(PP(TO to)"
-				+ "(NP(NNP Publishers)(NNP Information)(NNP Bureau))))))(. .)))");	
-		
+				+ "(NP(NNP Publishers)(NNP Information)(NNP Bureau))))))(. .)))");			
 		TreePreTreatment.deleteNone(tree1);
 		
 		AbstractParseStrategy<HeadTreeNode> ttss = new SRLParseNormalWithPruning();
@@ -46,11 +47,16 @@ public class SRLSampleNormalWithPruningEventStreamForOneStepTest {
 		TreeNodeWrapper<HeadTreeNode>[] argumenttree = sample.getArgumentTree();
 		TreeNodeWrapper<HeadTreeNode>[] predicatetree = sample.getPredicateTree();
 		String[] labelinfo = sample.getLabelInfo();
-		SRLContextGenerator generator = new SRLContextGeneratorConf();	
+		
+		Properties featureConf = new Properties();	
+		InputStream featureStream = SRLSampleNormalWithPruningEventStreamForOneStepTest.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/srl/feature.properties");	
+		featureConf.load(featureStream);
+		SRLContextGenerator generator = new SRLContextGeneratorConf(featureConf);	
+		
 		List<Event> events = new ArrayList<Event>();
 		for (int i = 0; i < argumenttree.length; i++) {
 			String[] context = generator.getContext(i, argumenttree, labelinfo, predicatetree);
-			events.add(new Event(labelinfo[i],context));
+			events.add(new Event(labelinfo[i], context));
 		}
 
 		List<String> result1 = new ArrayList<>();
@@ -106,8 +112,8 @@ public class SRLSampleNormalWithPruningEventStreamForOneStepTest {
 		List<String> result27 = new ArrayList<>();
 		result27.add("predicate=shore");
 		result27.add("predicatepos=VB");
-		result27.add("path=NP↑S↓VP↓NP↓S↓VP↓VP↓VB");
-		result27.add("pathlength=8");
+		result27.add("path=NP↑S↓VP↓NP↓VP↓VP↓VB");
+		result27.add("pathlength=7");
 		result27.add("partialpath=NP↑S");
 		result27.add("phrasetype=NP");
 		result27.add("position=before");
@@ -120,10 +126,10 @@ public class SRLSampleNormalWithPruningEventStreamForOneStepTest {
 		result27.add("lastargument=plan");
 		result27.add("lastargumentpos=NN");
 		result27.add("positionAndvoice=before|a");
-		result27.add("predicateAndpath=shore|NP↑S↓VP↓NP↓S↓VP↓VP↓VB");
-		result27.add("pathAndpositionAndvoice=NP↑S↓VP↓NP↓S↓VP↓VP↓VB|before|a");
-		result27.add("pathAndpositionAndvoiceAndpredicate=NP↑S↓VP↓NP↓S↓VP↓VP↓VB|before|a|shore");
-		result27.add("headwordAndpredicateAndpath=plan|shore|NP↑S↓VP↓NP↓S↓VP↓VP↓VB");
+		result27.add("predicateAndpath=shore|NP↑S↓VP↓NP↓VP↓VP↓VB");
+		result27.add("pathAndpositionAndvoice=NP↑S↓VP↓NP↓VP↓VP↓VB|before|a");
+		result27.add("pathAndpositionAndvoiceAndpredicate=NP↑S↓VP↓NP↓VP↓VP↓VB|before|a|shore");
+		result27.add("headwordAndpredicateAndpath=plan|shore|NP↑S↓VP↓NP↓VP↓VP↓VB");
 		result27.add("headwordAndPhrasetype=plan|NP");
 		result27.add("predicateAndHeadword=shore|plan");
 		result27.add("predicateAndPhrasetype=shore|NP");
@@ -131,8 +137,8 @@ public class SRLSampleNormalWithPruningEventStreamForOneStepTest {
 		List<String> result29 = new ArrayList<>();
 		result29.add("predicate=shore");
 		result29.add("predicatepos=VB");
-		result29.add("path=NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
-		result29.add("pathlength=11");
+		result29.add("path=NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB");
+		result29.add("pathlength=9");
 		result29.add("partialpath=NP↑S");
 		result29.add("phrasetype=NP");
 		result29.add("position=before");
@@ -145,10 +151,10 @@ public class SRLSampleNormalWithPruningEventStreamForOneStepTest {
 		result29.add("lastargument=Spoon");
 		result29.add("lastargumentpos=NNP");
 		result29.add("positionAndvoice=before|a");
-		result29.add("predicateAndpath=shore|NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
-		result29.add("pathAndpositionAndvoice=NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB|before|a");
-		result29.add("pathAndpositionAndvoiceAndpredicate=NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB|before|a|shore");
-		result29.add("headwordAndpredicateAndpath=Mr.|shore|NP↑S↓VP↓SBAR↓S↓VP↓NP↓S↓VP↓VP↓VB");
+		result29.add("predicateAndpath=shore|NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB");
+		result29.add("pathAndpositionAndvoice=NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB|before|a");
+		result29.add("pathAndpositionAndvoiceAndpredicate=NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB|before|a|shore");
+		result29.add("headwordAndpredicateAndpath=Mr.|shore|NP↑S↓VP↓S↓VP↓NP↓VP↓VP↓VB");
 		result29.add("headwordAndPhrasetype=Mr.|NP");
 		result29.add("predicateAndHeadword=shore|Mr.");
 		result29.add("predicateAndPhrasetype=shore|NP");
@@ -157,10 +163,10 @@ public class SRLSampleNormalWithPruningEventStreamForOneStepTest {
 		List<Event> event2 = new ArrayList<Event>();
 		List<Event> event27 = new ArrayList<Event>();
 		List<Event> event29 = new ArrayList<Event>();
-		event1.add(new Event("ARG1",result1.toArray(new String[result1.size()])));
-		event2.add(new Event("NULL",result2.toArray(new String[result2.size()])));
-		event27.add(new Event("ARG0",result27.toArray(new String[result27.size()])));
-		event29.add(new Event("NULL",result29.toArray(new String[result29.size()])));
+		event1.add(new Event("ARG1", result1.toArray(new String[result1.size()])));
+		event2.add(new Event("NULL", result2.toArray(new String[result2.size()])));
+		event27.add(new Event("ARG0", result27.toArray(new String[result27.size()])));
+		event29.add(new Event("NULL", result29.toArray(new String[result29.size()])));
 		
 		HashSet<String> hs1 = new HashSet<>();
 		for (int i = 0; i < labelinfo.length; i++) {
@@ -171,12 +177,12 @@ public class SRLSampleNormalWithPruningEventStreamForOneStepTest {
 		hs2.add("ARG1");
 		hs2.add("NULL");
 		
-		assertEquals(hs1.toString(),hs2.toString());
-		assertEquals(argumenttree.length,29);
-		assertEquals(events.size(),29);
-		assertEquals(events.get(0).toString(),event1.get(0).toString());
-		assertEquals(events.get(1).toString(),event2.get(0).toString());
-		assertEquals(events.get(26).toString(),event27.get(0).toString());
-		assertEquals(events.get(28).toString(),event29.get(0).toString());
+		assertEquals(hs1.toString(), hs2.toString());
+		assertEquals(argumenttree. length,29);
+		assertEquals(events.size(), 29);
+		assertEquals(events.get(0).toString(), event1.get(0).toString());
+		assertEquals(events.get(1).toString(), event2.get(0).toString());
+		assertEquals(events.get(26).toString(), event27.get(0).toString());
+		assertEquals(events.get(28).toString(), event29.get(0).toString());
 	}
 }
