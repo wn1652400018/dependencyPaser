@@ -22,9 +22,16 @@ public class DependencySample {
 	private List<String> dependencyIndices;
 	private String[][] adtionalContext;
 	
-	public DependencySample(List<String> words,List<String> pos){
-		this.words = words;
-		this.pos = pos;
+	/**
+	 * 构造
+	 * @param words 词语
+	 * @param pos 词性
+	 * @param dependency 依存关系
+	 * @param dependencyWords 依存关系对应的词
+	 * @param dependencyIndices 依存关系对应的词的下标
+	 */
+	public DependencySample(String[] words, String[] pos, String[] dependency, String[] dependencyWords, String[] dependencyIndices){
+		this(words, pos, dependency, dependencyWords, dependencyIndices, null);
 	}
 	
 	/**
@@ -35,33 +42,8 @@ public class DependencySample {
 	 * @param dependencyWords 依存关系对应的词
 	 * @param dependencyIndices 依存关系对应的词的下标
 	 */
-	public DependencySample(String[] words,String[] pos,String[] dependency,String[] dependencyWords,String[] dependencyIndices){
-		this(words,pos,dependency,dependencyWords,dependencyIndices,null);
-	}
-	
-	/**
-	 * 构造
-	 * @param words 词语
-	 * @param pos 词性
-	 * @param dependency 依存关系
-	 * @param dependencyWords 依存关系对应的词
-	 * @param dependencyIndices 依存关系对应的词的下标
-	 */
-	public DependencySample(List<String> words,List<String> pos,List<String> dependency,List<String> dependencyWords,List<String> dependencyIndices){
-		this(words,pos,dependency,dependencyWords,dependencyIndices,null);
-	}
-	
-	/**
-	 * 构造
-	 * @param words 词语
-	 * @param pos 词性
-	 * @param dependency 依存关系
-	 * @param dependencyWords 依存关系对应的词
-	 * @param dependencyIndices 依存关系对应的词的下标
-	 * @param additionalContext 额外的信息
-	 */
-	public DependencySample(String[] words,String[] pos,String[] dependency,String[] dependencyWords,String[] dependencyIndices,String[][] additionalContext){
-		this(Arrays.asList(words),Arrays.asList(pos),Arrays.asList(dependency),Arrays.asList(dependencyWords),Arrays.asList(dependencyIndices),additionalContext);
+	public DependencySample(List<String> words, List<String> pos, List<String> dependency, List<String> dependencyWords, List<String> dependencyIndices){
+		this(words, pos, dependency, dependencyWords, dependencyIndices, null);
 	}
 	
 	/**
@@ -73,7 +55,20 @@ public class DependencySample {
 	 * @param dependencyIndices 依存关系对应的词的下标
 	 * @param additionalContext 额外的信息
 	 */
-    public DependencySample(List<String> words,List<String> pos,List<String> dependency,List<String> dependencyWords,List<String> dependencyIndices,String[][] additionalContext){
+	public DependencySample(String[] words, String[] pos, String[] dependency, String[] dependencyWords, String[] dependencyIndices, String[][] additionalContext){
+		this(Arrays.asList(words), Arrays.asList(pos), Arrays.asList(dependency), Arrays.asList(dependencyWords), Arrays.asList(dependencyIndices), additionalContext);
+	}
+	
+	/**
+	 * 构造
+	 * @param words 词语
+	 * @param pos 词性
+	 * @param dependency 依存关系
+	 * @param dependencyWords 依存关系对应的词
+	 * @param dependencyIndices 依存关系对应的词的下标
+	 * @param additionalContext 额外的信息
+	 */
+    public DependencySample(List<String> words, List<String> pos, List<String> dependency, List<String> dependencyWords, List<String> dependencyIndices, String[][] additionalContext){
     	//不能被修改的list
         this.words = Collections.unmodifiableList(words);
         this.pos = Collections.unmodifiableList(pos);
@@ -104,14 +99,54 @@ public class DependencySample {
      */
     public String toCoNLLSample(){
     	String sample = new String();
+    	
+    	if(pos.size() == 0){
+    		for (int i = 0; i < dependency.size(); i++) {
+    			sample += (i + 1) + "\t" + words.get(i + 1) + "\t" + words.get(i + 1) + "\t"
+    					+ "_" + "\t"
+    					+ dependencyIndices.get(i) + "\t"
+    					+ dependency.get(i) + "\t"
+    					+ "_" + "\t" + "_" + "\n";
+    		}
+    	}else{
+    		for (int i = 0; i < dependency.size(); i++) {
+    			sample += (i + 1) + "\t" + words.get(i + 1) + "\t" + words.get(i + 1) + "\t"
+    					+ pos.get(i + 1) + "\t" + pos.get(i + 1) + "\t"
+    					+ "_" + "\t"
+    					+ dependencyIndices.get(i) + "\t"
+    					+ dependency.get(i) + "\t"
+    					+ "_" + "\t" + "_" + "\n";
+    		}
+    	}
+    	
+    	
+    	return sample;
+    }
+    
+    /**
+     * 输出Stanford依存语料样式
+     * @return
+     */
+    public String toStanfordSample(){
+    	String sample = new String();
     	for (int i = 0; i < dependency.size(); i++) {
-			sample += (i+1)+"\t"+words.get(i+1)+"\t"+words.get(i+1)+"\t"
-					+pos.get(i+1)+"\t"+pos.get(i+1)+"\t"
-					+"_"+"\t"
-					+dependencyIndices.get(i)+"\t"
-					+dependency.get(i)+"\t"
-					+"_"+"\t"+"_"+"\n";
-		}
+    		if(dependencyIndices.get(i).equals("0")){
+    			sample += dependency.get(i) + 
+        				"(" + dependencyWords.get(i) + "-" + dependencyIndices.get(i) +
+        				"," + 
+        				 words.get(i + 1) + "-" + (i + 1) + 
+        				")" + "\n";
+    		}
+    	}
+    	for (int i = 0; i < dependency.size(); i++) {
+    		if(!dependencyIndices.get(i).equals("0")){
+    			sample += dependency.get(i) + 
+        				"(" + dependencyWords.get(i) + "-" + dependencyIndices.get(i) +
+        				"," + 
+        				 words.get(i + 1) + "-" + (i + 1) + 
+        				")" + "\n";
+    		}
+    	}
     	return sample;
     }
     
