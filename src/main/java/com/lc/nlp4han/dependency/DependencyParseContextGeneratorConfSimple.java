@@ -108,111 +108,117 @@ public class DependencyParseContextGeneratorConfSimple implements DependencyPars
 	 * @return
 	 */
 	public String[] getContext( int indexi, int indexj, String[] words, String[] pos, Object[] ac) {
-		String pi,pi1,pi2,pi_1,pi_2,pj,pj1,pj2,pj_1,pj_2,wi,wj;
+		String pi, pi1, pi2, pi_1, pi_2, pj, pj1, pj2, pj_1, pj_2, wi, wj;
 		pi = pi1 = pi2 = pi_1 = pi_2 = pj = pj1 = pj2 = pj_1 = pj_2 = wi = wj = null;
 		int dis;
+		dis = indexi - indexj;
 		List<String> features = new ArrayList<String>();
 		wi = words[indexi];
-		pi = pos[indexi];
 		wj = words[indexj];
-		pj = pos[indexj];
-		if(pos.length > indexi + 1){
-			pi1 = pos[indexi+1];
-			if(pos.length > indexi + 2){
-				pi2 = pos[indexi+2];
+		
+		if(pos != null){
+			pi = pos[indexi];
+			pj = pos[indexj];
+			if(pos.length > indexi + 1){
+				pi1 = pos[indexi+1];
+				if(pos.length > indexi + 2){
+					pi2 = pos[indexi+2];
+				}
 			}
-		}
-		if(pos.length > indexj + 1){
-			pj1 = pos[indexj+1];
-			if(pos.length > indexj + 2){
-				pj2 = pos[indexj+2];
+			if(pos.length > indexj + 1){
+				pj1 = pos[indexj+1];
+				if(pos.length > indexj + 2){
+					pj2 = pos[indexj+2];
+				}
 			}
-		}
-		if(indexi - 1 >= 0){
-			pi_1 = pos[indexi-1];
-			if(indexi - 2 >= 0){
-				pi_2 = pos[indexi-2];
+			if(indexi - 1 >= 0){
+				pi_1 = pos[indexi-1];
+				if(indexi - 2 >= 0){
+					pi_2 = pos[indexi-2];
+				}
 			}
-		}
-		if(indexj - 1 >= 0){
-			pj_1 = pos[indexj-1];
-			if(indexj - 2 >= 0){
-				pj_2 = pos[indexj-2];
+			if(indexj - 1 >= 0){
+				pj_1 = pos[indexj-1];
+				if(indexj - 2 >= 0){
+					pj_2 = pos[indexj-2];
+				}
 			}
-		}
-		dis = indexi - indexj;
-		if(wiSet){
-			features.add("wi="+wi);
-		}
-		if(wjSet){
-			features.add("wj="+wj);
-		}
-		if(piSet){
-			features.add("pi="+pi);
-		}
-		if(pjSet){
-			features.add("pj="+pj);
-		}
-		if(pi1Set){
-			features.add("pi1="+pi1);
-		}
-		if(pi2Set){
-			features.add("pi2="+pi2);
-		}
-		if(pi_1Set){
-			features.add("pi_1="+pi_1);
-		}
-		if(pi_2Set){
-			features.add("pi2="+pi_2);
-		}
-		if(pj1Set){
-			features.add("pj1="+pj1);
-		}
-		if(pj2Set){
-			features.add("pj2="+pj2);
-		}
-		if(pj_1Set){
-			features.add("pj_1="+pj_1);
-		}
-		if(pj_2Set){
-			features.add("pj2="+pj_2);
+			//带有词性的特征
+			if(piSet){
+				features.add("pi="+pi);
+			}
+			if(pjSet){
+				features.add("pj="+pj);
+			}
+			if(pi1Set){
+				features.add("pi1="+pi1);
+			}
+			if(pi2Set){
+				features.add("pi2="+pi2);
+			}
+			if(pi_1Set){
+				features.add("pi_1="+pi_1);
+			}
+			if(pi_2Set){
+				features.add("pi2="+pi_2);
+			}
+			if(pj1Set){
+				features.add("pj1="+pj1);
+			}
+			if(pj2Set){
+				features.add("pj2="+pj2);
+			}
+			if(pj_1Set){
+				features.add("pj_1="+pj_1);
+			}
+			if(pj_2Set){
+				features.add("pj2="+pj_2);
+			}
+			if(pipjSet){
+				features.add("pipj="+pi+pj);
+			}	
+			if(pipjdisSet){
+				features.add("pipjdis="+pi+pj+dis);
+			}
+			if(pi_1 != null){
+				if(pipjpi_1Set){
+					features.add("pipjpi_1="+pi+pj+pi_1);
+				}
+			}
+			if(pi1 != null){
+				if(pipjpi1Set){
+					features.add("pipjpi1="+pi+pj+pi1);
+				}
+			}
+			if(pj_1 != null){
+				if(pipjpj_1Set){
+					features.add("pipjpj_1="+pi+pj+pj_1);
+				}
+			}
+			if(pj1 != null){
+				if(pipjpj1Set){
+					features.add("pipjpj1="+pi+pj+pj1);
+				}
+			}
 		}
 		
+		//不带有词性的特征
+		if(wiwjdisSet){
+			features.add("wiwjdis="+wi+wj+dis);
+		}
 		if(disSet){			
 			features.add("dis="+dis);
 		}
 		if(wiwjSet){
 			features.add("wiwj="+wi+wj);
 		}
-		if(pipjSet){
-			features.add("pipj="+pi+pj);
+		if(wiSet){
+			features.add("wi="+wi);
 		}
-		if(wiwjdisSet){
-			features.add("wiwjdis="+wi+wj+dis);
+		if(wjSet){
+			features.add("wj="+wj);
 		}
-		if(pipjdisSet){
-			features.add("pipjdis="+pi+pj+dis);
-		}
-		if(pi_1 != null){
-			if(pipjpi_1Set){
-				features.add("pipjpi_1="+pi+pj+pi_1);
-			}
-		}
-		if(pi1 != null){
-			if(pipjpi1Set){
-				features.add("pipjpi1="+pi+pj+pi1);
-			}
-		}
-		if(pj_1 != null){
-			if(pipjpj_1Set){
-				features.add("pipjpj_1="+pi+pj+pj_1);
-			}
-		}
-		if(pj1 != null){
-			if(pipjpj1Set){
-				features.add("pipjpj1="+pi+pj+pj1);
-			}
-		}
+		
 		String[] contexts = features.toArray(new String[features.size()]);
 		
 		return contexts;

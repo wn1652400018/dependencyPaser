@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 import com.lc.nlp4han.ml.util.CrossValidationPartitioner;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
@@ -68,7 +69,7 @@ public class WordPOSCrossValidatorTool
     
     private static void usage()
     {
-        System.out.println(WordPOSCrossValidatorTool.class.getName() + " -data <corpusFile> -encoding <encoding> [-folds <nFolds>] " + "[-cutoff <num>] [-iters <num>]");
+        System.out.println(WordPOSCrossValidatorTool.class.getName() + " -data <corpusFile> -encoding <encoding> -datatype <datatype> [-folds <nFolds>] " + "[-cutoff <num>] [-iters <num>]");
     }
 
     public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException
@@ -86,6 +87,7 @@ public class WordPOSCrossValidatorTool
         File corpusFile = null;
         String encoding = "UTF-8";
         String algType = "MAXENT";
+        String datatype = "pos";
         String contextClass = "com.lc.nlp4han.pos.word.DefaultWordPOSContextGenerator";
         for (int i = 0; i < args.length; i++)
         {
@@ -97,6 +99,11 @@ public class WordPOSCrossValidatorTool
             else if (args[i].equals("-encoding"))
             {
                 encoding = args[i + 1];
+                i++;
+            }
+            else if (args[i].equals("-datatype"))
+            {
+            	datatype = args[i + 1];
                 i++;
             }
             else if (args[i].equals("-cutoff"))
@@ -135,9 +142,16 @@ public class WordPOSCrossValidatorTool
 
         // TODO: 词和词性间分隔符作为参数
         String seperator = "_";
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
-        ObjectStream<WordPOSSample> sampleStream = new WordTagSampleStream(lineStream, seperator);
-        
+        ObjectStream<String> lineStream ;
+        ObjectStream<WordPOSSample> sampleStream;
+        if(datatype.equals("tree")){
+        	lineStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        	sampleStream = new WordTagSampleStream(lineStream, seperator, "tree");
+        }else{
+        	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        	sampleStream = new WordTagSampleStream(lineStream, seperator, "pos");
+        }
+
         AbstractStringContextGenerator contextGenerator = (AbstractStringContextGenerator) Class.forName(contextClass).newInstance();
 
         crossValidator.evaluate(sampleStream, folds, contextGenerator);

@@ -16,7 +16,7 @@ import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreTreatment;
+import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.model.SequenceClassificationModel;
@@ -278,7 +278,7 @@ public class SRLMEForClassificationNoNull implements SemanticRoleLabeler{
 	@Override
 	public SRLTree[] kSrltree(int k, TreeNode tree, int[] predicateinfo) {
 		SRLSample<HeadTreeNode> sample = null;
-		TreePreTreatment.deleteNone(tree);
+		TreePreprocessTool.deleteNone(tree);
 		String str = SRLSample.indexToTrainSample(predicateinfo);
         sample = parse.parse(tree, str, ahg);
         

@@ -3,6 +3,7 @@ package com.lc.nlp4han.pos.character;
 import java.io.File;
 import java.io.IOException;
 
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.PlainTextByLineStream;
@@ -18,7 +19,7 @@ public class CharPOSCrossValidatorTool
 {
     private static void usage()
     {
-        System.out.println(CharPOSCrossValidatorTool.class.getName() + " -data <corpusFile> -encoding <encoding> [-folds <nFolds>] " + "[-cutoff <num>] [-iters <num>]");
+        System.out.println(CharPOSCrossValidatorTool.class.getName() + " -data <corpusFile> -encoding <encoding> -parsetype <parsetype> [-folds <nFolds>] " + "[-cutoff <num>] [-iters <num>]");
     }
 
     public static void main(String[] args) throws IOException
@@ -36,6 +37,7 @@ public class CharPOSCrossValidatorTool
         File corpusFile = null;
         String encoding = "UTF-8";
         String algType = "MAXENT";
+        String parsetype = "open";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data"))
@@ -46,6 +48,11 @@ public class CharPOSCrossValidatorTool
             else if (args[i].equals("-encoding"))
             {
                 encoding = args[i + 1];
+                i++;
+            }
+            else if (args[i].equals("-parsetype"))
+            {
+            	parsetype = args[i + 1];
                 i++;
             }
             else if (args[i].equals("-cutoff"))
@@ -77,8 +84,19 @@ public class CharPOSCrossValidatorTool
         
         CharPOSCrossValidation crossValidator = new CharPOSCrossValidation(params);
 
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);    
-        CharPOSSampleParser parse = new CharPOSParseOpen();
+        CharPOSSampleParser parse = null;
+        ObjectStream<String> lineStream = null;
+        if(parsetype.equals("open")){
+        	parse = new CharPOSParseOpen();
+        	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        }else if(parsetype.equals("news")){
+        	parse = new CharPOSParseNews();
+        	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        }else if(parsetype.equals("tree")){
+        	parse = new CharPOSParseTreeBank();
+        	lineStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        }
+        
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
 

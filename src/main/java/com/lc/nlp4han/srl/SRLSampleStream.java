@@ -9,7 +9,7 @@ import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreTreatment;
+import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
 import com.lc.nlp4han.ml.util.FilterObjectStream;
 import com.lc.nlp4han.ml.util.ObjectStream;
 
@@ -37,7 +37,7 @@ public class SRLSampleStream extends FilterObjectStream<String[],SRLSample<HeadT
 		if(sentence[0]!= null && sentence[1] != null){
 			try{
 				TreeNode tree = BracketExpUtil.generateTree(sentence[0]);
-				TreePreTreatment.deleteNone(tree);
+				TreePreprocessTool.deleteNone(tree);
                 sample = parse.parse(tree, sentence[1], aghw);
 			}catch(Exception e){
 				

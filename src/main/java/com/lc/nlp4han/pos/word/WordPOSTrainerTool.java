@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
@@ -29,11 +30,14 @@ public class WordPOSTrainerTool
      * @param params 最大熵模型训练参数
      * @param contextGenerator 训练上下文产生器
      * @param encoding 训练语料编码
+     * @param datatype 语料类型
+     *                 普通的词性标记语料用pos
+     *                 树库语料用tree
      * 
      * @throws java.io.IOException
      */
     public static void train(File corpusFile, File modelFile, TrainingParameters params,
-            AbstractStringContextGenerator contextGenerator, String encoding) throws IOException
+            AbstractStringContextGenerator contextGenerator, String encoding, String datatype) throws IOException
     {
         // TODO: 词和词性间分隔符作为参数
         String seperator = "_";
@@ -43,8 +47,15 @@ public class WordPOSTrainerTool
         OutputStream modelOut = null;
         try
         {
-            ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
-            ObjectStream<WordPOSSample> sampleStream = new WordTagSampleStream(lineStream, seperator);
+            ObjectStream<String> lineStream ;
+            ObjectStream<WordPOSSample> sampleStream;
+            if(datatype.equals("tree")){
+            	lineStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+            	sampleStream = new WordTagSampleStream(lineStream, seperator, "tree");
+            }else{
+            	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+            	sampleStream = new WordTagSampleStream(lineStream, seperator, "pos");
+            }
 
             long start = System.currentTimeMillis();
 
@@ -73,7 +84,7 @@ public class WordPOSTrainerTool
 
     private static void usage()
     {
-        System.out.println(WordPOSTrainerTool.class.getName() + " -data <corpusFile> -model <modelFile> -encoding <encoding> "
+        System.out.println(WordPOSTrainerTool.class.getName() + " -data <corpusFile> -model <modelFile> -datatype <datatype> -encoding <encoding> "
                 + "[-cutoff <num>] [-iters <num>]");
     }
 
@@ -92,6 +103,7 @@ public class WordPOSTrainerTool
         File modelFile = null;
         String encoding = "UTF-8";
         String algType = "MAXENT";
+        String datatype = "pos";
         String contextClass = "com.lc.nlp4han.pos.word.DefaultWordPOSContextGenerator";
         for (int i = 0; i < args.length; i++)
         {
@@ -102,6 +114,10 @@ public class WordPOSTrainerTool
             } else if (args[i].equals("-model"))
             {
                 modelFile = new File(args[i + 1]);
+                i++;
+            } else if (args[i].equals("-datatype"))
+            {
+            	datatype = args[i + 1];
                 i++;
             } else if (args[i].equals("-encoding"))
             {
@@ -134,6 +150,6 @@ public class WordPOSTrainerTool
         params.put(TrainingParameters.ALGORITHM_PARAM, algType);
 
         AbstractStringContextGenerator contextGenerator = (AbstractStringContextGenerator) Class.forName(contextClass).newInstance();
-        train(corpusFile, modelFile, params, contextGenerator, encoding);
+        train(corpusFile, modelFile, params, contextGenerator, encoding, datatype);
     }
 }

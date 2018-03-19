@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 
+import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
@@ -26,6 +27,8 @@ public class CharPOSEvalTool
      * 
      * 各种评价指标结果会输出到控制台，错误的结果会输出到指定文件
      * 
+     * @param parsetype
+     *            解析文本的类
      * @param modelFile
      *            系模型文件
      * @param goldFile
@@ -36,14 +39,25 @@ public class CharPOSEvalTool
      *            黄金标准文件编码
      * @throws IOException
      */
-    public static void eval(File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException
+    public static void eval(String parsetype, File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException
     {
         System.out.println("构建词典...");
         HashSet<String> dict = CorpusStat.buildDict(trainFile.toString(), encoding);
 
         System.out.println("训练模型...");  
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        CharPOSSampleParser parse = new CharPOSParseOpen();
+        CharPOSSampleParser parse = null;
+        ObjectStream<String> lineStream = null;
+        if(parsetype.equals("open")){
+        	parse = new CharPOSParseOpen();
+        	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
+        }else if(parsetype.equals("news")){
+        	parse = new CharPOSParseNews();
+        	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
+        }else if(parsetype.equals("tree")){
+        	parse = new CharPOSParseTreeBank();
+        	lineStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(trainFile), encoding);
+        }
+        
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
         long start = System.currentTimeMillis();
@@ -65,10 +79,20 @@ public class CharPOSEvalTool
         
         WordPOSMeasure measure = new WordPOSMeasure(dict);
         evaluator.setMeasure(measure);
-
-        ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
+        
+        ObjectStream<String> goldStream = null;
+        if(parsetype.equals("open")){
+        	parse = new CharPOSParseOpen();
+        	goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
+        }else if(parsetype.equals("news")){
+        	parse = new CharPOSParseNews();
+        	goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
+        }else if(parsetype.equals("tree")){
+        	parse = new CharPOSParseTreeBank();
+        	goldStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(goldFile), encoding);
+        }
+        
         ObjectStream<CharPOSSample> testStream = new CharPOSSampleStream(goldStream, parse);
-
         start = System.currentTimeMillis();
         evaluator.evaluate(testStream);
         System.out.println("标注时间： " + (System.currentTimeMillis() - start));
@@ -81,7 +105,7 @@ public class CharPOSEvalTool
 
     private static void usage()
     {
-        System.out.println(CharPOSEvalTool.class.getName() + " -data <trainFile> -gold <goldFile> -encoding <encoding> [-error <errorFile>]" + " [-cutoff <num>] [-iters <num>]");
+        System.out.println(CharPOSEvalTool.class.getName() + " -data <trainFile> -gold <goldFile> -parsetype <parsetype> -encoding <encoding> [-error <errorFile>]" + " [-cutoff <num>] [-iters <num>]");
     }
 
     public static void main(String[] args) throws IOException
@@ -97,6 +121,7 @@ public class CharPOSEvalTool
         String goldFile = null;
         String errorFile = null;
         String encoding = null;
+        String parsetype = "open";
         int cutoff = 3;
         int iters = 100;
         for (int i = 0; i < args.length; i++)
@@ -109,6 +134,11 @@ public class CharPOSEvalTool
             else if (args[i].equals("-gold"))
             {
                 goldFile = args[i + 1];
+                i++;
+            }
+            else if (args[i].equals("-parsetype"))
+            {
+            	parsetype = args[i + 1];
                 i++;
             }
             else if (args[i].equals("-error"))
@@ -139,9 +169,9 @@ public class CharPOSEvalTool
 
         if (errorFile != null)
         {
-            eval(new File(trainFile), params, new File(goldFile), encoding, new File(errorFile));
+            eval(parsetype, new File(trainFile), params, new File(goldFile), encoding, new File(errorFile));
         }
         else
-            eval(new File(trainFile), params, new File(goldFile), encoding, null);
+            eval(parsetype, new File(trainFile), params, new File(goldFile), encoding, null);
     }
 }

@@ -17,16 +17,18 @@ public class WordTagSampleStream extends FilterObjectStream<String, WordPOSSampl
   private static Logger logger = Logger.getLogger(WordTagSampleStream.class.getName());
   
   private String seperator;
+  private String datatype;
 
   /**
    * Initializes the current instance.
    *
    * @param sentences the sentences
    */
-  public WordTagSampleStream(ObjectStream<String> sentences, String sep) {
+  public WordTagSampleStream(ObjectStream<String> sentences, String sep, String datatype) {
     super(sentences);
     
     this.seperator = sep;
+    this.datatype = datatype;
   }
 
   /**
@@ -49,7 +51,7 @@ public class WordTagSampleStream extends FilterObjectStream<String, WordPOSSampl
         
       WordPOSSample sample;
       try {
-        sample = WordPOSSample.parse(sentence, seperator);
+        sample = WordPOSSample.parse(sentence, seperator, datatype);
       } catch (InvalidFormatException e) {
 
         if (logger.isLoggable(Level.WARNING)) {

@@ -1,10 +1,13 @@
 
 package com.lc.nlp4han.pos.word;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.BracketExpUtil;
+import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.InvalidFormatException;
 
 /**
@@ -17,6 +20,8 @@ public class WordPOSSample {
   private List<String> tags;
 
   private final String[][] additionalContext;
+  
+  private static List<TreeNode> posTree = new ArrayList<TreeNode>();
 
   public WordPOSSample(String sentence[], String tags[]) {
     this(sentence, tags, null);
@@ -104,27 +109,73 @@ public class WordPOSSample {
       return result.toString();
     }
 
-  public static WordPOSSample parse(String sentenceString, String sep) throws InvalidFormatException {
+  /**
+   * 解析语料
+   * @param sentenceString 句子
+   *         读入的是树库文件是，这里的句子是括号表达式
+   * @param sep 句子中的分割符
+   * @param datatype 语料的类型，可以是pos，或者是树库文件
+   *         如果是标准的词性标记文件，用pos表示
+   *         如果是树库语料，用tree表示
+   * @return
+   * @throws InvalidFormatException
+   */
+  public static WordPOSSample parse(String sentenceString, String sep, String datatype) throws InvalidFormatException {
 
-    String tokenTags[] = sentenceString.split("\\s");//WhitespaceTokenizer.INSTANCE.tokenize(sentenceString);
+	  if(datatype.equals("tree")){
+		  TreeNode tree = BracketExpUtil.generateTree(sentenceString);
+		  posTree.clear();
+		  getWordAndPosTree(tree);
+		  
+		  ArrayList<String> poses = new ArrayList<String>();
+		  ArrayList<String> words = new ArrayList<String>();
 
-    String sentence[] = new String[tokenTags.length];
-    String tags[] = new String[tokenTags.length];
+		  for (int i = 0; i < posTree.size(); i++) {	
+			  String word = posTree.get(i).getFirstChildName();	
+			  String pos = posTree.get(i).getNodeName();
+			  words.add(word);
+			  poses.add(pos);
+		  }
+		  
+		  return new WordPOSSample(words.toArray(new String[words.size()]), poses.toArray(new String[poses.size()]));
+	  
+	  }else{		  
+		  String tokenTags[] = sentenceString.split("\\s");//WhitespaceTokenizer.INSTANCE.tokenize(sentenceString);
+		  
+		  String sentence[] = new String[tokenTags.length]; 
+		  String tags[] = new String[tokenTags.length];
+	  
+		  for (int i = 0; i < tokenTags.length; i++) {		    
+			  int split = tokenTags[i].lastIndexOf(sep);
 
-    for (int i = 0; i < tokenTags.length; i++) {
-      int split = tokenTags[i].lastIndexOf(sep);
-
-      if (split == -1) {
-        throw new InvalidFormatException("Cannot find \"" + sep + "\" inside token '" + tokenTags[i] + "'!");
-      }
-
-      sentence[i] = tokenTags[i].substring(0, split);
-      tags[i] = tokenTags[i].substring(split+1);
-    }
-
-    return new WordPOSSample(sentence, tags);
+			  if (split == -1) {		      
+				  throw new InvalidFormatException("Cannot find \"" + sep + "\" inside token '" + tokenTags[i] + "'!");		    
+			  }
+			  
+			  sentence[i] = tokenTags[i].substring(0, split);		    
+			  tags[i] = tokenTags[i].substring(split+1);
+		  }
+		  
+		  return new WordPOSSample(sentence, tags);
+	  }
   }
 
+  /**
+	 * 获得词性标记子树序列
+	 * @param tree
+	 */
+	private static void getWordAndPosTree(TreeNode tree){
+		//如果是叶子节点，肯定是具体的词，父节点是词性
+		if(tree.getChildren().size() == 0){
+			posTree.add(tree.getParent());
+		}else{
+			//不是叶子节点的时候，递归
+			for (TreeNode node : tree.getChildren()) {
+				getWordAndPosTree(node);
+			}
+		}		
+	}
+  
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

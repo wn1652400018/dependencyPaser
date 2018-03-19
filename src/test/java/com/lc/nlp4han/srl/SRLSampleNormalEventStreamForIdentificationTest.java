@@ -15,7 +15,7 @@ import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreTreatment;
+import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
 import com.lc.nlp4han.ml.model.Event;
 
 /**
@@ -37,7 +37,7 @@ public class SRLSampleNormalEventStreamForIdentificationTest {
 				+ "(NP(CD 1,620))(, ,)(NP(NP(DT a)(NN drop))(PP(IN of)(NP (CD 3.2)(NN %)))"
 				+ "(PP-DIR(IN from)(NP(JJ last)(NN year)))))(, ,)(PP(VBG according)(PP(TO to)"
 				+ "(NP(NNP Publishers)(NNP Information)(NNP Bureau))))))(. .)))");		
-		TreePreTreatment.deleteNone(tree1);
+		TreePreprocessTool.deleteNone(tree1);
 		
 		AbstractParseStrategy<HeadTreeNode> ttss = new SRLParseNormal();
 		String roles1 = "wsj/00/wsj0012.mrg 9 12 gold shore.01 i---a 4:1*10:0-ARG0 12:0,13:1-rel 14:2-ARG1";

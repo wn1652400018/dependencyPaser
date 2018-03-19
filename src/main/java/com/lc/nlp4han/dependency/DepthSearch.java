@@ -74,7 +74,7 @@ public class DepthSearch {
 		u = getFirst(graph, k);
 		while(u != -1){
 			if(visited[u] == 0){
-				hasForestDFS(graph,u,visited);
+				hasForestDFS(graph, u, visited);
 			}
 			u = getNext(graph, k, u);
 		}
