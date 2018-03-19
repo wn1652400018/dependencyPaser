@@ -11,7 +11,6 @@ import com.lc.nlp4han.ngram.utils.NGram;
 import com.lc.nlp4han.ngram.utils.NGramGenerator;
 import com.lc.nlp4han.ngram.utils.PseudoWord;
 
-
 /**
  *<ul>
  *<li>Description: 已经使用平滑算法训练的n元模型（在NGramLanguageModelTrainer.java实现） 
@@ -252,7 +251,7 @@ public class NGramLanguageModel implements LanguageModel {
 					
 				NGram end = list.get(list.size() - 1);
 				if(end.length() == order)
-					list.add(end.removeFirst().addLast(PseudoWord.End));
+					list.add(end.addLast(PseudoWord.End).removeFirst());
 				else
 					list.add(end.addLast(PseudoWord.End));
 			}else {//序列长度小于order
@@ -264,7 +263,7 @@ public class NGramLanguageModel implements LanguageModel {
 				
 				NGram end = list.get(0);
 				if(end.length() == order)
-					list.add(end.removeFirst().addLast(PseudoWord.End));
+					list.add(end.addLast(PseudoWord.End).removeFirst());
 				else
 					list.add(end.addLast(PseudoWord.End));
 			}

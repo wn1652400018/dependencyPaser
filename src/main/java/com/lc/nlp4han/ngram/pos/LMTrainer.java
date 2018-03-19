@@ -17,7 +17,6 @@ import com.lc.nlp4han.ngram.utils.AbstractGramSentenceStream;
 import com.lc.nlp4han.ngram.utils.StringGramSentenceStream;
 
 
-@SuppressWarnings("unused")
 public class LMTrainer {
 	
 	public static void main(String[] args) throws IOException {		
