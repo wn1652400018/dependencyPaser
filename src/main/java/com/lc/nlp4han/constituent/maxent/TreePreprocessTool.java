@@ -29,10 +29,9 @@ public class TreePreprocessTool {
 	 */
 	public static void pretreatment(String frompath, String topath, boolean haveWordIndex) throws UnsupportedOperationException, FileNotFoundException, IOException{
 		//读取一颗树
-		PlainTextByTreeStream lineStream = null;	
+		PlainTextByTreeStream lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(new File(frompath)), "utf8");	
 		//创建输出流
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(topath)));
-		lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(new File(frompath)), "utf8");
 		String tree = "";
 		while((tree = lineStream.read()) != ""){
 			TreeNode node = BracketExpUtil.generateTree(tree);

@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 
-import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
@@ -53,9 +52,6 @@ public class CharPOSEvalTool
         }else if(parsetype.equals("news")){
         	parse = new CharPOSParseNews();
         	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        }else if(parsetype.equals("tree")){
-        	parse = new CharPOSParseTreeBank();
-        	lineStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(trainFile), encoding);
         }
         
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
@@ -87,9 +83,6 @@ public class CharPOSEvalTool
         }else if(parsetype.equals("news")){
         	parse = new CharPOSParseNews();
         	goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-        }else if(parsetype.equals("tree")){
-        	parse = new CharPOSParseTreeBank();
-        	goldStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(goldFile), encoding);
         }
         
         ObjectStream<CharPOSSample> testStream = new CharPOSSampleStream(goldStream, parse);

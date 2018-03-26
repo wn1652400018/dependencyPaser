@@ -193,7 +193,7 @@ public class POSTaggerRefCrossValidatorTool
         String seperator = "_";
 
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
-        ObjectStream<WordPOSSample> sampleStream = new WordTagSampleStream(lineStream, seperator, "pos");
+        ObjectStream<WordPOSSample> sampleStream = new WordTagSampleStream(lineStream, seperator);
 
         crossValidator.evaluate(sampleStream, folds);
     }

@@ -120,7 +120,7 @@ public class POSTaggerRefEvalTool extends Evaluator<WordPOSSample>
         evaluator.setMeasure(measure);
 
         ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-        ObjectStream<WordPOSSample> testStream = new WordTagSampleStream(goldStream, seperator, "pos");
+        ObjectStream<WordPOSSample> testStream = new WordTagSampleStream(goldStream, seperator);
 
         start = System.currentTimeMillis();
         evaluator.evaluate(testStream);
@@ -159,7 +159,7 @@ public class POSTaggerRefEvalTool extends Evaluator<WordPOSSample>
         evaluator.setMeasure(measure);
 
         ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-        ObjectStream<WordPOSSample> testStream = new WordTagSampleStream(goldStream, "_", "pos");
+        ObjectStream<WordPOSSample> testStream = new WordTagSampleStream(goldStream, "_");
 
         evaluator.evaluate(testStream);
 

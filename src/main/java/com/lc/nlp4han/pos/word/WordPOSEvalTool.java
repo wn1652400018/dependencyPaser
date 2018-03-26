@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 
-import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 import com.lc.nlp4han.ml.util.Evaluator;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
@@ -88,10 +87,6 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
      * 
      * 各种评价指标结果会输出到控制台，错误的结果会输出到指定文件
      * 
-     * @param datatype 
-     *            语料类型
-     *            普通的词性标记语料用pos
-     *            树库语料用tree
      * @param modelFile
      *            系模型文件
      * @param goldFile
@@ -102,7 +97,7 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
      *            黄金标准文件编码
      * @throws IOException
      */
-    public static void eval(String datatype, File trainFile, TrainingParameters params, File goldFile, 
+    public static void eval(File trainFile, TrainingParameters params, File goldFile, 
             AbstractStringContextGenerator contextGenerator, String encoding, File errorFile) throws IOException
     {
         // TODO: 词和词性间分隔符作为参数
@@ -112,15 +107,8 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
 
         System.out.println("训练模型...");
         
-        ObjectStream<String> lineStream ;
-        ObjectStream<WordPOSSample> sampleStream;
-        if(datatype.equals("tree")){
-        	lineStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        	sampleStream = new WordTagSampleStream(lineStream, seperator, "tree");
-        }else{
-        	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
-        	sampleStream = new WordTagSampleStream(lineStream, seperator, "pos");
-        }
+        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
+        ObjectStream<WordPOSSample> sampleStream = new WordTagSampleStream(lineStream, seperator);
         
         long start = System.currentTimeMillis();
         ModelWrapper model = POSTaggerWordME.train(sampleStream, params, contextGenerator);
@@ -141,15 +129,8 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
         WordPOSMeasure measure = new WordPOSMeasure(dict);
         evaluator.setMeasure(measure);
 
-        ObjectStream<String> goldStream ;
-        ObjectStream<WordPOSSample> testStream;
-        if(datatype.equals("tree")){
-        	goldStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-        	testStream = new WordTagSampleStream(goldStream, seperator, "tree");
-        }else{
-        	goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
-        	testStream = new WordTagSampleStream(goldStream, seperator, "pos");
-        }
+        ObjectStream<String> goldStream  = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
+        ObjectStream<WordPOSSample> testStream = new WordTagSampleStream(goldStream, seperator);
         
         start = System.currentTimeMillis();
         evaluator.evaluate(testStream);
@@ -164,7 +145,7 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
 
     private static void usage()
     {
-        System.out.println(WordPOSEvalTool.class.getName() + " -data <trainFile> -gold <goldFile> -datatype <datatype> -encoding <encoding> [-error <errorFile>]" + " [-cutoff <num>] [-iters <num>]");
+        System.out.println(WordPOSEvalTool.class.getName() + " -data <trainFile> -gold <goldFile> -encoding <encoding> [-error <errorFile>]" + " [-cutoff <num>] [-iters <num>]");
     }
 
     public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException
@@ -180,7 +161,6 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
         String goldFile = null;
         String errorFile = null;
         String encoding = null;
-        String datatype = "pos";
         int cutoff = 3;
         int iters = 100;
         String contextClass = "com.lc.nlp4han.pos.word.DefaultWordPOSContextGenerator";
@@ -194,11 +174,6 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
             else if (args[i].equals("-gold"))
             {
                 goldFile = args[i + 1];
-                i++;
-            }
-            else if (args[i].equals("-datatype"))
-            {
-            	datatype = args[i + 1];
                 i++;
             }
             else if (args[i].equals("-error"))
@@ -235,9 +210,9 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
         AbstractStringContextGenerator contextGenerator = (AbstractStringContextGenerator) Class.forName(contextClass).newInstance();
         if (errorFile != null)
         {
-            eval(datatype, new File(trainFile), params, new File(goldFile), contextGenerator, encoding, new File(errorFile));
+            eval(new File(trainFile), params, new File(goldFile), contextGenerator, encoding, new File(errorFile));
         }
         else
-            eval(datatype, new File(trainFile), params, new File(goldFile), contextGenerator, encoding, null);
+            eval(new File(trainFile), params, new File(goldFile), contextGenerator, encoding, null);
     }
 }

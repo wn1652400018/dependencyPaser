@@ -3,7 +3,6 @@ package com.lc.nlp4han.pos.character;
 import java.io.File;
 import java.io.IOException;
 
-import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.PlainTextByLineStream;
@@ -92,9 +91,6 @@ public class CharPOSCrossValidatorTool
         }else if(parsetype.equals("news")){
         	parse = new CharPOSParseNews();
         	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
-        }else if(parsetype.equals("tree")){
-        	parse = new CharPOSParseTreeBank();
-        	lineStream = new PlainTextByTreeStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         }
         
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
