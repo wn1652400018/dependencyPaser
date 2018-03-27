@@ -2,6 +2,9 @@ package com.lc.nlp4han.ml.hmm.stream;
 
 import java.io.IOException;
 
+import com.lc.nlp4han.ml.util.FilterObjectStream;
+import com.lc.nlp4han.ml.util.ObjectStream;
+
 /**
  *<ul>
  *<li>Description: 抽象样本流 
