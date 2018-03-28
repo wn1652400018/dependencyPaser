@@ -9,7 +9,7 @@ import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreTreatment;
+import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
 
 /**
  * 将树转成语义角色标注树的单元测试
@@ -42,7 +42,7 @@ public class TreeToSRLTreeTest {
 				+ "(NP(CD 1,620))(, ,)(NP(NP(DT a)(NN drop))(PP(IN of)(NP (CD 3.2)(NN %)))"
 				+ "(PP-DIR(IN from)(NP(JJ last)(NN year)))))(, ,)(PP(VBG according)(PP(TO to)"
 				+ "(NP(NNP Publishers)(NNP Information)(NNP Bureau))))))(. .)))");	
-		TreePreTreatment.deleteNone(tree);
+		TreePreprocessTool.deleteNone(tree);
 		
 		SRLSample<HeadTreeNode> sample = parse.parse(tree, roles, ahg);
 		SRLTreeNode srltree = TreeToSRLTree.treeToSRLTree(tree, sample.getArgumentTree(), sample.getLabelInfo());

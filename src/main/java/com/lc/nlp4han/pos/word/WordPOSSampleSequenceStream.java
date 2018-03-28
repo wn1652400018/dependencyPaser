@@ -28,7 +28,7 @@ public class WordPOSSampleSequenceStream implements SequenceStream {
   }
 
   @SuppressWarnings("unchecked")
-  public Event[] updateContext(Sequence sequence, AbstractModel model) {
+  public Event[] updateContext(@SuppressWarnings("rawtypes") Sequence sequence, AbstractModel model) {
     Sequence<WordPOSSample> pss = sequence;
     POSTagger tagger = new POSTaggerWordME(new ModelWrapper(model));
     String[] sentence = pss.getSource().getSentence();
@@ -40,7 +40,8 @@ public class WordPOSSampleSequenceStream implements SequenceStream {
     return events;
   }
 
-  @Override
+  @SuppressWarnings("rawtypes")
+@Override
   public Sequence read() throws IOException {
 
     WordPOSSample sample = psi.read();

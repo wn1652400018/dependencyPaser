@@ -46,7 +46,7 @@ public class DependencySampleParserStanford implements DependencySampleParser{
 		}
 
 		return new DependencySample(word.toArray(new String[word.size()]), 
-				new String[]{}, 
+				null, 
 				dependency.toArray(new String[dependency.size()]), 
 				dependencyWords.toArray(new String[dependencyWords.size()]), 
 				dependencyIndices.toArray(new String[dependencyIndices.size()]));

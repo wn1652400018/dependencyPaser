@@ -16,7 +16,7 @@ public class CharPOSTrainerTool
 {
     private static void usage()
     {
-        System.out.println(CharPOSTrainerTool.class.getName() + " -data <corpusFile> -model <modelFile> -encoding <encoding> " + "[-cutoff <num>] [-iters <num>]");
+        System.out.println(CharPOSTrainerTool.class.getName() + " -data <corpusFile> -model <modelFile> -parsetype <parsetype> -encoding <encoding> " + "[-cutoff <num>] [-iters <num>]");
     }
 
     public static void main(String[] args) throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException
@@ -34,6 +34,7 @@ public class CharPOSTrainerTool
         File modelFile = null;
         String encoding = "UTF-8";
         String algType = "MAXENT";
+        String parsetype = "open";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data"))
@@ -44,6 +45,11 @@ public class CharPOSTrainerTool
             else if (args[i].equals("-model"))
             {
                 modelFile = new File(args[i + 1]);
+                i++;
+            }
+            else if (args[i].equals("-parsetype"))
+            {
+            	parsetype = args[i + 1];
                 i++;
             }
             else if (args[i].equals("-encoding"))
@@ -73,13 +79,19 @@ public class CharPOSTrainerTool
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
         params.put(TrainingParameters.ALGORITHM_PARAM, algType);
 
-        CharPOSSampleParser parse = new CharPOSParseOpen();
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        CharPOSSampleParser parse = null;
+        ObjectStream<String> lineStream = null;
+        if(parsetype.equals("open")){
+        	parse = new CharPOSParseOpen();
+        	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        }else if(parsetype.equals("news")){
+        	parse = new CharPOSParseNews();
+        	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        }
         ObjectStream<CharPOSSample> sampleStream = new CharPOSSampleStream(lineStream, parse);
         CharPOSContextGenerator contextGen = new CharPOSContextGeneratorConf();
         ModelWrapper model = CharPOSTaggerME.train(sampleStream, params, contextGen);
         OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
         model.serialize(modelOut);
-
     }
 }

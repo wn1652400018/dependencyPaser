@@ -17,7 +17,7 @@ public class WordPOSSample {
   private List<String> tags;
 
   private final String[][] additionalContext;
-
+  
   public WordPOSSample(String sentence[], String tags[]) {
     this(sentence, tags, null);
   }
@@ -104,27 +104,39 @@ public class WordPOSSample {
       return result.toString();
     }
 
+  /**
+   * 解析语料
+   * @param sentenceString 句子
+   *         读入的是树库文件是，这里的句子是括号表达式
+   * @param sep 句子中的分割符
+   * @param datatype 语料的类型，可以是pos，或者是树库文件
+   *         如果是标准的词性标记文件，用pos表示
+   *         如果是树库语料，用tree表示
+   * @return
+   * @throws InvalidFormatException
+   */
   public static WordPOSSample parse(String sentenceString, String sep) throws InvalidFormatException {
+ 
+	  String tokenTags[] = sentenceString.split("\\s");//WhitespaceTokenizer.INSTANCE.tokenize(sentenceString);
+		    
+	  String sentence[] = new String[tokenTags.length];   
+	  String tags[] = new String[tokenTags.length];
+	    
+	  for (int i = 0; i < tokenTags.length; i++) {		    
+			  
+		  int split = tokenTags[i].lastIndexOf(sep);
 
-    String tokenTags[] = sentenceString.split("\\s");//WhitespaceTokenizer.INSTANCE.tokenize(sentenceString);
+		  if (split == -1) {		      
+			  throw new InvalidFormatException("Cannot find \"" + sep + "\" inside token '" + tokenTags[i] + "'!");		    
+		  }
+			  
+		  sentence[i] = tokenTags[i].substring(0, split);		      
+		  tags[i] = tokenTags[i].substring(split+1);
+	  }
 
-    String sentence[] = new String[tokenTags.length];
-    String tags[] = new String[tokenTags.length];
-
-    for (int i = 0; i < tokenTags.length; i++) {
-      int split = tokenTags[i].lastIndexOf(sep);
-
-      if (split == -1) {
-        throw new InvalidFormatException("Cannot find \"" + sep + "\" inside token '" + tokenTags[i] + "'!");
-      }
-
-      sentence[i] = tokenTags[i].substring(0, split);
-      tags[i] = tokenTags[i].substring(split+1);
-    }
-
-    return new WordPOSSample(sentence, tags);
+	  return new WordPOSSample(sentence, tags);
   }
-
+  
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

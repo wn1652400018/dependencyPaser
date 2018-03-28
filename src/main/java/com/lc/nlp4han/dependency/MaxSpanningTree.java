@@ -97,7 +97,7 @@ public class MaxSpanningTree {
 			j=0;		
 		}
 		
-		return new DependencySample(sentence,pos,dependencyRec,dependencyWordsRec,dependencyIndiceRec);
+		return new DependencySample(sentence, pos, dependencyRec, dependencyWordsRec, dependencyIndiceRec);
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public class MaxSpanningTree {
 			}else{
 				//一行都是null的情况
 				dependencyIndiceRec[i-1] = String.valueOf(recordNull);
-				boolean isLoop = HasForestOrLoop.hasLoop(dependencyIndiceRec,recordNull);
+				boolean isLoop = HasForestOrLoop.hasLoop(dependencyIndiceRec, recordNull);
 				if(isLoop){
 					dependencyRec[i-1] = dependency[i][recordNull];		
 					dependencyWordsRec[i-1] = sentence[recordNull];
@@ -197,7 +197,7 @@ public class MaxSpanningTree {
 			maxWeightNull = -1;	
 		}
 		
-		return new DependencySample(sentence,pos,dependencyRec,dependencyWordsRec,dependencyIndiceRec);
+		return new DependencySample(sentence, pos, dependencyRec, dependencyWordsRec, dependencyIndiceRec);
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class MaxSpanningTree {
 				
 			}
 			
-			DependencySample sample = new DependencySample(sentence,pos,
+			DependencySample sample = new DependencySample(sentence, pos,
 					wordsDepList.toArray(new String[wordsDepList.size()]),
 					wordsList.toArray(new String[wordsList.size()]),
 					depIndiceList.toArray(new String[depIndiceList.size()]));
@@ -296,7 +296,6 @@ public class MaxSpanningTree {
 		String[][] proba = phraseProba.getKProba();//获得概率
 		String[][] dependency = phraseProba.getKDependency();//获得关系
 		String[] sentence = phraseProba.getSentence();//词语
-		String[] pos = phraseProba.getPos();//词性
 		
 		Queue<DepDatum> queue = new PriorityQueue<>();//为了排序用的
 		int j = 0;
@@ -310,7 +309,7 @@ public class MaxSpanningTree {
 				for (int l = 0; l < temp1.length && l < temp2.length; l++) {
 					if(temp2[l].compareTo("null") != 0){
 						//最大的K个概率就是队列最前面的几个，然后也能根据下标取到K个标记
-						queue.add(new DepDatum(Double.parseDouble(temp1[l]), indexk++, temp2[l], j, sentence[j], pos[j]));
+						queue.add(new DepDatum(Double.parseDouble(temp1[l]), indexk++, temp2[l], j, sentence[j]));
 					}				
 				}
 			}

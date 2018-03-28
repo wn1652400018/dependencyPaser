@@ -9,7 +9,7 @@ import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreTreatment;
+import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
 
 /**
  * 将一颗语义角色树输出为中括号形式的测试
@@ -33,7 +33,7 @@ public class SRLTreeToSRLBracketTest {
 				+ "(NP(CD 1,620))(, ,)(NP(NP(DT a)(NN drop))(PP(IN of)(NP (CD 3.2)(NN %)))"
 				+ "(PP-DIR(IN from)(NP(JJ last)(NN year)))))(, ,)(PP(VBG according)(PP(TO to)"
 				+ "(NP(NNP Publishers)(NNP Information)(NNP Bureau))))))(. .)))");	
-		TreePreTreatment.deleteNone(tree);
+		TreePreprocessTool.deleteNone(tree);
 		
 		SRLSample<HeadTreeNode> sample = parse.parse(tree, roles, ahg);
 		SRLTreeNode srltree = TreeToSRLTree.treeToSRLTree(tree, sample.getArgumentTree(), sample.getLabelInfo());
@@ -42,7 +42,7 @@ public class SRLTreeToSRLBracketTest {
 		
 		String roles1 = "wsj/00/wsj_0071.mrg 37 9 gold go.13 pn--a 7:1-ARG1 9:1-rel";
 		TreeNode tree1 = BracketExpUtil.generateTree("((S(S(NP-SBJ (PRP We))(VP (VBD got)(NP(PRP$ our)(CD two)(NNS six-packs))))(: --)(CC and)(S(NP-SBJ(PRP they))(VP (VBP 're) (VP (VBN gone) )))(. .)('' '')))");	
-		TreePreTreatment.deleteNone(tree1);	
+		TreePreprocessTool.deleteNone(tree1);	
 		
 		SRLSample<HeadTreeNode> sample1 = parse.parse(tree1, roles1, ahg);
 		SRLTreeNode srltree1 = TreeToSRLTree.treeToSRLTree(tree1, sample1.getArgumentTree(), sample1.getLabelInfo());

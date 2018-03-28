@@ -9,7 +9,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 /**
  * 
@@ -81,7 +80,8 @@ public class CorpusSplit
         String sentence = null;
         PrintWriter train = new PrintWriter(new OutputStreamWriter(new FileOutputStream(trainFile), encoding));
         PrintWriter test = new PrintWriter(new OutputStreamWriter(new FileOutputStream(testFile), encoding));
-        int n = 0;
+        @SuppressWarnings("unused")
+		int n = 0;
         ArrayList<String> sentences = new ArrayList<String>();
         while ((sentence = in.readLine()) != null)
         {

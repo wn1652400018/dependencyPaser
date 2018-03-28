@@ -25,7 +25,6 @@ public class WordTagSampleStream extends FilterObjectStream<String, WordPOSSampl
    */
   public WordTagSampleStream(ObjectStream<String> sentences, String sep) {
     super(sentences);
-    
     this.seperator = sep;
   }
 

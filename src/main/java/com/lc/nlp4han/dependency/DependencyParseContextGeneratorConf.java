@@ -140,18 +140,19 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	 */
 	@Override
 	public String toString() {
+		
 		return "PwordPpos="+PwordPposSet+" "+"Pword="+PwordSet+" "+"Ppos="+PposSet+" "+"CwordCpos="+CwordCposSet+" "+
-	"Cword="+CwordSet+" "+"Cpos="+CposSet+"\n"+"PwordPposCwordCpos="+PwordPposCwordCposSet+" "+
-	"PposCwordCpos="+PposCwordCposSet+" "+"PwordCwordCpos="+PwordCwordCposSet+" "+
-	"PwordPposCpos="+PwordPposCposSet+" "+"PwordPposCword="+PwordPposCwordSet+" "+
-	"PwordCword="+PwordCwordSet+" "+"PposCpos="+PposCposSet+"\n"+
-	"PposBposCpos="+PposBposCposSet+"\n"+
-	"PposPpos1Cpos_1Cpos="+PposPpos1Cpos_1CposSet+" "+"Ppos_1PposCpos_1Cpos="+Ppos_1PposCpos_1CposSet+" "+
-	"PposPpos1CposCpos1="+PposPpos1CposCpos1Set+" "+"Ppos_1PposCposCpos1="+Ppos_1PposCposCpos1Set+"\n"+
-	"dis="+disSet+" "+"PwordCwordDis="+PwordCwordDisSet+" "+"PposCposDis="+PposCposDisSet+"\n"+
-	"Ppos_1="+Ppos_1Set+" "+"Ppos1="+Ppos1Set+" "+"Cpos_1="+Cpos_1Set+" "+"Cpos1="+Cpos1Set+"\n"+
-	"Ppos_2="+Ppos_2Set+" "+"Ppos2="+Ppos2Set+" "+"Cpos_2="+Cpos_2Set+" "+"Cpos2="+Cpos2Set+"\n"+
-	"PposCposPpos_1="+PposCposPpos_1Set+" "+"PposCposCpos_1="+PposCposCpos_1Set+" "+"PposCposPpos1="+PposCposPpos1Set+" "+"PposCposCpos1="+PposCposCpos1Set;
+				"Cword="+CwordSet+" "+"Cpos="+CposSet+"\n"+"PwordPposCwordCpos="+PwordPposCwordCposSet+" "+
+				"PposCwordCpos="+PposCwordCposSet+" "+"PwordCwordCpos="+PwordCwordCposSet+" "+
+				"PwordPposCpos="+PwordPposCposSet+" "+"PwordPposCword="+PwordPposCwordSet+" "+
+				"PwordCword="+PwordCwordSet+" "+"PposCpos="+PposCposSet+"\n"+
+				"PposBposCpos="+PposBposCposSet+"\n"+
+				"PposPpos1Cpos_1Cpos="+PposPpos1Cpos_1CposSet+" "+"Ppos_1PposCpos_1Cpos="+Ppos_1PposCpos_1CposSet+" "+
+				"PposPpos1CposCpos1="+PposPpos1CposCpos1Set+" "+"Ppos_1PposCposCpos1="+Ppos_1PposCposCpos1Set+"\n"+
+				"dis="+disSet+" "+"PwordCwordDis="+PwordCwordDisSet+" "+"PposCposDis="+PposCposDisSet+"\n"+	
+				"Ppos_1="+Ppos_1Set+" "+"Ppos1="+Ppos1Set+" "+"Cpos_1="+Cpos_1Set+" "+"Cpos1="+Cpos1Set+"\n"+	
+				"Ppos_2="+Ppos_2Set+" "+"Ppos2="+Ppos2Set+" "+"Cpos_2="+Cpos_2Set+" "+"Cpos2="+Cpos2Set+"\n"+	
+				"PposCposPpos_1="+PposCposPpos_1Set+" "+"PposCposCpos_1="+PposCposCpos_1Set+" "+"PposCposPpos1="+PposCposPpos1Set+" "+"PposCposCpos1="+PposCposCpos1Set;
 	}
 	
 	/**
@@ -164,7 +165,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	 * @return
 	 */
 	public String[] getContext(int indexi, int indexj, String[] words, String[] pos, Object[] ac) {
-			return getContext(indexi,indexj,words,pos);
+			return getContext(indexi, indexj, words, pos);
 	}
 
 	/**
@@ -176,197 +177,196 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	 * @return
 	 */
 	private String[] getContext(int indexi, int indexj, String[] words, String[] pos) {
-		String Pword,Ppos,Cword,Cpos,Ppos_1,Ppos1,Cpos_1,Cpos1,Ppos_2,Ppos2,Cpos_2,Cpos2;
+		String Pword, Ppos, Cword, Cpos, Ppos_1, Ppos1, Cpos_1, Cpos1, Ppos_2, Ppos2, Cpos_2, Cpos2;
 		Pword = Ppos = Cword = Cpos = Ppos_1 = Ppos1 = Cpos_1 = Cpos1 = Ppos_2 = Ppos2 = Cpos_2 = Cpos2 = null;
 		int dis;
 		List<String> features = new ArrayList<String>();
 		Pword = words[indexi];
-		Ppos = pos[indexi];
 		Cword = words[indexj];
-		Cpos = pos[indexj];
 		dis = indexi - indexj;
-		if(pos.length > indexi + 1){
-			Ppos1 = pos[indexi+1];
-			if(pos.length > indexi + 2){
-				Ppos2 = pos[indexi+2];
+		
+		if(pos != null){
+			Cpos = pos[indexj];
+			Ppos = pos[indexi];
+			if(pos.length > indexi + 1){
+				Ppos1 = pos[indexi+1];
+				if(pos.length > indexi + 2){
+					Ppos2 = pos[indexi+2];
+				}
 			}
-		}
-		if(pos.length > indexj + 1){
-			Cpos1 = pos[indexj+1];
-			if(pos.length > indexj + 2){
-				Cpos2 = pos[indexj+2];
+			if(pos.length > indexj + 1){
+				Cpos1 = pos[indexj+1];
+				if(pos.length > indexj + 2){
+					Cpos2 = pos[indexj+2];
+				}
 			}
-		}
-		if(indexi - 1 >= 0){
-			Ppos_1 = pos[indexi-1];
-			if(indexi - 2 >= 0){
-				Ppos_2 = pos[indexi-2];
+			if(indexi - 1 >= 0){
+				Ppos_1 = pos[indexi-1];
+				if(indexi - 2 >= 0){
+					Ppos_2 = pos[indexi-2];
+				}
 			}
-		}
-		if(indexj - 1 >= 0){
-			Cpos_1 = pos[indexj-1];
-			if(indexj - 2 >= 0){
-				Cpos_2 = pos[indexj-2];
+			if(indexj - 1 >= 0){
+				Cpos_1 = pos[indexj-1];
+				if(indexj - 2 >= 0){
+					Cpos_2 = pos[indexj-2];
+				}
 			}
+			//带有词性的特征
+			if(PwordPposSet){
+				features.add("PwordPpos="+Pword+Ppos);			
+			}
+			if(PposSet){
+				features.add("Ppos="+Ppos);
+			}
+			if(CwordCposSet){
+				features.add("CwordCpos="+Cword+Cpos);
+			}
+			if(CposSet){
+				features.add("Cpos="+Cpos);
+			}
+			if(PwordPposCwordCposSet){
+				features.add("PwordPposCwordCpos="+Pword+Ppos+Cword+Cpos);
+			}
+			if(PposCwordCposSet){
+				features.add("PposCwordCpos="+Ppos+Cword+Cpos);
+			}
+			if(PwordCwordCposSet){
+				features.add("PwordCwordCpos="+Pword+Cword+Cpos);
+			}
+			if(PwordPposCposSet){
+				features.add("PwordPposCpos="+Pword+Ppos+Cpos);
+			}
+			if(PwordPposCwordSet){
+				features.add("PwordPposCword="+Pword+Ppos+Cword);
+			}
+			if(PposCposSet){
+				features.add("PposCpos="+Ppos+Cpos);
+			}
+			if(indexi - indexj > 1){
+				for (int i = indexj + 1; i < indexi; i++) {
+					if(PposBposCposSet){
+						features.add("PposBposCposSet="+Ppos+pos[i]+Cpos);	
+					}
+				}	
+			}else if(indexj - indexi > 1){
+				for (int i = indexi + 1; i < indexj; i++) {
+					if(PposBposCposSet){
+						features.add("PposBposCposSet="+Ppos+pos[i]+Cpos);	
+					}
+				}
+			}
+			if(Ppos1 != null && Cpos_1 != null){
+				if(PposPpos1Cpos_1CposSet){
+					features.add("PposPpos1Cpos_1Cpos="+Ppos+Ppos1+Cpos_1+Cpos);	
+				}
+			}
+			if(Ppos_1 != null && Cpos_1 != null){
+				if(Ppos_1PposCpos_1CposSet){
+					features.add("Ppos_1PposCpos_1Cpos="+Ppos_1+Ppos+Cpos_1+Cpos);	
+				}
+			}
+			if(Ppos1 != null && Cpos1 != null){
+				if(PposPpos1CposCpos1Set){
+					features.add("PposPpos1CposCpos1="+Ppos+Ppos1+Cpos+Cpos1);	
+				}
+			}
+			if(Ppos_1 != null && Cpos1 != null){
+				if(Ppos_1PposCposCpos1Set){
+					features.add("Ppos_1PposCposCpos1Set="+Ppos_1+Ppos+Cpos+Cpos1);	
+				}
+			}
+			//新增的特征
+			if(Ppos_1 != null){
+				if(Ppos_1Set){
+					features.add("Ppos_1="+Ppos_1);
+				}
+			}
+			
+			if(Ppos_2 != null){
+				if(Ppos_2Set){
+					features.add("Ppos_2="+Ppos_2);
+				}
+			}
+			
+			if(Ppos1 != null){
+				if(Ppos_1Set){
+					features.add("Ppos1="+Ppos1);
+				}
+			}
+			
+			if(Ppos2 != null){
+				if(Ppos_2Set){
+					features.add("Ppos2="+Ppos2);
+				}
+			}
+			
+			if(Cpos_1 != null){
+				if(Cpos_1Set){
+					features.add("Cpos_1="+Cpos_1);
+				}
+			}
+			
+			if(Cpos_2 != null){
+				if(Cpos_2Set){
+					features.add("Cpos_2="+Cpos_2);
+				}
+			}
+			
+			if(Cpos1 != null){
+				if(Cpos_1Set){
+					features.add("Cpos1="+Cpos1);
+				}
+			}
+			
+			if(Cpos2 != null){
+				if(Cpos_2Set){
+					features.add("Cpos2="+Cpos2);
+				}
+			}				
+			if(PposCposDisSet){
+				features.add("PposCposDis="+Ppos+Cpos+dis);
+			}
+			
+			if(Ppos_1 != null){
+				if(PposCposPpos_1Set){
+					features.add("PposCposPpos_1="+Ppos+Cpos+Ppos_1);
+				}
+			}
+			if(Cpos_1 != null){
+				if(PposCposCpos_1Set){
+					features.add("PposCposCpos_1="+Ppos+Cpos+Cpos_1);
+				}
+			}
+			if(Ppos1 != null){
+				if(PposCposPpos1Set){
+					features.add("PposCposPpos1="+Ppos+Cpos+Ppos1);
+				}
+			}
+			if(Cpos1 != null){
+				if(PposCposCpos1Set){
+					features.add("PposCposCpos1="+Ppos+Cpos+Cpos1);
+				}
+			}		
 		}
-		if(PwordPposSet){
-			features.add("PwordPpos="+Pword+Ppos);			
-		}
+		
+		//未带有词性的特征
 		if(PwordSet){
 			features.add("Pword="+Pword);
-		}
-		if(PposSet){
-			features.add("Ppos="+Ppos);
-		}
-		if(CwordCposSet){
-			features.add("CwordCpos="+Cword+Cpos);
 		}
 		if(CwordSet){
 			features.add("Cword="+Cword);
 		}
-		if(CposSet){
-			features.add("Cpos="+Cpos);
-		}
-		
-		if(PwordPposCwordCposSet){
-			features.add("PwordPposCwordCpos="+Pword+Ppos+Cword+Cpos);
-		}
-		if(PposCwordCposSet){
-			features.add("PposCwordCpos="+Ppos+Cword+Cpos);
-		}
-		if(PwordCwordCposSet){
-			features.add("PwordCwordCpos="+Pword+Cword+Cpos);
-		}
-		if(PwordPposCposSet){
-			features.add("PwordPposCpos="+Pword+Ppos+Cpos);
-		}
-		if(PwordPposCwordSet){
-			features.add("PwordPposCword="+Pword+Ppos+Cword);
-		}
 		if(PwordCwordSet){
 			features.add("PwordCword="+Pword+Cword);
 		}
-		if(PposCposSet){
-			features.add("PposCpos="+Ppos+Cpos);
-		}
-		
-		if(indexi - indexj > 1){
-			for (int i = indexj + 1; i < indexi; i++) {
-				if(PposBposCposSet){
-					features.add("PposBposCposSet="+Ppos+pos[i]+Cpos);	
-				}
-			}	
-		}else if(indexj - indexi > 1){
-			for (int i = indexi + 1; i < indexj; i++) {
-				if(PposBposCposSet){
-					features.add("PposBposCposSet="+Ppos+pos[i]+Cpos);	
-				}
-			}
-		}
-		
-		if(Ppos1 != null && Cpos_1 != null){
-			if(PposPpos1Cpos_1CposSet){
-				features.add("PposPpos1Cpos_1Cpos="+Ppos+Ppos1+Cpos_1+Cpos);	
-			}
-		}
-		if(Ppos_1 != null && Cpos_1 != null){
-			if(Ppos_1PposCpos_1CposSet){
-				features.add("Ppos_1PposCpos_1Cpos="+Ppos_1+Ppos+Cpos_1+Cpos);	
-			}
-		}
-		if(Ppos1 != null && Cpos1 != null){
-			if(PposPpos1CposCpos1Set){
-				features.add("PposPpos1CposCpos1="+Ppos+Ppos1+Cpos+Cpos1);	
-			}
-		}
-		if(Ppos_1 != null && Cpos1 != null){
-			if(Ppos_1PposCposCpos1Set){
-				features.add("Ppos_1PposCposCpos1Set="+Ppos_1+Ppos+Cpos+Cpos1);	
-			}
-		}
-		
 		if(disSet){			
 			features.add("dis="+dis);
 		}
-		
-		//新增的特征
-		if(Ppos_1 != null){
-			if(Ppos_1Set){
-				features.add("Ppos_1="+Ppos_1);
-			}
-		}
-		
-		if(Ppos_2 != null){
-			if(Ppos_2Set){
-				features.add("Ppos_2="+Ppos_2);
-			}
-		}
-		
-		if(Ppos1 != null){
-			if(Ppos_1Set){
-				features.add("Ppos1="+Ppos1);
-			}
-		}
-		
-		if(Ppos2 != null){
-			if(Ppos_2Set){
-				features.add("Ppos2="+Ppos2);
-			}
-		}
-		
-		if(Cpos_1 != null){
-			if(Cpos_1Set){
-				features.add("Cpos_1="+Cpos_1);
-			}
-		}
-		
-		if(Cpos_2 != null){
-			if(Cpos_2Set){
-				features.add("Cpos_2="+Cpos_2);
-			}
-		}
-		
-		if(Cpos1 != null){
-			if(Cpos_1Set){
-				features.add("Cpos1="+Cpos1);
-			}
-		}
-		
-		if(Cpos2 != null){
-			if(Cpos_2Set){
-				features.add("Cpos2="+Cpos2);
-			}
-		}
-		
 		if(PwordCwordDisSet){
 			features.add("PwordCwordDis="+Pword+Cword+dis);
 		}
-		
-		if(PposCposDisSet){
-			features.add("PposCposDis="+Ppos+Cpos+dis);
-		}
-		
-		if(Ppos_1 != null){
-			if(PposCposPpos_1Set){
-				features.add("PposCposPpos_1="+Ppos+Cpos+Ppos_1);
-			}
-		}
-		if(Cpos_1 != null){
-			if(PposCposCpos_1Set){
-				features.add("PposCposCpos_1="+Ppos+Cpos+Cpos_1);
-			}
-		}
-		if(Ppos1 != null){
-			if(PposCposPpos1Set){
-				features.add("PposCposPpos1="+Ppos+Cpos+Ppos1);
-			}
-		}
-		if(Cpos1 != null){
-			if(PposCposCpos1Set){
-				features.add("PposCposCpos1="+Ppos+Cpos+Cpos1);
-			}
-		}
-		
+
 		String[] contexts = features.toArray(new String[features.size()]);
 		return contexts;
 		

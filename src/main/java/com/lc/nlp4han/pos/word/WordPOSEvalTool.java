@@ -106,9 +106,10 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
         HashSet<String> dict = CorpusStat.buildDict(trainFile.toString(), encoding);
 
         System.out.println("训练模型...");
+        
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(trainFile), encoding);
         ObjectStream<WordPOSSample> sampleStream = new WordTagSampleStream(lineStream, seperator);
-
+        
         long start = System.currentTimeMillis();
         ModelWrapper model = POSTaggerWordME.train(sampleStream, params, contextGenerator);
         System.out.println("训练时间： " + (System.currentTimeMillis() - start));
@@ -128,9 +129,9 @@ public class WordPOSEvalTool extends Evaluator<WordPOSSample>
         WordPOSMeasure measure = new WordPOSMeasure(dict);
         evaluator.setMeasure(measure);
 
-        ObjectStream<String> goldStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
+        ObjectStream<String> goldStream  = new PlainTextByLineStream(new MarkableFileInputStreamFactory(goldFile), encoding);
         ObjectStream<WordPOSSample> testStream = new WordTagSampleStream(goldStream, seperator);
-
+        
         start = System.currentTimeMillis();
         evaluator.evaluate(testStream);
         System.out.println("标注时间： " + (System.currentTimeMillis() - start));

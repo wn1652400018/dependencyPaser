@@ -13,25 +13,23 @@ public class DepDatum implements Comparable<DepDatum>{
 	private String dependency;
 	private int wordIndex;
 	private String word;
-	private String pos;
 	
 	/**
 	 * 构造
 	 * @param value 数组中的值
 	 * @param index 值对应的下标
 	 */
-	public DepDatum(double value,int index) {
+	public DepDatum(double value, int index) {
 		this.value = value;
 		this.index = index;		
 	}
 	
-	public DepDatum(double value,int index, String dependency,int wordIndex,String word,String pos){
+	public DepDatum(double value, int index, String dependency, int wordIndex, String word){
 		this.value = value;
 		this.index = index;	
 		this.dependency = dependency;
 		this.wordIndex = wordIndex;
 		this.word = word;
-		this.pos = pos;
 	}
 	
 	/**
@@ -52,10 +50,6 @@ public class DepDatum implements Comparable<DepDatum>{
 	
 	public String getWord(){
 		return this.word;
-	}
-	
-	public String getPos(){
-		return this.pos;
 	}
 	
 	/**

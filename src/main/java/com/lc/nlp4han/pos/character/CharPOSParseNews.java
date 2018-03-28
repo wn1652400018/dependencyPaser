@@ -20,8 +20,6 @@ public class CharPOSParseNews implements CharPOSSampleParser {
 
 		ArrayList<String> characters = new ArrayList<String>();
 		ArrayList<String> words = new ArrayList<String>();
-		ArrayList<String> tags = new ArrayList<String>();
-		ArrayList<String> poses = new ArrayList<String>();
 		ArrayList<String> tagsAndposes = new ArrayList<String>();
 
 		for (int i = 1; i < wordsAndPoses.length; i++) {
@@ -59,10 +57,6 @@ public class CharPOSParseNews implements CharPOSSampleParser {
 					tagsAndposes.add("M_" + pos);
 				}
 			}
-		}
-
-		for (int i = 0; i < tags.size() && i < poses.size(); i++) {
-			tagsAndposes.add(tags.get(i) + "_" + poses.get(i));
 		}
 
 		return new CharPOSSample(characters, words, tagsAndposes);

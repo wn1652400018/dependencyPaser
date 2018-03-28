@@ -32,7 +32,7 @@ public class TreePreTreatmentTest{
 				+ "(PP-LOC(IN near)(NP(NP(NNP Rockford))(, ,)(NP(NNP Ill.))(, ,))))(VP(VBD was)(VP(VBN completed)"
 				+ "(NP(-NONE- *-17))(PP-TMP(IN in)(NP(CD 1985)))))(. .)))";
 		TreeNode tree1 = BracketExpUtil.generateTree(treestr1);
-		TreePreTreatment.deleteNone(tree1);
+		TreePreprocessTool.deleteNone(tree1);
 		String result1 = "(S(NP(NP(DT The)(QP($ $)(CD 2.5)(CD billion))(NNP Byron)(CD 1)(NN plant))"
 				+ "(PP(IN near)(NP(NP(NNP Rockford))(, ,)(NP(NNP Ill.))(, ,))))(VP(VBD was)(VP(VBN completed)"
 				+ "(PP(IN in)(NP(CD 1985)))))(. .))";
@@ -43,7 +43,7 @@ public class TreePreTreatmentTest{
 		+"(NP(NP(NNS earnings))(PP(IN of)(NP(NP(QP($ $)(CD 737.5)(CD million))(-NONE- *U*))(, ,)"
 		+ "(CC or)(NP(NP($ $)(CD 3.01)(-NONE- *U*))(NP-ADV(DT a)(NN share)))))))(. .)))";
 		TreeNode tree2 = BracketExpUtil.generateTree(treestr2);
-		TreePreTreatment.deleteNone(tree2);
+		TreePreprocessTool.deleteNone(tree2);
 		String result2 = "(S(PP(IN For)(NP(CD 1988)))(, ,)(NP(NNP Commonwealth)(NNP Edison))(VP(VBD reported)"
 				+"(NP(NP(NNS earnings))(PP(IN of)(NP(QP($ $)(CD 737.5)(CD million))(, ,)"
 				+ "(CC or)(NP(NP($ $)(CD 3.01))(NP(DT a)(NN share)))))))(. .))";
@@ -52,7 +52,7 @@ public class TreePreTreatmentTest{
 				+ "(VP(VBZ has)(RB n't)(NP(DT any)(NN authority)(S(NP-SBJ(-NONE- *))(VP(TO to)(VP(VB issue)(NP(NP(JJ new)(NN debt)(NNS obligations))"
 				+ "(PP(IN of)(NP(DT any)(NN kind))))))))))(, ,)(NP-SBJ(DT the)(NNP Treasury))(VP(VBD said)(SBAR(-NONE- 0)(S(-NONE- *T*-1))))(. .)))";
 		TreeNode tree3 = BracketExpUtil.generateTree(treestr3);
-		TreePreTreatment.deleteNone(tree3);
+		TreePreprocessTool.deleteNone(tree3);
 		String result3 = "(S(S(SBAR(IN Until)(S(NP(NNP Congress))(VP(VBZ acts))))(, ,)(NP(DT the)(NN government))"
 				+ "(VP(VBZ has)(RB n't)(NP(DT any)(NN authority)(VP(TO to)(VP(VB issue)(NP(NP(JJ new)(NN debt)(NNS obligations))"
 				+ "(PP(IN of)(NP(DT any)(NN kind)))))))))(, ,)(NP(DT the)(NNP Treasury))(VBD said)(. .))";
@@ -70,7 +70,7 @@ public class TreePreTreatmentTest{
 				+ "(S(NP-SBJ-74(-NONE- *T*-1))(VP(VBZ has)(VP(VBN been)(VP(VBN murdered)(NP(-NONE- *-74))(PP(IN by)"
 				+ "(NP-LGS(NNS thugs))))))))(, ,))(PP-CLR(TO to)(NP(PRP$ her)(NN mother))))))))))(. .)))";
 		TreeNode tree4 = BracketExpUtil.generateTree(treestr4);
-		TreePreTreatment.deleteNone(tree4);
+		TreePreprocessTool.deleteNone(tree4);
 		String result4 = "(S(ADVP(RB Then))(, ,)(SBAR(RB just)(IN as)(S(NP(DT the)(NNP Tramp))(VP(VBZ is)"
 				+ "(VP(VBN given)(NP(NP(DT a)(JJ blind)(NN girl))"
 				+ "(VP(TO to)(VB cure)))(PP(IN in)(`` ``)(NP(NNP City)(NNP Lights)))))))(, ,)"

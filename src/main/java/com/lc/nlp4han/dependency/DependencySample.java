@@ -71,7 +71,9 @@ public class DependencySample {
     public DependencySample(List<String> words, List<String> pos, List<String> dependency, List<String> dependencyWords, List<String> dependencyIndices, String[][] additionalContext){
     	//不能被修改的list
         this.words = Collections.unmodifiableList(words);
-        this.pos = Collections.unmodifiableList(pos);
+        if(pos != null){
+        	this.pos = Collections.unmodifiableList(pos);
+        }
         this.dependency = Collections.unmodifiableList(dependency);
         this.dependencyWords = Collections.unmodifiableList(dependencyWords);
         this.dependencyIndices = Collections.unmodifiableList(dependencyIndices);
@@ -100,7 +102,7 @@ public class DependencySample {
     public String toCoNLLSample(){
     	String sample = new String();
     	
-    	if(pos.size() == 0){
+    	if(pos == null){
     		for (int i = 0; i < dependency.size(); i++) {
     			sample += (i + 1) + "\t" + words.get(i + 1) + "\t" + words.get(i + 1) + "\t"
     					+ "_" + "\t"

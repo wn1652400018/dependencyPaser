@@ -137,7 +137,7 @@ public class WordPOSCrossValidatorTool
         String seperator = "_";
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         ObjectStream<WordPOSSample> sampleStream = new WordTagSampleStream(lineStream, seperator);
-        
+
         AbstractStringContextGenerator contextGenerator = (AbstractStringContextGenerator) Class.forName(contextClass).newInstance();
 
         crossValidator.evaluate(sampleStream, folds, contextGenerator);

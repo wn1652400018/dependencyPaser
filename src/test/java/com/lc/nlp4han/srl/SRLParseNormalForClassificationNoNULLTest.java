@@ -13,7 +13,7 @@ import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreTreatment;
+import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
 
 /**
  * 将样本解析成分类阶段要用的样本的样式
@@ -40,7 +40,7 @@ public class SRLParseNormalForClassificationNoNULLTest {
 				+ "(NP(CD 1,620))(, ,)(NP(NP(DT a)(NN drop))(PP(IN of)(NP (CD 3.2)(NN %)))"
 				+ "(PP-DIR(IN from)(NP(JJ last)(NN year)))))(, ,)(PP(VBG according)(PP(TO to)"
 				+ "(NP(NNP Publishers)(NNP Information)(NNP Bureau))))))(. .)))");	
-		TreePreTreatment.deleteNone(tree);	
+		TreePreprocessTool.deleteNone(tree);	
 			
 		List<Integer> index1 = new ArrayList<>();
 		index1.add(7);
