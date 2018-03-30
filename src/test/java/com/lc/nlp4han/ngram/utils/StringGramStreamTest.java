@@ -14,6 +14,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.ml.ngram.utils.Gram;
+import com.lc.nlp4han.ml.ngram.utils.StringGram;
+import com.lc.nlp4han.ml.ngram.utils.StringGramStream;
+
 /**
  *<ul>
  *<li>Description: 测试String类型的元流的读取 

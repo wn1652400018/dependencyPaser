@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import com.lc.nlp4han.csc.util.Sentence;
-import com.lc.nlp4han.ngram.io.BinaryFileNGramModelWriter;
-import com.lc.nlp4han.ngram.model.NGramLanguageModel;
-import com.lc.nlp4han.ngram.utils.Gram;
-import com.lc.nlp4han.ngram.utils.StringGram;
+import com.lc.nlp4han.ml.ngram.io.BinaryFileNGramModelWriter;
+import com.lc.nlp4han.ml.ngram.model.NGramLanguageModel;
+import com.lc.nlp4han.ml.ngram.utils.Gram;
+import com.lc.nlp4han.ml.ngram.utils.StringGram;
 
 /**
  *<ul>

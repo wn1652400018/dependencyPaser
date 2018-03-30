@@ -10,9 +10,15 @@ import java.io.ObjectInputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.lc.nlp4han.ngram.model.NGramCounter;
-import com.lc.nlp4han.ngram.utils.Gram;
-import com.lc.nlp4han.ngram.utils.StringGram;
+import com.lc.nlp4han.ml.ngram.io.BinaryFileNGramCountReader;
+import com.lc.nlp4han.ml.ngram.io.BinaryFileNGramCountWriter;
+import com.lc.nlp4han.ml.ngram.io.ObjectFileNGramCountReader;
+import com.lc.nlp4han.ml.ngram.io.ObjectFileNGramCountWriter;
+import com.lc.nlp4han.ml.ngram.io.TextFileNGramCountReader;
+import com.lc.nlp4han.ml.ngram.io.TextFileNGramCountWriter;
+import com.lc.nlp4han.ml.ngram.model.NGramCounter;
+import com.lc.nlp4han.ml.ngram.utils.Gram;
+import com.lc.nlp4han.ml.ngram.utils.StringGram;
 
 /**
  *<ul>

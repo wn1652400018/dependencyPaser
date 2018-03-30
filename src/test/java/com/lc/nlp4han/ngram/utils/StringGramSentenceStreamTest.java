@@ -14,6 +14,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.ml.ngram.utils.Gram;
+import com.lc.nlp4han.ml.ngram.utils.StringGram;
+import com.lc.nlp4han.ml.ngram.utils.StringGramSentenceStream;
+
 /**
  *<ul>
  *<li>Description: 测试String类型的句子流的读取 ，带开始结束标签

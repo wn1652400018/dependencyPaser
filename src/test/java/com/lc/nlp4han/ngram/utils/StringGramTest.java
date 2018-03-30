@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.ml.ngram.utils.StringGram;
+
 
 public class StringGramTest {
 	StringGram str1;

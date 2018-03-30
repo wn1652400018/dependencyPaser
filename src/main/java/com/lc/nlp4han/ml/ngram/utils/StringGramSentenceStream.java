@@ -1,4 +1,4 @@
-package com.lc.nlp4han.csc.checker;
+package com.lc.nlp4han.ml.ngram.utils;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -6,11 +6,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.lc.nlp4han.csc.util.CommonUtils;
-import com.lc.nlp4han.ml.ngram.utils.AbstractGramSentenceStream;
-import com.lc.nlp4han.ml.ngram.utils.Gram;
-import com.lc.nlp4han.ml.ngram.utils.StringGram;
+import com.lc.nlp4han.ml.ngram.io.FileOperator;
 
+/**
+ *<ul>
+ *<li>Description: 流式读取String类型的元组
+ *<li>Company: HUST
+ *<li>@author Sonly
+ *<li>Date: 2017年7月16日
+ *</ul>
+ */
 public class StringGramSentenceStream extends AbstractGramSentenceStream {
 
 	public StringGramSentenceStream(String pathname, String encoding) throws FileNotFoundException, UnsupportedEncodingException {
@@ -22,12 +27,8 @@ public class StringGramSentenceStream extends AbstractGramSentenceStream {
 		List<Gram[]> list = new ArrayList<>();
 		
 		for(int i = 0; i < lines.size(); i++) {
-			String line = CommonUtils.ToDBC(lines.get(i));
-			line = line.replaceAll("\\s+", "").trim();
-			
-			if(line.equals(""))
-				continue;
-			
+			String line = lines.get(i);
+			line = FileOperator.ToDBC(line).replaceAll("\\s", "");
 			String[] strings = line.split("");
 			Gram[] grams = new Gram[strings.length];
 			
@@ -40,4 +41,3 @@ public class StringGramSentenceStream extends AbstractGramSentenceStream {
 		return list.iterator();
 	}
 }
-

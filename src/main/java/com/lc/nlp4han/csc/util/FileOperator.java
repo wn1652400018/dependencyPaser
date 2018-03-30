@@ -24,8 +24,8 @@ import java.util.zip.ZipOutputStream;
 import com.lc.nlp4han.csc.detecet.SpellError;
 import com.lc.nlp4han.csc.ngram.HustNGramModel;
 import com.lc.nlp4han.csc.ngram.NGramModel;
-import com.lc.nlp4han.ngram.io.BinaryFileNGramModelReader;
-import com.lc.nlp4han.ngram.model.AbstractNGramModelReader;
+import com.lc.nlp4han.ml.ngram.io.BinaryFileNGramModelReader;
+import com.lc.nlp4han.ml.ngram.model.AbstractNGramModelReader;
 
 /**
  *<ul>

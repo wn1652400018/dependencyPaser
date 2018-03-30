@@ -12,12 +12,20 @@ import java.io.ObjectOutputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.lc.nlp4han.ngram.model.AbstractLanguageModelTrainer;
-import com.lc.nlp4han.ngram.model.MLLanguageModelTrainer;
-import com.lc.nlp4han.ngram.model.NGramCounter;
-import com.lc.nlp4han.ngram.model.NGramLanguageModel;
-import com.lc.nlp4han.ngram.utils.Gram;
-import com.lc.nlp4han.ngram.utils.StringGram;
+import com.lc.nlp4han.ml.ngram.io.ARPATextFileNGramModleReader;
+import com.lc.nlp4han.ml.ngram.io.ARPATextFileNGramModleWriter;
+import com.lc.nlp4han.ml.ngram.io.BinaryFileNGramModelReader;
+import com.lc.nlp4han.ml.ngram.io.BinaryFileNGramModelWriter;
+import com.lc.nlp4han.ml.ngram.io.ObjectFileNGramModelReader;
+import com.lc.nlp4han.ml.ngram.io.ObjectFileNGramModelWriter;
+import com.lc.nlp4han.ml.ngram.io.TextFileNGramModelReader;
+import com.lc.nlp4han.ml.ngram.io.TextFileNGramModelWriter;
+import com.lc.nlp4han.ml.ngram.model.AbstractLanguageModelTrainer;
+import com.lc.nlp4han.ml.ngram.model.MLLanguageModelTrainer;
+import com.lc.nlp4han.ml.ngram.model.NGramCounter;
+import com.lc.nlp4han.ml.ngram.model.NGramLanguageModel;
+import com.lc.nlp4han.ml.ngram.utils.Gram;
+import com.lc.nlp4han.ml.ngram.utils.StringGram;
 
 
 /**

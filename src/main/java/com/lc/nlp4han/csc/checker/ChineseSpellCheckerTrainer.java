@@ -37,7 +37,7 @@ import com.lc.nlp4han.csc.util.Dictionary;
 import com.lc.nlp4han.csc.util.CommonUtils;
 import com.lc.nlp4han.csc.wordseg.AbstractWordSegment;
 import com.lc.nlp4han.csc.wordseg.CKIPWordSegment;
-import com.lc.nlp4han.ngram.model.KneserNeyLanguageModelTrainer;
+import com.lc.nlp4han.ml.ngram.model.KneserNeyLanguageModelTrainer;
 
 /**
  *<ul>

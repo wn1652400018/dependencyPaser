@@ -8,6 +8,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.lc.nlp4han.ml.ngram.utils.Gram;
+import com.lc.nlp4han.ml.ngram.utils.NGram;
+import com.lc.nlp4han.ml.ngram.utils.NGramGenerator;
+import com.lc.nlp4han.ml.ngram.utils.StringGram;
+
 
 /**
  *<ul>
