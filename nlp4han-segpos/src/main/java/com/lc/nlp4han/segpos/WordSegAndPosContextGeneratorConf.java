@@ -8,7 +8,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.lc.nlp4han.util.DictionaryLoader;
-import com.lc.nlp4han.util.FeaturesTools;
+import com.lc.nlp4han.util.CharTypeUtil;
+import com.lc.nlp4han.util.FullHalfWidthUtil;
 
 public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGenerator{
 
@@ -166,16 +167,16 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         w0 = w_1 = w_2 = p_1 = p_2 = null;
         c0 = characters[i];
         w0 = words[j];
-        TC0 = FeaturesTools.featureType(c0);
+        TC0 = CharTypeUtil.featureType(c0);
         if (characters.length > i + 1)
         {
             c1 = characters[i + 1];
-            TC1 = FeaturesTools.featureType(c1);
+            TC1 = CharTypeUtil.featureType(c1);
 
             if (characters.length > i + 2)
             {
                 c2 = characters[i + 2];
-                TC2 = FeaturesTools.featureType(c2);
+                TC2 = CharTypeUtil.featureType(c2);
                 if(characters.length > i + 3){
                 	c3 = characters[i + 3];
                 }
@@ -185,12 +186,12 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         if (i - 1 >= 0)
         {
             c_1 = characters[i - 1];
-            TC_1 = FeaturesTools.featureType(c_1);
+            TC_1 = CharTypeUtil.featureType(c_1);
 
             if (i - 2 >= 0)
             {
                 c_2 = characters[i - 2].toString();
-                TC_2 = FeaturesTools.featureType(c_2);
+                TC_2 = CharTypeUtil.featureType(c_2);
                 if(i - 3 >= 0){
                 	c_3 = characters[i - 3];
                 }
@@ -270,7 +271,7 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         }
         //Pu
         if(PuSet){
-        	if (FeaturesTools.isChinesePunctuation(FeaturesTools.strq2b(c0)))
+        	if (CharTypeUtil.isChinesePunctuation(FullHalfWidthUtil.toHalfWidth(c0)))
                 features.add("Pu=" + 1);
             else
                 features.add("Pu=" + 0);
@@ -662,16 +663,16 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         String w0,w_1,w_2,p_1,p_2;
         w0 = w_1 = w_2 = p_1 = p_2 = null;
         c0 = characters[i];
-        TC0 = FeaturesTools.featureType(c0);
+        TC0 = CharTypeUtil.featureType(c0);
         if (characters.length > i + 1)
         {
             c1 = characters[i + 1];
-            TC1 = FeaturesTools.featureType(c1);
+            TC1 = CharTypeUtil.featureType(c1);
 
             if (characters.length > i + 2)
             {
                 c2 = characters[i + 2];
-                TC2 = FeaturesTools.featureType(c2);
+                TC2 = CharTypeUtil.featureType(c2);
                 if(characters.length > i + 3){
                 	c3 = characters[i + 3];
                 }
@@ -689,12 +690,12 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         	}
                        
             c_1 = characters[i - 1];
-            TC_1 = FeaturesTools.featureType(c_1);
+            TC_1 = CharTypeUtil.featureType(c_1);
 
             if (i - 2 >= 0)
             {
                 c_2 = characters[i - 2];
-                TC_2 = FeaturesTools.featureType(c_2);
+                TC_2 = CharTypeUtil.featureType(c_2);
                 if(i - 3 >= 0){
                 	c_3 = characters[i - 3];
                 }
@@ -768,7 +769,7 @@ public class WordSegAndPosContextGeneratorConf implements WordSegAndPosContextGe
         }
         //Pu
         if(PuSet){
-        	if (FeaturesTools.isChinesePunctuation(FeaturesTools.strq2b(c0)))
+        	if (CharTypeUtil.isChinesePunctuation(FullHalfWidthUtil.toHalfWidth(c0)))
                 features.add("Pu=" + 1);
             else
                 features.add("Pu=" + 0);

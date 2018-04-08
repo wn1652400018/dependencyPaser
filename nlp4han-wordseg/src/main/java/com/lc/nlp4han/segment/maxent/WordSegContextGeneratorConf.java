@@ -9,7 +9,8 @@ import java.util.Set;
 
 import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 import com.lc.nlp4han.util.DictionaryLoader;
-import com.lc.nlp4han.util.FeaturesTools;
+import com.lc.nlp4han.util.CharTypeUtil;
+import com.lc.nlp4han.util.FullHalfWidthUtil;
 
 /*
  * 基于配置文件的上下文特征产生器
@@ -148,16 +149,16 @@ public class WordSegContextGeneratorConf extends AbstractStringContextGenerator
         String t_2 = null;
 
         c0 = tokens[index].toString();
-        TC0 = FeaturesTools.featureType(c0);
+        TC0 = CharTypeUtil.featureType(c0);
         if (tokens.length > index + 1)
         {
             c1 = tokens[index + 1].toString();
-            TC1 = FeaturesTools.featureType(c1);
+            TC1 = CharTypeUtil.featureType(c1);
 
             if (tokens.length > index + 2)
             {
                 c2 = tokens[index + 2].toString();
-                TC2 = FeaturesTools.featureType(c2);
+                TC2 = CharTypeUtil.featureType(c2);
                 if (tokens.length > index + 3)
                     c3 = tokens[index + 3].toString();
             }
@@ -166,14 +167,14 @@ public class WordSegContextGeneratorConf extends AbstractStringContextGenerator
         if (index - 1 >= 0)
         {
             c_1 = tokens[index - 1].toString();
-            TC_1 = FeaturesTools.featureType(c_1);
+            TC_1 = CharTypeUtil.featureType(c_1);
             t_1 = tags[index - 1];
 
             if (index - 2 >= 0)
             {
                 c_2 = tokens[index - 2].toString();
                 t_2 = tags[index - 2];
-                TC_2 = FeaturesTools.featureType(c_2);
+                TC_2 = CharTypeUtil.featureType(c_2);
 
                 if (index - 3 >= 0)
                     c_3 = tokens[index - 3].toString();
@@ -257,7 +258,7 @@ public class WordSegContextGeneratorConf extends AbstractStringContextGenerator
         // 增加标点符号的特征【应用了全角转半角的strq2b方法】
         if (PuSet)
         {
-            if (FeaturesTools.isChinesePunctuation(FeaturesTools.strq2b(c0)))
+            if (CharTypeUtil.isChinesePunctuation(FullHalfWidthUtil.toHalfWidth(c0)))
                 features.add("Pu=" + 1);
             else
                 features.add("Pu=" + 0);

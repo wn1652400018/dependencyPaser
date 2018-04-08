@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import com.lc.nlp4han.util.FeaturesTools;
+import com.lc.nlp4han.util.CharTypeUtil;
+import com.lc.nlp4han.util.FullHalfWidthUtil;
 
 /**
  * 根据配置文件生成特征
@@ -174,23 +175,23 @@ public class NERCharacterContextGeneratorConf implements NERCharacterContextGene
 //		}
         
         w0 = words[index].toString();
-        TC0 = FeaturesTools.featureType(w0);
+        TC0 = CharTypeUtil.featureType(w0);
         if (words.length > index + 1) {
             w1 = words[index + 1].toString();
-            TC1 = FeaturesTools.featureType(w1);
+            TC1 = CharTypeUtil.featureType(w1);
             if (words.length > index + 2) {
                 w2 = words[index + 2].toString();
-                TC2 = FeaturesTools.featureType(w2);
+                TC2 = CharTypeUtil.featureType(w2);
             }
         }
 
         if (index - 1 >= 0) {
             w_1 = words[index - 1].toString();
-            TC_1 = FeaturesTools.featureType(w_1);
+            TC_1 = CharTypeUtil.featureType(w_1);
             t_1 = tags[index - 1];
             if (index - 2 >= 0) {
                 w_2 = words[index - 2].toString();
-                TC_2 = FeaturesTools.featureType(w_2);
+                TC_2 = CharTypeUtil.featureType(w_2);
                 t_2 = tags[index - 2];
             }
         }
@@ -269,7 +270,7 @@ public class NERCharacterContextGeneratorConf implements NERCharacterContextGene
      // 增加标点符号的特征【应用了全角转半角的strq2b方法】
         if (PuSet)
         {
-            if (FeaturesTools.isChinesePunctuation(FeaturesTools.strq2b(w0)))
+            if (CharTypeUtil.isChinesePunctuation(FullHalfWidthUtil.toHalfWidth(w0)))
                 features.add("Pu=" + 1);
             else
                 features.add("Pu=" + 0);

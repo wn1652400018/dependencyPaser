@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import com.lc.nlp4han.util.FeaturesTools;
+import com.lc.nlp4han.util.CharTypeUtil;
+import com.lc.nlp4han.util.FullHalfWidthUtil;
 
 /**
  * 根据配置文件配置的特征的信息，生成上下文的特征
@@ -133,16 +134,16 @@ public class CharPOSContextGeneratorConf implements CharPOSContextGenerator{
         		w_2 = words[record - 2];
         	}
         }
-        TC0 = FeaturesTools.featureType(c0);
+        TC0 = CharTypeUtil.featureType(c0);
         if (characters.length > i + 1)
         {
             c1 = characters[i + 1].split("_")[0];
-            TC1 = FeaturesTools.featureType(c1);
+            TC1 = CharTypeUtil.featureType(c1);
 
             if (characters.length > i + 2)
             {
                 c2 = characters[i + 2].split("_")[0];
-                TC2 = FeaturesTools.featureType(c2);
+                TC2 = CharTypeUtil.featureType(c2);
             }
         }
 
@@ -150,13 +151,13 @@ public class CharPOSContextGeneratorConf implements CharPOSContextGenerator{
         {
             c_1 = characters[i - 1].split("_")[0];
             p_1 = tagsAndPoses[i - 1].split("_")[1];
-            TC_1 = FeaturesTools.featureType(c_1);
+            TC_1 = CharTypeUtil.featureType(c_1);
 
             if (i - 2 >= 0)
             {
                 c_2 = characters[i - 2].split("_")[0];
                 p_2 = tagsAndPoses[i - 2].split("_")[1];
-                TC_2 = FeaturesTools.featureType(c_2);
+                TC_2 = CharTypeUtil.featureType(c_2);
             }
         }
 
@@ -226,7 +227,7 @@ public class CharPOSContextGeneratorConf implements CharPOSContextGenerator{
         }
         //Pu
         if(PuSet){
-        	if (FeaturesTools.isChinesePunctuation(FeaturesTools.strq2b(c0)))
+        	if (CharTypeUtil.isChinesePunctuation(FullHalfWidthUtil.toHalfWidth(c0)))
                 features.add("Pu=" + 1);
             else
                 features.add("Pu=" + 0);
