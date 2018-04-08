@@ -18,43 +18,64 @@ import java.util.Set;
  */
 public class DictionaryLoader
 {
-    public static Set<String> getWords(String dictPath, String encoding) throws IOException
-    {
-        Set<String> wordSet = new HashSet<>();
+	/**
+	 * 从字典文件中读取词集
+	 * 
+	 * 每行一个词
+	 * 
+	 * @param dictPath 字典文件路径
+	 * @param encoding 字典文件编码
+	 * @return 单词集合
+	 * @throws IOException
+	 */
+	public static Set<String> getWords(String dictPath, String encoding) throws IOException
+	{
+		Set<String> wordSet = new HashSet<>();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(dictPath)), encoding));
-        String line = null;
-        while ((line = br.readLine()) != null)
-        {
-            line = line.replaceAll("\\s", "").replaceAll("\n", "");
-            if (line.length() != 1)
-            {
-                wordSet.add(line);
-            }
-        }
-        
-        br.close();
+		BufferedReader br = new BufferedReader(
+				new InputStreamReader(new FileInputStream(new File(dictPath)), encoding));
+		String line = null;
+		while ((line = br.readLine()) != null)
+		{
+			line = line.replaceAll("\\s", "").replaceAll("\n", "");
+			if (line.length() != 0)
+			{
+				wordSet.add(line);
+			}
+		}
 
-        return wordSet;
-    }
-    
-    public static Set<String> getWords(InputStream dictStream, String encoding) throws IOException
-    {
-        Set<String> wordSet = new HashSet<>();
+		br.close();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(dictStream, encoding));
-        String line = null;
-        while ((line = br.readLine()) != null)
-        {
-            line = line.replaceAll("\\s", "").replaceAll("\n", "");
-            if (line.length() != 1)
-            {
-                wordSet.add(line);
-            }
-        }
-        
-        br.close();
+		return wordSet;
+	}
 
-        return wordSet;
-    }
+	/**
+	 * 从流中读取词集
+	 * 
+	 * 每行一个词
+	 * 
+	 * @param dictPath 字典流
+	 * @param encoding 字典流编码
+	 * @return 单词集合
+	 * @throws IOException
+	 */
+	public static Set<String> getWords(InputStream dictStream, String encoding) throws IOException
+	{
+		Set<String> wordSet = new HashSet<>();
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(dictStream, encoding));
+		String line = null;
+		while ((line = br.readLine()) != null)
+		{
+			line = line.replaceAll("\\s", "").replaceAll("\n", "");
+			if (line.length() != 0)
+			{
+				wordSet.add(line);
+			}
+		}
+
+		br.close();
+
+		return wordSet;
+	}
 }
