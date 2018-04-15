@@ -6,6 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+/**
+ * 统计中文分词语料基本情况应用
+ * 
+ * @author 刘小峰
+ *
+ */
 public class SegCorpusReportTool
 {
 
