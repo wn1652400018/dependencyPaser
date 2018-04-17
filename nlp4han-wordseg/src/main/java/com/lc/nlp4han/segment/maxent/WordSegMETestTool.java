@@ -35,7 +35,7 @@ public class WordSegMETestTool
         File modelFile = null;
         File textFile = null;
         File resultFile = null;
-        String contextClass = "com.lc.nlp4han.segment.DefaultWordSegContextGenerator";
+        String contextClass = "com.lc.nlp4han.segment.WordSegContextGeneratorConf";
         String encoding = "UTF-8";
         for (int i = 0; i < args.length; i++)
         {
