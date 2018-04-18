@@ -18,7 +18,7 @@ public class CharPOSCrossValidatorTool
 {
     private static void usage()
     {
-        System.out.println(CharPOSCrossValidatorTool.class.getName() + " -data <corpusFile> -encoding <encoding> -parsetype <parsetype> [-folds <nFolds>] " + "[-cutoff <num>] [-iters <num>]");
+        System.out.println(CharPOSCrossValidatorTool.class.getName() + " -data <corpusFile> -encoding <encoding> -format <format> [-folds <nFolds>] " + "[-cutoff <num>] [-iters <num>]");
     }
 
     public static void main(String[] args) throws IOException
@@ -36,7 +36,7 @@ public class CharPOSCrossValidatorTool
         File corpusFile = null;
         String encoding = "UTF-8";
         String algType = "MAXENT";
-        String parsetype = "open";
+        String format = "open";
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data"))
@@ -49,9 +49,9 @@ public class CharPOSCrossValidatorTool
                 encoding = args[i + 1];
                 i++;
             }
-            else if (args[i].equals("-parsetype"))
+            else if (args[i].equals("-format"))
             {
-            	parsetype = args[i + 1];
+            	format = args[i + 1];
                 i++;
             }
             else if (args[i].equals("-cutoff"))
@@ -85,10 +85,10 @@ public class CharPOSCrossValidatorTool
 
         CharPOSSampleParser parse = null;
         ObjectStream<String> lineStream = null;
-        if(parsetype.equals("open")){
+        if(format.equals("open")){
         	parse = new CharPOSParseOpen();
         	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
-        }else if(parsetype.equals("news")){
+        }else if(format.equals("news")){
         	parse = new CharPOSParseNews();
         	lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         }
