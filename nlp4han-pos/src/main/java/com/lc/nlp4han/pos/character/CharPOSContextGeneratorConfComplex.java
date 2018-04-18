@@ -17,7 +17,7 @@ import com.lc.nlp4han.util.FullHalfWidthUtil;
  * @author 王馨苇
  *
  */
-public class CharPOSContextGeneratorConf2 implements CharPOSContextGenerator {
+public class CharPOSContextGeneratorConfComplex implements CharPOSContextGenerator {
 
 	private boolean c_2Set;
 	private boolean c_1Set;
@@ -51,9 +51,9 @@ public class CharPOSContextGeneratorConf2 implements CharPOSContextGenerator {
 	 * 
 	 * @throws IOException
 	 */
-	public CharPOSContextGeneratorConf2() throws IOException {
+	public CharPOSContextGeneratorConfComplex() throws IOException {
 		Properties featureConf = new Properties();
-		InputStream featureStream = CharPOSContextGeneratorConf2.class.getClassLoader()
+		InputStream featureStream = CharPOSContextGeneratorConfComplex.class.getClassLoader()
 				.getResourceAsStream("com/lc/nlp4han/pos/character/feature.properties");
 		featureConf.load(featureStream);
 
@@ -67,7 +67,7 @@ public class CharPOSContextGeneratorConf2 implements CharPOSContextGenerator {
 	 *            配置文件
 	 * @throws IOException
 	 */
-	public CharPOSContextGeneratorConf2(Properties properties) throws IOException {
+	public CharPOSContextGeneratorConfComplex(Properties properties) throws IOException {
 
 		init(properties);
 	}
@@ -118,7 +118,7 @@ public class CharPOSContextGeneratorConf2 implements CharPOSContextGenerator {
 		dictResource = config.getProperty("feature.dict");
 		dictEncoding = config.getProperty("feature.dict.encoding");
 
-		InputStream dictIn = CharPOSContextGeneratorConf2.class.getClassLoader().getResourceAsStream(dictResource);
+		InputStream dictIn = CharPOSContextGeneratorConfComplex.class.getClassLoader().getResourceAsStream(dictResource);
 		dictWords = DictionaryLoader.getWords(dictIn, dictEncoding);
 	}
 
