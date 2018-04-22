@@ -93,5 +93,6 @@ public class CharPOSTrainerTool
         ModelWrapper model = CharPOSTaggerME.train(sampleStream, params, contextGen);
         OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
         model.serialize(modelOut);
+        modelOut.close();
     }
 }
