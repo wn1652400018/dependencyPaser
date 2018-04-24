@@ -191,7 +191,7 @@ public class CharPOSTaggerME implements POSTaggerProb
     
     public String[] tag(String[] characters, String[] words){
 		bestSequence = model.bestSequence(characters, (String[])words, contextGenerator,sequenceValidator);
-      //  System.out.println(bestSequence);
+//        System.out.println(Arrays.toString(words));
 		List<String> t = bestSequence.getOutcomes();
         
         return t.toArray(new String[t.size()]);

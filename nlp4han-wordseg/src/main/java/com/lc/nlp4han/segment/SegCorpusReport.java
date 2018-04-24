@@ -86,9 +86,9 @@ public class SegCorpusReport
 	}
 	
 	/**
-	 * 词性数
+	 * 词形数
 	 * 
-	 * @return 词性数
+	 * @return 词形数
 	 */
 	public int numWordTypes()
 	{
