@@ -14,6 +14,8 @@ import com.lc.nlp4han.ner.NERMeasure;
 
 /**
  * 基于词的命名实体识别交叉验证类
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -95,7 +97,8 @@ public class NERWordCrossValidationTool {
         
         NERWordContextGenerator context = new NERWordContextGeneratorConf();
         System.out.println(context);
-        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);    
+        ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding); 
+        // TODO: 根据命令行参数选择不同的样本解析类
         NERParseStrategy parse = new NERParseWordPD();
         ObjectStream<NERWordOrCharacterSample> sampleStream = new NERWordSampleStream(lineStream, parse);
         NERWordCrossValidationTool run = new NERWordCrossValidationTool();

@@ -6,6 +6,8 @@ import java.util.Queue;
 
 /**
  * 为基于分词的命名实体识别解析文本
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -159,7 +161,7 @@ public class NERParseWordPD implements NERParseStrategy{
 	 * @param i 当前位置
 	 * @return
 	 */
-	public String[] getWordAndPos(String[] str, int i){
+	private String[] getWordAndPos(String[] str, int i){
 		String[] temp = str[i].split("/");
 		return temp;
 	}
@@ -167,9 +169,9 @@ public class NERParseWordPD implements NERParseStrategy{
 	/**
 	 * 根据当前队列的长度为当前队列中的词语增加标记
 	 * @param queue 词语队列
-	 * @param tag 标价
+	 * @param tag 标记
 	 */
-	public void add(Queue<String> queue,String tag){
+	private void add(Queue<String> queue,String tag){
 		if(queue.size() == 1){
 			words.add(queue.poll());
 			tags.add("s_"+tag);

@@ -100,61 +100,10 @@ public class NERWordContextGeneratorConf implements NERWordContextGenerator{
 	 * @return
 	 */
 	private String[] getContext(int index, String[] words, String[] tags) {
-		String w1, w2, w3,w4,w5,w6, w0, w_1, w_2,w_3,w_4,w_5,w_6;
-        w1 = w2 = w3 = w4 = w5 = w6 = w0 = w_1 = w_2 = w_3= w_4 = w_5 = w_6 =  null;
+		String w1, w2, w0, w_1, w_2;
+        w1 = w2 = w0 = w_1 = w_2 = null;
         String t_1 = null;
         String t_2 = null;
-        //根据能匹配的最长的长度，以及当前的字，生成一个最长长度的2倍少一的字符串数组
-//        String[] strNT = new String[2*lengthNT-1];
-//        strNT[lengthNT - 1] = words[index];
-//        for (int i = 1; i < lengthNT; i++) {
-//			if(index - i >= 0){
-//				strNT[lengthNT - 1 - i] = words[index - i];
-//			}else{
-//				strNT[lengthNT  - 1 - i] = "null";
-//			}
-//		}
-//        for (int i = 1; i < lengthNT; i++) {
-//			if(index + i < words.length){
-//				strNT[lengthNT  - 1 + i] = words[index + i];
-//			}else{
-//				strNT[lengthNT  - 1 + i] = "null";
-//			}
-//		}
-// 
-//        String[] strNS = new String[2*lengthNS-1];
-//        strNS[lengthNS - 1] = words[index];
-//        for (int i = 1; i < lengthNS; i++) {
-//			if(index - i >= 0){
-//				strNS[lengthNS - 1 - i] = words[index - i];
-//			}else{
-//				strNS[lengthNS  - 1 - i] = "null";
-//			}
-//		}
-//        for (int i = 1; i < lengthNS; i++) {
-//			if(index + i < words.length){
-//				strNS[lengthNS  - 1 + i] = words[index + i];
-//			}else{
-//				strNS[lengthNS  - 1 + i] = "null";
-//			}
-//		}
-//        
-//        String[] strNR = new String[2*lengthNR-1];
-//        strNR[lengthNR - 1] = words[index];
-//        for (int i = 1; i < lengthNR; i++) {
-//			if(index - i >= 0){
-//				strNR[lengthNR - 1 - i] = words[index - i];
-//			}else{
-//				strNR[lengthNR  - 1 - i] = "null";
-//			}
-//		}
-//        for (int i = 1; i < lengthNR; i++) {
-//			if(index + i < words.length){
-//				strNR[lengthNR  - 1 + i] = words[index + i];
-//			}else{
-//				strNR[lengthNR  - 1 + i] = "null";
-//			}
-//		}
         
         w0 = words[index].toString();
         if (words.length > index + 1) {
@@ -297,7 +246,7 @@ public class NERWordContextGeneratorConf implements NERWordContextGenerator{
 	 * @param flag 标志，代表是地名，人名还是机构名的词典，主要是对特征的生成有帮助
 	 * @param words 词典，这里是人名，地名，机构名，其中的一个词典
 	 */
-	public List<String> find(int length, String[] str, String flag, Set<String> words){
+	private List<String> find(int length, String[] str, String flag, Set<String> words){
 		List<String> feature = new ArrayList<String>();
 		int middle = (str.length - 1) / 2;
 		for (int i = middle-length+1; i < middle+1; i++) {			
@@ -428,7 +377,7 @@ public class NERWordContextGeneratorConf implements NERWordContextGenerator{
 	 * @param words 当前要判断的词语
 	 * @return
 	 */
-	public boolean isDictionalWords(Set<String> dictionaryWords, String words){
+	private boolean isDictionalWords(Set<String> dictionaryWords, String words){
 		
 		if(dictionaryWords.contains(words)){
 			return true;
