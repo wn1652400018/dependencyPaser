@@ -388,7 +388,7 @@ public class NERWordAndPosME implements NERWordAndPos{
 	 * @param sentence 读取的词性标注的语料
 	 * @return
 	 */
-	public NamedEntity[][] ner(int k,String sentence){
+	public NamedEntity[][] ner(String sentence,int k){
 		String[] str = sentence.split("\\s+");
 		List<String> words = new ArrayList<>();
 		List<String> tags = new ArrayList<>();
@@ -398,8 +398,8 @@ public class NERWordAndPosME implements NERWordAndPos{
 			words.add(word);
 			tags.add(tag);
 		}
-		return ner(k,words.toArray(new String[words.size()]),
-				tags.toArray(new String[tags.size()]));
+		return ner(words.toArray(new String[words.size()]),tags.toArray(new String[tags.size()]),
+				k);
 	}
 	
 	/**
@@ -408,7 +408,7 @@ public class NERWordAndPosME implements NERWordAndPos{
 	 * @param poses 词性
 	 * @return
 	 */
-	public NamedEntity[][] ner(int k,String[] words,String[] poses){
+	public NamedEntity[][] ner(String[] words,String[] poses,int k){
 		String[][] tags = tag(k,words,poses);
 		NamedEntity[][] kners = new NamedEntity[k][];
 		for (int i = 0; i < tags.length; i++) {
