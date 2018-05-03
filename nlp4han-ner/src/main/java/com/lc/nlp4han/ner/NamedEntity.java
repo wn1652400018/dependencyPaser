@@ -75,7 +75,6 @@ public class NamedEntity {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "["+this.string+"]"+this.type+"("+this.start+","+this.end+")"+"{"+this.words+"}";
 	}
 }

@@ -1,11 +1,8 @@
 package com.lc.nlp4han.ner.word;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +11,6 @@ import java.util.Map;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.model.SequenceClassificationModel;
-import com.lc.nlp4han.ml.util.AbstractStringContextGenerator;
 import com.lc.nlp4han.ml.util.BeamSearch;
 import com.lc.nlp4han.ml.util.EventTrainer;
 import com.lc.nlp4han.ml.util.ModelWrapper;
@@ -29,6 +25,8 @@ import com.lc.nlp4han.ner.NamedEntity;
 
 /**
  * 为基于分词的命名实体识别训练模型
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -39,8 +37,6 @@ public class NERWordME implements NERWord{
 	private int size;
 	private Sequence bestSequence;
 	private SequenceClassificationModel<String> model;
-	private List<String> characters = new ArrayList<String>();
-	private List<String> tags = new ArrayList<String>();
 
     private SequenceValidator<String> sequenceValidator;
 	
@@ -122,12 +118,12 @@ public class NERWordME implements NERWord{
 	
 	/**
 	 * 得到最好的一个序列
-	 * @param characters
+	 * @param words
 	 * @param additionaContext
 	 * @return
 	 */
-	public String[] tag(String[] characters,Object[] additionaContext){
-		bestSequence = model.bestSequence(characters, additionaContext, contextGenerator,sequenceValidator);
+	public String[] tag(String[] words,Object[] additionaContext){
+		bestSequence = model.bestSequence(words, additionaContext, contextGenerator,sequenceValidator);
       //  System.out.println(bestSequence);
 		List<String> t = bestSequence.getOutcomes();
 		return t.toArray(new String[t.size()]);
@@ -157,7 +153,7 @@ public class NERWordME implements NERWord{
     /**
 	 * 得到最好的numTaggings个标记序列
 	 * @param numTaggings 个数
-	 * @param characters 一个个词语
+	 * @param words 一个个词语
 	 * @return 分词加词性标注的序列
 	 */
 	public String[][] tag(int numTaggings, String[] words) {
@@ -176,7 +172,7 @@ public class NERWordME implements NERWord{
 	 */
 	@Override
 	public NamedEntity[] ner(String sentence) {
-		String[] words = sentence.split(" ");
+		String[] words = sentence.split("\\s+");
 		return ner(words);
 	}
 
@@ -185,7 +181,7 @@ public class NERWordME implements NERWord{
 	 */
 	@Override
 	public NamedEntity[] ner(String[] words) {
-		String[] tags = tag(words,null);
+		String[] tags = tag(words, null);
 		List<NamedEntity> ners = new ArrayList<>();
 		for (int i = 0; i < tags.length; i++) {
 			String flag;
@@ -194,13 +190,16 @@ public class NERWordME implements NERWord{
 			}else{
 				flag = tags[i].split("_")[1];
 			}
+			
 			if(ners.size() == 0){
-				ners.add(getNer(0,tags,words,flag));
+				ners.add(getNer(0, tags, words, flag));
 			}else{
-				ners.add(getNer(i,tags,words,flag));
+				ners.add(getNer(i, tags, words, flag));
 			}
+			
 			i = ners.get(ners.size()-1).getEnd();
 		}
+		
  		return ners.toArray(new NamedEntity[ners.size()]);
 	}
 	
@@ -212,7 +211,7 @@ public class NERWordME implements NERWord{
 	   * @param flag 实体标记
 	   * @return
 	   */
-	public NamedEntity getNer(int begin,String[] tags,String[] words,String flag){
+	private NamedEntity getNer(int begin, String[] tags, String[] words, String flag){
 		NamedEntity ner = new NamedEntity();
 		for (int i = begin; i < tags.length; i++) {
 			List<String> wordStr = new ArrayList<>();
@@ -282,9 +281,10 @@ public class NERWordME implements NERWord{
 	 */
 	@Override
 	public NamedEntity[] ner(String sentence, String flag) {
-		String[] words = sentence.split(" ");
-		return ner(words,flag);
+		String[] words = sentence.split("\\s+");
+		return ner(words, flag);
 	}
+	
 	/**
 	 * 读入分词的语料，得到指定的命名实体
 	 * @param words 词语
@@ -309,9 +309,9 @@ public class NERWordME implements NERWord{
 	 * @param sentence 读取的分词的语料
 	 * @return
 	 */
-	public NamedEntity[][] ner(int k,String sentence){
-		String[] words = sentence.split(" ");
-		return ner(k,words);
+	public NamedEntity[][] ner(String sentence, int k){
+		String[] words = sentence.split("\\s+");
+		return ner(words,k);
 	}
 	
 	/**
@@ -319,8 +319,8 @@ public class NERWordME implements NERWord{
 	 * @param words 词语
 	 * @return
 	 */
-	public NamedEntity[][] ner(int k,String[] words){
-		String[][] tags = tag(k,words);
+	public NamedEntity[][] ner(String[] words, int k){
+		String[][] tags = tag(k, words);
 		NamedEntity[][] kners = new NamedEntity[k][];
 		for (int i = 0; i < tags.length; i++) {
 			List<NamedEntity> ners = new ArrayList<>();
