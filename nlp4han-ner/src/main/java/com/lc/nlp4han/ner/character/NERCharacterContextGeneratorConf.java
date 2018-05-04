@@ -52,7 +52,7 @@ public class NERCharacterContextGeneratorConf implements NERCharacterContextGene
 	 */
 	public NERCharacterContextGeneratorConf() throws IOException{
 		Properties featureConf = new Properties();
-        InputStream featureStream = NERCharacterContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/wxw/ner/run/feature.properties");
+        InputStream featureStream = NERCharacterContextGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/ner/feature.properties");
         featureConf.load(featureStream);
         
         init(featureConf);
