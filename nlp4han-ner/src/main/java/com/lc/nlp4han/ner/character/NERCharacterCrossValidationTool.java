@@ -14,7 +14,7 @@ import com.lc.nlp4han.ner.NERMeasure;
 import com.lc.nlp4han.ner.word.NERParseStrategy;
 import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
 
-public class NERCharacterCrossValidationRun {
+public class NERCharacterCrossValidationTool {
 
 	private final String languageCode;
 
@@ -22,7 +22,7 @@ public class NERCharacterCrossValidationRun {
 
     private NEREvaluateMonitor[] listeners;
     
-    public NERCharacterCrossValidationRun(String languageCode,TrainingParameters trainParam,NEREvaluateMonitor... listeners){
+    public NERCharacterCrossValidationTool(String languageCode,TrainingParameters trainParam,NEREvaluateMonitor... listeners){
     	this.languageCode = languageCode;
         this.params = trainParam;
         this.listeners = listeners;
@@ -53,7 +53,7 @@ public class NERCharacterCrossValidationRun {
     }
     
     private static void usage(){
-    	System.out.println(NERCharacterCrossValidationRun.class.getName() + " -data <corpusFile> -encoding <encoding> " + "[-cutoff <num>] [-iters <num>] [-folds <nFolds>] ");
+    	System.out.println(NERCharacterCrossValidationTool.class.getName() + " -data <corpusFile> -encoding <encoding> " + "[-cutoff <num>] [-iters <num>] [-folds <nFolds>] ");
     }
     
     public static void main(String[] args) throws IOException {
@@ -106,7 +106,7 @@ public class NERCharacterCrossValidationRun {
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);       
         NERParseStrategy parse = new NERParseCharacterPD();
         ObjectStream<NERWordOrCharacterSample> sampleStream = new NERCharacterSampleStream(lineStream, parse);
-        NERCharacterCrossValidationRun run = new NERCharacterCrossValidationRun("zh",params);
+        NERCharacterCrossValidationTool run = new NERCharacterCrossValidationTool("zh",params);
         run.evaluate(sampleStream,folds,context);
 	}
 }

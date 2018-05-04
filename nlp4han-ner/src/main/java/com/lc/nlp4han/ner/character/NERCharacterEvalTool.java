@@ -14,9 +14,9 @@ import com.lc.nlp4han.ner.NERMeasure;
 import com.lc.nlp4han.ner.word.NERParseStrategy;
 import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
 
-public class NERCharacterEvaluateRun {
+public class NERCharacterEvalTool {
 	private static void usage(){
-		System.out.println(NERCharacterEvaluateRun.class.getName() + " -data <trainFile> -gold <goldFile> -error <errorFile> -encoding <encoding>" + " [-cutoff <num>] [-iters <num>]");
+		System.out.println(NERCharacterEvalTool.class.getName() + " -data <trainFile> -gold <goldFile> -error <errorFile> -encoding <encoding>" + " [-cutoff <num>] [-iters <num>]");
 	}
 	
 	public static void eval(File trainFile, TrainingParameters params, File goldFile, String encoding, File errorFile) throws IOException{
