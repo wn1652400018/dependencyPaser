@@ -11,6 +11,8 @@ import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.ml.util.TrainingParameters;
+import com.lc.nlp4han.ner.NERParseStrategy;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 /**
  * 基于词的命名实体识别

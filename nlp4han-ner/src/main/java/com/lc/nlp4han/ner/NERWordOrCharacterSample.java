@@ -1,4 +1,4 @@
-package com.lc.nlp4han.ner.word;
+package com.lc.nlp4han.ner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,43 +9,43 @@ public class NERWordOrCharacterSample
 {
 
 	public List<String> tags;
-	public List<String> words;
+	public List<String> wordsOrChars;
 	private String[][] addtionalContext;
 
 	/**
 	 * 构造
 	 * 
-	 * @param words
+	 * @param wordsOrChars
 	 *            词语
 	 * @param poses
 	 *            词性
 	 * @param tags
 	 *            实体标记
 	 */
-	public NERWordOrCharacterSample(String[] words, String[] tags)
+	public NERWordOrCharacterSample(String[] wordsOrChars, String[] tags)
 	{
-		this(words, tags, null);
+		this(wordsOrChars, tags, null);
 	}
 
 	/**
 	 * 构造
 	 * 
-	 * @param words
+	 * @param wordsOrChars
 	 *            词语
 	 * @param poses
 	 *            词性
 	 * @param tags
 	 *            实体标记
 	 */
-	public NERWordOrCharacterSample(List<String> words, List<String> tags)
+	public NERWordOrCharacterSample(List<String> wordsOrChars, List<String> tags)
 	{
-		this(words, tags, null);
+		this(wordsOrChars, tags, null);
 	}
 
 	/**
 	 * 构造
 	 * 
-	 * @param words
+	 * @param wordsOrChars
 	 *            词语
 	 * @param poses
 	 *            词性
@@ -54,15 +54,15 @@ public class NERWordOrCharacterSample
 	 * @param additionalContext
 	 *            额外的信息
 	 */
-	public NERWordOrCharacterSample(String[] words, String[] tags, String[][] additionalContext)
+	public NERWordOrCharacterSample(String[] wordsOrChars, String[] tags, String[][] additionalContext)
 	{
-		this(Arrays.asList(words), Arrays.asList(tags), additionalContext);
+		this(Arrays.asList(wordsOrChars), Arrays.asList(tags), additionalContext);
 	}
 
 	/**
 	 * 构造
 	 * 
-	 * @param words
+	 * @param wordsOrChars
 	 *            词语
 	 * @param poses
 	 *            词性
@@ -71,10 +71,10 @@ public class NERWordOrCharacterSample
 	 * @param additionalContext
 	 *            额外的信息
 	 */
-	public NERWordOrCharacterSample(List<String> words, List<String> tags, String[][] additionalContext)
+	public NERWordOrCharacterSample(List<String> wordsOrChars, List<String> tags, String[][] additionalContext)
 	{
 		this.tags = Collections.unmodifiableList(tags);
-		this.words = Collections.unmodifiableList(words);
+		this.wordsOrChars = Collections.unmodifiableList(wordsOrChars);
 		String[][] ac;
 		if (additionalContext != null)
 		{
@@ -100,7 +100,7 @@ public class NERWordOrCharacterSample
 	 */
 	public String[] getWords()
 	{
-		return this.words.toArray(new String[words.size()]);
+		return this.wordsOrChars.toArray(new String[wordsOrChars.size()]);
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class NERWordOrCharacterSample
 		int result = 1;
 		result = prime * result + Arrays.deepHashCode(addtionalContext);
 		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
-		result = prime * result + ((words == null) ? 0 : words.hashCode());
+		result = prime * result + ((wordsOrChars == null) ? 0 : wordsOrChars.hashCode());
 		return result;
 	}
 
@@ -259,12 +259,12 @@ public class NERWordOrCharacterSample
 		}
 		else if (!tags.equals(other.tags))
 			return false;
-		if (words == null)
+		if (wordsOrChars == null)
 		{
-			if (other.words != null)
+			if (other.wordsOrChars != null)
 				return false;
 		}
-		else if (!words.equals(other.words))
+		else if (!wordsOrChars.equals(other.wordsOrChars))
 			return false;
 		return true;
 	}

@@ -3,7 +3,7 @@ package com.lc.nlp4han.ner.character;
 import com.lc.nlp4han.ml.util.Evaluator;
 import com.lc.nlp4han.ner.NEREvaluateMonitor;
 import com.lc.nlp4han.ner.NERMeasure;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 public class NERCharacterEvaluator extends Evaluator<NERWordOrCharacterSample>{
 

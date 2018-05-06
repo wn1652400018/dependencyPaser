@@ -3,8 +3,6 @@ package com.lc.nlp4han.ner;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
-
 /**
  * 为基于字的命名实体识别打印错误信息类 
  * @author 王馨苇

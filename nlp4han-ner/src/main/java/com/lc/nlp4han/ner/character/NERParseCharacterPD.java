@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.lc.nlp4han.ner.word.NERParseStrategy;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
+import com.lc.nlp4han.ner.NERParseStrategy;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 /**
  * 对人民日报语料做基于字的解析

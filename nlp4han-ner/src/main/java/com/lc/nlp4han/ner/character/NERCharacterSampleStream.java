@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 
 import com.lc.nlp4han.ml.util.FilterObjectStream;
 import com.lc.nlp4han.ml.util.ObjectStream;
-import com.lc.nlp4han.ner.word.NERParseStrategy;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
+import com.lc.nlp4han.ner.NERParseStrategy;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 /**
  * 为基于字的命名实体识别过滤文本流得到想要的样式

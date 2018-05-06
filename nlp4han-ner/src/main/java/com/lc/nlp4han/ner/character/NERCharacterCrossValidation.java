@@ -8,7 +8,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.ner.NEREvaluateMonitor;
 import com.lc.nlp4han.ner.NERMeasure;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 /**
  * 基于字的命名实体识别的交叉验证

@@ -20,6 +20,7 @@ import com.lc.nlp4han.ml.util.SequenceValidator;
 import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
 import com.lc.nlp4han.ml.util.TrainingParameters;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 import com.lc.nlp4han.ner.NamedEntity;
 
 

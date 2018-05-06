@@ -11,8 +11,8 @@ import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.ner.NERErrorPrinter;
 import com.lc.nlp4han.ner.NERMeasure;
-import com.lc.nlp4han.ner.word.NERParseStrategy;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
+import com.lc.nlp4han.ner.NERParseStrategy;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 public class NERCharacterEvalTool {
 	private static void usage(){

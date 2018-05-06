@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.lc.nlp4han.ner.NERParseStrategy;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
+
 /**
  * 为基于分词的命名实体识别解析文本
  * 

@@ -20,8 +20,8 @@ import com.lc.nlp4han.ml.util.SequenceValidator;
 import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
 import com.lc.nlp4han.ml.util.TrainingParameters;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 import com.lc.nlp4han.ner.NamedEntity;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
 
 /**
  * 为基于字的命名实体识别训练模型

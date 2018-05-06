@@ -2,8 +2,8 @@ package com.lc.nlp4han.ner.character;
 
 import java.util.ArrayList;
 
-import com.lc.nlp4han.ner.word.NERParseStrategy;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
+import com.lc.nlp4han.ner.NERParseStrategy;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 /**
  * 为基于字的命名实体识别解析语料

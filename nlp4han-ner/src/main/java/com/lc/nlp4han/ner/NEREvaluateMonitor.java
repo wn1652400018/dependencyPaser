@@ -1,7 +1,6 @@
 package com.lc.nlp4han.ner;
 
 import com.lc.nlp4han.ml.util.EvaluationMonitor;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
 
 public class NEREvaluateMonitor implements EvaluationMonitor<NERWordOrCharacterSample>{
 

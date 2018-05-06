@@ -3,6 +3,7 @@ package com.lc.nlp4han.ner.word;
 import com.lc.nlp4han.ml.util.Evaluator;
 import com.lc.nlp4han.ner.NEREvaluateMonitor;
 import com.lc.nlp4han.ner.NERMeasure;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 /**
  * 基于分词的命名实体分析评估器

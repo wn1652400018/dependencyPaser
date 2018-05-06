@@ -7,7 +7,7 @@ import java.util.List;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.util.AbstractEventStream;
 import com.lc.nlp4han.ml.util.ObjectStream;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 /**
  * 为基于字的命名实体识别生成事件

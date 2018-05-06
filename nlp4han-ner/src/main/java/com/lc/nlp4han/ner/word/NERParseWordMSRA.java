@@ -2,6 +2,9 @@ package com.lc.nlp4han.ner.word;
 
 import java.util.ArrayList;
 
+import com.lc.nlp4han.ner.NERParseStrategy;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
+
 /**
  * 对msra语料基于词的解析
  * @author 王馨苇

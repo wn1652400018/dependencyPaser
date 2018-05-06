@@ -11,12 +11,12 @@ import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.ml.util.TrainingParameters;
-import com.lc.nlp4han.ner.word.NERParseStrategy;
+import com.lc.nlp4han.ner.NERParseStrategy;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 import com.lc.nlp4han.ner.word.NERParseWordPD;
 import com.lc.nlp4han.ner.word.NERWordContextGenerator;
 import com.lc.nlp4han.ner.word.NERWordContextGeneratorConf;
 import com.lc.nlp4han.ner.word.NERWordME;
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
 import com.lc.nlp4han.ner.word.NERWordSampleStream;
 
 public class NERWordAndPosTrainTool {

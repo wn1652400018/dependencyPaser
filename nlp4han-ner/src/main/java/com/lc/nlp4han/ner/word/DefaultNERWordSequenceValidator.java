@@ -27,6 +27,7 @@ public class DefaultNERWordSequenceValidator implements SequenceValidator<String
 	@Override
 	public boolean validSequence(int i, String[] words, String[] tags, String out)
 	{
+		//TODO: 校验不依赖命名实体的标注方案
 		if (words.length == 1)
 		{
 			if (out.equals("o") || out.equals("s_nt") || out.equals("s_nr") || out.equals("s_ns") || out.equals("s_nz"))

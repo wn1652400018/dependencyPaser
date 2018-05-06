@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.lc.nlp4han.ner.word.NERWordOrCharacterSample;
+import com.lc.nlp4han.ner.NERWordOrCharacterSample;
 
 public class NERWordAndPosSample extends NERWordOrCharacterSample{
 
@@ -62,7 +62,7 @@ public class NERWordAndPosSample extends NERWordOrCharacterSample{
 	 * @return
 	 */
 	public String toString() {
-		String[] word = toWordAndPos(words,poses,tags);
+		String[] word = toWordAndPos(wordsOrChars,poses,tags);
 		String[] tag = toNer(tags);
 		String sample = "";
 		for (int i = 0; i < word.length; i++) {
