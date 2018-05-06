@@ -16,7 +16,6 @@ import com.lc.nlp4han.ner.NERWordOrCharacterSample;
  *
  */
 public class NERWordCrossValidation {
-	private final String languageCode;
 	private final TrainingParameters params;
 	private NEREvaluateMonitor[] monitor;
 	
@@ -26,8 +25,7 @@ public class NERWordCrossValidation {
 	 * @param params 训练的参数
 	 * @param listeners 监听器
 	 */
-	public NERWordCrossValidation(String languageCode,TrainingParameters params,NEREvaluateMonitor... monitor){
-		this.languageCode = languageCode;
+	public NERWordCrossValidation(TrainingParameters params,NEREvaluateMonitor... monitor){
 		this.params = params;
 		this.monitor = monitor;
 	}

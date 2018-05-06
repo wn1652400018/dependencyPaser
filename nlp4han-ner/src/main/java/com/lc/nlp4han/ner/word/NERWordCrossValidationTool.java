@@ -23,7 +23,7 @@ import com.lc.nlp4han.ner.NERWordOrCharacterSample;
  */
 public class NERWordCrossValidationTool {
     
-    public void evaluate(ObjectStream<NERWordOrCharacterSample> samples, int nFolds, NERWordContextGenerator contextGen,
+    public static void evaluate(ObjectStream<NERWordOrCharacterSample> samples, int nFolds, NERWordContextGenerator contextGen,
     		TrainingParameters trainParam, NEREvaluateMonitor... listeners) throws IOException{
     	CrossValidationPartitioner<NERWordOrCharacterSample> partitioner = new CrossValidationPartitioner<NERWordOrCharacterSample>(samples, nFolds);
 		int run = 1;
@@ -103,7 +103,6 @@ public class NERWordCrossValidationTool {
         // TODO: 根据命令行参数选择不同的样本解析类
         NERParseStrategy parse = new NERParseWordPD();
         ObjectStream<NERWordOrCharacterSample> sampleStream = new NERWordSampleStream(lineStream, parse);
-        NERWordCrossValidationTool run = new NERWordCrossValidationTool();
-        run.evaluate(sampleStream,folds,context, params);
+        evaluate(sampleStream,folds,context, params);
 	}
 }
