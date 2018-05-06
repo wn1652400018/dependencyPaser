@@ -17,7 +17,6 @@ public class SRLEvaluateMonitor implements EvaluationMonitor<SRLSample<HeadTreeN
 	 */
 	@Override
 	public void correctlyClassified(SRLSample<HeadTreeNode> arg0, SRLSample<HeadTreeNode> arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -28,7 +27,6 @@ public class SRLEvaluateMonitor implements EvaluationMonitor<SRLSample<HeadTreeN
 	 */
 	@Override
 	public void missclassified(SRLSample<HeadTreeNode> arg0, SRLSample<HeadTreeNode> arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -50,7 +50,6 @@ public class PlainTextByTreeStream  implements ObjectStream<String[]>{
 	 * 关闭文件
 	 */
 	public void close() throws IOException {
-		// TODO Auto-generated method stub
 		if (this.in != null && this.channel == null) {
 			this.in.close();
 		} else if (this.channel != null) {

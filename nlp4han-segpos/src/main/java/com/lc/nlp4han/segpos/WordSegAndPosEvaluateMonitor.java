@@ -15,7 +15,6 @@ public class WordSegAndPosEvaluateMonitor implements EvaluationMonitor<WordSegAn
 	 * @param arg1 预测的结果
 	 */
 	public void correctlyClassified(WordSegAndPosSample arg0, WordSegAndPosSample arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -25,7 +24,6 @@ public class WordSegAndPosEvaluateMonitor implements EvaluationMonitor<WordSegAn
 	 * @param arg1 预测的结果
 	 */
 	public void missclassified(WordSegAndPosSample arg0, WordSegAndPosSample arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
