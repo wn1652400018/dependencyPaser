@@ -6,19 +6,19 @@ public class NEREvaluateMonitor implements EvaluationMonitor<NERWordOrCharacterS
 
 	/**
 	 * 预测正确的时候执行
-	 * @param arg0 参考的结果
-	 * @param arg1 预测的结果
+	 * @param ref 参考的结果
+	 * @param pre 预测的结果
 	 */
-	public void correctlyClassified(NERWordOrCharacterSample arg0, NERWordOrCharacterSample arg1) {
+	public void correctlyClassified(NERWordOrCharacterSample ref, NERWordOrCharacterSample pre) {
 		
 	}
 
 	/**
 	 * 预测正确的时候执行
-	 * @param arg0 参考的结果
-	 * @param arg1 预测的结果
+	 * @param ref 参考的结果
+	 * @param pre 预测的结果
 	 */
-	public void missclassified(NERWordOrCharacterSample arg0, NERWordOrCharacterSample arg1) {
+	public void missclassified(NERWordOrCharacterSample ref, NERWordOrCharacterSample pre) {
 		
 	}
 

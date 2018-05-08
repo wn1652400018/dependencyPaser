@@ -68,12 +68,16 @@ public class NERWordTrainTool {
         params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
         params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
         
+        // TODO: 根据命令行参数选择不同的样本解析类
         NERParseStrategy parse = new NERParseWordPD();
         ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
         ObjectStream<NERWordOrCharacterSample> sampleStream = new NERWordSampleStream(lineStream, parse);
         NERWordContextGenerator contextGen = new NERWordContextGeneratorConf();
+        
         ModelWrapper model = NERWordME.train(sampleStream, params, contextGen);
         OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
         model.serialize(modelOut);
+        
+        modelOut.close();
 	}
 }

@@ -1,7 +1,9 @@
 package com.lc.nlp4han.ner;
 
 /**
- * 计算指标
+ * NER评价指标
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
@@ -19,21 +21,24 @@ public class NERMeasure {
      */
     private long target;
     //人名
-    private long truePositivenr;
-    private long selectednr;
-    private long targetnr;
+    private long truePositiveNR;
+    private long selectedNR;
+    private long targetNR;
+    
     //机构名
-    private long truePositivent;
-    private long selectednt;
-    private long targetnt;
+    private long truePositiveNT;
+    private long selectedNT;
+    private long targetNT;
+    
     //地名
-    private long truePositivens;
-    private long selectedns;
-    private long targetns;
+    private long truePositiveNS;
+    private long selectedNS;
+    private long targetNS;
+    
     //专有名词
-    private long truePositivenz;
-    private long selectednz;
-    private long targetnz;
+    private long truePositiveNZ;
+    private long selectedNZ;
+    private long targetNZ;
     
     /**
      * 预测正确的个数
@@ -48,6 +53,8 @@ public class NERMeasure {
 	 * @param tagsPre 预测的词性标记
 	 */
 	public void update(String[] wordsRef, String[] tagsRef, String[] wordsPre, String[] tagsPre) {
+		// TODO: 不依赖与NER标准方案的指标计算
+		
 		//定义变量记录当前扫描的总长度
     	int countRef = 0,countPre = 0;
     	//记录当前所在的词的位置
@@ -68,22 +75,22 @@ public class NERMeasure {
         			}       			
         			if(tagsRef[i].equals("nr") && tagsPre[j].equals("nr") && (tagsRef[i] == tagsPre[j] || tagsRef[i].equals(tagsPre[j]))){
     					
-        				truePositivenr++;        				
+        				truePositiveNR++;        				
         			} 
  
         			if(tagsRef[i].equals("ns") && tagsPre[j].equals("ns") && (tagsRef[i] == tagsPre[j] || tagsRef[i].equals(tagsPre[j]))){
     					
-        				truePositivens++;  
+        				truePositiveNS++;  
         			}
 
         			if(tagsRef[i].equals("nt") && tagsPre[j].equals("nt") && (tagsRef[i] == tagsPre[j] || tagsRef[i].equals(tagsPre[j]))){
     					
-        				truePositivent++;  
+        				truePositiveNT++;  
         			}
         			
         			if(tagsRef[i].equals("nz") && tagsPre[j].equals("nz") && (tagsRef[i] == tagsPre[j] || tagsRef[i].equals(tagsPre[j]))){
     					
-        				truePositivenz++;  
+        				truePositiveNZ++;  
         			}
 
         			iPre = i;
@@ -124,31 +131,31 @@ public class NERMeasure {
     			selected++;
     		}   		
     		if(tagsPre[k].equals("nr")){
-    			selectednr++;
+    			selectedNR++;
     		}
     		if(tagsPre[k].equals("ns")){
-    			selectedns++;
+    			selectedNS++;
     		}
     		if(tagsPre[k].equals("nt")){
-    			selectednt++;
+    			selectedNT++;
     		}
     		if(tagsPre[k].equals("nz")){
-    			selectednz++;
+    			selectedNZ++;
     		}
     		
 		}
     	for (int k = 0; k < tagsRef.length; k++) {
     		if(tagsRef[k].equals("nr")){
-    			targetnr++;
+    			targetNR++;
     		}
     		if(tagsRef[k].equals("ns")){
-    			targetns++;
+    			targetNS++;
     		}
     		if(tagsRef[k].equals("nt")){
-    			targetnt++;
+    			targetNT++;
     		}
     		if(tagsRef[k].equals("nz")){
-    			targetnz++;
+    			targetNZ++;
     		}
     		if(!tagsRef[k].equals("o")){
     			target++;
@@ -192,7 +199,7 @@ public class NERMeasure {
 	 * @return
 	 */
 	public double getNRPrecisionScore() {
-		return selectednr > 0 ? (double) truePositivenr / (double) selectednr : 0;
+		return selectedNR > 0 ? (double) truePositiveNR / (double) selectedNR : 0;
 	}
 
 	/**
@@ -200,7 +207,7 @@ public class NERMeasure {
 	 * @return
 	 */
 	public double getNRRecallScore() { 
-		return targetnr > 0 ? (double) truePositivenr / (double) targetnr : 0;
+		return targetNR > 0 ? (double) truePositiveNR / (double) targetNR : 0;
 	}
 	
 	/**
@@ -223,7 +230,7 @@ public class NERMeasure {
 	 * @return
 	 */
 	public double getNSPrecisionScore() {
-		return selectedns > 0 ? (double) truePositivens / (double) selectedns : 0;
+		return selectedNS > 0 ? (double) truePositiveNS / (double) selectedNS : 0;
 	}
 
 	/**
@@ -231,7 +238,7 @@ public class NERMeasure {
 	 * @return
 	 */
 	public double getNSRecallScore() { 
-		return targetns > 0 ? (double) truePositivens / (double) targetns : 0;
+		return targetNS > 0 ? (double) truePositiveNS / (double) targetNS : 0;
 	}
 	
 	/**
@@ -254,7 +261,7 @@ public class NERMeasure {
 	 * @return
 	 */
 	public double getNTPrecisionScore() {
-		return selectednt > 0 ? (double) truePositivent / (double) selectednt : 0;
+		return selectedNT > 0 ? (double) truePositiveNT / (double) selectedNT : 0;
 	}
 
 	/**
@@ -262,7 +269,7 @@ public class NERMeasure {
 	 * @return
 	 */
 	public double getNTRecallScore() { 
-		return targetnt > 0 ? (double) truePositivent / (double) targetnt : 0;
+		return targetNT > 0 ? (double) truePositiveNT / (double) targetNT : 0;
 	}
 	
 	/**
@@ -285,7 +292,7 @@ public class NERMeasure {
 	 * @return
 	 */
 	public double getNZPrecisionScore() {
-		return selectednz > 0 ? (double) truePositivenz / (double) selectednz : 0;
+		return selectedNZ > 0 ? (double) truePositiveNZ / (double) selectedNZ : 0;
 	}
 
 	/**
@@ -293,7 +300,7 @@ public class NERMeasure {
 	 * @return
 	 */
 	public double getNZRecallScore() { 
-		return targetnz > 0 ? (double) truePositivenz / (double) targetnz : 0;
+		return targetNZ > 0 ? (double) truePositiveNZ / (double) targetNZ : 0;
 	}
 	
 	/**

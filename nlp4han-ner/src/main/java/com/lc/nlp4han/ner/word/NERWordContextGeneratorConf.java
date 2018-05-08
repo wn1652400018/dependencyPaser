@@ -27,6 +27,8 @@ public class NERWordContextGeneratorConf implements NERWordContextGenerator{
     private boolean t_1Set;
     private boolean t_2Set;
     private boolean t_2t_1Set;
+    
+    // TODO: 基于词典的NER特征
   //增加的字典特征的控制变量
     private boolean Lt0Set;
     private boolean w_1t0Set;

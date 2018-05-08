@@ -5,6 +5,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 基于字或词的NER样本
+ * 
+ * @author 刘小峰
+ *
+ */
 public class NERWordOrCharacterSample
 {
 

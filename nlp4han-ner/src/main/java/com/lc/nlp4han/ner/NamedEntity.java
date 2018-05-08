@@ -2,6 +2,7 @@ package com.lc.nlp4han.ner;
 
 /**
  * 命名实体类
+ * 
  * @author 王馨苇
  *
  */
@@ -50,7 +51,7 @@ public class NamedEntity {
 	}
 	
 	/**
-	 * 实体起始位置
+	 * 实体起始位置，词或字位置
 	 * @return
 	 */
 	public int getStart(){
@@ -58,7 +59,7 @@ public class NamedEntity {
 	}
 	
 	/**
-	 * 实体结束位置
+	 * 实体结束位置，词或字位置
 	 * @return
 	 */
 	public int getEnd(){
