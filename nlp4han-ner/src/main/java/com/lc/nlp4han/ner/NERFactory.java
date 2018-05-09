@@ -23,7 +23,7 @@ public class NERFactory
 	 * @return 中文NER
 	 * @throws IOException
 	 */
-	public static NERWord getPOSTagger() throws IOException
+	public static NERWord getNERWordTagger() throws IOException
 	{
 		if (ner != null)
 			return ner;
@@ -42,7 +42,7 @@ public class NERFactory
 	{
 		String words = "李 鹏 在 北京 视察 。";
 
-		NERWord tagger = NERFactory.getPOSTagger();
+		NERWord tagger = NERFactory.getNERWordTagger();
 		NamedEntity[] tags = tagger.ner(words);
 		for(int i=0; i<tags.length; i++)
 			System.out.println(tags[i]);
