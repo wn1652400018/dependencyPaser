@@ -25,9 +25,9 @@ public class HeadGeneratorCollins extends AbstractHeadGenerator{
 		int record = -1;
 		//先判断是不是这种结构
 		for (int i = 0; i < node.getChildrenNum() - 2; i++) {
-			if(node.getIChildName(i).split("-")[0].equals(parentNonTerminal) &&
-					node.getIChildName(i+1).equals("CC") &&
-					node.getIChildName(i+2).split("-")[0].equals(parentNonTerminal)){
+			if(node.getChildName(i).split("-")[0].equals(parentNonTerminal) &&
+					node.getChildName(i+1).equals("CC") &&
+					node.getChildName(i+2).split("-")[0].equals(parentNonTerminal)){
 				flag = true;
 				record = i;
 				break;
@@ -58,7 +58,7 @@ public class HeadGeneratorCollins extends AbstractHeadGenerator{
 					//用所有的子节点从左向右匹配规则中每一个
 					for (int i = 0; i < specialRules.get(currNodeName).get(k).getRightRulesSize(); i++) {
 						for (int j = 0; j < node.getChildrenNum(); j++) {
-							if(node.getIChildName(j).equals(specialRules.get(currNodeName).get(k).getIRightRule(i))){
+							if(node.getChildName(j).equals(specialRules.get(currNodeName).get(k).getIRightRule(i))){
 								return node.getIChildHeadWord(j)+"_"+node.getIChildHeadWordPos(j);
 							}
 						}
@@ -66,7 +66,7 @@ public class HeadGeneratorCollins extends AbstractHeadGenerator{
 				}else if(specialRules.get(currNodeName).get(k).getDirection().equals("right")){
 					for (int i = specialRules.get(currNodeName).get(k).getRightRulesSize() -1 ; i >= 0; i--) {
 						for (int j = 0; j < node.getChildrenNum(); j++) {
-							if(node.getIChildName(j).equals(specialRules.get(currNodeName).get(k).getIRightRule(i))){
+							if(node.getChildName(j).equals(specialRules.get(currNodeName).get(k).getIRightRule(i))){
 								return node.getIChildHeadWord(j)+"_"+node.getIChildHeadWordPos(j);
 							}
 						}
@@ -94,7 +94,7 @@ public class HeadGeneratorCollins extends AbstractHeadGenerator{
 				//用所有的子节点从左向右匹配规则中每一个
 				for (int i = 0; i < normalRules.get(currentNodeName).getRightRulesSize(); i++) {
 					for (int j = 0; j < node.getChildrenNum(); j++) {
-						if(node.getIChildName(j).equals(normalRules.get(currentNodeName).getIRightRule(i))){
+						if(node.getChildName(j).equals(normalRules.get(currentNodeName).getIRightRule(i))){
 							return node.getIChildHeadWord(j)+"_"+node.getIChildHeadWordPos(j);
 						}
 					}
@@ -102,7 +102,7 @@ public class HeadGeneratorCollins extends AbstractHeadGenerator{
 			}else if(normalRules.get(currentNodeName).getDirection().equals("right")){
 				for (int i = normalRules.get(currentNodeName).getRightRulesSize() -1 ; i >= 0; i--) {
 					for (int j = 0; j < node.getChildrenNum(); j++) {
-						if(node.getIChildName(j).equals(normalRules.get(currentNodeName).getIRightRule(i))){
+						if(node.getChildName(j).equals(normalRules.get(currentNodeName).getIRightRule(i))){
 							return node.getIChildHeadWord(j)+"_"+node.getIChildHeadWordPos(j);
 						}
 					}

@@ -75,13 +75,13 @@ public class ConstituentParserME implements ConstituentParser{
 
 	/**
 	 * 得到最好的K个成分树
-	 * @param k 最好的K个结果
 	 * @param words 词语
 	 * @param poses 词性标记
+	 * @param k 最好的K个结果
 	 * @return
 	 */
 	@Override
-	public ConstituentTree[] parseKTree(int k, String[] words, String[] poses) {
+	public ConstituentTree[] parseKTree(String[] words, String[] poses, int k) {
 		String[][] kposes = new String[1][poses.length];
 		for (int i = 0; i < kposes.length; i++) {
 			for (int j = 0; j < kposes[i].length; j++) {
@@ -102,12 +102,12 @@ public class ConstituentParserME implements ConstituentParser{
 
 	/**
 	 * 得到最好的K个成分树
-	 * @param k 最好的K个结果
 	 * @param words 分词序列
+	 * @param k 最好的K个结果
 	 * @return
 	 */
 	@Override
-	public ConstituentTree[] parseKTree(int k, String[] words) {
+	public ConstituentTree[] parseKTree(String[] words, int k) {
 		List<List<HeadTreeNode>> postree = postagger.posTree(k, words);
 		List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(k, postree, null);
 		List<HeadTreeNode> headTreeNode = buildAndChecktagger.tagBuildAndCheck(k,chunkTree, null);

@@ -80,9 +80,9 @@ public class TreePreTreatmentTest{
 				+ "(VP(VBZ has)(VP(VBN been)(VP(VBN murdered)(PP(IN by)"
 				+ "(NP(NNS thugs)))))))(, ,))(PP(TO to)(NP(PRP$ her)(NN mother)))))))))(. .))";
 		
-		assertEquals(result1,tree1.toNoNoneBracket());	
-		assertEquals(result2,tree2.toNoNoneBracket());	
-		assertEquals(result3,tree3.toNoNoneBracket());	
-		assertEquals(result4,tree4.toNoNoneBracket());	
+		assertEquals(result1,tree1.toBracketNoNullNode());	
+		assertEquals(result2,tree2.toBracketNoNullNode());	
+		assertEquals(result3,tree3.toBracketNoNullNode());	
+		assertEquals(result4,tree4.toBracketNoNullNode());	
 	}
 }

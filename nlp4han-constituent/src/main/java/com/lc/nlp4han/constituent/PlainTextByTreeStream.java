@@ -11,52 +11,70 @@ import com.lc.nlp4han.ml.util.InputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
- * 从训练语料中读取完整的树
- * 说明：每次读取一颗完整的树是根据括号的匹配情况来判断
+ * 从训练语料中读取完整的树 说明：每次读取一颗完整的树是根据括号的匹配情况来判断
  * 
  * @author 刘小峰
  * @author 王馨苇
  *
  */
-public class PlainTextByTreeStream  implements ObjectStream<String>{
+public class PlainTextByTreeStream implements ObjectStream<String>
+{
 
-	private final FileChannel channel;//缓冲道
+	private final FileChannel channel;// 缓冲道
 	private final String encoding;
 	private InputStreamFactory inputStreamFactory;
 	private BufferedReader in;
-	
+
 	/**
 	 * 构造
-	 * @param inputStreamFactory 输入文件样本流
-	 * @param charsetName 编码
-	 * @throws UnsupportedOperationException 异常
-	 * @throws IOException 异常
+	 * 
+	 * @param inputStreamFactory
+	 *            输入文件样本流
+	 * @param charsetName
+	 *            编码
+	 * @throws UnsupportedOperationException
+	 *             异常
+	 * @throws IOException
+	 *             异常
 	 */
-	public PlainTextByTreeStream(InputStreamFactory inputStreamFactory, String charsetName) throws UnsupportedOperationException, IOException{
-		this(inputStreamFactory,Charset.forName(charsetName));
+	public PlainTextByTreeStream(InputStreamFactory inputStreamFactory, String charsetName)
+			throws UnsupportedOperationException, IOException
+	{
+		this(inputStreamFactory, Charset.forName(charsetName));
 	}
-	
+
 	/**
 	 * 构造
-	 * @param inputStreamFactory 输入文件样本流
-	 * @param charsetName 编码
-	 * @throws UnsupportedOperationException 异常
-	 * @throws IOException 异常
+	 * 
+	 * @param inputStreamFactory
+	 *            输入文件样本流
+	 * @param charsetName
+	 *            编码
+	 * @throws UnsupportedOperationException
+	 *             异常
+	 * @throws IOException
+	 *             异常
 	 */
-	public PlainTextByTreeStream(InputStreamFactory inputStreamFactory, Charset charsetName) throws UnsupportedOperationException, IOException{
+	public PlainTextByTreeStream(InputStreamFactory inputStreamFactory, Charset charsetName)
+			throws UnsupportedOperationException, IOException
+	{
 		this.encoding = charsetName.name();
-		this.inputStreamFactory  = inputStreamFactory;
+		this.inputStreamFactory = inputStreamFactory;
 		this.channel = null;
 		this.reset();
 	}
-	
+
 	/**
 	 * 关闭文件
 	 */
-	public void close() throws IOException {
-		if (this.in != null && this.channel == null) {
+	public void close() throws IOException
+	{
+		if (this.in != null && this.channel == null)
+		{
 			this.in.close();
-		} else if (this.channel != null) {
+		}
+		else if (this.channel != null)
+		{
 			this.channel.close();
 		}
 	}
@@ -66,43 +84,57 @@ public class PlainTextByTreeStream  implements ObjectStream<String>{
 	 * 
 	 * @return 拼接后的结果
 	 */
-	public String read() throws IOException {
+	public String read() throws IOException
+	{
 		String line = "";
 		String readContent = "";
 		int left = 0;
 		int right = 0;
-		while((line = this.in.readLine()) != null){
-			if(line != "" && !line.equals("")){
-				line = line.replaceAll("\n","");
+		while ((line = this.in.readLine()) != null)
+		{
+			if (line != "" && !line.equals(""))
+			{
+				line = line.replaceAll("\n", "");
 				char[] c = line.trim().toCharArray();
 				readContent += line.trim();
-				for (int i = 0; i < c.length; i++) {
-					if(c[i] == '('){
+				for (int i = 0; i < c.length; i++)
+				{
+					if (c[i] == '(')
+					{
 						left++;
-					}else if(c[i] == ')'){
+					}
+					else if (c[i] == ')')
+					{
 						right++;
 					}
 				}
-				
-				if(left == right){
+
+				if (left == right)
+				{
 					break;
 				}
 			}
 		}
-		
+
 		return readContent;
 	}
 
 	/**
 	 * 重置读取的位置
 	 */
-	public void reset() throws IOException, UnsupportedOperationException {	
-		if (this.inputStreamFactory != null) {
+	public void reset() throws IOException, UnsupportedOperationException
+	{
+		if (this.inputStreamFactory != null)
+		{
 			this.in = new BufferedReader(
 					new InputStreamReader(this.inputStreamFactory.createInputStream(), this.encoding));
-		}else if (this.channel == null) {
+		}
+		else if (this.channel == null)
+		{
 			this.in.reset();
-		} else {
+		}
+		else
+		{
 			this.channel.position(0L);
 			this.in = new BufferedReader(Channels.newReader(this.channel, this.encoding));
 		}

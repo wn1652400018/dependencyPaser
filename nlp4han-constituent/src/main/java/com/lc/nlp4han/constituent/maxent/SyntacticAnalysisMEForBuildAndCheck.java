@@ -331,7 +331,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 			return null;
 		} else {
 			for (int i = 0; i < alltree.size(); i++) {
-				TreeNode node = BracketExpUtil.generateTree("(" + alltree.get(i).toBracket() + ")");
+				TreeNode node = BracketExpUtil.generateTree("(" + alltree.get(i).toStringWithWordIndex() + ")");
 				HeadTreeNode headTree = TreeToHeadTree.treeToHeadTree(node, headGenerator);
 				SyntacticAnalysisSample<HeadTreeNode> sample = HeadTreeToActions.headTreeToAction(headTree,
 						headGenerator);

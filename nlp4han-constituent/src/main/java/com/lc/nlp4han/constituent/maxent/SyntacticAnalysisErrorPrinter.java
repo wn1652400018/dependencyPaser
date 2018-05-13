@@ -26,10 +26,10 @@ public class SyntacticAnalysisErrorPrinter extends SyntacticAnalysisEvaluateMoni
 	@Override
 	public void missclassified(SyntacticAnalysisSample<HeadTreeNode> reference, SyntacticAnalysisSample<HeadTreeNode> predict) {
 		 errOut.println("样本的结果：");
-		 errOut.println(SyntacticAnalysisSample.toTree(reference.getWords(), reference.getActions()).toBracket());
+		 errOut.println(SyntacticAnalysisSample.toTree(reference.getWords(), reference.getActions()).toStringWithWordIndex());
 		 errOut.println();
 		 errOut.println("预测的结果：");
-		 errOut.println(SyntacticAnalysisSample.toTree(predict.getWords(), predict.getActions()).toBracket());
+		 errOut.println(SyntacticAnalysisSample.toTree(predict.getWords(), predict.getActions()).toStringWithWordIndex());
 		 errOut.println();
 	}
 }

@@ -48,13 +48,13 @@ public abstract class AbstractParseStrategy<T extends TreeNode> {
 			tree.setFlag(false);
 			if(IsCordinateStructureUtil.isCordinate(tree)){
 				for (int i = 0; i < tree.getChildrenNum(); i++) {
-					tree.getIChild(i).setFlag(false);
+					tree.getChild(i).setFlag(false);
 				}
 			}
 		}
 		
 		for (int i = 0; i < count; i++) {
-			tree = (T) tree.getIChild(list.get(list.size()-1-i));
+			tree = (T) tree.getChild(list.get(list.size()-1-i));
 		}
 		
 		return tree;

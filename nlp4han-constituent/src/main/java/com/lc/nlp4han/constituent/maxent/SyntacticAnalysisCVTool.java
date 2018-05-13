@@ -6,7 +6,7 @@ import java.io.IOException;
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
+import com.lc.nlp4han.constituent.ConstituentMeasure;
 import com.lc.nlp4han.ml.util.CrossValidationPartitioner;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
@@ -67,7 +67,7 @@ public class SyntacticAnalysisCVTool {
 	        SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel, checkmodel, contextGen, aghw);
 	        
 			SyntacticAnalysisEvaluatorForByStep evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger, chunktagger, buildandchecktagger, aghw, listeners);
-			SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
+			ConstituentMeasure measure = new ConstituentMeasure();
 			
 			evaluator.setMeasure(measure);
 	        //设置测试集（在测试集上进行评价）

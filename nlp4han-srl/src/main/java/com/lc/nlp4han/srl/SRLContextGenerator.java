@@ -55,9 +55,9 @@ public abstract class SRLContextGenerator implements BeamSearchContextGenerator<
 			str += headTree.getNodeName()+"→";
 			for (int i = index; i < headTree.getChildrenNum(); i++) {
 				if(i == headTree.getChildrenNum() - 1){
-					str += headTree.getIChildName(i);
+					str += headTree.getChildName(i);
 				}else{
-					str += headTree.getIChildName(i) + " ";
+					str += headTree.getChildName(i) + " ";
 				}				
 			}
 		}

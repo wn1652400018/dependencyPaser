@@ -86,7 +86,7 @@ public class TreeToSRLTree {
 	 * @param role 角色标注信息
 	 */
 	private static void treeAddSingleSemanticRole(SRLTreeNode tree, HeadTreeNode headtree, String role){
-		if(tree.toString().equals(headtree.toBracket())){
+		if(tree.toString().equals(headtree.toStringWithWordIndex())){
 			tree.setSemanticRole(role);
 		}else{
 			for (TreeNode treenode : tree.getChildren()) {

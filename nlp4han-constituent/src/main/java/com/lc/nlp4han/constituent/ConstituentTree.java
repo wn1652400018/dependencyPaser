@@ -1,7 +1,9 @@
 package com.lc.nlp4han.constituent;
 
 /**
- * 成分树结构设计
+ * 成分树/短语结构树
+ * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */

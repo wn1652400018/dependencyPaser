@@ -7,7 +7,7 @@ import java.io.IOException;
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
+import com.lc.nlp4han.constituent.ConstituentMeasure;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
@@ -46,7 +46,7 @@ public class SyntacticAnalysisEvalTool {
         SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel, contextGen, aghw);
         SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel, checkmodel, contextGen, aghw);
         
-        SyntacticAnalysisMeasure measure = new SyntacticAnalysisMeasure();
+        ConstituentMeasure measure = new ConstituentMeasure();
         SyntacticAnalysisEvaluatorForByStep evaluator = null;
         SyntacticAnalysisErrorPrinter printer = null;
         if(errorFile != null){
@@ -60,7 +60,7 @@ public class SyntacticAnalysisEvalTool {
         ObjectStream<String> linesStream = new PlainTextByLineStream(new FileInputStreamFactory(goldFile), encoding);
         ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(linesStream, aghw);
         evaluator.evaluate(sampleStream);
-        SyntacticAnalysisMeasure measureRes = evaluator.getMeasure();
+        ConstituentMeasure measureRes = evaluator.getMeasure();
         System.out.println("标注时间： " + (System.currentTimeMillis() - start));
         System.out.println(measureRes);
 	}

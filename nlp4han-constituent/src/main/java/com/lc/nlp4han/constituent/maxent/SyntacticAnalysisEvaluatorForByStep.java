@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
+import com.lc.nlp4han.constituent.ConstituentMeasure;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.Evaluator;
 
@@ -22,7 +22,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 	private SyntacticAnalysisForPos<HeadTreeNode> postagger;
 	private SyntacticAnalysisMEForChunk chunktagger;
 	private SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger;
-	private SyntacticAnalysisMeasure measure;
+	private ConstituentMeasure measure;
 	private AbstractHeadGenerator aghw;
 	
 	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger, SyntacticAnalysisMEForChunk chunktagger, SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw) {
@@ -44,7 +44,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 	 * 设置评估指标的对象
 	 * @param measure 评估指标计算的对象
 	 */
-	public void setMeasure(SyntacticAnalysisMeasure measure){
+	public void setMeasure(ConstituentMeasure measure){
 		this.measure = measure;
 	}
 	
@@ -52,7 +52,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 	 * 得到评估的指标
 	 * @return
 	 */
-	public SyntacticAnalysisMeasure getMeasure(){
+	public ConstituentMeasure getMeasure(){
 		return this.measure;
 	}
 
@@ -82,7 +82,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 				}	
 			} catch(Exception e){
 				if (logger.isLoggable(Level.WARNING)) {						
-                    logger.warning("Error during parsing, ignoring sentence: " + treePre.toBracket());
+                    logger.warning("Error during parsing, ignoring sentence: " + treePre.toStringWithWordIndex());
                 }	
 				samplePre = new SyntacticAnalysisSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 			}

@@ -66,12 +66,12 @@ public class HeadTreeToActions {
 				int record = -1;
 				for (int j = 0; j < treeCopy.getParent().getChildrenNum(); j++) {
 					//如果有一颗子树破坏了flat结构，退出
-					if(treeCopy.getParent().getIChild(j).getChildrenNum() > 1){
+					if(treeCopy.getParent().getChild(j).getChildrenNum() > 1){
 						record = j;
 						break;
 					//(PP-CLR(TO to)(NP(PRP it)))针对这种结构
-					}else if(treeCopy.getParent().getIChild(j).getChildrenNum()  == 1
-							&& treeCopy.getParent().getIChild(j).getFirstChild().getChildrenNum() != 0){
+					}else if(treeCopy.getParent().getChild(j).getChildrenNum()  == 1
+							&& treeCopy.getParent().getChild(j).getFirstChild().getChildrenNum() != 0){
 						record = j;
 						break;
 					}
@@ -184,8 +184,8 @@ public class HeadTreeToActions {
 					node.setHeadWords(tree.getParent().getHeadWords());
 					node.setHeadWordsPos(tree.getParent().getHeadWordsPos());
 					for (int j = 0; j < tree.getParent().getChildrenNum(); j++) {								
-						node.addChild(tree.getParent().getIChild(j));
-						tree.getParent().getIChild(j).setParent(node);						
+						node.addChild(tree.getParent().getChild(j));
+						tree.getParent().getChild(j).setParent(node);						
 					}
 					//对subTreeCopy更改
 					//要更改的位置

@@ -42,7 +42,7 @@ public class TreePreprocessTool {
 			if(haveWordIndex == true){
 				newTreeStr = node.toNoNoneSample();
 			}else{
-				newTreeStr = node.toNoNoneBracket();
+				newTreeStr = node.toBracketNoNullNode();
 			}
 			TreeNode newTree = BracketExpUtil.generateTree("("+newTreeStr+")");
 			bw.write("("+TreeNode.printTree(newTree, 1)+")");
@@ -72,11 +72,11 @@ public class TreePreprocessTool {
 					//(SBAR(-NONE- 0)(S(-NONE- *T*-1)))
 					if(node.getParent().getChildrenNum() == 2){
 						node.getParent().setFlag(false);
-						if(node.getParent().getIChild(1).getChildrenNum() == 1){
-							if(node.getParent().getIChild(1).getFirstChildName().contains("NONE")){
-								node.getParent().getIChild(1).setFlag(false);
-								node.getParent().getIChild(1).getFirstChild().setFlag(false);
-								node.getParent().getIChild(1).getFirstChild().getFirstChild().setFlag(false);
+						if(node.getParent().getChild(1).getChildrenNum() == 1){
+							if(node.getParent().getChild(1).getFirstChildName().contains("NONE")){
+								node.getParent().getChild(1).setFlag(false);
+								node.getParent().getChild(1).getFirstChild().setFlag(false);
+								node.getParent().getChild(1).getFirstChild().getFirstChild().setFlag(false);
 								//(VP (VBD reported) (SBAR (-NONE- 0) (S (-NONE- *T*-1) )))变为(VBD reported)
 								if(node.getParent().getParent().getChildrenNum() == 2){
 									node.getParent().getParent().setFlag(false);

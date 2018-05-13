@@ -92,7 +92,7 @@ public class HeadTreeNode extends TreeNode{
 	 * @param i 儿子的序数
 	 * @return
 	 */
-	public HeadTreeNode getIChild(int i){
+	public HeadTreeNode getChild(int i){
 		return (HeadTreeNode) this.children.get(i);
 	}
 	
@@ -147,14 +147,14 @@ public class HeadTreeNode extends TreeNode{
 	 * 没有头结点的括号表达式
 	 * @return
 	 */
-	public String toBracket(){
+	public String toStringWithWordIndex(){
 		if(this.children.size() == 0){
 			return " " + this.nodename + "[" + getWordIndex() + "]";
 		}else{
 			String treestr = "";
 			treestr = "(" + this.nodename;
 			for (TreeNode node:this.children) {
-				treestr += node.toBracket();
+				treestr += node.toStringWithWordIndex();
 			}
 			treestr += ")";
 			return treestr;

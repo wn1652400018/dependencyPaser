@@ -403,11 +403,11 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		String wordandpos = "";
 		for (int i = 0; i < tree.getChildrenNum(); i++) {
 			if(i == tree.getChildrenNum() - 1){
-				wordandpos += tree.getIChild(i).getFirstChildName()+"/"+
-						tree.getIChildName(i);
+				wordandpos += tree.getChild(i).getFirstChildName()+"/"+
+						tree.getChildName(i);
 			}else{
-				wordandpos += tree.getIChild(i).getFirstChildName()+"/"+
-						tree.getIChildName(i)+" ";
+				wordandpos += tree.getChild(i).getFirstChildName()+"/"+
+						tree.getChildName(i)+" ";
 			}
 		}
 		return wordandpos;

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.lc.nlp4han.constituent.BracketExpUtil;
-import com.lc.nlp4han.constituent.SyntacticAnalysisMeasure;
+import com.lc.nlp4han.constituent.ConstituentMeasure;
 import com.lc.nlp4han.constituent.TreeNode;
 
 
@@ -21,7 +21,7 @@ public class SyntacticAnalysisMeasureTest {
 		//两棵树不同
 		TreeNode treeRef1 = BracketExpUtil.generateTree("((S(NP(NN Measuring)(NNS cups))(VP(MD may)(ADVP(RB soon))(VP(VB be)(VP(VBN replaced)(PP(IN by)(NP(NNS tablespoons)))(PP(IN in)(NP(DT the)(NN laundry)(NN room))))))(. .)))");
 		TreeNode treePre1 = BracketExpUtil.generateTree("((S(NP(VBG Measuring)(NNS cups))(VP(MD may)(ADVP(RB soon))(VP(VB be)(VP(VBN replaced)(PP(IN by)(NP(NP(NNS tablespoons))(PP(IN in)(NP(DT the)(NN laundry)(NN room))))))))(. .)))");
-		SyntacticAnalysisMeasure measure1 = new SyntacticAnalysisMeasure();
+		ConstituentMeasure measure1 = new ConstituentMeasure();
 		measure1.update(treeRef1, treePre1);
 		assertEquals(measure1.getPrecisionScore(), 0.8181, 0.001);
 		assertEquals(measure1.getRecallScore(), 0.9, 0.001);
@@ -34,7 +34,7 @@ public class SyntacticAnalysisMeasureTest {
 		//两颗树相同的
 		TreeNode treeRef2 = BracketExpUtil.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
 		TreeNode treePre2 = BracketExpUtil.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
-		SyntacticAnalysisMeasure measure2 = new SyntacticAnalysisMeasure();
+		ConstituentMeasure measure2 = new ConstituentMeasure();
 		measure2.update(treeRef2, treePre2);
 		assertEquals(measure2.getPrecisionScore(), 1.0, 0.001);
 		assertEquals(measure2.getRecallScore(), 1.0, 0.001);
