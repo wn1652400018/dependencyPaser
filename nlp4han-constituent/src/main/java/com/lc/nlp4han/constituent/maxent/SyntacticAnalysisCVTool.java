@@ -42,13 +42,13 @@ public class SyntacticAnalysisCVTool {
      * @param aghw 生成头结点
      * @throws IOException
      */
-    public void evaluate(String postaggertype, ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) throws IOException{
-    	CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>> partitioner = new CrossValidationPartitioner<SyntacticAnalysisSample<HeadTreeNode>>(samples, nFolds);
+    public void evaluate(String postaggertype, ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples, int nFolds, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw) throws IOException{
+    	CrossValidationPartitioner<ConstituentTreeSample<HeadTreeNode>> partitioner = new CrossValidationPartitioner<ConstituentTreeSample<HeadTreeNode>>(samples, nFolds);
 		int run = 1;
 		//小于折数的时候
 		while(partitioner.hasNext()){
 			System.out.println("Run"+run+"...");
-			CrossValidationPartitioner.TrainingSampleStream<SyntacticAnalysisSample<HeadTreeNode>> trainingSampleStream = partitioner.next();
+			CrossValidationPartitioner.TrainingSampleStream<ConstituentTreeSample<HeadTreeNode>> trainingSampleStream = partitioner.next();
 			ModelWrapper posmodel = new ModelWrapper(new File("data\\model\\pos\\en-pos-maxent.bin"));	
 			ModelWrapper chunkmodel= SyntacticAnalysisMEForChunk.train(languageCode, trainingSampleStream, params, contextGen);
 			trainingSampleStream.reset();
@@ -145,7 +145,7 @@ public class SyntacticAnalysisCVTool {
         AbstractHeadGenerator aghw = new HeadGeneratorCollins();
         System.out.println(contextGen);
         ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(corpusFile), encoding);       
-        ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);
+        ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream, aghw);
         SyntacticAnalysisCVTool run = new SyntacticAnalysisCVTool("zh", params);
         run.evaluate(postagger, sampleStream, folds, contextGen, aghw);
 	}

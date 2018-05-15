@@ -8,7 +8,7 @@ import com.lc.nlp4han.ml.util.EvaluationMonitor;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisEvaluateMonitor implements EvaluationMonitor<SyntacticAnalysisSample<HeadTreeNode>>{
+public class SyntacticAnalysisEvaluateMonitor implements EvaluationMonitor<ConstituentTreeSample<HeadTreeNode>>{
 
 	/**
 	 * 预测正确的时候执行
@@ -16,7 +16,7 @@ public class SyntacticAnalysisEvaluateMonitor implements EvaluationMonitor<Synta
 	 * @param arg1 预测的结果
 	 */
 	@Override
-	public void correctlyClassified(SyntacticAnalysisSample<HeadTreeNode> arg0, SyntacticAnalysisSample<HeadTreeNode> arg1) {
+	public void correctlyClassified(ConstituentTreeSample<HeadTreeNode> arg0, ConstituentTreeSample<HeadTreeNode> arg1) {
 		
 	}
 
@@ -26,7 +26,7 @@ public class SyntacticAnalysisEvaluateMonitor implements EvaluationMonitor<Synta
 	 * @param arg1 预测的结果
 	 */
 	@Override
-	public void missclassified(SyntacticAnalysisSample<HeadTreeNode> arg0, SyntacticAnalysisSample<HeadTreeNode> arg1) {
+	public void missclassified(ConstituentTreeSample<HeadTreeNode> arg0, ConstituentTreeSample<HeadTreeNode> arg1) {
 		
 	}
 

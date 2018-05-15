@@ -96,7 +96,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 		
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream, aghw);
+			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream, aghw);
 			model = SyntacticAnalysisMEForBuildAndCheck.trainForBuild("zh", sampleStream, params, contextGen);
 			return model;
 		} catch (FileNotFoundException e) {
@@ -123,7 +123,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 * @throws IOException
 	 */
 	public static ModelWrapper trainForBuild(String languageCode,
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream, TrainingParameters params,
+			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream, TrainingParameters params,
 			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException {
 		String beamSizeString = params.getSettings().get(SyntacticAnalysisBeamSearch.BEAM_SIZE_PARAMETER);
 		int beamSize = SyntacticAnalysisMEForBuildAndCheck.DEFAULT_BEAM_SIZE;
@@ -169,7 +169,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(
+			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(
 					lineStream, aghw);
 			model = SyntacticAnalysisMEForBuildAndCheck.trainForBuild("zh", sampleStream, params, contextGen);
 			modelOut = new BufferedOutputStream(new FileOutputStream(buildmodelFile));
@@ -204,7 +204,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	public static ModelWrapper trainForCheck(File file, TrainingParameters params,
 			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw) throws IOException {
 		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-		ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream,
+		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				aghw);
 		ModelWrapper model = SyntacticAnalysisMEForBuildAndCheck.trainForCheck("zh", sampleStream, params, contextGen);
 		return model;
@@ -226,7 +226,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 	 * @throws IOException
 	 */
 	public static ModelWrapper trainForCheck(String languageCode,
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream, TrainingParameters params,
+			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream, TrainingParameters params,
 			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException {
 		String beamSizeString = params.getSettings().get(SyntacticAnalysisBeamSearch.BEAM_SIZE_PARAMETER);
 		int beamSize = SyntacticAnalysisMEForBuildAndCheck.DEFAULT_BEAM_SIZE;
@@ -272,7 +272,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 		ModelWrapper model = null;
 		try {
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(
+			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(
 					lineStream, aghw);
 			model = SyntacticAnalysisMEForBuildAndCheck.trainForBuild("zh", sampleStream, params, contextGen);
 			modelOut = new BufferedOutputStream(new FileOutputStream(checkmodelFile));
@@ -333,7 +333,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 			for (int i = 0; i < alltree.size(); i++) {
 				TreeNode node = BracketExpUtil.generateTree("(" + alltree.get(i).toStringWithWordIndex() + ")");
 				HeadTreeNode headTree = TreeToHeadTree.treeToHeadTree(node, headGenerator);
-				SyntacticAnalysisSample<HeadTreeNode> sample = HeadTreeToActions.headTreeToAction(headTree,
+				ConstituentTreeSample<HeadTreeNode> sample = HeadTreeToActions.headTreeToAction(headTree,
 						headGenerator);
 				kActions.add(sample.getActions());
 			}
@@ -392,8 +392,8 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 			if (chunkTag[i].equals("O")) {
 				HeadTreeNode pos = new HeadTreeNode(poses[i]);
 				pos.addChild(new HeadTreeNode(words[i]));
-				pos.setHeadWords(words[i]);
-				pos.setHeadWordsPos(poses[i]);
+				pos.setHeadWord(words[i]);
+				pos.setHeadPos(poses[i]);
 				chunkTree.add(pos);
 			} else if (chunkTag[i].endsWith("B")) {
 				HeadTreeNode node = new HeadTreeNode(chunkTag[i].split("_")[0]);
@@ -401,15 +401,15 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 				for (j = i; j < chunkTag.length; j++) {
 					HeadTreeNode pos = new HeadTreeNode(poses[j]);
 					pos.addChild(new HeadTreeNode(words[j]));
-					pos.setHeadWords(words[j]);
-					pos.setHeadWordsPos(poses[i]);
+					pos.setHeadWord(words[j]);
+					pos.setHeadPos(poses[i]);
 					node.addChild(pos);
 					if (chunkTag[j].endsWith("E")) {
 						break;
 					}
 				}
-				node.setHeadWords(headGenerator.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
-				node.setHeadWordsPos(headGenerator.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadWord(headGenerator.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadPos(headGenerator.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 				chunkTree.add(node);
 				i = j;
 			}

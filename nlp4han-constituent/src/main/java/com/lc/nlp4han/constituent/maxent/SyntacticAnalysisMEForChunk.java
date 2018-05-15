@@ -29,7 +29,8 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<HeadTreeNode> {
+public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<HeadTreeNode>
+{
 
 	public static final int DEFAULT_BEAM_SIZE = 20;
 	private SyntacticAnalysisContextGenerator<HeadTreeNode> contextGenerator;
@@ -52,7 +53,8 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 *            生成头结点,chunk步合并的时候需要
 	 */
 	public SyntacticAnalysisMEForChunk(ModelWrapper model, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
-			AbstractHeadGenerator aghw) {
+			AbstractHeadGenerator aghw)
+	{
 		init(model, contextGen, aghw);
 	}
 
@@ -67,7 +69,8 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 *            生成头结点，chunk步合并的时候需要
 	 */
 	private void init(ModelWrapper model, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
-			AbstractHeadGenerator aghw) {
+			AbstractHeadGenerator aghw)
+	{
 		int beamSize = SyntacticAnalysisMEForChunk.DEFAULT_BEAM_SIZE;
 
 		contextGenerator = contextGen;
@@ -91,12 +94,14 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @param aghw
 	 *            生成头结点的方法
 	 * @return 模型和模型信息的包裹结果
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static ModelWrapper train(File file, TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw) throws IOException {
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
+			throws IOException
+	{
 		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-		ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(lineStream,
+		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				aghw);
 		ModelWrapper model = SyntacticAnalysisMEForChunk.train("zh", sampleStream, params, contextGen);
 		return model;
@@ -118,17 +123,20 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @throws IOException
 	 */
 	public static ModelWrapper train(String languageCode,
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream, TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException {
+			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream, TrainingParameters params,
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException
+	{
 		String beamSizeString = params.getSettings().get(SyntacticAnalysisBeamSearch.BEAM_SIZE_PARAMETER);
 		int beamSize = SyntacticAnalysisMEForChunk.DEFAULT_BEAM_SIZE;
-		if (beamSizeString != null) {
+		if (beamSizeString != null)
+		{
 			beamSize = Integer.parseInt(beamSizeString);
 		}
 		ClassificationModel chunkModel = null;
 		Map<String, String> manifestInfoEntries = new HashMap<String, String>();
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
-		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType)) {
+		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType))
+		{
 			ObjectStream<Event> es = new SyntacticAnalysisSampleEventForChunk(sampleStream, contextGen);
 			EventTrainer trainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
 			chunkModel = trainer.train(es);
@@ -149,33 +157,30 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 *            特征生成器
 	 * @param encoding
 	 *            编码方式
-	 * @param aghw
+	 * @param headGen
 	 *            生成头结点的方法
 	 * @return
 	 * @throws IOException
 	 */
 	public static void train(File file, File modelFile, TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
-			throws IOException {
+			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator headGen)
+			throws IOException
+	{
 		OutputStream modelOut = null;
 		ModelWrapper model = null;
-		try {
-			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(
-					lineStream, aghw);
-			model = SyntacticAnalysisMEForChunk.train("zh", sampleStream, params, contextGen);
-			// 模型的写出，文本文件
-			modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
-			model.serialize(modelOut);
-		} finally {
-			if (modelOut != null) {
-				try {
-					modelOut.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+
+		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
+		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
+				headGen);
+		
+		model = SyntacticAnalysisMEForChunk.train("zh", sampleStream, params, contextGen);
+		
+		// 模型的写出，文本文件
+		modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
+		model.serialize(modelOut);
+
+		modelOut.close();
+
 	}
 
 	/**
@@ -188,25 +193,29 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @param ac
 	 * @return
 	 */
-	public List<List<HeadTreeNode>> tagKChunk(int k, List<List<HeadTreeNode>> posTree, Object[] ac) {
+	public List<List<HeadTreeNode>> tagKChunk(int k, List<List<HeadTreeNode>> posTree, Object[] ac)
+	{
 		List<List<HeadTreeNode>> chunkTree = new ArrayList<List<HeadTreeNode>>();
 
 		List<List<HeadTreeNode>> combineChunkTree = new ArrayList<List<HeadTreeNode>>();
 		SyntacticAnalysisSequenceForChunk[] sequences = this.model.bestSequencesForChunk(k, posTree, ac,
 				contextGenerator, sequenceValidator);
-		for (int i = 0; i < sequences.length; i++) {
+		for (int i = 0; i < sequences.length; i++)
+		{
 			int label = sequences[i].getLabel();
 			List<HeadTreeNode> tree = new ArrayList<>();
 			List<HeadTreeNode> tempTree = posTree.get(label);
 			List<String> outcomes = sequences[i].getOutcomes();
-			for (int j = 0; j < outcomes.size(); j++) {
+			for (int j = 0; j < outcomes.size(); j++)
+			{
 				HeadTreeNode outNode = new HeadTreeNode(outcomes.get(j));
 				outNode.addChild(tempTree.get(j));
 				tree.add(outNode);
 			}
 			chunkTree.add(tree);
 		}
-		for (int i = 0; i < chunkTree.size(); i++) {
+		for (int i = 0; i < chunkTree.size(); i++)
+		{
 			List<HeadTreeNode> node = ChunkTreeCombineUtil.combineToHeadTree(chunkTree.get(i), headGenerator);
 			combineChunkTree.add(node);
 		}
@@ -223,7 +232,8 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @param ac
 	 * @return
 	 */
-	public List<HeadTreeNode> tagChunk(List<List<HeadTreeNode>> posTree, Object[] ac) {
+	public List<HeadTreeNode> tagChunk(List<List<HeadTreeNode>> posTree, Object[] ac)
+	{
 		List<List<HeadTreeNode>> chunkTree = tagKChunk(1, posTree, null);
 		return chunkTree.get(0);
 	}
@@ -238,10 +248,12 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	@Override
-	public List<HeadTreeNode> chunkTree(String[] words, String[] poses) {
+	public List<HeadTreeNode> chunkTree(String[] words, String[] poses)
+	{
 
 		List<HeadTreeNode> posTree = new ArrayList<>();
-		for (int i = 0; i < poses.length && i < words.length; i++) {
+		for (int i = 0; i < poses.length && i < words.length; i++)
+		{
 			HeadTreeNode pos = new HeadTreeNode(poses[i]);
 			pos.addChild(new HeadTreeNode(words[i]));
 			posTree.add(pos);
@@ -258,10 +270,12 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	@Override
-	public List<HeadTreeNode> chunkTree(String[] wordsandposes) {
+	public List<HeadTreeNode> chunkTree(String[] wordsandposes)
+	{
 		String[] words = new String[wordsandposes.length];
 		String[] poses = new String[wordsandposes.length];
-		for (int i = 0; i < wordsandposes.length; i++) {
+		for (int i = 0; i < wordsandposes.length; i++)
+		{
 			words[i] = wordsandposes[i].split("/")[0];
 			poses[i] = wordsandposes[i].split("/")[1];
 		}
@@ -276,7 +290,8 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	@Override
-	public List<HeadTreeNode> chunkTree(String wordsandposes) {
+	public List<HeadTreeNode> chunkTree(String wordsandposes)
+	{
 		String[] wordandpos = wordsandposes.split("\\s+");
 		return chunkTree(wordandpos);
 	}
@@ -289,7 +304,8 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	@Override
-	public List<HeadTreeNode> chunkTree(List<HeadTreeNode> posTree) {
+	public List<HeadTreeNode> chunkTree(List<HeadTreeNode> posTree)
+	{
 		List<List<HeadTreeNode>> allposTree = new ArrayList<>();
 		allposTree.add(posTree);
 		return ChunkTreeCombineUtil.combineToHeadTree(tagChunk(allposTree, null), headGenerator);
@@ -305,9 +321,11 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	@Override
-	public String[] chunk(String[] words, String[] poses) {
+	public String[] chunk(String[] words, String[] poses)
+	{
 		List<HeadTreeNode> posTree = new ArrayList<>();
-		for (int i = 0; i < poses.length && i < words.length; i++) {
+		for (int i = 0; i < poses.length && i < words.length; i++)
+		{
 			HeadTreeNode pos = new HeadTreeNode(poses[i]);
 			pos.addChild(new HeadTreeNode(words[i]));
 			posTree.add(pos);
@@ -324,10 +342,12 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	@Override
-	public String[] chunk(String[] wordsandposes) {
+	public String[] chunk(String[] wordsandposes)
+	{
 		String[] words = new String[wordsandposes.length];
 		String[] poses = new String[wordsandposes.length];
-		for (int i = 0; i < wordsandposes.length; i++) {
+		for (int i = 0; i < wordsandposes.length; i++)
+		{
 			words[i] = wordsandposes[i].split("/")[0];
 			poses[i] = wordsandposes[i].split("/")[1];
 		}
@@ -342,7 +362,8 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	@Override
-	public String[] chunk(String wordsandposes) {
+	public String[] chunk(String wordsandposes)
+	{
 		String[] wordandpos = wordsandposes.split("\\s+");
 		return chunk(wordandpos);
 	}
@@ -355,7 +376,8 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @return
 	 */
 	@Override
-	public String[] chunk(List<HeadTreeNode> posTree) {
+	public String[] chunk(List<HeadTreeNode> posTree)
+	{
 		List<List<HeadTreeNode>> allposTree = new ArrayList<>();
 		allposTree.add(posTree);
 		List<HeadTreeNode> chunkTree = tagChunk(allposTree, null);
@@ -364,15 +386,21 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		String[] output = new String[chunkTree.size()];
 		int k = 0;
 		int index = -1;
-		for (int i = 0; i < chunkTree.size(); i++) {
+		for (int i = 0; i < chunkTree.size(); i++)
+		{
 
-			if(chunkTree.get(i).getNodeName().contains("start")){
+			if (chunkTree.get(i).getNodeName().contains("start"))
+			{
 				chunkTag[k] = chunkTree.get(i).getNodeNameRightPart();
 				wordandpos[k] += getWordAndPos(chunkTree.get(i).getFirstChild());
-				for (int j = i+1; j < chunkTag.length; j++) {
-					if(chunkTree.get(j).getNodeName().contains("start")){
+				for (int j = i + 1; j < chunkTag.length; j++)
+				{
+					if (chunkTree.get(j).getNodeName().contains("start"))
+					{
 						break;
-					}else if(chunkTree.get(j).getNodeName().contains("join")){
+					}
+					else if (chunkTree.get(j).getNodeName().contains("join"))
+					{
 						wordandpos[k] += getWordAndPos(chunkTree.get(j).getFirstChild());
 						index = j;
 					}
@@ -380,13 +408,19 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 				i = index;
 				output[k] = "[" + wordandpos[k] + "]" + chunkTag[k] + " ";
 				k++;
-			} else if (chunkTree.get(i).getNodeName().contains("other")) {
+			}
+			else if (chunkTree.get(i).getNodeName().contains("other"))
+			{
 				chunkTag[k] = "o";
-				wordandpos[k] += getWordAndPos(chunkTree.get(i).getFirstChild());		
-				for (int j = i+1; j < chunkTag.length; j++) {
-					if(chunkTree.get(j).getNodeName().contains("start")){
+				wordandpos[k] += getWordAndPos(chunkTree.get(i).getFirstChild());
+				for (int j = i + 1; j < chunkTag.length; j++)
+				{
+					if (chunkTree.get(j).getNodeName().contains("start"))
+					{
 						break;
-					}else if(chunkTree.get(j).getNodeName().contains("join")){
+					}
+					else if (chunkTree.get(j).getNodeName().contains("join"))
+					{
 						wordandpos[k] += getWordAndPos(chunkTree.get(j).getFirstChild());
 						index = j;
 					}
@@ -398,16 +432,19 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		}
 		return output;
 	}
-	
-	private String getWordAndPos(HeadTreeNode tree){
+
+	private String getWordAndPos(HeadTreeNode tree)
+	{
 		String wordandpos = "";
-		for (int i = 0; i < tree.getChildrenNum(); i++) {
-			if(i == tree.getChildrenNum() - 1){
-				wordandpos += tree.getChild(i).getFirstChildName()+"/"+
-						tree.getChildName(i);
-			}else{
-				wordandpos += tree.getChild(i).getFirstChildName()+"/"+
-						tree.getChildName(i)+" ";
+		for (int i = 0; i < tree.getChildrenNum(); i++)
+		{
+			if (i == tree.getChildrenNum() - 1)
+			{
+				wordandpos += tree.getChild(i).getFirstChildName() + "/" + tree.getChildName(i);
+			}
+			else
+			{
+				wordandpos += tree.getChild(i).getFirstChildName() + "/" + tree.getChildName(i) + " ";
 			}
 		}
 		return wordandpos;

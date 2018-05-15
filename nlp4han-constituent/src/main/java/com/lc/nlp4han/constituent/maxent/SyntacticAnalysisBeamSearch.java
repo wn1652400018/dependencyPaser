@@ -310,8 +310,8 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 									//下面开始合并
 									if(out.split("_")[0].equals("start")){
 										HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
-										combine.setHeadWords(copy.get(0).getHeadWords());
-										combine.setHeadWordsPos(copy.get(0).getHeadWordsPos());
+										combine.setHeadWord(copy.get(0).getHeadWord());
+										combine.setHeadPos(copy.get(0).getHeadPos());
 										combine.addChild(copy.get(0).getFirstChild());
 										copy.get(0).getFirstChild().setParent(combine);
 										copy.set(0, combine);
@@ -361,8 +361,8 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 									//下面开始合并
 									if(out.split("_")[0].equals("start")){
 										HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
-										combine.setHeadWords(copy.get(0).getHeadWords());
-										combine.setHeadWordsPos(copy.get(0).getHeadWordsPos());
+										combine.setHeadWord(copy.get(0).getHeadWord());
+										combine.setHeadPos(copy.get(0).getHeadPos());
 										combine.addChild(copy.get(0).getFirstChild());
 										copy.get(0).getFirstChild().setParent(combine);
 										copy.set(0, combine);
@@ -453,8 +453,8 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 										//如果标记为start就要合并
 										if(out.split("_")[0].equals("start")){
 											HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
-											combine.setHeadWords(copy.get(numSeq).getHeadWords());
-											combine.setHeadWordsPos(copy.get(numSeq).getHeadWordsPos());
+											combine.setHeadWord(copy.get(numSeq).getHeadWord());
+											combine.setHeadPos(copy.get(numSeq).getHeadPos());
 											combine.addChild(copy.get(numSeq).getFirstChild());
 											copy.get(numSeq).getFirstChild().setParent(combine);
 											copy.set(numSeq, combine);											
@@ -473,8 +473,8 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 												copy.get(k).getFirstChild().setParent(combine);
 											}
 											//设置头结点
-											combine.setHeadWords(aghw.extractHeadWord(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
-											combine.setHeadWordsPos(aghw.extractHeadWordPos(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+											combine.setHeadWord(aghw.extractHeadWord(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+											combine.setHeadPos(aghw.extractHeadWordPos(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 											copy.set(record,combine);
 											//删除用于合并的那些位置上的
 											for (int k = numSeq; k >= record+1; k--) {
@@ -535,8 +535,8 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 										//如果标记为start就要合并
 										if(out.split("_")[0].equals("start")){
 											HeadTreeNode combine = new HeadTreeNode(out.split("_")[1]);
-											combine.setHeadWords(copy.get(numSeq).getHeadWords());
-											combine.setHeadWordsPos(copy.get(numSeq).getHeadWordsPos());
+											combine.setHeadWord(copy.get(numSeq).getHeadWord());
+											combine.setHeadPos(copy.get(numSeq).getHeadPos());
 											combine.addChild(copy.get(numSeq).getFirstChild());
 											copy.get(numSeq).getFirstChild().setParent(combine);
 											copy.set(numSeq, combine);
@@ -555,8 +555,8 @@ public class SyntacticAnalysisBeamSearch implements SyntacticAnalysisSequenceCla
 												copy.get(k).getFirstChild().setParent(combine);
 											}
 											//设置头结点
-											combine.setHeadWords(aghw.extractHeadWord(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
-											combine.setHeadWordsPos(aghw.extractHeadWordPos(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+											combine.setHeadWord(aghw.extractHeadWord(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+											combine.setHeadPos(aghw.extractHeadWordPos(combine, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 											copy.set(record,combine);
 											//删除用于合并的那些位置上的
 											for (int k = numSeq; k >= record+1; k--) {

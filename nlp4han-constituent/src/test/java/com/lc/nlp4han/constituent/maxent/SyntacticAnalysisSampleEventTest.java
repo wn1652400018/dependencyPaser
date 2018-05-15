@@ -30,7 +30,7 @@ public class SyntacticAnalysisSampleEventTest {
 	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator ;
 	private TreeNode tree ;
 	private HeadTreeNode headTree ;
-	private SyntacticAnalysisSample<HeadTreeNode> sample ;
+	private ConstituentTreeSample<HeadTreeNode> sample ;
 	private List<String> words ;
 	private List<HeadTreeNode> chunkTree ;
 	private List<List<HeadTreeNode>> buildAndCheckTree ;

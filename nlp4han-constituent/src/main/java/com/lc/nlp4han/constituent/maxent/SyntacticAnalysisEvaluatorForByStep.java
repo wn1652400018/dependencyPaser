@@ -16,7 +16,7 @@ import com.lc.nlp4han.ml.util.Evaluator;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnalysisSample<HeadTreeNode>>{
+public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<ConstituentTreeSample<HeadTreeNode>>{
 
 	private Logger logger = Logger.getLogger(SyntacticAnalysisEvaluatorForByStep.class.getName());
 	private SyntacticAnalysisForPos<HeadTreeNode> postagger;
@@ -57,12 +57,12 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 	}
 
 	@Override
-	protected SyntacticAnalysisSample<HeadTreeNode> processSample(SyntacticAnalysisSample<HeadTreeNode> sample) {
-		SyntacticAnalysisSample<HeadTreeNode> samplePre = null;
+	protected ConstituentTreeSample<HeadTreeNode> processSample(ConstituentTreeSample<HeadTreeNode> sample) {
+		ConstituentTreeSample<HeadTreeNode> samplePre = null;
 		HeadTreeNode treePre = null;
 		//在验证的过程中，有些配ignore的句子，也会来验证，这是没有意义的，为了防止这种情况，就加入判断
 		if(sample.getActions().size() == 0 && sample.getWords().size() == 0){
-			return new SyntacticAnalysisSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+			return new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 		}else{
 			try {
 				List<String> words = sample.getWords();
@@ -74,7 +74,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 				treePre = buildAndChecktagger.tagBuildAndCheck(chunkTree, null);
 				
 				if(treePre == null){
-					samplePre = new SyntacticAnalysisSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+					samplePre = new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 					measure.countNodeDecodeTrees(treePre);
 				}else{
 					samplePre = HeadTreeToActions.headTreeToAction(treePre,aghw);
@@ -84,7 +84,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<SyntacticAnal
 				if (logger.isLoggable(Level.WARNING)) {						
                     logger.warning("Error during parsing, ignoring sentence: " + treePre.toStringWithWordIndex());
                 }	
-				samplePre = new SyntacticAnalysisSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+				samplePre = new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 			}
 			return samplePre;
 		}

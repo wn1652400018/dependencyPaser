@@ -118,13 +118,13 @@ public class SRLContextGeneratorConfForIdentification extends SRLContextGenerato
 			features.add("phrasetype="+argumenttree[i].getTree().getNodeName());
 		}
 		if(headwordSet){
-			features.add("headword="+argumenttree[i].getTree().getHeadWords());
+			features.add("headword="+argumenttree[i].getTree().getHeadWord());
 		}
 		if(headwordposSet){
-			features.add("headwordpos="+argumenttree[i].getTree().getHeadWordsPos());
+			features.add("headwordpos="+argumenttree[i].getTree().getHeadPos());
 		}
 		if(predicateAndHeadwordSet){
-			features.add("predicateAndHeadword="+predicate+"|"+argumenttree[i].getTree().getHeadWords());
+			features.add("predicateAndHeadword="+predicate+"|"+argumenttree[i].getTree().getHeadWord());
 		}
 		if(predicateAndPhrasetypeSet){
 			features.add("predicateAndPhrasetype="+predicate+"|"+argumenttree[i].getTree().getNodeName());
@@ -142,10 +142,10 @@ public class SRLContextGeneratorConfForIdentification extends SRLContextGenerato
 			features.add("predicateAndpath="+predicate+"|"+path);
 		}
 		if(headwordAndPhrasetypeSet){
-			features.add("headwordAndPhrasetype="+argumenttree[i].getTree().getHeadWords()+"|"+argumenttree[i].getTree().getNodeName());
+			features.add("headwordAndPhrasetype="+argumenttree[i].getTree().getHeadWord()+"|"+argumenttree[i].getTree().getNodeName());
 		}
 		if(headwordAndpredicateAndpathSet){
-			features.add("headwordAndpredicateAndpath="+argumenttree[i].getTree().getHeadWords()+"|"+predicate+"|"+path);
+			features.add("headwordAndpredicateAndpath="+argumenttree[i].getTree().getHeadWord()+"|"+predicate+"|"+path);
 		}
 		String[] contexts = features.toArray(new String[features.size()]);
         return contexts;

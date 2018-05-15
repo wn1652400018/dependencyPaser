@@ -25,7 +25,7 @@ public class SyntacticAnalysisContextGeneratorConfTest{
 	private AbstractHeadGenerator aghw;
 	private TreeNode tree;
     private HeadTreeNode headTree;
-	private SyntacticAnalysisSample<HeadTreeNode> sample;
+	private ConstituentTreeSample<HeadTreeNode> sample;
 	private List<String> actions;
 	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator;
 

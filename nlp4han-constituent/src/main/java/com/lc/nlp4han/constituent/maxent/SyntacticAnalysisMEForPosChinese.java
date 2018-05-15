@@ -32,7 +32,7 @@ public class SyntacticAnalysisMEForPosChinese implements SyntacticAnalysisForPos
 	@Override
 	public List<HeadTreeNode> posTree(String[] words) {
 		String[][] poses = postagger.tag(1, words);
-		List<List<HeadTreeNode>> posTree = SyntacticAnalysisSample.toPosTree(words, poses);
+		List<List<HeadTreeNode>> posTree = ConstituentTreeSample.toPosTree(words, poses);
 		return posTree.get(0);
 	}
 
@@ -56,7 +56,7 @@ public class SyntacticAnalysisMEForPosChinese implements SyntacticAnalysisForPos
 	@Override
 	public List<List<HeadTreeNode>> posTree(int k, String[] words) {
 		String[][] poses = postagger.tag(k, words);
-		List<List<HeadTreeNode>> posTree = SyntacticAnalysisSample.toPosTree(words, poses);
+		List<List<HeadTreeNode>> posTree = ConstituentTreeSample.toPosTree(words, poses);
 		return posTree;
 	}
 

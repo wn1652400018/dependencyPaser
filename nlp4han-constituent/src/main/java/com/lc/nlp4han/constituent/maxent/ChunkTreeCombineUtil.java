@@ -32,8 +32,8 @@ public class ChunkTreeCombineUtil {
 				//所以遇到start就生成新的子树
 				HeadTreeNode node = new HeadTreeNode(subTree.get(i).getNodeNameRightPart());
 				node.addChild(subTree.get(i).getFirstChild());
-				node.setHeadWords(aghw.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
-				node.setHeadWordsPos(aghw.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadWord(aghw.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadPos(aghw.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 				subTree.get(i).getFirstChild().setParent(node);
 				
 				for (int j = i+1; j < subTree.size(); j++) {
@@ -45,16 +45,16 @@ public class ChunkTreeCombineUtil {
 							subTree.get(j).getNodeNameLeftPart().equals("other")){
 						break;
 					}
-					node.setHeadWords(aghw.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
-					node.setHeadWordsPos(aghw.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+					node.setHeadWord(aghw.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
+					node.setHeadPos(aghw.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(), HeadRuleSet.getSpecialRuleSet()));
 				}
 				//将一颗合并过的完整子树加入列表
 				combineChunk.add(node);
 				//标记为other的，去掉other
 			}else if(subTree.get(i).getNodeName().equals("other")){
 				subTree.get(i).getFirstChild().setParent(null);
-				subTree.get(i).getFirstChild().setHeadWords(subTree.get(i).getChildren().get(0).getHeadWords());
-				subTree.get(i).getFirstChild().setHeadWordsPos(subTree.get(i).getChildren().get(0).getHeadWordsPos());
+				subTree.get(i).getFirstChild().setHeadWord(subTree.get(i).getChildren().get(0).getHeadWord());
+				subTree.get(i).getFirstChild().setHeadPos(subTree.get(i).getChildren().get(0).getHeadPos());
 				combineChunk.add(subTree.get(i).getFirstChild());
 			}
 		}

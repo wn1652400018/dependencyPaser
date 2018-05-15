@@ -58,7 +58,7 @@ public class SyntacticAnalysisEvalTool {
         }
         evaluator.setMeasure(measure);
         ObjectStream<String> linesStream = new PlainTextByLineStream(new FileInputStreamFactory(goldFile), encoding);
-        ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> sampleStream = new SyntacticAnalysisSampleStream(linesStream, aghw);
+        ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(linesStream, aghw);
         evaluator.evaluate(sampleStream);
         ConstituentMeasure measureRes = evaluator.getMeasure();
         System.out.println("标注时间： " + (System.currentTimeMillis() - start));

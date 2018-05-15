@@ -138,8 +138,8 @@ public class HeadTreeToActions {
 				//然后再去合并，但是不加入
 				HeadTreeNode tempnode = new HeadTreeNode(tree.getParent().getNodeName());
 				tempnode.setParent(tree.getParent().getParent());
-				tempnode.setHeadWords(tree.getParent().getHeadWords());
-				tempnode.setHeadWordsPos(tree.getParent().getHeadWordsPos());
+				tempnode.setHeadWord(tree.getParent().getHeadWord());
+				tempnode.setHeadPos(tree.getParent().getHeadPos());
 				tempnode.addChild(tree.getParent().getFirstChild());
 				tree.getParent().getFirstChild().setParent(tempnode);
 				subTree.set(i, tree.getParent());			
@@ -181,8 +181,8 @@ public class HeadTreeToActions {
 					//需要合并,node为合并后的父节点
 					HeadTreeNode node = new HeadTreeNode(tree.getParent().getNodeName());
 					node.setParent(tree.getParent().getParent());
-					node.setHeadWords(tree.getParent().getHeadWords());
-					node.setHeadWordsPos(tree.getParent().getHeadWordsPos());
+					node.setHeadWord(tree.getParent().getHeadWord());
+					node.setHeadPos(tree.getParent().getHeadPos());
 					for (int j = 0; j < tree.getParent().getChildrenNum(); j++) {								
 						node.addChild(tree.getParent().getChild(j));
 						tree.getParent().getChild(j).setParent(node);						
@@ -234,7 +234,7 @@ public class HeadTreeToActions {
 	 * @param aghw 生成头结点的对象
 	 * @throws CloneNotSupportedException
 	 */
-	public static SyntacticAnalysisSample<HeadTreeNode> headTreeToAction(HeadTreeNode tree, AbstractHeadGenerator aghw) throws CloneNotSupportedException{
+	public static ConstituentTreeSample<HeadTreeNode> headTreeToAction(HeadTreeNode tree, AbstractHeadGenerator aghw) throws CloneNotSupportedException{
 		i = 0;
 		posTree.clear();
 		chunkTree.clear();
@@ -243,6 +243,6 @@ public class HeadTreeToActions {
 		getActionPOS(tree);		
 		getActionCHUNK(tree, posTree);
 		getActionBUILDandCHECK(tree, ChunkTreeCombineUtil.combineToHeadTree(chunkTree,aghw));
-		return new SyntacticAnalysisSample<HeadTreeNode>(posTree,chunkTree,buildAndCheckTree,actions);
+		return new ConstituentTreeSample<HeadTreeNode>(posTree,chunkTree,buildAndCheckTree,actions);
 	}
 }

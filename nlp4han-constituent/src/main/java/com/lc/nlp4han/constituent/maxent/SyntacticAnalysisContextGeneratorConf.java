@@ -366,7 +366,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         //当前位置之后的也没有build标记
         if(tree1 != null){
 			if(cons1Set){
-				features.add("cons1="+tree1.getNodeName()+"|"+tree1.getHeadWords());
+				features.add("cons1="+tree1.getNodeName()+"|"+tree1.getHeadWord());
 			}
 			if(cons1ASet){
 				features.add("cons1*="+tree1.getNodeName());
@@ -374,7 +374,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 		}
         if(tree2 != null){
 			if(cons2Set){
-				features.add("cons2="+tree2.getNodeName()+"|"+tree2.getHeadWords());
+				features.add("cons2="+tree2.getNodeName()+"|"+tree2.getHeadWord());
 			}
 			if(cons2ASet){
 				features.add("cons2*="+tree2.getNodeName());
@@ -403,7 +403,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         if(tree0 != null && tree1 != null){
         	if(cons01Set){
         		features.add("cons01="+tree0.getFirstChildName()+"|"+tree0.getFirstChildHeadWord()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords());
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord());
         	}
         	if(cons01ASet){
         		features.add("cons01*="+tree0.getFirstChildName()+"|"+tree0.getFirstChildHeadWord()
@@ -411,7 +411,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         	}
         	if(cons0A1Set){
         		features.add("cons0*1="+tree0.getFirstChildName()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords());
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord());
         	}
         	if(cons0A1ASet){
         		features.add("cons0*1*="+tree0.getFirstChildName()
@@ -450,8 +450,8 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         if(tree0 != null && tree1 != null && tree2 != null){
         	if(cons012Set){
         		features.add("cons012="+tree0.getFirstChildName()+"|"+tree0.getFirstChildHeadWord()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords()
-        				+";"+tree2.getNodeName()+"|"+tree2.getHeadWords());
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord()
+        				+";"+tree2.getNodeName()+"|"+tree2.getHeadWord());
         	}
         	if(cons01A2ASet){
         		features.add("cons01*2*="+tree0.getFirstChildName()+"|"+tree0.getFirstChildHeadWord()
@@ -461,11 +461,11 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         	if(cons01A2Set){
         		features.add("cons01*2="+tree0.getFirstChildName()+"|"+tree0.getFirstChildHeadWord()
         				+";"+tree1.getNodeName()
-        				+";"+tree2.getNodeName()+"|"+tree2.getHeadWords());
+        				+";"+tree2.getNodeName()+"|"+tree2.getHeadWord());
         	}
         	if(cons012ASet){
         		features.add("cons012*="+tree0.getFirstChildName()+"|"+tree0.getFirstChildHeadWord()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords()
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord()
         				+";"+tree2.getNodeName());
         	}
         	if(cons0A1A2ASet){
@@ -479,7 +479,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         	if(cons_101Set){
         		features.add("cons_101="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()+"|"+tree_1.getFirstChildHeadWord()
         				+";"+tree0.getFirstChildName()+"|"+tree0.getFirstChildHeadWord()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords());
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord());
         	}
         	if(cons_1A01ASet){
         		features.add("cons_1*01*="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()
@@ -489,7 +489,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         	if(cons_1A01Set){
         		features.add("cons_1*01="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()
         				+";"+tree0.getFirstChildName()+"|"+tree0.getFirstChildHeadWord()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords());
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord());
         	}
         	if(cons_101ASet){
         		features.add("cons_101*="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()+"|"+tree_1.getFirstChildHeadWord()
@@ -1007,7 +1007,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 		//当前位置没有build标记
         if(tree0 != null){
 			if(cons0Set){
-				features.add("cons0="+tree0.getNodeName()+"|"+tree0.getHeadWords());
+				features.add("cons0="+tree0.getNodeName()+"|"+tree0.getHeadWord());
 			}
 			if(cons0ASet){
 				features.add("cons0*="+tree0.getNodeName());
@@ -1033,7 +1033,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         //当前位置之后的也没有build标记
         if(tree1 != null){
 			if(cons1Set){
-				features.add("cons1="+tree1.getNodeName()+"|"+tree1.getHeadWords());
+				features.add("cons1="+tree1.getNodeName()+"|"+tree1.getHeadWord());
 			}
 			if(cons1ASet){
 				features.add("cons1*="+tree1.getNodeName());
@@ -1041,7 +1041,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 		}
         if(tree2 != null){
 			if(cons2Set){
-				features.add("cons2="+tree2.getNodeName()+"|"+tree2.getHeadWords());
+				features.add("cons2="+tree2.getNodeName()+"|"+tree2.getHeadWord());
 			}
 			if(cons2ASet){
 				features.add("cons2*="+tree2.getNodeName());
@@ -1051,7 +1051,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         if(tree_1 != null && tree0 != null){
         	if(cons_10Set){
         		features.add("cons_10="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()+"|"+tree_1.getFirstChildHeadWord()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords());
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord());
         	}
         	if(cons_10ASet){
         		features.add("cons_10*="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()+"|"+tree_1.getFirstChildHeadWord()
@@ -1059,7 +1059,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         	}
         	if(cons_1A0Set){
         		features.add("cons_1*0="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords());
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord());
         	}
         	if(cons_1A0ASet){
         		features.add("cons_1*0*="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()
@@ -1069,16 +1069,16 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         
         if(tree0 != null && tree1 != null){
         	if(cons01Set){
-        		features.add("cons01="+tree0.getNodeName()+"|"+tree0.getHeadWords()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords());
+        		features.add("cons01="+tree0.getNodeName()+"|"+tree0.getHeadWord()
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord());
         	}
         	if(cons01ASet){
-        		features.add("cons01*="+tree0.getNodeName()+"|"+tree0.getHeadWords()
+        		features.add("cons01*="+tree0.getNodeName()+"|"+tree0.getHeadWord()
         				+";"+tree1.getNodeName());
         	}
         	if(cons0A1Set){
         		features.add("cons0*1="+tree0.getNodeName()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords());
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord());
         	}
         	if(cons0A1ASet){
         		features.add("cons0*1*="+tree0.getNodeName()
@@ -1090,22 +1090,22 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         	if(cons_2_10Set){
         		features.add("cons_2_10="+tree_2.getNodeName()+"|"+tree_2.getFirstChildName()+"|"+tree_2.getFirstChildHeadWord()
         				+";"+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()+"|"+tree_1.getFirstChildHeadWord()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords());
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord());
         	}
         	if(cons_2A_1A0Set){
         		features.add("cons_2*_1*0="+tree_2.getNodeName()+"|"+tree_2.getFirstChildName()
         				+";"+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords());
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord());
         	}
         	if(cons_2A_10Set){
         		features.add("cons_2*_10="+tree_2.getNodeName()+"|"+tree_2.getFirstChildName()
         				+";"+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()+"|"+tree_1.getFirstChildHeadWord()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords());
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord());
         	}
         	if(cons_2_1A0Set){
         		features.add("cons_2_1*0="+tree_2.getNodeName()+"|"+tree_2.getFirstChildName()+"|"+tree_2.getFirstChildHeadWord()
         				+";"+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords());
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord());
         	}
         	if(cons_2A_1A0ASet){
         		features.add("cons_2*_1*0*="+tree_2.getNodeName()+"|"+tree_2.getFirstChildName()
@@ -1116,23 +1116,23 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 
         if(tree0 != null && tree1 != null && tree2 != null){
         	if(cons012Set){
-        		features.add("cons012="+tree0.getNodeName()+"|"+tree0.getHeadWords()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords()
-        				+";"+tree2.getNodeName()+"|"+tree2.getHeadWords());
+        		features.add("cons012="+tree0.getNodeName()+"|"+tree0.getHeadWord()
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord()
+        				+";"+tree2.getNodeName()+"|"+tree2.getHeadWord());
         	}
         	if(cons01A2ASet){
-        		features.add("cons01*2*="+tree0.getNodeName()+"|"+tree0.getHeadWords()
+        		features.add("cons01*2*="+tree0.getNodeName()+"|"+tree0.getHeadWord()
         				+";"+tree1.getNodeName()
         				+";"+tree2.getNodeName());
         	}
         	if(cons01A2Set){
-        		features.add("cons01*2="+tree0.getNodeName()+"|"+tree0.getHeadWords()
+        		features.add("cons01*2="+tree0.getNodeName()+"|"+tree0.getHeadWord()
         				+";"+tree1.getNodeName()
-        				+";"+tree2.getNodeName()+"|"+tree2.getHeadWords());
+        				+";"+tree2.getNodeName()+"|"+tree2.getHeadWord());
         	}
         	if(cons012ASet){
-        		features.add("cons012*="+tree0.getNodeName()+"|"+tree0.getHeadWords()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords()
+        		features.add("cons012*="+tree0.getNodeName()+"|"+tree0.getHeadWord()
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord()
         				+";"+tree2.getNodeName());
         	}
         	if(cons0A1A2ASet){
@@ -1145,22 +1145,22 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
         if(tree_1 != null && tree0 != null && tree1 != null){
         	if(cons_101Set){
         		features.add("cons_101="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()+"|"+tree_1.getFirstChildHeadWord()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords());
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord()
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord());
         	}
         	if(cons_1A01ASet){
         		features.add("cons_1*01*="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords()
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord()
         				+";"+tree1.getNodeName());
         	}
         	if(cons_1A01Set){
         		features.add("cons_1*01="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords()
-        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWords());
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord()
+        				+";"+tree1.getNodeName()+"|"+tree1.getHeadWord());
         	}
         	if(cons_101ASet){
         		features.add("cons_101*="+tree_1.getNodeName()+"|"+tree_1.getFirstChildName()+"|"+tree_1.getFirstChildHeadWord()
-        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWords()
+        				+";"+tree0.getNodeName()+"|"+tree0.getHeadWord()
         				+";"+tree1.getNodeName());
         	}
         	if(cons_1A0A1ASet){
@@ -1242,7 +1242,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 			if(checkcons_beginSet){
 				features.add("checkcons_begin="+out.split("_")[1]+"|"
 			+buildAndCheckTree.get(record).getNodeName()+"|"
-						+buildAndCheckTree.get(record).getHeadWords());
+						+buildAndCheckTree.get(record).getHeadWord());
 			}
 			if(checkcons_beginASet){
 				features.add("checkcons_begin*="+out.split("_")[1]+"|"
@@ -1264,7 +1264,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 		if(checkcons_lastSet){
 			features.add("checkcons_last="+out.split("_")[1]+"|"
 		+buildAndCheckTree.get(index).getNodeName()+"|"
-					+buildAndCheckTree.get(index).getHeadWords());
+					+buildAndCheckTree.get(index).getHeadWord());
 		}
 		if(checkcons_lastASet){
 			features.add("checkcons_last*="+out.split("_")[1]+"|"
@@ -1278,7 +1278,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 						+buildAndCheckTree.get(i).getFirstChildHeadWord()+";"
 			+out.split("_")[1]+"|"
 			+buildAndCheckTree.get(index).getNodeName()+"|"
-			+buildAndCheckTree.get(index).getHeadWords());
+			+buildAndCheckTree.get(index).getHeadWord());
 			}
 			
 			if(checkcons_iAlastSet){
@@ -1287,7 +1287,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 						+";"
 			+out.split("_")[1]+"|"
 			+buildAndCheckTree.get(index).getNodeName()+"|"
-			+buildAndCheckTree.get(index).getHeadWords());
+			+buildAndCheckTree.get(index).getHeadWord());
 			}
 			
 			if(checkcons_ilastASet){

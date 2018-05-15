@@ -6,154 +6,196 @@ import java.util.List;
 /**
  * 带中心词的成分树节点
  * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
-public class HeadTreeNode extends TreeNode{
+public class HeadTreeNode extends TreeNode
+{
 
-	private String headWords;
-	private String headWordsPos;
+	private String headWord;
+	private String headPos;
 
-	public HeadTreeNode(String nodename){
+	public HeadTreeNode(String nodename)
+	{
 		super(nodename);
 	}
 
-	public void setHeadWords(String headWords){
-		this.headWords = headWords;
-	}
-	
-	public String getHeadWords(){
-		return this.headWords;
+	public void setHeadWord(String headWords)
+	{
+		this.headWord = headWords;
 	}
 
-	public void setHeadWordsPos(String headWordsPos){
-		this.headWordsPos = headWordsPos;
+	public String getHeadWord()
+	{
+		return this.headWord;
 	}
-	
-	public String getHeadWordsPos(){
-		return this.headWordsPos;
+
+	public void setHeadPos(String headWordsPos)
+	{
+		this.headPos = headWordsPos;
 	}
-	
-	//返回父节点
-	public HeadTreeNode getParent(){
+
+	public String getHeadPos()
+	{
+		return this.headPos;
+	}
+
+	// 返回父节点
+	public HeadTreeNode getParent()
+	{
 		return (HeadTreeNode) parent;
 	}
 
 	/**
 	 * 第一个儿子
+	 * 
 	 * @return
 	 */
-	public HeadTreeNode getFirstChild(){
+	public HeadTreeNode getFirstChild()
+	{
 		return (HeadTreeNode) this.children.get(0);
 	}
-	
+
 	/**
 	 * 获取第一个儿子头结点
+	 * 
 	 * @return
 	 */
-	public String getFirstChildHeadWord(){
-		return ((HeadTreeNode) this.children.get(0)).getHeadWords();
+	public String getFirstChildHeadWord()
+	{
+		return ((HeadTreeNode) this.children.get(0)).getHeadWord();
 	}
-	
+
 	/**
 	 * 获取第一个儿子头结点词性
+	 * 
 	 * @return
 	 */
-	public String getFirstChildHeadWordPos(){
-		return ((HeadTreeNode) this.children.get(0)).getHeadWordsPos();
+	public String getFirstChildHeadWordPos()
+	{
+		return ((HeadTreeNode) this.children.get(0)).getHeadPos();
 	}
-	
+
 	/**
 	 * 获取最后一个儿子头结点
+	 * 
 	 * @return
 	 */
-	public String getLastChildHeadWord(){
-		return ((HeadTreeNode) this.children.get(this.children.size()-1)).getHeadWords();
+	public String getLastChildHeadWord()
+	{
+		return ((HeadTreeNode) this.children.get(this.children.size() - 1)).getHeadWord();
 	}
-	
+
 	/**
 	 * 获取最后一个儿子头结点词性
+	 * 
 	 * @return
 	 */
-	public String getLastChildHeadWordPos(){
-		return ((HeadTreeNode) this.children.get(this.children.size()-1)).getHeadWordsPos();
+	public String getLastChildHeadPos()
+	{
+		return ((HeadTreeNode) this.children.get(this.children.size() - 1)).getHeadPos();
 	}
-	
+
 	/**
 	 * 获取最后一个儿子
+	 * 
 	 * @return
 	 */
-	public HeadTreeNode getLastChild(){
-		return (HeadTreeNode) this.children.get(this.children.size()-1);
+	public HeadTreeNode getLastChild()
+	{
+		return (HeadTreeNode) this.children.get(this.children.size() - 1);
 	}
-	
+
 	/**
 	 * 获取第i个儿子
-	 * @param i 儿子的序数
+	 * 
+	 * @param i
+	 *            儿子的序数
 	 * @return
 	 */
-	public HeadTreeNode getChild(int i){
+	public HeadTreeNode getChild(int i)
+	{
 		return (HeadTreeNode) this.children.get(i);
 	}
-	
+
 	/**
 	 * 获取第i个儿子头结点
-	 * @param i 儿子的序数
+	 * 
+	 * @param i
+	 *            儿子的序数
 	 * @return
 	 */
-	public String getIChildHeadWord(int i){
-		return ((HeadTreeNode) this.children.get(i)).getHeadWords();
+	public String getChildHeadWord(int i)
+	{
+		return ((HeadTreeNode) this.children.get(i)).getHeadWord();
 	}
-	
+
 	/**
 	 * 获取第i个儿子头结点词性
-	 * @param i 儿子的序数
+	 * 
+	 * @param i
+	 *            儿子的序数
 	 * @return
 	 */
-	public String getIChildHeadWordPos(int i){
-		return ((HeadTreeNode) this.children.get(i)).getHeadWordsPos();
+	public String getChildHeadPos(int i)
+	{
+		return ((HeadTreeNode) this.children.get(i)).getHeadPos();
 	}
-	
-	//返回子节点列表
-	public List<HeadTreeNode> getChildren(){
+
+	// 返回子节点列表
+	public List<HeadTreeNode> getChildren()
+	{
 		List<HeadTreeNode> hnode = new ArrayList<>();
-		for (TreeNode treeNode : children) {
+		for (TreeNode treeNode : children)
+		{
 			HeadTreeNode node = (HeadTreeNode) treeNode;
 			hnode.add(node);
 		}
 		return hnode;
 	}
-	
+
 	/**
 	 * 带有头结点的树的输出（一行括号表达式）
 	 */
 	@Override
-	public String toString() {
-		if(super.children.size() == 0){
+	public String toString()
+	{
+		if (super.children.size() == 0)
+		{
 			return " " + this.nodename + "[" + this.getWordIndex() + "]";
-		}else{
+		}
+		else
+		{
 			String treestr = "";
-			treestr = "(" + this.nodename + "{" + this.headWords + "[" + this.headWordsPos + "]}";
-			
-			for (HeadTreeNode node:getChildren()) {
+			treestr = "(" + this.nodename + "{" + this.headWord + "[" + this.headPos + "]}";
+
+			for (HeadTreeNode node : getChildren())
+			{
 				treestr += node.toString();
 			}
 			treestr += ")";
 			return treestr;
 		}
 	}
-	
+
 	/**
 	 * 没有头结点的括号表达式
+	 * 
 	 * @return
 	 */
-	public String toStringWithWordIndex(){
-		if(this.children.size() == 0){
+	public String toStringWithWordIndex()
+	{
+		if (this.children.size() == 0)
+		{
 			return " " + this.nodename + "[" + getWordIndex() + "]";
-		}else{
+		}
+		else
+		{
 			String treestr = "";
 			treestr = "(" + this.nodename;
-			for (TreeNode node:this.children) {
+			for (TreeNode node : this.children)
+			{
 				treestr += node.toStringWithWordIndex();
 			}
 			treestr += ")";
@@ -162,11 +204,15 @@ public class HeadTreeNode extends TreeNode{
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		HeadTreeNode node = (HeadTreeNode)obj;
-		if(this.toString().equals(node.toString())){
+	public boolean equals(Object obj)
+	{
+		HeadTreeNode node = (HeadTreeNode) obj;
+		if (this.toString().equals(node.toString()))
+		{
 			return true;
-		}else{
+		}
+		else
+		{
 			return false;
 		}
 	}

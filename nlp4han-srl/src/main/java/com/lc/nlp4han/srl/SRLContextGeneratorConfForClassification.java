@@ -175,10 +175,10 @@ public class SRLContextGeneratorConfForClassification extends SRLContextGenerato
 			features.add("phrasetype="+argumenttree[i].getTree().getNodeName());
 		}
 		if(headwordSet){
-			features.add("headword="+argumenttree[i].getTree().getHeadWords());
+			features.add("headword="+argumenttree[i].getTree().getHeadWord());
 		}
 		if(headwordposSet){
-			features.add("headwordpos="+argumenttree[i].getTree().getHeadWordsPos());
+			features.add("headwordpos="+argumenttree[i].getTree().getHeadPos());
 		}
 		if(subcategorizationSet){
 			features.add("subcategorization="+getSubcategorization(predicatetree[0].getTree()));
@@ -199,7 +199,7 @@ public class SRLContextGeneratorConfForClassification extends SRLContextGenerato
 			features.add("positionAndvoice="+position+"|"+voice);
 		}	
 		if(predicateAndHeadwordSet){
-			features.add("predicateAndHeadword="+predicate+"|"+argumenttree[i].getTree().getHeadWords());
+			features.add("predicateAndHeadword="+predicate+"|"+argumenttree[i].getTree().getHeadWord());
 		}
 		if(predicateAndPhrasetypeSet){
 			features.add("predicateAndPhrasetype="+predicate+"|"+argumenttree[i].getTree().getNodeName());
@@ -232,10 +232,10 @@ public class SRLContextGeneratorConfForClassification extends SRLContextGenerato
 			features.add("pathAndpositionAndvoiceAndpredicate="+path+"|"+position+"|"+voice+"|"+predicate);
 		}
 		if(headwordAndpredicateAndpathSet){
-			features.add("headwordAndpredicateAndpath="+argumenttree[i].getTree().getHeadWords()+"|"+predicate+"|"+path);
+			features.add("headwordAndpredicateAndpath="+argumenttree[i].getTree().getHeadWord()+"|"+predicate+"|"+path);
 		}
 		if(headwordAndPhrasetypeSet){
-			features.add("headwordAndPhrasetype="+argumenttree[i].getTree().getHeadWords()+"|"+argumenttree[i].getTree().getNodeName());
+			features.add("headwordAndPhrasetype="+argumenttree[i].getTree().getHeadWord()+"|"+argumenttree[i].getTree().getNodeName());
 		}
 		content.clear();
 		contentpos.clear();

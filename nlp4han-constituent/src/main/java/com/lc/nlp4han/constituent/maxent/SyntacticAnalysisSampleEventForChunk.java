@@ -14,7 +14,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisSampleEventForChunk extends AbstractEventStream<SyntacticAnalysisSample<HeadTreeNode>>{
+public class SyntacticAnalysisSampleEventForChunk extends AbstractEventStream<ConstituentTreeSample<HeadTreeNode>>{
 
 	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator;
 	
@@ -23,7 +23,7 @@ public class SyntacticAnalysisSampleEventForChunk extends AbstractEventStream<Sy
 	 * @param samples 样本流
 	 * @param generator 上下文产生器
 	 */
-	public SyntacticAnalysisSampleEventForChunk(ObjectStream<SyntacticAnalysisSample<HeadTreeNode>> samples,SyntacticAnalysisContextGenerator<HeadTreeNode> generator) {
+	public SyntacticAnalysisSampleEventForChunk(ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples,SyntacticAnalysisContextGenerator<HeadTreeNode> generator) {
 		super(samples);
 		this.generator = generator;
 	}
@@ -32,7 +32,7 @@ public class SyntacticAnalysisSampleEventForChunk extends AbstractEventStream<Sy
 	 * 生成事件
 	 */
 	@Override
-	protected Iterator<Event> createEvents(SyntacticAnalysisSample<HeadTreeNode> sample) {
+	protected Iterator<Event> createEvents(ConstituentTreeSample<HeadTreeNode> sample) {
 		List<String> words = sample.getWords();
 		List<String> actions = sample.getActions();
 		List<HeadTreeNode> chunkTree = sample.getChunkTree();
