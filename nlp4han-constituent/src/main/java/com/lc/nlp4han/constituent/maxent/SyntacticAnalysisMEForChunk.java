@@ -132,6 +132,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		{
 			beamSize = Integer.parseInt(beamSizeString);
 		}
+		
 		ClassificationModel chunkModel = null;
 		Map<String, String> manifestInfoEntries = new HashMap<String, String>();
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
@@ -141,6 +142,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 			EventTrainer trainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
 			chunkModel = trainer.train(es);
 		}
+		
 		return new ModelWrapper(chunkModel, beamSize);
 	}
 
