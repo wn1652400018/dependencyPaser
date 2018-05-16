@@ -26,9 +26,9 @@ public class DependencyParseErrorPrinter extends DependencyParseEvaluateMonitor{
 	@Override
 	public void missclassified(DependencySample reference, DependencySample predict) {
 		 errOut.println("样本的结果：");
-		 errOut.println(reference.toCoNLLSample());	 
+		 errOut.println(reference.toCoNLLString());	 
 		 
 		 errOut.println("预测的结果：");
-		 errOut.println(predict.toCoNLLSample());
+		 errOut.println(predict.toCoNLLString());
 	}
 }

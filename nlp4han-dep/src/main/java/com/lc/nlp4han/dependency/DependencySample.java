@@ -136,11 +136,9 @@ public class DependencySample
 	/**
 	 * 输出的样本的格式
 	 * 
-	 * TODO: toStanfordSample
-	 * 
 	 * @return 输出的结果
 	 */
-	public String toCoNLLSample()
+	public String toCoNLLString()
 	{
 		String sample = new String();
 
@@ -170,7 +168,7 @@ public class DependencySample
 	 * 
 	 * @return
 	 */
-	public String toStanfordSample()
+	public String toStanfordString()
 	{
 		String sample = new String();
 		for (int i = 0; i < dependency.size(); i++)

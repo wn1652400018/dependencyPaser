@@ -37,7 +37,7 @@ public class DependencySampleParserCoNLLTest {
 	 */
 	@Test
 	public void testCoNLL(){
-		assertEquals(corpus, sample.toCoNLLSample());
+		assertEquals(corpus, sample.toCoNLLString());
 	}
 	
 	/**
@@ -53,6 +53,6 @@ public class DependencySampleParserCoNLLTest {
 				"连接依存(贪污-3,等-5)" + "\n" +
 				"限定(犯罪-7,经济-6)" + "\n" +
 				"受事(惩治-2,犯罪-7)" + "\n" ;
-		assertEquals(result, sample.toStanfordSample());
+		assertEquals(result, sample.toStanfordString());
 	}
 }

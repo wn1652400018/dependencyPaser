@@ -115,18 +115,7 @@ public class DependencyTree
 	@Override
 	public String toString()
 	{
-		String[] words = sample.getWords();
-		String[] pos = sample.getPos();
-		String[] dependency = sample.getDependency();
-		String[] dependencyIndice = sample.getDependencyIndices();
-		int length = dependency.length;
-		String output = "";
-		for (int i = 0; i < length; i++)
-		{
-			output += (i + 1) + "\t" + words[i + 1] + "\t" + words[i + 1] + "\t" + pos[i + 1] + "\t" + pos[i + 1] + "\t"
-					+ "_" + "\t" + dependencyIndice[i] + "\t" + dependency[i] + "\t" + "_" + "\t" + "_";
-		}
-		return output;
+		return sample.toStanfordString();
 	}
 
 }
