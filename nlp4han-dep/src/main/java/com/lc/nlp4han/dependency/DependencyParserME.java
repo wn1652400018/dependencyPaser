@@ -30,8 +30,8 @@ import com.lc.nlp4han.ml.util.PlainTextByLineStream;
  * @author 王馨苇
  *
  */
-public class DependencyParserME implements DependencyParser {
-
+public class DependencyParserME implements DependencyParser
+{
 	public static final int DEFAULT_BEAM_SIZE = 3;
 
 	private DependencyParseContextGenerator contextGenerator;
@@ -39,26 +39,26 @@ public class DependencyParserME implements DependencyParser {
 	private ClassificationModel mm;
 
 	public DependencyParserME(File model) throws IOException
-    {
-        this(new ModelWrapper(model), new DependencyParseContextGeneratorConf());
-    }
+	{
+		this(new ModelWrapper(model), new DependencyParseContextGeneratorConf());
+	}
 
-    public DependencyParserME(File model, DependencyParseContextGenerator contextGen) throws IOException
-    {
-        this(new ModelWrapper(model), contextGen);
-    }
-    
-    public DependencyParserME(ModelWrapper model) throws IOException
-    {
-        init(model, new DependencyParseContextGeneratorConf());
+	public DependencyParserME(File model, DependencyParseContextGenerator contextGen) throws IOException
+	{
+		this(new ModelWrapper(model), contextGen);
+	}
 
-    }
+	public DependencyParserME(ModelWrapper model) throws IOException
+	{
+		init(model, new DependencyParseContextGeneratorConf());
 
-    public DependencyParserME(ModelWrapper model, DependencyParseContextGenerator contextGen)
-    {
-        init(model, contextGen);
+	}
 
-    }
+	public DependencyParserME(ModelWrapper model, DependencyParseContextGenerator contextGen)
+	{
+		init(model, contextGen);
+
+	}
 
 	/**
 	 * 初始化工作
@@ -68,12 +68,12 @@ public class DependencyParserME implements DependencyParser {
 	 * @param contextGen
 	 *            特征
 	 */
-	private void init(ModelWrapper model, DependencyParseContextGenerator contextGen) {
+	private void init(ModelWrapper model, DependencyParseContextGenerator contextGen)
+	{
 		mm = model.getModel();
 
 		contextGenerator = contextGen;
 	}
-
 
 	/**
 	 * 训练模型
@@ -89,9 +89,11 @@ public class DependencyParserME implements DependencyParser {
 	 * @return 模型和模型信息的包裹结果
 	 * @throws IOException
 	 */
-	public static ModelWrapper train(File file, TrainingParameters params,
-			DependencyParseContextGenerator contextGen, String encoding) throws IOException {
+	public static ModelWrapper train(File file, TrainingParameters params, DependencyParseContextGenerator contextGen,
+			String encoding) throws IOException
+	{
 		ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), encoding);
+		// TODO: 样本解析器灵活选择，不能固化
 		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
 		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
 		ModelWrapper model = DependencyParserME.train(sampleStream, params, contextGen);
@@ -101,8 +103,6 @@ public class DependencyParserME implements DependencyParser {
 	/**
 	 * 训练模型
 	 * 
-	 * @param languageCode
-	 *            编码
 	 * @param sampleStream
 	 *            样本流
 	 * @param params
@@ -113,30 +113,35 @@ public class DependencyParserME implements DependencyParser {
 	 * @throws IOException
 	 *             IO异常
 	 */
-	public static ModelWrapper train(ObjectStream<DependencySample> sampleStream,
-			TrainingParameters params, DependencyParseContextGenerator contextGen) throws IOException {
-		// beamSizeString为空
+	public static ModelWrapper train(ObjectStream<DependencySample> sampleStream, TrainingParameters params,
+			DependencyParseContextGenerator contextGen) throws IOException
+	{
 		String beamSizeString = params.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
 
 		int beamSize = DependencyParserME.DEFAULT_BEAM_SIZE;
-		if (beamSizeString != null) {
+		if (beamSizeString != null)
+		{
 			beamSize = Integer.parseInt(beamSizeString);
 		}
-		
+
 		ClassificationModel maxentModel = null;
 		SequenceClassificationModel<String> seqModel = null;
-		
+
 		Map<String, String> manifestInfoEntries = new HashMap<String, String>();
-		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());	
-		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType)) {
+		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
+		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType))
+		{
 			ObjectStream<Event> es = new DependencySampleEventStream(sampleStream, contextGen);
 			EventTrainer trainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
 			maxentModel = trainer.train(es);
 		}
 
-		if (maxentModel != null) {
+		if (maxentModel != null)
+		{
 			return new ModelWrapper(maxentModel, beamSize);
-		} else {
+		}
+		else
+		{
 			return new ModelWrapper(seqModel);
 		}
 	}
@@ -152,55 +157,67 @@ public class DependencyParserME implements DependencyParser {
 	 *            额外的信息
 	 * @return 对象包装概率和依存关系的信息
 	 */
-	public DependencyParseMatrix tagNoNull(String[] sentence, String[] pos, Object[] additionaContext) {
+	public DependencyParseMatrix tagNoNull(String[] sentence, String[] pos, Object[] additionaContext)
+	{
 		int i = 1, j = 0;
 		double[][] proba = new double[sentence.length][sentence.length];
 		String[][] dependencyRelation = new String[sentence.length][sentence.length];
-		for (int m = 0; m < sentence.length; m++) {
-			for (int n = 0; n < sentence.length; n++) {
+		for (int m = 0; m < sentence.length; m++)
+		{
+			for (int n = 0; n < sentence.length; n++)
+			{
 				proba[m][n] = 0.0;
 				dependencyRelation[m][n] = "null";
 			}
 		}
 
 		int lenLeft, lenRight;
-		if (DependencyParseContextGeneratorConf.LEFT == -1 && DependencyParseContextGeneratorConf.RIGHT == -1) {
+		if (DependencyParseContextGeneratorConf.LEFT == -1 && DependencyParseContextGeneratorConf.RIGHT == -1)
+		{
 			lenLeft = -sentence.length;
 			lenRight = sentence.length;
-		} else {
+		}
+		else
+		{
 			lenLeft = DependencyParseContextGeneratorConf.LEFT;
 			lenRight = DependencyParseContextGeneratorConf.RIGHT;
 		}
 
-		while (i < sentence.length) {
-			while (j - i <= lenRight && j - i >= lenLeft && j < sentence.length) {
-				if (i != j) {
+		while (i < sentence.length)
+		{
+			while (j - i <= lenRight && j - i >= lenLeft && j < sentence.length)
+			{
+				if (i != j)
+				{
 					String[] context = contextGenerator.getContext(i, j, sentence, pos, additionaContext);
 					double temp[] = mm.eval(context);
-					
+
 					String tempDependency[] = new String[temp.length];
-					for (int k = 0; k < temp.length; k++) {
+					for (int k = 0; k < temp.length; k++)
+					{
 						tempDependency[k] = mm.getOutcome(k);
 					}
-					
+
 					double max = -1;
 					int record = -1;
-					for (int k = 0; k < temp.length; k++) {
-						if ((temp[k] > max) && (tempDependency[k].compareTo("null") != 0)) {
+					for (int k = 0; k < temp.length; k++)
+					{
+						if ((temp[k] > max) && (tempDependency[k].compareTo("null") != 0))
+						{
 							max = temp[k];
 							record = k;
 						}
 					}
-					
+
 					// 根据最大的下标获取对应的依赖关系
 					dependencyRelation[i][j] = tempDependency[record];
 					// 最大的概率
 					proba[i][j] = temp[record];
 				}
-				
+
 				j++;
 			}
-			
+
 			i++;
 			j = 0;
 		}
@@ -221,48 +238,65 @@ public class DependencyParserME implements DependencyParser {
 	 *            额外的信息
 	 * @return 对象包装概率和依存关系的信息
 	 */
-	public DependencyParseMatrix tagK(int kRes, String[] sentence, String[] pos, Object[] additionaContext) {
+	public DependencyParseMatrix tagK(int kRes, String[] sentence, String[] pos, Object[] additionaContext)
+	{
 
 		int i = 1, j = 0;
 		String[][] proba = new String[sentence.length][sentence.length];
 		String[][] dependencyRelation = new String[sentence.length][sentence.length];
 
 		int lenLeft, lenRight;
-		if (DependencyParseContextGeneratorConf.LEFT == -1 && DependencyParseContextGeneratorConf.RIGHT == -1) {
+		if (DependencyParseContextGeneratorConf.LEFT == -1 && DependencyParseContextGeneratorConf.RIGHT == -1)
+		{
 			lenLeft = -sentence.length;
 			lenRight = sentence.length;
-		} else if (DependencyParseContextGeneratorConf.LEFT == -1 && DependencyParseContextGeneratorConf.RIGHT != -1) {
+		}
+		else if (DependencyParseContextGeneratorConf.LEFT == -1 && DependencyParseContextGeneratorConf.RIGHT != -1)
+		{
 			lenLeft = -sentence.length;
 			lenRight = DependencyParseContextGeneratorConf.RIGHT;
-		} else if (DependencyParseContextGeneratorConf.LEFT != -1 && DependencyParseContextGeneratorConf.RIGHT == -1) {
+		}
+		else if (DependencyParseContextGeneratorConf.LEFT != -1 && DependencyParseContextGeneratorConf.RIGHT == -1)
+		{
 			lenLeft = DependencyParseContextGeneratorConf.LEFT;
 			lenRight = sentence.length;
-		} else {
+		}
+		else
+		{
 			lenLeft = DependencyParseContextGeneratorConf.LEFT;
 			lenRight = DependencyParseContextGeneratorConf.RIGHT;
 		}
 
-		while (i < sentence.length) {
-			while (j - i <= lenRight && j - i >= lenLeft && j < sentence.length) {
-				if (i != j) {
+		while (i < sentence.length)
+		{
+			while (j - i <= lenRight && j - i >= lenLeft && j < sentence.length)
+			{
+				if (i != j)
+				{
 					Queue<DepDatum> queue = new PriorityQueue<>();
 					String[] context = contextGenerator.getContext(i, j, sentence, pos, additionaContext);
 					double temp[] = mm.eval(context);
 					String tempDependency[] = new String[temp.length];
-					for (int k = 0; k < temp.length; k++) {
-						if (mm.getOutcome(k).compareTo("null") != 0) {
+					for (int k = 0; k < temp.length; k++)
+					{
+						if (mm.getOutcome(k).compareTo("null") != 0)
+						{
 							tempDependency[k] = mm.getOutcome(k);
 							queue.add(new DepDatum(temp[k], k));
 						}
 					}
 					String tempProba = "";
 					String tempDepen = "";
-					for (int k = 0; k < kRes; k++) {
+					for (int k = 0; k < kRes; k++)
+					{
 						DepDatum data = queue.poll();
-						if (k == kRes - 1) {
+						if (k == kRes - 1)
+						{
 							tempProba += data.getValue();
 							tempDepen += tempDependency[data.getIndex()];
-						} else {
+						}
+						else
+						{
 							tempProba += data.getValue() + "_";
 							tempDepen += tempDependency[data.getIndex()] + "_";
 						}
@@ -290,7 +324,8 @@ public class DependencyParserME implements DependencyParser {
 	 *            词性
 	 * @return 对象包装概率和依存关系的信息
 	 */
-	public DependencyParseMatrix tagNoNull(String[] sentence, String[] pos) {
+	public DependencyParseMatrix tagNoNull(String[] sentence, String[] pos)
+	{
 		return tagNoNull(sentence, pos, null);
 	}
 
@@ -305,55 +340,61 @@ public class DependencyParserME implements DependencyParser {
 	 *            词性
 	 * @return 对象包装概率和依存关系的信息
 	 */
-	public DependencyParseMatrix tagK(int k, String[] sentence, String[] pos) {
+	public DependencyParseMatrix tagK(int k, String[] sentence, String[] pos)
+	{
 
 		return tagK(k, sentence, pos, null);
 	}
 
 	@Override
-	public DependencyTree parse(String sentence) {
+	public DependencyTree parse(String sentence)
+	{
 		String[] wordsandposes = sentence.split("\\s+");
 		String[] words = new String[wordsandposes.length];
 		String[] poses = new String[wordsandposes.length];
 
-		for (int i = 0; i < wordsandposes.length; i++) {
+		for (int i = 0; i < wordsandposes.length; i++)
+		{
 			String[] temp = wordsandposes[i].split("/");
 
 			words[i] = temp[0];
 			poses[i] = temp[1];
 		}
-		
+
 		return parse(words, poses);
 	}
 
 	@Override
-	public DependencyTree parse(String[] words, String[] poses) {
+	public DependencyTree parse(String[] words, String[] poses)
+	{
 		List<String> wordslist = Arrays.asList(words);
 		List<String> allwords = new ArrayList<>();
 		allwords.add(0, "核心");
 		allwords.addAll(wordslist);
-		
+
 		List<String> poseslist = Arrays.asList(poses);
 		List<String> allposes = new ArrayList<>();
 		allposes.add(0, "root");
 		allposes.addAll(poseslist);
-		
+
 		DependencyParseMatrix proba = tagNoNull(allwords.toArray(new String[allwords.size()]),
 				allposes.toArray(new String[allposes.size()]));
-		
+
 		DependencySample sample;
 		sample = MaxSpanningTree.getMaxTree(proba);
 		DependencyTree parse = new DependencyTree(sample);
-		
+
 		return parse;
 	}
 
 	@Override
-	public DependencyTree parse(String[] wordsandposes) {
+	public DependencyTree parse(String[] wordsandposes)
+	{
 		String[] words = new String[wordsandposes.length];
 		String[] poses = new String[wordsandposes.length];
 
-		for (int i = 0; i < wordsandposes.length; i++) {
+		for (int i = 0; i < wordsandposes.length; i++)
+		{
 			String[] temp = wordsandposes[i].split("/");
 
 			words[i] = temp[0];
@@ -364,54 +405,59 @@ public class DependencyParserME implements DependencyParser {
 	}
 
 	@Override
-	public DependencyTree[] parse(int k, String sentence) {
+	public DependencyTree[] parse(String sentence, int k)
+	{
 		String[] wordsandposes = sentence.split("\\s+");
 		String[] words = new String[wordsandposes.length];
 		String[] poses = new String[wordsandposes.length];
 
-		for (int i = 0; i < wordsandposes.length; i++) {
+		for (int i = 0; i < wordsandposes.length; i++)
+		{
 			String[] temp = wordsandposes[i].split("/");
 
 			words[i] = temp[0];
 			poses[i] = temp[1];
 		}
 
-		return parse(k, words, poses);
+		return parse(words, poses, k);
 	}
 
 	@Override
-	public DependencyTree[] parse(int k, String[] words, String[] poses) {
+	public DependencyTree[] parse(String[] words, String[] poses, int k)
+	{
 		List<String> wordslist = Arrays.asList(words);
 		List<String> allwords = new ArrayList<>();
 		allwords.add(0, "核心");
 		allwords.addAll(wordslist);
-		
+
 		List<String> poseslist = Arrays.asList(poses);
 		List<String> allposes = new ArrayList<>();
 		allposes.add(0, "root");
 		allposes.addAll(poseslist);
-		
+
 		DependencyParseMatrix proba = tagK(k, allwords.toArray(new String[allwords.size()]),
 				allposes.toArray(new String[allposes.size()]));
 
 		DependencyTree[] parse = new DependencyTree[k];
 		parse = MaxSpanningTree.getKMaxTrees(k, proba);
-		
+
 		return parse;
 	}
 
 	@Override
-	public DependencyTree[] parse(int k, String[] wordsandposes) {
+	public DependencyTree[] parse(String[] wordsandposes, int k)
+	{
 		String[] words = new String[wordsandposes.length];
 		String[] poses = new String[wordsandposes.length];
 
-		for (int i = 0; i < wordsandposes.length; i++) {
+		for (int i = 0; i < wordsandposes.length; i++)
+		{
 			String[] temp = wordsandposes[i].split("/");
 
 			words[i] = temp[0];
 			poses[i] = temp[1];
 		}
 
-		return parse(k, words, poses);
+		return parse(words, poses, k);
 	}
 }

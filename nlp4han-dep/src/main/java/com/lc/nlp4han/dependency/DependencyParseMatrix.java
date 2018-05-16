@@ -1,13 +1,16 @@
 package com.lc.nlp4han.dependency;
 
 /**
- * 封装最大熵得到的树的权重
+ * 封装最大熵得到的词两两间的关系和权重（概率）
+ * 
+ * 两词间无依存关系，关系为null，权重或概率为0
  * 
  * @author 刘小峰
  * @author 王馨苇
  *
  */
-public class DependencyParseMatrix {
+public class DependencyParseMatrix
+{
 
 	private double[][] proba;
 	private String[][] dependency;
@@ -30,7 +33,8 @@ public class DependencyParseMatrix {
 	 * @param dependecy
 	 *            依存关系
 	 */
-	public DependencyParseMatrix(String[] sentence, String[] pos, double[][] proba, String[][] dependecy) {
+	public DependencyParseMatrix(String[] sentence, String[] pos, double[][] proba, String[][] dependecy)
+	{
 		this.sentence = sentence;
 		this.dependency = dependecy;
 		this.proba = proba;
@@ -49,7 +53,8 @@ public class DependencyParseMatrix {
 	 * @param dependecy
 	 *            K个最好的依存关系拼接后的结果（与K个最好的概率拼接后的结果相对应）
 	 */
-	public DependencyParseMatrix(String[] sentence, String[] pos, String[][] kprobas, String[][] kdependency) {
+	public DependencyParseMatrix(String[] sentence, String[] pos, String[][] kprobas, String[][] kdependency)
+	{
 		this.sentence = sentence;
 		this.kdependency = kdependency;
 		this.kprobas = kprobas;
@@ -61,7 +66,8 @@ public class DependencyParseMatrix {
 	 * 
 	 * @return 词语
 	 */
-	public String[] getSentence() {
+	public String[] getSentence()
+	{
 		return this.sentence;
 	}
 
@@ -70,7 +76,8 @@ public class DependencyParseMatrix {
 	 * 
 	 * @return 依存关系
 	 */
-	public String[][] getDependency() {
+	public String[][] getDependency()
+	{
 		return this.dependency;
 	}
 
@@ -79,7 +86,8 @@ public class DependencyParseMatrix {
 	 * 
 	 * @return
 	 */
-	public String[][] getKDependency() {
+	public String[][] getKDependency()
+	{
 		return this.kdependency;
 	}
 
@@ -88,11 +96,13 @@ public class DependencyParseMatrix {
 	 * 
 	 * @return 概率
 	 */
-	public double[][] getProba() {
+	public double[][] getProba()
+	{
 		return this.proba;
 	}
 
-	public String[][] getKProba() {
+	public String[][] getKProba()
+	{
 		return this.kprobas;
 	}
 
@@ -101,26 +111,32 @@ public class DependencyParseMatrix {
 	 * 
 	 * @return 词性
 	 */
-	public String[] getPos() {
+	public String[] getPos()
+	{
 		return this.pos;
 	}
 
-	public String toString() {
+	public String toString()
+	{
 		StringBuilder buf = new StringBuilder();
-		for (int j2 = 0; j2 < proba.length; j2++) {
-			for (int k = 0; k < proba.length; k++) {
+		for (int j2 = 0; j2 < proba.length; j2++)
+		{
+			for (int k = 0; k < proba.length; k++)
+			{
 				buf.append(proba[j2][k] + "\t");
 			}
 			buf.append("\n");
 		}
-		
-		for (int j2 = 0; j2 < dependency.length; j2++) {
-			for (int k = 0; k < dependency.length; k++) {
+
+		for (int j2 = 0; j2 < dependency.length; j2++)
+		{
+			for (int k = 0; k < dependency.length; k++)
+			{
 				buf.append(dependency[j2][k] + "\t");
 			}
 			buf.append("\n");
 		}
-		
+
 		return buf.toString();
 	}
 }

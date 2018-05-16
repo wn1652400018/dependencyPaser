@@ -69,6 +69,7 @@ public class DependencyCrossValidatorTool
 
 
         ObjectStream<String> linesStream = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(corpusFile), encoding);
+        // TODO: 根据命令行参数选择不同的样本解析器
         DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
         ObjectStream<DependencySample> sampleStream = new DependencySampleStream(linesStream, sampleParser);
 

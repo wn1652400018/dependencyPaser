@@ -16,15 +16,17 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  * @author 王馨苇
  *
  */
-public class DependencySampleStream extends FilterObjectStream<String, DependencySample>{
+public class DependencySampleStream extends FilterObjectStream<String, DependencySample>
+{
 
 	private static Logger logger = Logger.getLogger(DependencySampleStream.class.getName());
-	
+
 	private DependencySampleParser sampleParser;
-	
-	public DependencySampleStream(ObjectStream<String> samples, DependencySampleParser sampleParser) {
+
+	public DependencySampleStream(ObjectStream<String> samples, DependencySampleParser sampleParser)
+	{
 		super(samples);
-		
+
 		this.sampleParser = sampleParser;
 	}
 
@@ -32,33 +34,38 @@ public class DependencySampleStream extends FilterObjectStream<String, Dependenc
 	 * 读取两个空行之间的句子，并转换成依存样本DependencySample
 	 * 
 	 * @return 返回解析之后的依存样本
-	 */	
-	public DependencySample read() throws IOException {
-		//上面的super,指定了read()读的是哪个文件的
-		//这里的read()读取训练语料中两个空行之间的内容
+	 */
+	public DependencySample read() throws IOException
+	{
+		// 这里的read()读取训练语料中两个空行之间的内容
 		String sentences = samples.read();
-		//用PhraseAnalysisDependencySample的实现来解析文本
-//		DependencyFormat parser = new DependencyFormat(new DependencySampleParserCoNLL(), sentences);
-		if(sentences != "" || !(sentences.equals(""))){
-			DependencySample sample = null ;
-			try{
-				//System.out.println(sentences);
+
+		if (sentences != "" || !(sentences.equals("")))
+		{
+			DependencySample sample = null;
+			try
+			{
 				sample = sampleParser.parse(sentences);
-			}catch(Exception e){
-				if (logger.isLoggable(Level.WARNING)) {
-					
-                    logger.warning("Error during parsing, ignoring sentence: " + sentences);
-                }
-				sample = new DependencySample(new String[]{},new String[]{},new String[]{},new String[]{},new String[]{});
+			}
+			catch (Exception e)
+			{
+				if (logger.isLoggable(Level.WARNING))
+				{
+
+					logger.warning("Error during parsing, ignoring sentence: " + sentences);
+				}
+				sample = new DependencySample(new String[] {}, new String[] {}, new String[] {}, new String[] {},
+						new String[] {});
 			}
 
 			return sample;
-			
-		}else{
+
+		}
+		else
+		{
 			return null;
 		}
-		
+
 	}
 
-	
 }
