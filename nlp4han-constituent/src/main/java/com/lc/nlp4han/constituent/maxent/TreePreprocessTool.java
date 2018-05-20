@@ -42,22 +42,25 @@ public class TreePreprocessTool
 		while ((tree = lineStream.read()) != "")
 		{
 			TreeNode node = BracketExpUtil.generateTree(tree);
+			
 			// 对树进行遍历
 			deleteNone(node);
 
 			String newTreeStr;
 			if (haveWordIndex == true)
 			{
-				newTreeStr = node.toNoNoneSample();
+				newTreeStr = node.toStringWordIndexNoNone();
 			}
 			else
 			{
-				newTreeStr = node.toBracketNoNullNode();
+				newTreeStr = node.toStringNoNone();
 			}
+			
 			TreeNode newTree = BracketExpUtil.generateTree("(" + newTreeStr + ")");
 			bw.write("(" + TreeNode.printTree(newTree, 1) + ")");
 			bw.newLine();
 		}
+		
 		bw.close();
 		lineStream.close();
 	}

@@ -89,14 +89,14 @@ public class SRLTreeNode extends TreeNode{
 	 * 括号表达式
 	 * @return
 	 */
-	public String toStringWithWordIndex(){
+	public String toStringWordIndex(){
 		if(this.children.size() == 0){
 			return " "+this.nodename+"["+getWordIndex()+"]";
 		}else{
 			String treestr = "";
 			treestr = "("+this.nodename;
 			for (TreeNode node:this.children) {
-				treestr += node.toStringWithWordIndex();
+				treestr += node.toStringWordIndex();
 			}
 			treestr += ")";
 			return treestr;

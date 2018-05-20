@@ -20,7 +20,7 @@ public class TreeToSRLTree {
 	 * @return
 	 */
 	private static SRLTreeNode transferToSRLTreeNodeStructure(TreeNode treenode){
-		String strtree = "("+treenode.toNoNoneSample()+")";
+		String strtree = "("+treenode.toStringWordIndexNoNone()+")";
 		String format = BracketExpUtil.format(strtree);
 		List<String> parts = BracketExpUtil.stringToList(format);
 		Stack<SRLTreeNode> tree = new Stack<SRLTreeNode>();
@@ -86,7 +86,7 @@ public class TreeToSRLTree {
 	 * @param role 角色标注信息
 	 */
 	private static void treeAddSingleSemanticRole(SRLTreeNode tree, HeadTreeNode headtree, String role){
-		if(tree.toString().equals(headtree.toStringWithWordIndex())){
+		if(tree.toString().equals(headtree.toStringWordIndex())){
 			tree.setSemanticRole(role);
 		}else{
 			for (TreeNode treenode : tree.getChildren()) {

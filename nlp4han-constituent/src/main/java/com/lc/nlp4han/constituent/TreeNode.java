@@ -286,7 +286,7 @@ public class TreeNode implements Cloneable
 	 * 
 	 * @return
 	 */
-	public String toStringWithWordIndex()
+	public String toStringWordIndex()
 	{
 		if (this.children.size() == 0)
 		{
@@ -311,7 +311,7 @@ public class TreeNode implements Cloneable
 	 * 
 	 * @return
 	 */
-	public String toBracketNoNullNode()
+	public String toStringNoNone()
 	{
 		if (this.children.size() == 0 && this.flag == true)
 		{
@@ -328,7 +328,7 @@ public class TreeNode implements Cloneable
 			for (TreeNode node : this.children)
 			{
 
-				treestr += node.toBracketNoNullNode();
+				treestr += node.toStringNoNone();
 			}
 			
 			if (this.flag == true)
@@ -365,7 +365,7 @@ public class TreeNode implements Cloneable
 	 * 
 	 * @return
 	 */
-	public String toNoNoneSample()
+	public String toStringWordIndexNoNone()
 	{
 		if (this.children.size() == 0 && this.flag == true)
 		{
@@ -382,7 +382,7 @@ public class TreeNode implements Cloneable
 			for (TreeNode node : this.children)
 			{
 
-				treestr += node.toNoNoneSample();
+				treestr += node.toStringWordIndexNoNone();
 			}
 			
 			if (this.flag == true)

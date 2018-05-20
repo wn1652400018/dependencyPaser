@@ -184,7 +184,7 @@ public class HeadTreeNode extends TreeNode
 	 * 
 	 * @return
 	 */
-	public String toStringWithWordIndex()
+	public String toStringWordIndex()
 	{
 		if (this.children.size() == 0)
 		{
@@ -196,7 +196,7 @@ public class HeadTreeNode extends TreeNode
 			treestr = "(" + this.nodename;
 			for (TreeNode node : this.children)
 			{
-				treestr += node.toStringWithWordIndex();
+				treestr += node.toStringWordIndex();
 			}
 			treestr += ")";
 			return treestr;

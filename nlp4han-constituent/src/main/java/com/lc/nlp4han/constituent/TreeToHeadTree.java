@@ -20,7 +20,7 @@ public class TreeToHeadTree
 	 */
 	public static HeadTreeNode treeToHeadTree(TreeNode treeNode, AbstractHeadGenerator headGen)
 	{
-		String treeStr = "(" + treeNode.toNoNoneSample() + ")";
+		String treeStr = "(" + treeNode.toStringWordIndexNoNone() + ")";
 		treeStr = BracketExpUtil.format(treeStr);
 		
 		int indexTree;// 记录当前是第几颗子树

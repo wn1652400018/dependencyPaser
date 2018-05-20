@@ -82,7 +82,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<ConstituentTr
 				}	
 			} catch(Exception e){
 				if (logger.isLoggable(Level.WARNING)) {						
-                    logger.warning("Error during parsing, ignoring sentence: " + treePre.toStringWithWordIndex());
+                    logger.warning("Error during parsing, ignoring sentence: " + treePre.toStringWordIndex());
                 }	
 				samplePre = new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 			}
