@@ -153,6 +153,7 @@ public class TreePreprocessTool
 
 	public static void main(String[] args) throws IOException
 	{
+		/// TODO: 语料编码作为命令行参数
 
 		if (args.length < 1)
 		{
@@ -177,6 +178,7 @@ public class TreePreprocessTool
 			}
 			if (args[i].equals("-havewordindex"))
 			{
+				// TODO:  开关量参数不需要带参数值
 				havewordindex = args[i + 1];
 				i++;
 			}
