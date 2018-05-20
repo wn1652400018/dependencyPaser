@@ -1,4 +1,4 @@
-package com.lc.nlp4han.dependency;
+package com.lc.nlp4han.dependency.mst;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,15 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import com.lc.nlp4han.dependency.DependencyParseContextGenerator;
+import com.lc.nlp4han.dependency.DependencyParseContextGeneratorConf;
+import com.lc.nlp4han.dependency.DependencyParser;
+import com.lc.nlp4han.dependency.DependencySample;
+import com.lc.nlp4han.dependency.DependencySampleEventStream;
+import com.lc.nlp4han.dependency.DependencySampleParser;
+import com.lc.nlp4han.dependency.DependencySampleParserCoNLL;
+import com.lc.nlp4han.dependency.DependencySampleStream;
+import com.lc.nlp4han.dependency.DependencyTree;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.model.SequenceClassificationModel;

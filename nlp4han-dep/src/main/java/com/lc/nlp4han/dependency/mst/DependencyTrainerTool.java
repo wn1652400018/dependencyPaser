@@ -1,4 +1,4 @@
-package com.lc.nlp4han.dependency;
+package com.lc.nlp4han.dependency.mst;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.lc.nlp4han.dependency.DependencyParseContextGenerator;
+import com.lc.nlp4han.dependency.DependencyParseContextGeneratorConf;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 

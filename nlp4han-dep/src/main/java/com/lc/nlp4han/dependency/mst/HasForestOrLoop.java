@@ -1,4 +1,4 @@
-package com.lc.nlp4han.dependency;
+package com.lc.nlp4han.dependency.mst;
 
 /**
  * 判断是否有环路

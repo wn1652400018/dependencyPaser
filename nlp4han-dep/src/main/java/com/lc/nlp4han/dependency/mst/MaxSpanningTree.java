@@ -1,9 +1,12 @@
-package com.lc.nlp4han.dependency;
+package com.lc.nlp4han.dependency.mst;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+
+import com.lc.nlp4han.dependency.DependencySample;
+import com.lc.nlp4han.dependency.DependencyTree;
 
 /**
  * 最大生成树算法

@@ -1,5 +1,8 @@
-package com.lc.nlp4han.dependency;
+package com.lc.nlp4han.dependency.mst;
 
+import com.lc.nlp4han.dependency.DependencyParseEvaluateMonitor;
+import com.lc.nlp4han.dependency.DependencyParseMeasure;
+import com.lc.nlp4han.dependency.DependencySample;
 import com.lc.nlp4han.ml.util.Evaluator;
 
 /**

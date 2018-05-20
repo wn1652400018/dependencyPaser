@@ -1,8 +1,15 @@
-package com.lc.nlp4han.dependency;
+package com.lc.nlp4han.dependency.mst;
 
 import java.io.File;
 import java.io.IOException;
 
+import com.lc.nlp4han.dependency.DependencyParseContextGenerator;
+import com.lc.nlp4han.dependency.DependencyParseContextGeneratorConf;
+import com.lc.nlp4han.dependency.DependencySample;
+import com.lc.nlp4han.dependency.DependencySampleParser;
+import com.lc.nlp4han.dependency.DependencySampleParserCoNLL;
+import com.lc.nlp4han.dependency.DependencySampleStream;
+import com.lc.nlp4han.dependency.PlainTextBySpaceLineStream;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.TrainingParameters;

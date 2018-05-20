@@ -1,4 +1,4 @@
-package com.lc.nlp4han.dependency;
+package com.lc.nlp4han.dependency.mst;
 
 /**
  * 封装最大熵得到的词两两间的关系和权重（概率）

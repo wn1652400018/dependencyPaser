@@ -1,4 +1,4 @@
-package com.lc.nlp4han.dependency;
+package com.lc.nlp4han.dependency.mst;
 
 /**
  * 存放数组中的值和对应的下标
