@@ -216,4 +216,38 @@ public class HeadTreeNode extends TreeNode
 			return false;
 		}
 	}
+
+	/**
+	 * 将词性标注和词语转成树的形式
+	 * 
+	 * @param words
+	 *            k个最好的词语序列
+	 * @param poses
+	 *            k个最好的词性标注序列
+	 * @return
+	 */
+	public static List<List<HeadTreeNode>> toPosTree(String[] words, String[][] poses)
+	{
+		List<List<HeadTreeNode>> posTrees = new ArrayList<>();
+		for (int i = 0; i < poses.length; i++)
+		{
+			List<HeadTreeNode> posTree = new ArrayList<HeadTreeNode>();
+			for (int j = 0; j < poses[i].length && j < words.length; j++)
+			{
+				HeadTreeNode pos = new HeadTreeNode(poses[i][j]);
+				HeadTreeNode word = new HeadTreeNode(words[j]);
+				
+				pos.addChild(word);
+				word.setParent(pos);
+				
+				pos.setHeadWord(words[j]);
+				
+				posTree.add(pos);
+			}
+			
+			posTrees.add(posTree);
+		}
+		
+		return posTrees;
+	}
 }

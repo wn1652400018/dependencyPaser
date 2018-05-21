@@ -8,62 +8,80 @@ import com.lc.nlp4han.pos.word.POSTaggerWordME;
 
 /**
  * 英文的词性标注器
+ * 
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMEForPosEnglish implements SyntacticAnalysisForPos<HeadTreeNode> {
+// TODO: 此类和SyntacticAnalysisMEForPosChinese大量代码重复，需要重构
+public class SyntacticAnalysisMEForPosEnglish implements SyntacticAnalysisForPos<HeadTreeNode>
+{
 
-	private POSTaggerWordME postagger ;
-	
-	public SyntacticAnalysisMEForPosEnglish(ModelWrapper posmodel) {
+	private POSTaggerWordME postagger;
+
+	public SyntacticAnalysisMEForPosEnglish(ModelWrapper posmodel)
+	{
 		postagger = new POSTaggerWordME(posmodel);
 	}
 
 	/**
 	 * 得到词性标注子树序列
-	 * @param words 分词数组
+	 * 
+	 * @param words
+	 *            分词数组
 	 * @return
 	 */
 	@Override
-	public List<HeadTreeNode> posTree(String[] words) {
-		String[][] posres = postagger.tag(words,1);
-		List<List<HeadTreeNode>> posTree = ConstituentTreeSample.toPosTree(words, posres);
+	public List<HeadTreeNode> posTree(String[] words)
+	{
+		String[][] posres = postagger.tag(words, 1);
+		List<List<HeadTreeNode>> posTree = HeadTreeNode.toPosTree(words, posres);
 		return posTree.get(0);
 	}
 
 	/**
 	 * 得到词性标注子树序列
-	 * @param sentence 分词句子
+	 * 
+	 * @param sentence
+	 *            分词句子
 	 * @return
 	 */
 	@Override
-	public List<HeadTreeNode> posTree(String sentence) {
+	public List<HeadTreeNode> posTree(String sentence)
+	{
 		String[] words = sentence.split(" ");
 		return posTree(words);
 	}
 
 	/**
 	 * 得到最好的K个词性标注子树序列
-	 * @param k 最好的K个结果
-	 * @param words 分词数组
+	 * 
+	 * @param words
+	 *            分词数组
+	 * @param k
+	 *            最好的K个结果
 	 * @return
 	 */
 	@Override
-	public List<List<HeadTreeNode>> posTree(int k, String[] words) {
+	public List<List<HeadTreeNode>> posTree(String[] words, int k)
+	{
 		String[][] posres = postagger.tag(words, k);
-		List<List<HeadTreeNode>> posTree = ConstituentTreeSample.toPosTree(words, posres);
+		List<List<HeadTreeNode>> posTree = HeadTreeNode.toPosTree(words, posres);
 		return posTree;
 	}
 
 	/**
 	 * 得到最好的K个词性标注子树序列
-	 * @param k 最好的K个结果
-	 * @param sentece 分词句子
+	 * 
+	 * @param k
+	 *            最好的K个结果
+	 * @param sentece
+	 *            分词句子
 	 * @return
 	 */
 	@Override
-	public List<List<HeadTreeNode>> posTree(int k, String sentence) {
+	public List<List<HeadTreeNode>> posTree(String sentence, int k)
+	{
 		String[] words = sentence.split(" ");
-		return posTree(k, words);
+		return posTree(words, k);
 	}
 }

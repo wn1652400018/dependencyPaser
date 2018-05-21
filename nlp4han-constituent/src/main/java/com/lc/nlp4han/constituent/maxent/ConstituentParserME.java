@@ -52,7 +52,7 @@ public class ConstituentParserME implements ConstituentParser
 			}
 		}
 
-		List<List<HeadTreeNode>> postree = ConstituentTreeSample.toPosTree(words, kposes);
+		List<List<HeadTreeNode>> postree = HeadTreeNode.toPosTree(words, kposes);
 		List<HeadTreeNode> chunkTree = chunktagger.tagChunk(postree, null);
 		List<List<HeadTreeNode>> kchunkTree = new ArrayList<>();
 		kchunkTree.add(chunkTree);
@@ -108,7 +108,7 @@ public class ConstituentParserME implements ConstituentParser
 				kposes[i][j] = poses[j];
 			}
 		}
-		List<List<HeadTreeNode>> postree = ConstituentTreeSample.toPosTree(words, kposes);
+		List<List<HeadTreeNode>> postree = HeadTreeNode.toPosTree(words, kposes);
 		List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(k, postree, null);
 		List<HeadTreeNode> headTreeNode = buildAndChecktagger.tagBuildAndCheck(k, chunkTree, null);
 		List<ConstituentTree> constituent = new ArrayList<>();
@@ -133,7 +133,7 @@ public class ConstituentParserME implements ConstituentParser
 	@Override
 	public ConstituentTree[] parseKTree(String[] words, int k)
 	{
-		List<List<HeadTreeNode>> postree = postagger.posTree(k, words);
+		List<List<HeadTreeNode>> postree = postagger.posTree(words, k);
 		List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(k, postree, null);
 		List<HeadTreeNode> headTreeNode = buildAndChecktagger.tagBuildAndCheck(k, chunkTree, null);
 		List<ConstituentTree> constituent = new ArrayList<>();

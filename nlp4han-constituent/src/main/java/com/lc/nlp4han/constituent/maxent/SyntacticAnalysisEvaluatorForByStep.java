@@ -69,7 +69,7 @@ public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<ConstituentTr
 				List<String> actionsRef = sample.getActions();
 				//参考样本没有保存完整的一棵树，需要将动作序列转成一颗完整的树
 				TreeNode treeRef = ActionsToTree.actionsToTree(words, actionsRef);
-				List<List<HeadTreeNode>> posTree = postagger.posTree(20,words.toArray(new String[words.size()]));
+				List<List<HeadTreeNode>> posTree = postagger.posTree(words.toArray(new String[words.size()]),20);
 				List<List<HeadTreeNode>> chunkTree = chunktagger.tagKChunk(20, posTree, null);	
 				treePre = buildAndChecktagger.tagBuildAndCheck(chunkTree, null);
 				
