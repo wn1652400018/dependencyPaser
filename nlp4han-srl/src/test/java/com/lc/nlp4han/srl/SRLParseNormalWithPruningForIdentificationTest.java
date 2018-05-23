@@ -13,7 +13,7 @@ import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
+import com.lc.nlp4han.constituent.TreePreprocessTool;
 
 /**
  * 为识别阶段生成的样本类测试(NULL标记，有剪枝)

@@ -15,7 +15,7 @@ import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
+import com.lc.nlp4han.constituent.TreePreprocessTool;
 import com.lc.nlp4han.ml.model.Event;
 
 /**

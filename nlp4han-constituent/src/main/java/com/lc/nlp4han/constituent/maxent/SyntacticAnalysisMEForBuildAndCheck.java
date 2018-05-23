@@ -136,7 +136,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
 		
 		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType)) {
-			ObjectStream<Event> buildes = new SyntacticAnalysisSampleEventForBuild(sampleStream, contextGen);
+			ObjectStream<Event> buildes = new SampleEventsForBuild(sampleStream, contextGen);
 			EventTrainer buildtrainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
 			buildModel = buildtrainer.train(buildes);
 		}
@@ -239,7 +239,7 @@ public class SyntacticAnalysisMEForBuildAndCheck implements SyntacticAnalysisFor
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
 		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType)) {
 			sampleStream.reset();
-			ObjectStream<Event> checkes = new SyntacticAnalysisSampleEventForCheck(sampleStream, contextGen);
+			ObjectStream<Event> checkes = new SampleEventsForCheck(sampleStream, contextGen);
 			EventTrainer checktrainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
 			checkModel = checktrainer.train(checkes);
 		}

@@ -14,7 +14,7 @@ import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
+import com.lc.nlp4han.constituent.TreePreprocessTool;
 
 /**
  * 将样本解析成分类阶段要用的样本的样式

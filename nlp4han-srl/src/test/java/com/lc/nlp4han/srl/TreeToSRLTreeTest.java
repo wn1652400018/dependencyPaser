@@ -9,7 +9,7 @@ import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
-import com.lc.nlp4han.constituent.maxent.TreePreprocessTool;
+import com.lc.nlp4han.constituent.TreePreprocessTool;
 
 /**
  * 将树转成语义角色标注树的单元测试

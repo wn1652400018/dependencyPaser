@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.TreeNode;
+import com.lc.nlp4han.constituent.TreePreprocessTool;
 
 /**
  * 句法树预处理操作的测试

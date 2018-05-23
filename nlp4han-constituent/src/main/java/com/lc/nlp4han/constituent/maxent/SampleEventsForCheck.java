@@ -14,7 +14,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisSampleEventForCheck extends AbstractEventStream<ConstituentTreeSample<HeadTreeNode>>{
+public class SampleEventsForCheck extends AbstractEventStream<ConstituentTreeSample<HeadTreeNode>>{
 
 	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator;
 	
@@ -23,7 +23,7 @@ public class SyntacticAnalysisSampleEventForCheck extends AbstractEventStream<Co
 	 * @param samples 样本流
 	 * @param generator 上下文产生器
 	 */
-	public SyntacticAnalysisSampleEventForCheck(ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples,SyntacticAnalysisContextGenerator<HeadTreeNode> generator) {
+	public SampleEventsForCheck(ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples,SyntacticAnalysisContextGenerator<HeadTreeNode> generator) {
 		super(samples);
 		this.generator = generator;
 	}

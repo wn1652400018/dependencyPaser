@@ -7,6 +7,7 @@ import java.util.HashSet;
  * @author 王馨苇
  *
  */
+// TODO: 唯一使用的地方只需要判断是否是英文数字，没必要存在，将使用的地方用java方法简单替换
 public class IsDigitUtil {
 
 	private static HashSet<Character> hsalbdigit = new HashSet<>();

@@ -138,7 +138,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
 		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType))
 		{
-			ObjectStream<Event> es = new SyntacticAnalysisSampleEventForChunk(sampleStream, contextGen);
+			ObjectStream<Event> es = new SampleEventsForChunk(sampleStream, contextGen);
 			EventTrainer trainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
 			chunkModel = trainer.train(es);
 		}

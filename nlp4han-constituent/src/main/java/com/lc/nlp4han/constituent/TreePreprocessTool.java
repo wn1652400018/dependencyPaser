@@ -1,17 +1,16 @@
-package com.lc.nlp4han.constituent.maxent;
+package com.lc.nlp4han.constituent;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.lc.nlp4han.constituent.BracketExpUtil;
-import com.lc.nlp4han.constituent.PlainTextByTreeStream;
-import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.ml.util.FileInputStreamFactory;
 
 /**
  * 句法树预处理运行类
+ * 
+ * 去掉空节点和功能标记
  * 
  * @author 刘小峰
  * @author 王馨苇
@@ -130,9 +129,9 @@ public class TreePreprocessTool
 					node.setNewName(node.getNodeName().split("-")[0]);
 				}
 			}
-			else if (IsDigitUtil.isDigit(node.getNodeName().charAt(node.getNodeName().length() - 1)))
+			else if (Character.isDigit(node.getNodeName().charAt(node.getNodeName().length() - 1)))
 			{
-				if (IsDigitUtil.isDigit(node.getNodeName().charAt(node.getNodeName().length() - 2)))
+				if (Character.isDigit(node.getNodeName().charAt(node.getNodeName().length() - 2)))
 				{
 					node.setNewName(node.getNodeName().substring(0, node.getNodeName().length() - 3));
 				}
