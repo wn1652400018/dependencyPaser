@@ -29,16 +29,16 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<HeadTreeNode>
+public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 {
 
 	public static final int DEFAULT_BEAM_SIZE = 20;
-	private SyntacticAnalysisContextGenerator<HeadTreeNode> contextGenerator;
+	private ParserContextGenerator<HeadTreeNode> contextGenerator;
 	@SuppressWarnings("unused")
 	private int size;
-	private SyntacticAnalysisSequenceClassificationModel<HeadTreeNode> model;
+	private ParserSequenceClassificationModel<HeadTreeNode> model;
 
-	private SyntacticAnalysisSequenceValidator<HeadTreeNode> sequenceValidator;
+	private ParserSequenceValidator<HeadTreeNode> sequenceValidator;
 
 	private AbstractHeadGenerator headGenerator;
 
@@ -52,7 +52,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @param aghw
 	 *            生成头结点,chunk步合并的时候需要
 	 */
-	public SyntacticAnalysisMEForChunk(ModelWrapper model, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
+	public ChunkerForParserME(ModelWrapper model, ParserContextGenerator<HeadTreeNode> contextGen,
 			AbstractHeadGenerator aghw)
 	{
 		init(model, contextGen, aghw);
@@ -68,16 +68,16 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @param aghw
 	 *            生成头结点，chunk步合并的时候需要
 	 */
-	private void init(ModelWrapper model, SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen,
+	private void init(ModelWrapper model, ParserContextGenerator<HeadTreeNode> contextGen,
 			AbstractHeadGenerator aghw)
 	{
-		int beamSize = SyntacticAnalysisMEForChunk.DEFAULT_BEAM_SIZE;
+		int beamSize = ChunkerForParserME.DEFAULT_BEAM_SIZE;
 
 		contextGenerator = contextGen;
 		size = beamSize;
-		sequenceValidator = new DefaultSyntacticAnalysisSequenceValidator();
+		sequenceValidator = new DefaultParserSequenceValidator();
 		this.headGenerator = aghw;
-		this.model = new SyntacticAnalysisBeamSearch(beamSize, model.getModel(), 0);
+		this.model = new ParserBeamSearch(beamSize, model.getModel(), 0);
 	}
 
 	/**
@@ -97,13 +97,13 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @throws IOException
 	 */
 	public static ModelWrapper train(File file, TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
+			ParserContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
 			throws IOException
 	{
 		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
 		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				aghw);
-		ModelWrapper model = SyntacticAnalysisMEForChunk.train("zh", sampleStream, params, contextGen);
+		ModelWrapper model = ChunkerForParserME.train("zh", sampleStream, params, contextGen);
 		return model;
 
 	}
@@ -124,10 +124,10 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 */
 	public static ModelWrapper train(String languageCode,
 			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream, TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen) throws IOException
+			ParserContextGenerator<HeadTreeNode> contextGen) throws IOException
 	{
-		String beamSizeString = params.getSettings().get(SyntacticAnalysisBeamSearch.BEAM_SIZE_PARAMETER);
-		int beamSize = SyntacticAnalysisMEForChunk.DEFAULT_BEAM_SIZE;
+		String beamSizeString = params.getSettings().get(ParserBeamSearch.BEAM_SIZE_PARAMETER);
+		int beamSize = ChunkerForParserME.DEFAULT_BEAM_SIZE;
 		if (beamSizeString != null)
 		{
 			beamSize = Integer.parseInt(beamSizeString);
@@ -165,7 +165,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 	 * @throws IOException
 	 */
 	public static void train(File file, File modelFile, TrainingParameters params,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator headGen)
+			ParserContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator headGen)
 			throws IOException
 	{
 		OutputStream modelOut = null;
@@ -175,7 +175,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				headGen);
 		
-		model = SyntacticAnalysisMEForChunk.train("zh", sampleStream, params, contextGen);
+		model = ChunkerForParserME.train("zh", sampleStream, params, contextGen);
 		
 		// 模型的写出，文本文件
 		modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
@@ -200,7 +200,7 @@ public class SyntacticAnalysisMEForChunk implements SyntacticAnalysisForChunk<He
 		List<List<HeadTreeNode>> chunkTree = new ArrayList<List<HeadTreeNode>>();
 
 		List<List<HeadTreeNode>> combineChunkTree = new ArrayList<List<HeadTreeNode>>();
-		SyntacticAnalysisSequenceForChunk[] sequences = this.model.bestSequencesForChunk(k, posTree, ac,
+		ChunkSequence[] sequences = this.model.bestSequencesForChunk(k, posTree, ac,
 				contextGenerator, sequenceValidator);
 		for (int i = 0; i < sequences.length; i++)
 		{

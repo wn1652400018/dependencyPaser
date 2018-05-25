@@ -10,11 +10,11 @@ import com.lc.nlp4han.constituent.HeadTreeNode;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisErrorPrinter extends SyntacticAnalysisEvaluateMonitor{
+public class ParserErrorPrinter extends ParserEvaluateMonitor{
 
     private PrintStream errOut;
 	
-	public SyntacticAnalysisErrorPrinter(OutputStream out){
+	public ParserErrorPrinter(OutputStream out){
 		errOut = new PrintStream(out);
 	}
 	

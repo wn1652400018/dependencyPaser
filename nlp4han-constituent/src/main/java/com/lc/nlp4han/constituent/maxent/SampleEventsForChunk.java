@@ -18,7 +18,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
 public class SampleEventsForChunk extends AbstractEventStream<ConstituentTreeSample<HeadTreeNode>>
 {
 
-	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator;
+	private ParserContextGenerator<HeadTreeNode> generator;
 
 	/**
 	 * 构造
@@ -29,7 +29,7 @@ public class SampleEventsForChunk extends AbstractEventStream<ConstituentTreeSam
 	 *            上下文产生器
 	 */
 	public SampleEventsForChunk(ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> generator)
+			ParserContextGenerator<HeadTreeNode> generator)
 	{
 		super(samples);
 		this.generator = generator;

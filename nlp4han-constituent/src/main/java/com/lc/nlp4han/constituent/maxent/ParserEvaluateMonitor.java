@@ -8,7 +8,7 @@ import com.lc.nlp4han.ml.util.EvaluationMonitor;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisEvaluateMonitor implements EvaluationMonitor<ConstituentTreeSample<HeadTreeNode>>{
+public class ParserEvaluateMonitor implements EvaluationMonitor<ConstituentTreeSample<HeadTreeNode>>{
 
 	/**
 	 * 预测正确的时候执行

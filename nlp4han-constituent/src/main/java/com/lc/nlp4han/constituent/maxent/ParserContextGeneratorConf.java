@@ -11,10 +11,11 @@ import com.lc.nlp4han.constituent.HeadTreeNode;
 /**
  * 根据配置文件生成特征
  * 
+ * @author 刘小峰
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisContextGenerator<HeadTreeNode>
+public class ParserContextGeneratorConf implements ParserContextGenerator<HeadTreeNode>
 {
 
 	// chunk
@@ -100,11 +101,11 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 	 * 
 	 * @throws IOException
 	 */
-	public SyntacticAnalysisContextGeneratorConf() throws IOException
+	public ParserContextGeneratorConf() throws IOException
 	{
 
 		Properties featureConf = new Properties();
-		InputStream featureStream = SyntacticAnalysisContextGeneratorConf.class.getClassLoader()
+		InputStream featureStream = ParserContextGeneratorConf.class.getClassLoader()
 				.getResourceAsStream("com/lc/nlp4han/constituent/maxent/feature.properties");
 		featureConf.load(featureStream);
 		init(featureConf);
@@ -116,7 +117,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 	 * @param properties
 	 *            配置文件
 	 */
-	public SyntacticAnalysisContextGeneratorConf(Properties properties)
+	public ParserContextGeneratorConf(Properties properties)
 	{
 		init(properties);
 	}
@@ -240,6 +241,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 				tree_2 = chunkTree.get(index - 2);
 			}
 		}
+		
 		// 这里的特征是word pos chunk组成的
 		// 当前位置的时候是没有chunk标记的
 		if (tree0 != null)
@@ -249,11 +251,13 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 				features.add("chunkandpostag0=" + tree0.getFirstChildName() + "|"
 						+ tree0.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag0ASet)
 			{
 				features.add("chunkandpostag0*=" + tree0.getFirstChildName());
 			}
 		}
+		
 		// 当前位置之前的时候有chunk标记
 		if (tree_1 != null)
 		{
@@ -262,11 +266,13 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 				features.add("chunkandpostag_1=" + tree_1.getNodeName() + "|" + tree_1.getFirstChildName() + "|"
 						+ tree_1.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag_1ASet)
 			{
 				features.add("chunkandpostag_1*=" + tree_1.getNodeName() + "|" + tree_1.getFirstChildName());
 			}
 		}
+		
 		if (tree_2 != null)
 		{
 			if (chunkandpostag_2Set)
@@ -274,11 +280,13 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 				features.add("chunkandpostag_2=" + tree_2.getNodeName() + "|" + tree_2.getFirstChildName() + "|"
 						+ tree_2.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag_2ASet)
 			{
 				features.add("chunkandpostag_2*=" + tree_2.getNodeName() + "|" + tree_2.getFirstChildName());
 			}
 		}
+		
 		// 当前位置之后的也没有chunk标记
 		if (tree1 != null)
 		{
@@ -287,11 +295,13 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 				features.add("chunkandpostag1=" + tree1.getFirstChildName() + "|"
 						+ tree1.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag1ASet)
 			{
 				features.add("chunkandpostag1*=" + tree1.getFirstChildName());
 			}
 		}
+		
 		if (tree2 != null)
 		{
 			if (chunkandpostag2Set)
@@ -299,6 +309,7 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 				features.add("chunkandpostag2=" + tree2.getFirstChildName() + "|"
 						+ tree2.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag2ASet)
 			{
 				features.add("chunkandpostag2*=" + tree2.getFirstChildName());
@@ -313,16 +324,19 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 						+ tree_1.getFirstChild().getFirstChildName() + ";" + tree0.getFirstChildName() + "|"
 						+ tree0.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag_10ASet)
 			{
 				features.add("chunkandpostag_10*=" + tree_1.getNodeName() + "|" + tree_1.getFirstChildName() + "|"
 						+ tree_1.getFirstChild().getFirstChildName() + ";" + tree0.getFirstChildName());
 			}
+			
 			if (chunkandpostag_1A0Set)
 			{
 				features.add("chunkandpostag_1*0=" + tree_1.getNodeName() + "|" + tree_1.getFirstChildName() + ";"
 						+ tree0.getFirstChildName() + "|" + tree0.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag_1A0ASet)
 			{
 				features.add("chunkandpostag_1*0*=" + tree_1.getNodeName() + "|" + tree_1.getFirstChildName() + ";"
@@ -338,21 +352,25 @@ public class SyntacticAnalysisContextGeneratorConf implements SyntacticAnalysisC
 						+ tree0.getFirstChild().getFirstChildName() + ";" + tree1.getFirstChildName() + "|"
 						+ tree1.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag01ASet)
 			{
 				features.add("chunkandpostag01*=" + tree0.getFirstChildName() + "|"
 						+ tree0.getFirstChild().getFirstChildName() + ";" + tree1.getFirstChildName());
 			}
+			
 			if (chunkandpostag0A1Set)
 			{
 				features.add("chunkandpostag0*1=" + tree0.getFirstChildName() + ";" + tree1.getFirstChildName() + "|"
 						+ tree1.getFirstChild().getFirstChildName());
 			}
+			
 			if (chunkandpostag0A1ASet)
 			{
 				features.add("chunkandpostag0*1*=" + tree0.getFirstChildName() + ";" + tree1.getFirstChildName());
 			}
 		}
+		
 		String[] contexts = features.toArray(new String[features.size()]);
 		return contexts;
 	}

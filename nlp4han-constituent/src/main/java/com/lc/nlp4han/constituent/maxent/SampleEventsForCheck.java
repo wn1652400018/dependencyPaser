@@ -16,14 +16,14 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  */
 public class SampleEventsForCheck extends AbstractEventStream<ConstituentTreeSample<HeadTreeNode>>{
 
-	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator;
+	private ParserContextGenerator<HeadTreeNode> generator;
 	
 	/**
 	 * 构造
 	 * @param samples 样本流
 	 * @param generator 上下文产生器
 	 */
-	public SampleEventsForCheck(ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples,SyntacticAnalysisContextGenerator<HeadTreeNode> generator) {
+	public SampleEventsForCheck(ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples,ParserContextGenerator<HeadTreeNode> generator) {
 		super(samples);
 		this.generator = generator;
 	}

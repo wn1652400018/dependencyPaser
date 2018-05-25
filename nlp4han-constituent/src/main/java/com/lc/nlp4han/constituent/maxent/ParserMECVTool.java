@@ -20,17 +20,17 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisCVTool
+public class ParserMECVTool
 {
 
 	private final String languageCode;
 
 	private final TrainingParameters params;
 
-	private SyntacticAnalysisEvaluateMonitor[] listeners;
+	private ParserEvaluateMonitor[] listeners;
 
-	public SyntacticAnalysisCVTool(String languageCode, TrainingParameters trainParam,
-			SyntacticAnalysisEvaluateMonitor... listeners)
+	public ParserMECVTool(String languageCode, TrainingParameters trainParam,
+			ParserEvaluateMonitor... listeners)
 	{
 		this.languageCode = languageCode;
 		this.params = trainParam;
@@ -53,7 +53,7 @@ public class SyntacticAnalysisCVTool
 	 * @throws IOException
 	 */
 	public void evaluate(String postaggertype, ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples, int nFolds,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator headGen) throws IOException
+			ParserContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator headGen) throws IOException
 	{
 		CrossValidationPartitioner<ConstituentTreeSample<HeadTreeNode>> partitioner = new CrossValidationPartitioner<ConstituentTreeSample<HeadTreeNode>>(
 				samples, nFolds);
@@ -66,20 +66,20 @@ public class SyntacticAnalysisCVTool
 					.next();
 			
 			// 训练组块器
-			ModelWrapper chunkmodel = SyntacticAnalysisMEForChunk.train(languageCode, trainingSampleStream, params,
+			ModelWrapper chunkmodel = ChunkerForParserME.train(languageCode, trainingSampleStream, params,
 					contextGen);
 			
 			// 训练构建器
 			trainingSampleStream.reset();		
-			ModelWrapper buildmodel = SyntacticAnalysisMEForBuildAndCheck.trainForBuild(languageCode,
+			ModelWrapper buildmodel = BuilderAndCheckerME.trainForBuild(languageCode,
 					trainingSampleStream, params, contextGen);
 
 			// 训练检测器
 			trainingSampleStream.reset();
-			ModelWrapper checkmodel = SyntacticAnalysisMEForBuildAndCheck.trainForCheck(languageCode,
+			ModelWrapper checkmodel = BuilderAndCheckerME.trainForCheck(languageCode,
 					trainingSampleStream, params, contextGen);
 
-			SyntacticAnalysisForPos<HeadTreeNode> postagger;
+			POSTaggerForParser<HeadTreeNode> postagger;
 			// TODO: 此处模型文件应可灵活指定
 			ModelWrapper posmodel = new ModelWrapper(new File("data\\model\\pos\\en-pos-maxent.bin"));
 			if (postaggertype.equals("china"))
@@ -91,11 +91,11 @@ public class SyntacticAnalysisCVTool
 				postagger = new SyntacticAnalysisMEForPosEnglish(posmodel);
 			}
 			
-			SyntacticAnalysisMEForChunk chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel, contextGen, headGen);
-			SyntacticAnalysisMEForBuildAndCheck buildandchecktagger = new SyntacticAnalysisMEForBuildAndCheck(
+			ChunkerForParserME chunktagger = new ChunkerForParserME(chunkmodel, contextGen, headGen);
+			BuilderAndCheckerME buildandchecktagger = new BuilderAndCheckerME(
 					buildmodel, checkmodel, contextGen, headGen);
 
-			SyntacticAnalysisEvaluatorForByStep evaluator = new SyntacticAnalysisEvaluatorForByStep(postagger,
+			ParserEvaluatorForByStep evaluator = new ParserEvaluatorForByStep(postagger,
 					chunktagger, buildandchecktagger, headGen, listeners);
 			
 			ConstituentMeasure measure = new ConstituentMeasure();
@@ -111,7 +111,7 @@ public class SyntacticAnalysisCVTool
 
 	private static void usage()
 	{
-		System.out.println(SyntacticAnalysisCVTool.class.getName()
+		System.out.println(ParserMECVTool.class.getName()
 				+ " -data <corpusFile> -encoding <encoding> -type <algorithm> -postagger <postagger>"
 				+ "[-cutoff <num>] [-iters <num>] [-folds <nFolds>] ");
 	}
@@ -175,7 +175,7 @@ public class SyntacticAnalysisCVTool
 		params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
 		params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
 
-		SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen = new SyntacticAnalysisContextGeneratorConf();
+		ParserContextGenerator<HeadTreeNode> contextGen = new ParserContextGeneratorConf();
 		AbstractHeadGenerator headGen = new HeadGeneratorCollins();
 		System.out.println(contextGen);
 
@@ -183,7 +183,7 @@ public class SyntacticAnalysisCVTool
 		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				headGen);
 
-		SyntacticAnalysisCVTool run = new SyntacticAnalysisCVTool("zh", params);
+		ParserMECVTool run = new ParserMECVTool("zh", params);
 		run.evaluate(postagger, sampleStream, folds, contextGen, headGen);
 	}
 }

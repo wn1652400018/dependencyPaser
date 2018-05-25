@@ -16,23 +16,23 @@ import com.lc.nlp4han.ml.util.Evaluator;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisEvaluatorForByStep extends Evaluator<ConstituentTreeSample<HeadTreeNode>>{
+public class ParserEvaluatorForByStep extends Evaluator<ConstituentTreeSample<HeadTreeNode>>{
 
-	private Logger logger = Logger.getLogger(SyntacticAnalysisEvaluatorForByStep.class.getName());
-	private SyntacticAnalysisForPos<HeadTreeNode> postagger;
-	private SyntacticAnalysisMEForChunk chunktagger;
-	private SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger;
+	private Logger logger = Logger.getLogger(ParserEvaluatorForByStep.class.getName());
+	private POSTaggerForParser<HeadTreeNode> postagger;
+	private ChunkerForParserME chunktagger;
+	private BuilderAndCheckerME buildAndChecktagger;
 	private ConstituentMeasure measure;
 	private AbstractHeadGenerator aghw;
 	
-	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger, SyntacticAnalysisMEForChunk chunktagger, SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw) {
+	public ParserEvaluatorForByStep(POSTaggerForParser<HeadTreeNode> postagger, ChunkerForParserME chunktagger, BuilderAndCheckerME buildAndChecktagger, AbstractHeadGenerator aghw) {
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;
 		this.buildAndChecktagger = buildAndChecktagger;
 		this.aghw = aghw;
 	}
 	
-	public SyntacticAnalysisEvaluatorForByStep(SyntacticAnalysisForPos<HeadTreeNode> postagger, SyntacticAnalysisMEForChunk chunktagger, SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger, AbstractHeadGenerator aghw, SyntacticAnalysisEvaluateMonitor... evaluateMonitors) {
+	public ParserEvaluatorForByStep(POSTaggerForParser<HeadTreeNode> postagger, ChunkerForParserME chunktagger, BuilderAndCheckerME buildAndChecktagger, AbstractHeadGenerator aghw, ParserEvaluateMonitor... evaluateMonitors) {
 		super(evaluateMonitors);
 		this.postagger = postagger;
 		this.chunktagger = chunktagger;

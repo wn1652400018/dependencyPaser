@@ -12,7 +12,7 @@ import com.lc.nlp4han.constituent.TreeNode;
  *
  * @param <T> 树中节点的类型
  */
-public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> implements Comparable<SyntacticAnalysisSequenceForBuildAndCheck<T>> {
+public class BuildAndCheckSequence<T extends TreeNode> implements Comparable<BuildAndCheckSequence<T>> {
 	private double score;
 	private double scorecheck;
 	private List<Double> probs;
@@ -20,7 +20,7 @@ public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> imple
 	private List<T> tree;
 	private int begin;
 
-	public SyntacticAnalysisSequenceForBuildAndCheck() {
+	public BuildAndCheckSequence() {
 		this.probs = new ArrayList<>(1);
 		this.probscheck = new ArrayList<>(1);
 		this.tree = new ArrayList<>(1);
@@ -29,7 +29,7 @@ public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> imple
 		this.begin = 0;
 	}
 
-	public SyntacticAnalysisSequenceForBuildAndCheck(List<T> tree){
+	public BuildAndCheckSequence(List<T> tree){
 		this.probs = new ArrayList<>(1);
 		this.probscheck = new ArrayList<>(1);
 		this.tree = tree;
@@ -38,7 +38,7 @@ public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> imple
 		this.begin = 0;
 	}
 	
-	public SyntacticAnalysisSequenceForBuildAndCheck(SyntacticAnalysisSequenceForBuildAndCheck<T> s) {
+	public BuildAndCheckSequence(BuildAndCheckSequence<T> s) {
 		this.probs = new ArrayList<>(s.probs.size() + 1);
 		this.probs.addAll(s.probs);
 		this.probscheck = new ArrayList<>(s.probscheck.size() + 1);
@@ -49,7 +49,7 @@ public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> imple
 		this.begin = s.begin;
 	}
 
-	public SyntacticAnalysisSequenceForBuildAndCheck(SyntacticAnalysisSequenceForBuildAndCheck<T> s, double p, double checkp) {
+	public BuildAndCheckSequence(BuildAndCheckSequence<T> s, double p, double checkp) {
 		this.probs = new ArrayList<>(s.probs.size() + 1);
 		this.probs.addAll(s.probs);
 		this.probs.add(Double.valueOf(p));
@@ -61,7 +61,7 @@ public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> imple
 		this.begin = s.begin;
 	}
 
-	public SyntacticAnalysisSequenceForBuildAndCheck(SyntacticAnalysisSequenceForBuildAndCheck<T> s, List<T> tree, double p, double pcheck, int begin) {
+	public BuildAndCheckSequence(BuildAndCheckSequence<T> s, List<T> tree, double p, double pcheck, int begin) {
 		this.tree = tree;
 		this.probs = new ArrayList<>(s.probs.size() + 1);
 		this.probs.addAll(s.probs);
@@ -73,7 +73,7 @@ public class SyntacticAnalysisSequenceForBuildAndCheck<T extends TreeNode> imple
 		this.begin = begin;
 	}
 
-	public int compareTo(SyntacticAnalysisSequenceForBuildAndCheck<T> s) {
+	public int compareTo(BuildAndCheckSequence<T> s) {
 		return this.score < s.score ? 1 : (this.score > s.score ? -1 : 0);
 	}
 

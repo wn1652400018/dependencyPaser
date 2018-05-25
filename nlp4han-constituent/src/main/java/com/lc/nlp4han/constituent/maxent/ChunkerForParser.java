@@ -10,7 +10,7 @@ import com.lc.nlp4han.constituent.TreeNode;
  * @author 王馨苇
  *
  */
-public interface SyntacticAnalysisForChunk<T extends TreeNode>
+public interface ChunkerForParser<T extends TreeNode>
 {
 
 	/**

@@ -15,7 +15,7 @@ import com.lc.nlp4han.segpos.WordSegAndPosME;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMEForPosChinese implements SyntacticAnalysisForPos<HeadTreeNode>
+public class SyntacticAnalysisMEForPosChinese implements POSTaggerForParser<HeadTreeNode>
 {
 
 	private WordSegAndPosME postagger;

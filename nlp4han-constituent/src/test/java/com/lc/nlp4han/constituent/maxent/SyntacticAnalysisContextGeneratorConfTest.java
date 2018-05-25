@@ -27,7 +27,7 @@ public class SyntacticAnalysisContextGeneratorConfTest{
     private HeadTreeNode headTree;
 	private ConstituentTreeSample<HeadTreeNode> sample;
 	private List<String> actions;
-	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator;
+	private ParserContextGenerator<HeadTreeNode> generator;
 
 	@Before
 	public void setUP() throws CloneNotSupportedException, IOException{
@@ -37,7 +37,7 @@ public class SyntacticAnalysisContextGeneratorConfTest{
         headTree = TreeToHeadTree.treeToHeadTree(tree,aghw);
 		sample = HeadTreeToActions.headTreeToAction(headTree,aghw);
 		actions = sample.getActions();
-		generator = new SyntacticAnalysisContextGeneratorConf();
+		generator = new ParserContextGeneratorConf();
 	}
 
 	/**

@@ -27,7 +27,7 @@ public class SyntacticAnalysisSampleEventTest {
 
 	private List<Event> events ;
 	private AbstractHeadGenerator aghw ;
-	private SyntacticAnalysisContextGenerator<HeadTreeNode> generator ;
+	private ParserContextGenerator<HeadTreeNode> generator ;
 	private TreeNode tree ;
 	private HeadTreeNode headTree ;
 	private ConstituentTreeSample<HeadTreeNode> sample ;
@@ -40,7 +40,7 @@ public class SyntacticAnalysisSampleEventTest {
 	public void setUp() throws IOException, CloneNotSupportedException{
 		events = new ArrayList<Event>();
 		aghw = new HeadGeneratorCollins();
-		generator = new SyntacticAnalysisContextGeneratorConf();
+		generator = new ParserContextGeneratorConf();
 		tree = BracketExpUtil.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
 		headTree = TreeToHeadTree.treeToHeadTree(tree, aghw);
 		sample = HeadTreeToActions.headTreeToAction(headTree, aghw);

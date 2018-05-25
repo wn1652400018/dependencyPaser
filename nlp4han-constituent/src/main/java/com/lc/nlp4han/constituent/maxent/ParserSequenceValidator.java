@@ -10,7 +10,7 @@ import com.lc.nlp4han.constituent.TreeNode;
  * @author 王馨苇
  *
  */
-public interface SyntacticAnalysisSequenceValidator<T extends TreeNode> {
+public interface ParserSequenceValidator<T extends TreeNode> {
 
 	/**
 	 * 检验chunk步的标记是否正确

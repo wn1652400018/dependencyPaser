@@ -18,17 +18,17 @@ import com.lc.nlp4han.ml.util.ModelWrapper;
 public class ConstituentParserME implements ConstituentParser
 {
 
-	private SyntacticAnalysisForPos<HeadTreeNode> postagger;
-	private SyntacticAnalysisMEForChunk chunktagger;
-	private SyntacticAnalysisMEForBuildAndCheck buildAndChecktagger;
+	private POSTaggerForParser<HeadTreeNode> postagger;
+	private ChunkerForParserME chunktagger;
+	private BuilderAndCheckerME buildAndChecktagger;
 
-	public ConstituentParserME(SyntacticAnalysisForPos<HeadTreeNode> postagger, ModelWrapper chunkmodel,
+	public ConstituentParserME(POSTaggerForParser<HeadTreeNode> postagger, ModelWrapper chunkmodel,
 			ModelWrapper buildmodel, ModelWrapper checkmodel,
-			SyntacticAnalysisContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw)
+			ParserContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw)
 	{
 		this.postagger = postagger;
-		this.chunktagger = new SyntacticAnalysisMEForChunk(chunkmodel, contextGen, aghw);
-		this.buildAndChecktagger = new SyntacticAnalysisMEForBuildAndCheck(buildmodel, checkmodel, contextGen, aghw);
+		this.chunktagger = new ChunkerForParserME(chunkmodel, contextGen, aghw);
+		this.buildAndChecktagger = new BuilderAndCheckerME(buildmodel, checkmodel, contextGen, aghw);
 	}
 
 	/**

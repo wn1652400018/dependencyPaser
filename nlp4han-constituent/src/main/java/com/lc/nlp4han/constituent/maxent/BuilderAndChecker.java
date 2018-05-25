@@ -9,7 +9,7 @@ import com.lc.nlp4han.constituent.TreeNode;
  * @author 王馨苇
  *
  */
-public interface SyntacticAnalysisForBuildAndCheck<T extends TreeNode> {
+public interface BuilderAndChecker<T extends TreeNode> {
 
 	/**
 	 * 得到句法树
