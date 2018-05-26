@@ -17,7 +17,7 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
  */
 public class ParserMETrainerTool
 {
-
+	// TODO：不指定单个模型文件，指定模型存放的目录，或采用相同模型名不同模型后缀
 	private static void usage()
 	{
 		System.out.println(ParserMETrainerTool.class.getName()
@@ -92,9 +92,12 @@ public class ParserMETrainerTool
 		params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
 
 		AbstractHeadGenerator headGenerator = new HeadGeneratorCollins();
+		
 		ChunkerForParserME.train(corpusFile, chunkmodelFile, params, contextGen, encoding, headGenerator);
+		
 		BuilderAndCheckerME.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding,
 				headGenerator);
+		
 		BuilderAndCheckerME.trainForCheck(corpusFile, checkmodelFile, params, contextGen, encoding,
 				headGenerator);
 	}

@@ -84,11 +84,11 @@ public class ParserMECVTool
 			ModelWrapper posmodel = new ModelWrapper(new File("data\\model\\pos\\en-pos-maxent.bin"));
 			if (postaggertype.equals("china"))
 			{
-				postagger = new SyntacticAnalysisMEForPosChinese(posmodel);
+				postagger = new POSTaggerForParserMEChinese(posmodel);
 			}
 			else
 			{
-				postagger = new SyntacticAnalysisMEForPosEnglish(posmodel);
+				postagger = new POSTaggerForParserMEEnglish(posmodel);
 			}
 			
 			ChunkerForParserME chunktagger = new ChunkerForParserME(chunkmodel, contextGen, headGen);

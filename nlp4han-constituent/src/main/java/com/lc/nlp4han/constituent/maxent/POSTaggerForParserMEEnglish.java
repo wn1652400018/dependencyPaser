@@ -13,12 +13,12 @@ import com.lc.nlp4han.pos.word.POSTaggerWordME;
  *
  */
 // TODO: 此类和SyntacticAnalysisMEForPosChinese大量代码重复，需要重构
-public class SyntacticAnalysisMEForPosEnglish implements POSTaggerForParser<HeadTreeNode>
+public class POSTaggerForParserMEEnglish implements POSTaggerForParser<HeadTreeNode>
 {
 
 	private POSTaggerWordME postagger;
 
-	public SyntacticAnalysisMEForPosEnglish(ModelWrapper posmodel)
+	public POSTaggerForParserMEEnglish(ModelWrapper posmodel)
 	{
 		postagger = new POSTaggerWordME(posmodel);
 	}

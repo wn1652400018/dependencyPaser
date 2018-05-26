@@ -15,13 +15,13 @@ import com.lc.nlp4han.segpos.WordSegAndPosME;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMEForPosChinese implements POSTaggerForParser<HeadTreeNode>
+public class POSTaggerForParserMEChinese implements POSTaggerForParser<HeadTreeNode>
 {
 
 	private WordSegAndPosME postagger;
 	private WordSegAndPosContextGenerator generator;
 
-	public SyntacticAnalysisMEForPosChinese(ModelWrapper posmodel) throws IOException
+	public POSTaggerForParserMEChinese(ModelWrapper posmodel) throws IOException
 	{
 		generator = new WordSegAndPosContextGeneratorConf();
 		postagger = new WordSegAndPosME(posmodel, generator);

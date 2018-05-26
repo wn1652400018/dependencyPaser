@@ -75,14 +75,19 @@ public class ConstituentParserME implements ConstituentParser
 	public ConstituentTree parseTree(String[] words)
 	{
 		List<HeadTreeNode> postree = postagger.posTree(words);
+		
 		List<List<HeadTreeNode>> postrees = new ArrayList<>();
 		postrees.add(postree);
+		
 		List<HeadTreeNode> chunkTree = chunktagger.tagChunk(postrees, null);
 		List<List<HeadTreeNode>> kchunkTree = new ArrayList<>();
 		kchunkTree.add(chunkTree);
+		
 		HeadTreeNode headTreeNode = buildAndChecktagger.tagBuildAndCheck(kchunkTree, null);
+		
 		ConstituentTree constituent = new ConstituentTree();
 		constituent.setRoot(headTreeNode);
+		
 		return constituent;
 	}
 
