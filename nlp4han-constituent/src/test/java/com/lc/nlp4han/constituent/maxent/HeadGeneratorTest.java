@@ -16,7 +16,7 @@ import com.lc.nlp4han.constituent.TreeToHeadTree;
  * @author 王馨苇
  *
  */
-public class GenerateHeadWordsTest {
+public class HeadGeneratorTest {
 	
 	@Test
 	public void testGenerateHeadWords(){

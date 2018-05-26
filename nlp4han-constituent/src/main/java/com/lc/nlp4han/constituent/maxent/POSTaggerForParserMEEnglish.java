@@ -12,7 +12,7 @@ import com.lc.nlp4han.pos.word.POSTaggerWordME;
  * @author 王馨苇
  *
  */
-// TODO: 此类和SyntacticAnalysisMEForPosChinese大量代码重复，需要重构
+// TODO: 此类和POSTaggerForParserMEChinese大量代码重复，需要重构
 public class POSTaggerForParserMEEnglish implements POSTaggerForParser<HeadTreeNode>
 {
 

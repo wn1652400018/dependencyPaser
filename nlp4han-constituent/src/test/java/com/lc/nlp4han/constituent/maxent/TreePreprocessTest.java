@@ -17,7 +17,7 @@ import com.lc.nlp4han.constituent.TreePreprocessTool;
  * @author 王馨苇
  *
  */
-public class TreePreTreatmentTest{
+public class TreePreprocessTest{
 
 	/**
 	 * 验证去除空节点和功能标记后输出的带换行的括号表达式是否正确

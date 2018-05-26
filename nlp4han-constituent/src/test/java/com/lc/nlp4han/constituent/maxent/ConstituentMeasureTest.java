@@ -14,7 +14,7 @@ import com.lc.nlp4han.constituent.TreeNode;
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisMeasureTest {
+public class ConstituentMeasureTest {
 
 	@Test
 	public void test() throws CloneNotSupportedException{

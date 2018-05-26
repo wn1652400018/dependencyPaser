@@ -3,7 +3,6 @@ package com.lc.nlp4han.constituent.maxent;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -15,92 +14,39 @@ import com.lc.nlp4han.constituent.HeadGeneratorCollins;
 import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.constituent.TreeToHeadTree;
-import com.lc.nlp4han.ml.model.Event;
-
 
 /**
- * 测试事件的生成
+ * 对特征生成类的测试
  * @author 王馨苇
  *
  */
-public class SyntacticAnalysisSampleEventTest {
+public class ParserContextGeneratorConfTest{
 
-	private List<Event> events ;
-	private AbstractHeadGenerator aghw ;
-	private ParserContextGenerator<HeadTreeNode> generator ;
-	private TreeNode tree ;
-	private HeadTreeNode headTree ;
-	private ConstituentTreeSample<HeadTreeNode> sample ;
-	private List<String> words ;
-	private List<HeadTreeNode> chunkTree ;
-	private List<List<HeadTreeNode>> buildAndCheckTree ;
-	private List<String> actions ;
-	
+	private AbstractHeadGenerator aghw;
+	private TreeNode tree;
+    private HeadTreeNode headTree;
+	private ConstituentTreeSample<HeadTreeNode> sample;
+	private List<String> actions;
+	private ParserContextGenerator<HeadTreeNode> generator;
+
 	@Before
-	public void setUp() throws IOException, CloneNotSupportedException{
-		events = new ArrayList<Event>();
+	public void setUP() throws CloneNotSupportedException, IOException{
+   
 		aghw = new HeadGeneratorCollins();
-		generator = new ParserContextGeneratorConf();
 		tree = BracketExpUtil.generateTree("((S(NP(PRP I))(VP(VP(VBD saw)(NP(DT the)(NN man)))(PP(IN with)(NP(DT the)(NN telescope))))))");
-		headTree = TreeToHeadTree.treeToHeadTree(tree, aghw);
-		sample = HeadTreeToActions.headTreeToAction(headTree, aghw);
-		words = sample.getWords();
-		chunkTree = sample.getChunkTree();
-		buildAndCheckTree = sample.getBuildAndCheckTree();
+        headTree = TreeToHeadTree.treeToHeadTree(tree,aghw);
+		sample = HeadTreeToActions.headTreeToAction(headTree,aghw);
 		actions = sample.getActions();
-		
-		//chunk
-		for (int i = words.size(); i < 2*words.size(); i++) {		
-			String[] context = generator.getContextForChunk(i - words.size(), chunkTree, actions, null);
-		    events.add(new Event(actions.get(i), context));
-		}
-		
-		//buildAndCheck 两个变量i j   i控制第几个list  j控制list中的第几个
-		int j = 0;
-		for (int i = 2*words.size(); i < actions.size(); i=i+2) {
-			String[] buildContext = generator.getContextForBuild(j,buildAndCheckTree.get(i - 2*words.size()), actions, null);
-			events.add(new Event(actions.get(i), buildContext));
-			if(actions.get(i+1).equals("yes")){
-				int record = j-1;
-				for (int k = record; k >= 0; k--) {
-					if(buildAndCheckTree.get(i - 2*words.size()).get(k).getNodeNameLeftPart().equals("start")){
-						j = k;
-						break;
-					}
-				}
-			}else if(actions.get(i+1).equals("no")){            	
-				j++;
-			}  
-		}
-		
-		j = 0;
-		for (int i = 2*words.size(); i < actions.size(); i=i+2) {    
-			if(actions.get(i+1).equals("yes")){
-				String[] checkContext = generator.getContextForCheck(j,buildAndCheckTree.get(i + 1-2*words.size()), actions, null);
-				int record = j-1;
-				for (int k = record; k >= 0; k--) {		    
-					if(buildAndCheckTree.get(i - 2*words.size()).get(k).getNodeNameLeftPart().equals("start")){			    
-						j = k;
-						break;
-						}
-				}
-				events.add(new Event(actions.get(i+1), checkContext));
-			}else if(actions.get(i+1).equals("no")){            	
-				String[] checkContext = generator.getContextForCheck(j,buildAndCheckTree.get(i + 1-2*words.size()), actions, null);
-				events.add(new Event(actions.get(i+1), checkContext));
-				j++;
-			}  
-		}		
+		generator = new ParserContextGeneratorConf();
 	}
-	
+
 	/**
-	 * 对chunk步骤生成的事件进行测试
-	 * @throws CloneNotSupportedException
-	 * @throws IOException
+	 * 对chunk步生成的特征进行测试
 	 */
 	@Test
-	public void testChunkEvent() throws CloneNotSupportedException, IOException{
-
+	public void testChunkFeature(){
+		List<HeadTreeNode> chunkTree = sample.getChunkTree();
+		
 		String[] chunk0 = new String[]{"chunkandpostag0=PRP|I","chunkandpostag0*=PRP","chunkandpostag1=VBD|saw","chunkandpostag1*=VBD","chunkandpostag2=DT|the",
 				"chunkandpostag2*=DT","chunkandpostag01=PRP|I;VBD|saw","chunkandpostag01*=PRP|I;VBD","chunkandpostag0*1=PRP;VBD|saw","chunkandpostag0*1*=PRP;VBD"};
 		String[] chunk1 = new String[]{"chunkandpostag0=VBD|saw","chunkandpostag0*=VBD","chunkandpostag_1=start_NP|PRP|I","chunkandpostag_1*=start_NP|PRP","chunkandpostag1=DT|the",
@@ -126,38 +72,23 @@ public class SyntacticAnalysisSampleEventTest {
 				"chunkandpostag01=NN|man;IN|with","chunkandpostag01*=NN|man;IN","chunkandpostag0*1=NN;IN|with","chunkandpostag0*1*=NN;IN"};
 		String[] chunk6 = new String[]{"chunkandpostag0=NN|telescope","chunkandpostag0*=NN","chunkandpostag_1=start_NP|DT|the","chunkandpostag_1*=start_NP|DT","chunkandpostag_2=other|IN|with",
 				"chunkandpostag_2*=other|IN","chunkandpostag_10=start_NP|DT|the;NN|telescope","chunkandpostag_10*=start_NP|DT|the;NN","chunkandpostag_1*0=start_NP|DT;NN|telescope","chunkandpostag_1*0*=start_NP|DT;NN"};
-				
-		List<Event> event1 = new ArrayList<>();
-		List<Event> event2 = new ArrayList<>();
-		List<Event> event3 = new ArrayList<>();
-		List<Event> event4 = new ArrayList<>();
-		List<Event> event5 = new ArrayList<>();
-		List<Event> event6 = new ArrayList<>();
-		List<Event> event7 = new ArrayList<>();
 		
-		event1.add(new Event("start_NP",chunk0));
-		event2.add(new Event("other",chunk1));
-		event3.add(new Event("start_NP",chunk2));
-		event4.add(new Event("join_NP",chunk3));
-		event5.add(new Event("other",chunk4));
-		event6.add(new Event("start_NP",chunk5));
-		event7.add(new Event("join_NP",chunk6));
-				
-		assertEquals(events.get(0).toString(),event1.get(0).toString());
-		assertEquals(events.get(1).toString(),event2.get(0).toString());
-		assertEquals(events.get(2).toString(),event3.get(0).toString());
-		assertEquals(events.get(3).toString(),event4.get(0).toString());
-		assertEquals(events.get(4).toString(),event5.get(0).toString());
-		assertEquals(events.get(5).toString(),event6.get(0).toString());
-		assertEquals(events.get(6).toString(),event7.get(0).toString());
+		assertArrayEquals(generator.getContextForChunk(0,chunkTree, actions, null),chunk0);
+		assertArrayEquals(generator.getContextForChunk(1,chunkTree, actions, null),chunk1);
+		assertArrayEquals(generator.getContextForChunk(2,chunkTree, actions, null),chunk2);
+		assertArrayEquals(generator.getContextForChunk(3,chunkTree, actions, null),chunk3);
+		assertArrayEquals(generator.getContextForChunk(4,chunkTree, actions, null),chunk4);
+		assertArrayEquals(generator.getContextForChunk(5,chunkTree, actions, null),chunk5);
+		assertArrayEquals(generator.getContextForChunk(6,chunkTree, actions, null),chunk6);
 	}
 	
 	/**
-	 * 对build步骤生成的事件进行测试
+	 * 对build步生成的特征进行测试
 	 */
 	@Test
-	public void testBuildEvent(){
-
+	public void testBuildFeature(){
+		List<List<HeadTreeNode>> buildAndCheckTree = sample.getBuildAndCheckTree();
+		
 		String[] build0 = new String[]{"cons0=NP|I","cons0*=NP","cons1=VBD|saw","cons1*=VBD","cons2=NP|man","cons2*=NP",
 				"cons01=NP|I;VBD|saw","cons01*=NP|I;VBD","cons0*1=NP;VBD|saw","cons0*1*=NP;VBD",
 				"cons012=NP|I;VBD|saw;NP|man","cons01*2*=NP|I;VBD;NP","cons01*2=NP|I;VBD;NP|man","cons012*=NP|I;VBD|saw;NP","cons0*1*2*=NP;VBD;NP"};
@@ -192,40 +123,23 @@ public class SyntacticAnalysisSampleEventTest {
 		String[] build7 = new String[]{"cons0=VP|saw","cons0*=VP","cons_1=start_S|NP|I","cons_1*=start_S|NP","cons_10=start_S|NP|I;VP|saw",
 				"cons_10*=start_S|NP|I;VP","cons_1*0=start_S|NP;VP|saw","cons_1*0*=start_S|NP;VP"};
 		
-		List<Event> event8 = new ArrayList<>();
-		List<Event> event9 = new ArrayList<>();
-		List<Event> event10 = new ArrayList<>();
-		List<Event> event11 = new ArrayList<>();
-		List<Event> event12 = new ArrayList<>();
-		List<Event> event13 = new ArrayList<>();
-		List<Event> event14 = new ArrayList<>();
-		List<Event> event15 = new ArrayList<>();
-				
-		event8.add(new Event("start_S",build0));
-		event9.add(new Event("start_VP",build1));
-		event10.add(new Event("join_VP",build2));
-		event11.add(new Event("start_VP",build3));
-		event12.add(new Event("start_PP",build4));
-		event13.add(new Event("join_PP",build5));
-		event14.add(new Event("join_VP",build6));
-		event15.add(new Event("join_S",build7));
-				
-		assertEquals(events.get(7).toString(),event8.get(0).toString());
-		assertEquals(events.get(8).toString(),event9.get(0).toString());
-		assertEquals(events.get(9).toString(),event10.get(0).toString());
-		assertEquals(events.get(10).toString(),event11.get(0).toString());
-		assertEquals(events.get(11).toString(),event12.get(0).toString());
-		assertEquals(events.get(12).toString(),event13.get(0).toString());
-		assertEquals(events.get(13).toString(),event14.get(0).toString());
-		assertEquals(events.get(14).toString(),event15.get(0).toString());
+	    assertArrayEquals(generator.getContextForBuild(0,buildAndCheckTree.get(0), actions, null),build0);
+		assertArrayEquals(generator.getContextForBuild(1,buildAndCheckTree.get(2), actions, null),build1);
+		assertArrayEquals(generator.getContextForBuild(2,buildAndCheckTree.get(4), actions, null),build2);
+		assertArrayEquals(generator.getContextForBuild(1,buildAndCheckTree.get(6), actions, null),build3);
+		assertArrayEquals(generator.getContextForBuild(2,buildAndCheckTree.get(8), actions, null),build4);
+		assertArrayEquals(generator.getContextForBuild(3,buildAndCheckTree.get(10), actions, null),build5);
+		assertArrayEquals(generator.getContextForBuild(2,buildAndCheckTree.get(12), actions, null),build6);
+		assertArrayEquals(generator.getContextForBuild(1,buildAndCheckTree.get(14), actions, null),build7);			
 	}
 	
 	/**
-	 * 对check步骤生成的事件进行测试
+	 * 对check步生成的特征进行测试
 	 */
 	@Test
-	public void testCheckEvent(){
-
+	public void testCheckFeature(){
+		List<List<HeadTreeNode>> buildAndCheckTree = sample.getBuildAndCheckTree();
+		
 		String[] check0 = new String[]{"checkcons_begin=S|NP|I","checkcons_begin*=S|NP","checkcons_last=S|NP|I","checkcons_last*=S|NP",
 				"production=S→NP","surround1=VBD|saw","surround1*=VBD","surround2=DT|the;NN|man","surround2*=DT;NN"};
 		String[] check1 = new String[]{"checkcons_begin=VP|VBD|saw","checkcons_begin*=VP|VBD","checkcons_last=VP|VBD|saw","checkcons_last*=VP|VBD","production=VP→VBD",
@@ -245,30 +159,13 @@ public class SyntacticAnalysisSampleEventTest {
 		String[] check7 = new String[]{"checkcons_begin=S|NP|I","checkcons_begin*=S|NP","checkcons_last=S|VP|saw","checkcons_last*=S|VP","checkcons_0last=S|NP|I;S|VP|saw",
 				"production=S→NP,VP"};
 		
-		List<Event> event16 = new ArrayList<>();
-		List<Event> event17 = new ArrayList<>();
-		List<Event> event18 = new ArrayList<>();
-		List<Event> event19 = new ArrayList<>();
-		List<Event> event20 = new ArrayList<>();
-		List<Event> event21 = new ArrayList<>();
-		List<Event> event22 = new ArrayList<>();
-		List<Event> event23 = new ArrayList<>();
-		
-		event16.add(new Event("no",check0));
-		event17.add(new Event("no",check1));
-		event18.add(new Event("yes",check2));
-		event19.add(new Event("no",check3));
-		event20.add(new Event("no",check4));
-		event21.add(new Event("yes",check5));
-		event22.add(new Event("yes",check6));
-		event23.add(new Event("yes",check7));
-
-		assertEquals(events.get(16).toString(),event17.get(0).toString());
-		assertEquals(events.get(17).toString(),event18.get(0).toString());
-		assertEquals(events.get(18).toString(),event19.get(0).toString());
-		assertEquals(events.get(19).toString(),event20.get(0).toString());
-		assertEquals(events.get(20).toString(),event21.get(0).toString());
-		assertEquals(events.get(21).toString(),event22.get(0).toString());
-		assertEquals(events.get(22).toString(),event23.get(0).toString());
+		assertArrayEquals(generator.getContextForCheck(0,buildAndCheckTree.get(1), actions, null),check0);
+		assertArrayEquals(generator.getContextForCheck(1,buildAndCheckTree.get(3), actions, null),check1);
+		assertArrayEquals(generator.getContextForCheck(2,buildAndCheckTree.get(5), actions, null),check2);
+		assertArrayEquals(generator.getContextForCheck(1,buildAndCheckTree.get(7), actions, null),check3);
+		assertArrayEquals(generator.getContextForCheck(2,buildAndCheckTree.get(9), actions, null),check4);
+		assertArrayEquals(generator.getContextForCheck(3,buildAndCheckTree.get(11), actions, null),check5);
+		assertArrayEquals(generator.getContextForCheck(2,buildAndCheckTree.get(13), actions, null),check6);
+		assertArrayEquals(generator.getContextForCheck(1,buildAndCheckTree.get(15), actions, null),check7);		
 	}
 }
