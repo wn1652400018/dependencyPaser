@@ -125,7 +125,7 @@ public class Bracket2POSTool
 
 	public static void main(String[] args) throws IOException
 	{
-		String encoding = "GB2312";
+		String encoding = "GBK";
 		String sep = "/";
 		String in = null;
 		String out = null;

@@ -65,7 +65,7 @@ public class AllDocsToOneDocTool
 
 	public static void main(String[] args) throws IOException
 	{
-		String encoding = "GB2312";
+		String encoding = "GBK";
 		String inDir = null;
 		String out = null;
 		for (int i = 0; i < args.length; i++)
