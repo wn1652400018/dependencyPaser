@@ -14,7 +14,7 @@ import java.util.Map;
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.BracketExpUtil;
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.HeadRuleSet;
+import com.lc.nlp4han.constituent.HeadRuleSetPTB;
 import com.lc.nlp4han.constituent.PlainTextByTreeStream;
 import com.lc.nlp4han.constituent.TreeNode;
 import com.lc.nlp4han.constituent.TreeToHeadTree;
@@ -469,10 +469,10 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 						break;
 					}
 				}
-				node.setHeadWord(headGenerator.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(),
-						HeadRuleSet.getSpecialRuleSet()));
-				node.setHeadPos(headGenerator.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(),
-						HeadRuleSet.getSpecialRuleSet()));
+				node.setHeadWord(headGenerator.extractHeadWord(node, HeadRuleSetPTB.getNormalRuleSet(),
+						HeadRuleSetPTB.getSpecialRuleSet()));
+				node.setHeadPos(headGenerator.extractHeadWordPos(node, HeadRuleSetPTB.getNormalRuleSet(),
+						HeadRuleSetPTB.getSpecialRuleSet()));
 				chunkTree.add(node);
 				i = j;
 			}

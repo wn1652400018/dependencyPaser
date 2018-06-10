@@ -79,10 +79,10 @@ public class TreeToHeadTree
 				}
 				else if (!node.isLeaf())
 				{
-					node.setHeadWord(headGen.extractHeadWord(node, HeadRuleSet.getNormalRuleSet(),
-							HeadRuleSet.getSpecialRuleSet()));
-					node.setHeadPos(headGen.extractHeadWordPos(node, HeadRuleSet.getNormalRuleSet(),
-							HeadRuleSet.getSpecialRuleSet()));
+					node.setHeadWord(headGen.extractHeadWord(node, HeadRuleSetPTB.getNormalRuleSet(),
+							HeadRuleSetPTB.getSpecialRuleSet()));
+					node.setHeadPos(headGen.extractHeadWordPos(node, HeadRuleSetPTB.getNormalRuleSet(),
+							HeadRuleSetPTB.getSpecialRuleSet()));
 				}
 				tree.push(node);
 			}
