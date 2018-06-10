@@ -24,7 +24,7 @@ public class ConstituentParserME implements ConstituentParser
 
 	public ConstituentParserME(POSTaggerForParser<HeadTreeNode> postagger, ModelWrapper chunkmodel,
 			ModelWrapper buildmodel, ModelWrapper checkmodel,
-			ParserContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw)
+			ParserContextGenerator contextGen, AbstractHeadGenerator aghw)
 	{
 		this.postagger = postagger;
 		this.chunktagger = new ChunkerForParserME(chunkmodel, contextGen, aghw);

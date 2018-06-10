@@ -53,7 +53,7 @@ public class ParserMECVTool
 	 * @throws IOException
 	 */
 	public void evaluate(String postaggertype, ObjectStream<ConstituentTreeSample> samples, int nFolds,
-			ParserContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator headGen) throws IOException
+			ParserContextGenerator contextGen, AbstractHeadGenerator headGen) throws IOException
 	{
 		CrossValidationPartitioner<ConstituentTreeSample> partitioner = new CrossValidationPartitioner<ConstituentTreeSample>(
 				samples, nFolds);
@@ -175,7 +175,7 @@ public class ParserMECVTool
 		params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
 		params.put(TrainingParameters.ALGORITHM_PARAM, type.toUpperCase());
 
-		ParserContextGenerator<HeadTreeNode> contextGen = new ParserContextGeneratorConf();
+		ParserContextGenerator contextGen = new ParserContextGeneratorConf();
 		AbstractHeadGenerator headGen = new HeadGeneratorCollins();
 		System.out.println(contextGen);
 

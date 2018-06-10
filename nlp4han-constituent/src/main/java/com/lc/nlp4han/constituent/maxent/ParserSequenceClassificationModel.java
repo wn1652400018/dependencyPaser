@@ -2,7 +2,7 @@ package com.lc.nlp4han.constituent.maxent;
 
 import java.util.List;
 
-import com.lc.nlp4han.constituent.TreeNode;
+import com.lc.nlp4han.constituent.HeadTreeNode;
 
 /**
  * 句法分析序列分类模型
@@ -10,7 +10,7 @@ import com.lc.nlp4han.constituent.TreeNode;
  * @author 王馨苇
  *
  */
-public interface ParserSequenceClassificationModel<T extends TreeNode>
+public interface ParserSequenceClassificationModel
 {
 
 	/**
@@ -26,8 +26,8 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 *            序列验证
 	 * @return
 	 */
-	ChunkSequence bestSequenceForChunk(List<List<T>> posTree, Object[] ac,
-			ParserContextGenerator<T> generator, ParserSequenceValidator validator);
+	ChunkSequence bestSequenceForChunk(List<List<HeadTreeNode>> posTree, Object[] ac,
+			ParserContextGenerator generator, ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的num个chunk结果
@@ -46,8 +46,8 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 *            序列验证
 	 * @return
 	 */
-	ChunkSequence[] bestSequencesForChunk(int num, List<List<T>> posTree, Object[] ac, double min,
-			ParserContextGenerator<T> generator, ParserSequenceValidator validator);
+	ChunkSequence[] bestSequencesForChunk(int num, List<List<HeadTreeNode>> posTree, Object[] ac, double min,
+			ParserContextGenerator generator, ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的num个chunk结果
@@ -64,8 +64,8 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 *            序列验证
 	 * @return
 	 */
-	ChunkSequence[] bestSequencesForChunk(int num, List<List<T>> posTree, Object[] ac,
-			ParserContextGenerator<T> generator, ParserSequenceValidator validator);
+	ChunkSequence[] bestSequencesForChunk(int num, List<List<HeadTreeNode>> posTree, Object[] ac,
+			ParserContextGenerator generator, ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的BuildAndCheck结果
@@ -80,8 +80,8 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 *            序列验证
 	 * @return
 	 */
-	BuildAndCheckSequence<T> bestSequenceForBuildAndCheck(List<List<T>> comnineChunkTree,
-			Object[] ac, ParserContextGenerator<T> generator, ParserSequenceValidator validator);
+	BuildAndCheckSequence<HeadTreeNode> bestSequenceForBuildAndCheck(List<List<HeadTreeNode>> comnineChunkTree,
+			Object[] ac, ParserContextGenerator generator, ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的num个BuildAndCheck结果
@@ -100,8 +100,8 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 *            序列验证
 	 * @return
 	 */
-	BuildAndCheckSequence<T>[] bestSequencesForBuildAndCheck(int num,
-			List<List<T>> comnineChunkTree, Object[] ac, double min, ParserContextGenerator<T> generator,
+	BuildAndCheckSequence<HeadTreeNode>[] bestSequencesForBuildAndCheck(int num,
+			List<List<HeadTreeNode>> comnineChunkTree, Object[] ac, double min, ParserContextGenerator generator,
 			ParserSequenceValidator validator);
 
 	/**
@@ -119,7 +119,7 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 *            序列验证
 	 * @return
 	 */
-	BuildAndCheckSequence<T>[] bestSequencesForBuildAndCheck(int num,
-			List<List<T>> comnineChunkTree, Object[] ac, ParserContextGenerator<T> generator,
+	BuildAndCheckSequence<HeadTreeNode>[] bestSequencesForBuildAndCheck(int num,
+			List<List<HeadTreeNode>> comnineChunkTree, Object[] ac, ParserContextGenerator generator,
 			ParserSequenceValidator validator);
 }

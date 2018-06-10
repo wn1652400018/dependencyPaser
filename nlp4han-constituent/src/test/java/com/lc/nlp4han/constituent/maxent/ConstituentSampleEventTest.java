@@ -27,7 +27,7 @@ public class ConstituentSampleEventTest {
 
 	private List<Event> events ;
 	private AbstractHeadGenerator aghw ;
-	private ParserContextGenerator<HeadTreeNode> generator ;
+	private ParserContextGenerator generator ;
 	private TreeNode tree ;
 	private HeadTreeNode headTree ;
 	private ConstituentTreeSample sample ;

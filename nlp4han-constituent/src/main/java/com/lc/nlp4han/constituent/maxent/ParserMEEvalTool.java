@@ -35,7 +35,7 @@ public class ParserMEEvalTool
 			String encoding, File errorFile) throws IOException
 	{
 		long start = System.currentTimeMillis();
-		ParserContextGenerator<HeadTreeNode> contextGen = new ParserContextGeneratorConf();
+		ParserContextGenerator contextGen = new ParserContextGeneratorConf();
 		System.out.println(contextGen);
 		AbstractHeadGenerator aghw = new HeadGeneratorCollins();
 		ModelWrapper posmodel = new ModelWrapper(new File("data\\model\\pos\\en-pos-maxent.bin"));

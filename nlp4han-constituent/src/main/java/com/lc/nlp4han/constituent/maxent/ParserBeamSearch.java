@@ -17,7 +17,7 @@ import com.lc.nlp4han.ml.util.Cache;
  * @author 王馨苇
  *
  */
-public class ParserBeamSearch implements ParserSequenceClassificationModel<HeadTreeNode>
+public class ParserBeamSearch implements ParserSequenceClassificationModel
 {
 
 	private AbstractHeadGenerator aghw;
@@ -112,7 +112,7 @@ public class ParserBeamSearch implements ParserSequenceClassificationModel<HeadT
 	 */
 	@Override
 	public ChunkSequence bestSequenceForChunk(List<List<HeadTreeNode>> posTree, Object[] ac,
-			ParserContextGenerator<HeadTreeNode> generator, ParserSequenceValidator validator)
+			ParserContextGenerator generator, ParserSequenceValidator validator)
 	{
 		ChunkSequence[] sequences = this.bestSequencesForChunk(1, posTree, ac, generator,
 				validator);
@@ -137,7 +137,7 @@ public class ParserBeamSearch implements ParserSequenceClassificationModel<HeadT
 	 * @return
 	 */
 	public ChunkSequence[] bestSequencesForChunk(int num, List<List<HeadTreeNode>> posTree,
-			Object[] ac, double minSequenceScore, ParserContextGenerator<HeadTreeNode> generator,
+			Object[] ac, double minSequenceScore, ParserContextGenerator generator,
 			ParserSequenceValidator validator)
 	{
 		// 用于存放输入的K个结果中每一个得到的K个结果
@@ -274,7 +274,7 @@ public class ParserBeamSearch implements ParserSequenceClassificationModel<HeadT
 	 */
 	@Override
 	public ChunkSequence[] bestSequencesForChunk(int num, List<List<HeadTreeNode>> posTree,
-			Object[] ac, ParserContextGenerator<HeadTreeNode> generator,
+			Object[] ac, ParserContextGenerator generator,
 			ParserSequenceValidator validator)
 	{
 
@@ -296,7 +296,7 @@ public class ParserBeamSearch implements ParserSequenceClassificationModel<HeadT
 	 */
 	@Override
 	public BuildAndCheckSequence<HeadTreeNode> bestSequenceForBuildAndCheck(
-			List<List<HeadTreeNode>> comnineChunkTree, Object[] ac, ParserContextGenerator<HeadTreeNode> generator,
+			List<List<HeadTreeNode>> comnineChunkTree, Object[] ac, ParserContextGenerator generator,
 			ParserSequenceValidator validator)
 	{
 		BuildAndCheckSequence<HeadTreeNode>[] sequences = this.bestSequencesForBuildAndCheck(1,
@@ -324,7 +324,7 @@ public class ParserBeamSearch implements ParserSequenceClassificationModel<HeadT
 	@SuppressWarnings("unchecked")
 	public BuildAndCheckSequence<HeadTreeNode>[] bestSequencesForBuildAndCheck(int num,
 			List<List<HeadTreeNode>> comnineChunkTree, Object[] ac, double minSequenceScore,
-			ParserContextGenerator<HeadTreeNode> generator, ParserSequenceValidator validator)
+			ParserContextGenerator generator, ParserSequenceValidator validator)
 	{
 		PriorityQueue<BuildAndCheckSequence<HeadTreeNode>> kRes = new PriorityQueue<>(this.size);
 		// 遍历K个结果
@@ -812,7 +812,7 @@ public class ParserBeamSearch implements ParserSequenceClassificationModel<HeadT
 	 * @return
 	 */
 	public BuildAndCheckSequence<HeadTreeNode>[] bestSequencesForBuildAndCheck(int num,
-			List<List<HeadTreeNode>> comnineChunkTree, Object[] ac, ParserContextGenerator<HeadTreeNode> generator,
+			List<List<HeadTreeNode>> comnineChunkTree, Object[] ac, ParserContextGenerator generator,
 			ParserSequenceValidator validator)
 	{
 		return this.bestSequencesForBuildAndCheck(num, comnineChunkTree, ac, -1000.0D, generator, validator);

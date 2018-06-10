@@ -27,7 +27,7 @@ public class ParserContextGeneratorConfTest{
     private HeadTreeNode headTree;
 	private ConstituentTreeSample sample;
 	private List<String> actions;
-	private ParserContextGenerator<HeadTreeNode> generator;
+	private ParserContextGenerator generator;
 
 	@Before
 	public void setUP() throws CloneNotSupportedException, IOException{

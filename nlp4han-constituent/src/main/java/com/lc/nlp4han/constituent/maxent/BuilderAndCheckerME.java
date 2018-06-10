@@ -37,10 +37,10 @@ import com.lc.nlp4han.ml.util.TrainingParameters;
 public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 {
 	public static final int DEFAULT_BEAM_SIZE = 20;
-	private ParserContextGenerator<HeadTreeNode> contextGenerator;
+	private ParserContextGenerator contextGenerator;
 	@SuppressWarnings("unused")
 	private int size;
-	private ParserSequenceClassificationModel<HeadTreeNode> model;
+	private ParserSequenceClassificationModel model;
 
 	private ParserSequenceValidator sequenceValidator;
 	private AbstractHeadGenerator headGenerator;
@@ -56,7 +56,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 *            生成头结点，build后check为yes时候进行合并的时候需要
 	 */
 	public BuilderAndCheckerME(ModelWrapper buildmodel, ModelWrapper checkmodel,
-			ParserContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator aghw)
+			ParserContextGenerator contextGen, AbstractHeadGenerator aghw)
 	{
 		init(buildmodel, checkmodel, contextGen, aghw);
 	}
@@ -71,7 +71,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 * @param aghw
 	 *            生成头结点，build后check为yes时候进行合并的时候需要
 	 */
-	private void init(ModelWrapper buildmodel, ModelWrapper checkmodel, ParserContextGenerator<HeadTreeNode> contextGen,
+	private void init(ModelWrapper buildmodel, ModelWrapper checkmodel, ParserContextGenerator contextGen,
 			AbstractHeadGenerator aghw)
 	{
 		int beamSize = BuilderAndCheckerME.DEFAULT_BEAM_SIZE;
@@ -99,7 +99,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 * @return 模型和模型信息的包裹结果
 	 */
 	public static ModelWrapper trainForBuild(File file, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
+			ParserContextGenerator contextGen, String encoding, AbstractHeadGenerator aghw)
 	{
 		ModelWrapper model = null;
 
@@ -139,7 +139,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 */
 	public static ModelWrapper trainForBuild(String languageCode,
 			ObjectStream<ConstituentTreeSample> sampleStream, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen) throws IOException
+			ParserContextGenerator contextGen) throws IOException
 	{
 		String beamSizeString = params.getSettings().get(ParserBeamSearch.BEAM_SIZE_PARAMETER);
 		int beamSize = BuilderAndCheckerME.DEFAULT_BEAM_SIZE;
@@ -181,7 +181,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 * @throws IOException
 	 */
 	public static void trainForBuild(File file, File buildmodelFile, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
+			ParserContextGenerator contextGen, String encoding, AbstractHeadGenerator aghw)
 			throws IOException
 	{
 		OutputStream modelOut = null;
@@ -228,7 +228,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 * @throws IOException
 	 */
 	public static ModelWrapper trainForCheck(File file, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
+			ParserContextGenerator contextGen, String encoding, AbstractHeadGenerator aghw)
 			throws IOException
 	{
 		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
@@ -255,7 +255,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 */
 	public static ModelWrapper trainForCheck(String languageCode,
 			ObjectStream<ConstituentTreeSample> sampleStream, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen) throws IOException
+			ParserContextGenerator contextGen) throws IOException
 	{
 		String beamSizeString = params.getSettings().get(ParserBeamSearch.BEAM_SIZE_PARAMETER);
 		int beamSize = BuilderAndCheckerME.DEFAULT_BEAM_SIZE;
@@ -297,7 +297,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 * @throws IOException
 	 */
 	public static void trainForCheck(File file, File checkmodelFile, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
+			ParserContextGenerator contextGen, String encoding, AbstractHeadGenerator aghw)
 			throws IOException
 	{
 		OutputStream modelOut = null;

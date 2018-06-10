@@ -15,7 +15,7 @@ import com.lc.nlp4han.constituent.HeadTreeNode;
  * @author 王馨苇
  *
  */
-public class ParserContextGeneratorConf implements ParserContextGenerator<HeadTreeNode>
+public class ParserContextGeneratorConf implements ParserContextGenerator
 {
 
 	// chunk

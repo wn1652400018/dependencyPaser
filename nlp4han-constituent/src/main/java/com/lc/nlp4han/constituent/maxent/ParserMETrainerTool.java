@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import com.lc.nlp4han.constituent.AbstractHeadGenerator;
 import com.lc.nlp4han.constituent.HeadGeneratorCollins;
-import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 
 /**
@@ -84,7 +83,7 @@ public class ParserMETrainerTool
 			}
 		}
 
-		ParserContextGenerator<HeadTreeNode> contextGen = new ParserContextGeneratorConf();
+		ParserContextGenerator contextGen = new ParserContextGeneratorConf();
 		System.out.println(contextGen);
 		TrainingParameters params = TrainingParameters.defaultParams();
 		params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));

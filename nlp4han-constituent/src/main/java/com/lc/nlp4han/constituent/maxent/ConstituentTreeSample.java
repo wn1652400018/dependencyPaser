@@ -153,7 +153,6 @@ public class ConstituentTreeSample
 		}
 		else if (obj instanceof ConstituentTreeSample)
 		{
-			@SuppressWarnings("unchecked")
 			ConstituentTreeSample a = (ConstituentTreeSample) obj;
 			return Arrays.equals(getActions().stream().toArray(), a.getActions().stream().toArray());
 		}

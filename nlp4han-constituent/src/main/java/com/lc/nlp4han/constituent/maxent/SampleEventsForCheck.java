@@ -16,7 +16,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  */
 public class SampleEventsForCheck extends AbstractEventStream<ConstituentTreeSample>{
 
-	private ParserContextGenerator<HeadTreeNode> generator;
+	private ParserContextGenerator generator;
 	
 	/**
 	 * 构造

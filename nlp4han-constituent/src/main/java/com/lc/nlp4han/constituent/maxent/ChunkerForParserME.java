@@ -33,10 +33,10 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 {
 
 	public static final int DEFAULT_BEAM_SIZE = 20;
-	private ParserContextGenerator<HeadTreeNode> contextGenerator;
+	private ParserContextGenerator contextGenerator;
 	@SuppressWarnings("unused")
 	private int size;
-	private ParserSequenceClassificationModel<HeadTreeNode> model;
+	private ParserSequenceClassificationModel model;
 
 	private ParserSequenceValidator sequenceValidator;
 
@@ -52,7 +52,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 	 * @param aghw
 	 *            生成头结点,chunk步合并的时候需要
 	 */
-	public ChunkerForParserME(ModelWrapper model, ParserContextGenerator<HeadTreeNode> contextGen,
+	public ChunkerForParserME(ModelWrapper model, ParserContextGenerator contextGen,
 			AbstractHeadGenerator aghw)
 	{
 		init(model, contextGen, aghw);
@@ -68,7 +68,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 	 * @param aghw
 	 *            生成头结点，chunk步合并的时候需要
 	 */
-	private void init(ModelWrapper model, ParserContextGenerator<HeadTreeNode> contextGen,
+	private void init(ModelWrapper model, ParserContextGenerator contextGen,
 			AbstractHeadGenerator aghw)
 	{
 		int beamSize = ChunkerForParserME.DEFAULT_BEAM_SIZE;
@@ -97,7 +97,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 	 * @throws IOException
 	 */
 	public static ModelWrapper train(File file, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator aghw)
+			ParserContextGenerator contextGen, String encoding, AbstractHeadGenerator aghw)
 			throws IOException
 	{
 		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
@@ -124,7 +124,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 	 */
 	public static ModelWrapper train(String languageCode,
 			ObjectStream<ConstituentTreeSample> sampleStream, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen) throws IOException
+			ParserContextGenerator contextGen) throws IOException
 	{
 		String beamSizeString = params.getSettings().get(ParserBeamSearch.BEAM_SIZE_PARAMETER);
 		int beamSize = ChunkerForParserME.DEFAULT_BEAM_SIZE;
@@ -165,7 +165,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 	 * @throws IOException
 	 */
 	public static void train(File file, File modelFile, TrainingParameters params,
-			ParserContextGenerator<HeadTreeNode> contextGen, String encoding, AbstractHeadGenerator headGen)
+			ParserContextGenerator contextGen, String encoding, AbstractHeadGenerator headGen)
 			throws IOException
 	{
 		OutputStream modelOut = null;

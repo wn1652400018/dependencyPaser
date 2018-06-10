@@ -3,7 +3,6 @@ package com.lc.nlp4han.constituent.maxent;
 import java.util.List;
 
 import com.lc.nlp4han.constituent.HeadTreeNode;
-import com.lc.nlp4han.constituent.TreeNode;
 
 
 /**

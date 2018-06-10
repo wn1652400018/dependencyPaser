@@ -18,7 +18,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
 public class SampleEventsForBuild extends AbstractEventStream<ConstituentTreeSample>
 {
 
-	private ParserContextGenerator<HeadTreeNode> generator;
+	private ParserContextGenerator generator;
 
 	/**
 	 * 构造
@@ -29,7 +29,7 @@ public class SampleEventsForBuild extends AbstractEventStream<ConstituentTreeSam
 	 *            上下文产生器
 	 */
 	public SampleEventsForBuild(ObjectStream<ConstituentTreeSample> samples,
-			ParserContextGenerator<HeadTreeNode> generator)
+			ParserContextGenerator generator)
 	{
 		super(samples);
 		this.generator = generator;
