@@ -14,7 +14,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  * @author 王馨苇
  *
  */
-public class SampleEventsForCheck extends AbstractEventStream<ConstituentTreeSample<HeadTreeNode>>{
+public class SampleEventsForCheck extends AbstractEventStream<ConstituentTreeSample>{
 
 	private ParserContextGenerator<HeadTreeNode> generator;
 	
@@ -23,7 +23,7 @@ public class SampleEventsForCheck extends AbstractEventStream<ConstituentTreeSam
 	 * @param samples 样本流
 	 * @param generator 上下文产生器
 	 */
-	public SampleEventsForCheck(ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples,ParserContextGenerator<HeadTreeNode> generator) {
+	public SampleEventsForCheck(ObjectStream<ConstituentTreeSample> samples,ParserContextGenerator generator) {
 		super(samples);
 		this.generator = generator;
 	}
@@ -32,7 +32,7 @@ public class SampleEventsForCheck extends AbstractEventStream<ConstituentTreeSam
 	 * 生成事件
 	 */
 	@Override
-	protected Iterator<Event> createEvents(ConstituentTreeSample<HeadTreeNode> sample) {
+	protected Iterator<Event> createEvents(ConstituentTreeSample sample) {
 		List<String> words = sample.getWords();
 		List<String> actions = sample.getActions();
 		List<List<HeadTreeNode>> buildAndCheckTree = sample.getBuildAndCheckTree();

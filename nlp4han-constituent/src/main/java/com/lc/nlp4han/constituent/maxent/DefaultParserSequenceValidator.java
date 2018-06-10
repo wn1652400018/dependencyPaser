@@ -10,7 +10,7 @@ import com.lc.nlp4han.constituent.HeadTreeNode;
  * @author 王馨苇
  *
  */
-public class DefaultParserSequenceValidator implements ParserSequenceValidator<HeadTreeNode>
+public class DefaultParserSequenceValidator implements ParserSequenceValidator
 {
 
 	/**

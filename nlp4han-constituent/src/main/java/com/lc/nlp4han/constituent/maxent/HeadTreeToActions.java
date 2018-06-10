@@ -295,7 +295,7 @@ public class HeadTreeToActions
 	 *            生成头结点的对象
 	 * @throws CloneNotSupportedException
 	 */
-	public static ConstituentTreeSample<HeadTreeNode> headTreeToAction(HeadTreeNode tree, AbstractHeadGenerator headGen)
+	public static ConstituentTreeSample headTreeToAction(HeadTreeNode tree, AbstractHeadGenerator headGen)
 			throws CloneNotSupportedException
 	{
 		i = 0;
@@ -308,6 +308,6 @@ public class HeadTreeToActions
 		getActionCHUNK(tree, posTree);
 		getActionBUILDandCHECK(tree, ChunkTreeCombineUtil.combineToHeadTree(chunkTree, headGen));
 		
-		return new ConstituentTreeSample<HeadTreeNode>(posTree, chunkTree, buildAndCheckTree, actions);
+		return new ConstituentTreeSample(posTree, chunkTree, buildAndCheckTree, actions);
 	}
 }

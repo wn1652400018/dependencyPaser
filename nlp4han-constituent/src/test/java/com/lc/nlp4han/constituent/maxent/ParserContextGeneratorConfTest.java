@@ -25,7 +25,7 @@ public class ParserContextGeneratorConfTest{
 	private AbstractHeadGenerator aghw;
 	private TreeNode tree;
     private HeadTreeNode headTree;
-	private ConstituentTreeSample<HeadTreeNode> sample;
+	private ConstituentTreeSample sample;
 	private List<String> actions;
 	private ParserContextGenerator<HeadTreeNode> generator;
 

@@ -74,7 +74,7 @@ public class ParserMEEvalTool
 		}
 		evaluator.setMeasure(measure);
 		ObjectStream<String> linesStream = new PlainTextByLineStream(new FileInputStreamFactory(goldFile), encoding);
-		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(linesStream,
+		ObjectStream<ConstituentTreeSample> sampleStream = new ConstituentTreeSampleStream(linesStream,
 				aghw);
 		evaluator.evaluate(sampleStream);
 		ConstituentMeasure measureRes = evaluator.getMeasure();

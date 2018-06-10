@@ -52,17 +52,17 @@ public class ParserMECVTool
 	 *            生成头结点
 	 * @throws IOException
 	 */
-	public void evaluate(String postaggertype, ObjectStream<ConstituentTreeSample<HeadTreeNode>> samples, int nFolds,
+	public void evaluate(String postaggertype, ObjectStream<ConstituentTreeSample> samples, int nFolds,
 			ParserContextGenerator<HeadTreeNode> contextGen, AbstractHeadGenerator headGen) throws IOException
 	{
-		CrossValidationPartitioner<ConstituentTreeSample<HeadTreeNode>> partitioner = new CrossValidationPartitioner<ConstituentTreeSample<HeadTreeNode>>(
+		CrossValidationPartitioner<ConstituentTreeSample> partitioner = new CrossValidationPartitioner<ConstituentTreeSample>(
 				samples, nFolds);
 		int run = 1;
 		while (partitioner.hasNext())
 		{
 			System.out.println("Run" + run + "...");
 			
-			CrossValidationPartitioner.TrainingSampleStream<ConstituentTreeSample<HeadTreeNode>> trainingSampleStream = partitioner
+			CrossValidationPartitioner.TrainingSampleStream<ConstituentTreeSample> trainingSampleStream = partitioner
 					.next();
 			
 			// 训练组块器
@@ -180,7 +180,7 @@ public class ParserMECVTool
 		System.out.println(contextGen);
 
 		ObjectStream<String> lineStream = new PlainTextByLineStream(new FileInputStreamFactory(corpusFile), encoding);
-		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
+		ObjectStream<ConstituentTreeSample> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				headGen);
 
 		ParserMECVTool run = new ParserMECVTool("zh", params);

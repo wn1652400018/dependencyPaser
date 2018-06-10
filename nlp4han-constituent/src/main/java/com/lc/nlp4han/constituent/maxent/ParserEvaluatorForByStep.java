@@ -17,7 +17,7 @@ import com.lc.nlp4han.ml.util.Evaluator;
  * @author 王馨苇
  *
  */
-public class ParserEvaluatorForByStep extends Evaluator<ConstituentTreeSample<HeadTreeNode>>
+public class ParserEvaluatorForByStep extends Evaluator<ConstituentTreeSample>
 {
 
 	private Logger logger = Logger.getLogger(ParserEvaluatorForByStep.class.getName());
@@ -72,14 +72,14 @@ public class ParserEvaluatorForByStep extends Evaluator<ConstituentTreeSample<He
 	}
 
 	@Override
-	protected ConstituentTreeSample<HeadTreeNode> processSample(ConstituentTreeSample<HeadTreeNode> sample)
+	protected ConstituentTreeSample processSample(ConstituentTreeSample sample)
 	{
-		ConstituentTreeSample<HeadTreeNode> samplePre = null;
+		ConstituentTreeSample samplePre = null;
 		HeadTreeNode treePre = null;
 		// 在验证的过程中，有些配ignore的句子，也会来验证，这是没有意义的，为了防止这种情况，就加入判断
 		if (sample.getActions().size() == 0 && sample.getWords().size() == 0)
 		{
-			return new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+			return new ConstituentTreeSample(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
 					new ArrayList<>());
 		}
 		else
@@ -96,7 +96,7 @@ public class ParserEvaluatorForByStep extends Evaluator<ConstituentTreeSample<He
 
 				if (treePre == null)
 				{
-					samplePre = new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(),
+					samplePre = new ConstituentTreeSample(new ArrayList<>(), new ArrayList<>(),
 							new ArrayList<>(), new ArrayList<>());
 					measure.countNodeDecodeTrees(treePre);
 				}
@@ -112,7 +112,7 @@ public class ParserEvaluatorForByStep extends Evaluator<ConstituentTreeSample<He
 				{
 					logger.warning("Error during parsing, ignoring sentence: " + treePre.toStringWordIndex());
 				}
-				samplePre = new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(),
+				samplePre = new ConstituentTreeSample(new ArrayList<>(), new ArrayList<>(),
 						new ArrayList<>(), new ArrayList<>());
 			}
 			return samplePre;

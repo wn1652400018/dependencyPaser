@@ -2,6 +2,7 @@ package com.lc.nlp4han.constituent.maxent;
 
 import java.util.List;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
 
 
@@ -10,7 +11,7 @@ import com.lc.nlp4han.constituent.TreeNode;
  * @author 王馨苇
  *
  */
-public interface ParserSequenceValidator<T extends TreeNode> {
+public interface ParserSequenceValidator {
 
 	/**
 	 * 检验chunk步的标记是否正确
@@ -20,7 +21,7 @@ public interface ParserSequenceValidator<T extends TreeNode> {
 	 * @param out 当前位置的结果
 	 * @return
 	 */
-	boolean validSequenceForChunk(int i, List<T> posTree, List<String> outcomes, String out);
+	boolean validSequenceForChunk(int i, List<HeadTreeNode> posTree, List<String> outcomes, String out);
 	
 	/**
 	 * 检验build和check步骤的标记是否正确
@@ -29,5 +30,5 @@ public interface ParserSequenceValidator<T extends TreeNode> {
 	 * @param out 当前位置的结果
 	 * @return
 	 */
-	boolean validSequenceForBuildAndCheck(int i, List<T> combineChunkTree, String out );
+	boolean validSequenceForBuildAndCheck(int i, List<HeadTreeNode> combineChunkTree, String out );
 }

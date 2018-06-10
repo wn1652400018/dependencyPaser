@@ -38,7 +38,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 	private int size;
 	private ParserSequenceClassificationModel<HeadTreeNode> model;
 
-	private ParserSequenceValidator<HeadTreeNode> sequenceValidator;
+	private ParserSequenceValidator sequenceValidator;
 
 	private AbstractHeadGenerator headGenerator;
 
@@ -101,7 +101,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 			throws IOException
 	{
 		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
+		ObjectStream<ConstituentTreeSample> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				aghw);
 		ModelWrapper model = ChunkerForParserME.train("zh", sampleStream, params, contextGen);
 		return model;
@@ -123,7 +123,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 	 * @throws IOException
 	 */
 	public static ModelWrapper train(String languageCode,
-			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream, TrainingParameters params,
+			ObjectStream<ConstituentTreeSample> sampleStream, TrainingParameters params,
 			ParserContextGenerator<HeadTreeNode> contextGen) throws IOException
 	{
 		String beamSizeString = params.getSettings().get(ParserBeamSearch.BEAM_SIZE_PARAMETER);
@@ -161,7 +161,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 	 *            编码方式
 	 * @param headGen
 	 *            生成头结点的方法
-	 * @return
+	 *            
 	 * @throws IOException
 	 */
 	public static void train(File file, File modelFile, TrainingParameters params,
@@ -172,7 +172,7 @@ public class ChunkerForParserME implements ChunkerForParser<HeadTreeNode>
 		ModelWrapper model = null;
 
 		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
+		ObjectStream<ConstituentTreeSample> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				headGen);
 		
 		model = ChunkerForParserME.train("zh", sampleStream, params, contextGen);

@@ -30,7 +30,7 @@ public class ConstituentSampleEventTest {
 	private ParserContextGenerator<HeadTreeNode> generator ;
 	private TreeNode tree ;
 	private HeadTreeNode headTree ;
-	private ConstituentTreeSample<HeadTreeNode> sample ;
+	private ConstituentTreeSample sample ;
 	private List<String> words ;
 	private List<HeadTreeNode> chunkTree ;
 	private List<List<HeadTreeNode>> buildAndCheckTree ;

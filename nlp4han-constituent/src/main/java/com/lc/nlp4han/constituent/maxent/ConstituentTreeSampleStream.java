@@ -20,7 +20,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  * @author 王馨苇
  *
  */
-public class ConstituentTreeSampleStream extends FilterObjectStream<String, ConstituentTreeSample<HeadTreeNode>>
+public class ConstituentTreeSampleStream extends FilterObjectStream<String, ConstituentTreeSample>
 {
 
 	private Logger logger = Logger.getLogger(ConstituentTreeSampleStream.class.getName());
@@ -44,10 +44,10 @@ public class ConstituentTreeSampleStream extends FilterObjectStream<String, Cons
 	 * @return
 	 */
 	@Override
-	public ConstituentTreeSample<HeadTreeNode> read() throws IOException
+	public ConstituentTreeSample read() throws IOException
 	{
 		String sentence = samples.read();
-		ConstituentTreeSample<HeadTreeNode> sample = null;
+		ConstituentTreeSample sample = null;
 		if (sentence != null)
 		{
 			if (sentence.compareTo("") != 0)
@@ -64,14 +64,14 @@ public class ConstituentTreeSampleStream extends FilterObjectStream<String, Cons
 					{
 						logger.warning("Error during parsing, ignoring sentence: " + sentence);
 					}
-					sample = new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(),
+					sample = new ConstituentTreeSample(new ArrayList<>(), new ArrayList<>(),
 							new ArrayList<>(), new ArrayList<>());
 				}
 				return sample;
 			}
 			else
 			{
-				sample = new ConstituentTreeSample<HeadTreeNode>(new ArrayList<>(), new ArrayList<>(),
+				sample = new ConstituentTreeSample(new ArrayList<>(), new ArrayList<>(),
 						new ArrayList<>(), new ArrayList<>());
 				return null;
 			}

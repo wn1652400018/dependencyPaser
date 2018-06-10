@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.lc.nlp4han.constituent.HeadTreeNode;
 import com.lc.nlp4han.constituent.TreeNode;
 
 /**
@@ -14,26 +15,26 @@ import com.lc.nlp4han.constituent.TreeNode;
  * @author 王馨苇
  *
  */
-public class ConstituentTreeSample<T extends TreeNode>
+public class ConstituentTreeSample
 {
 
 	private List<String> words = new ArrayList<String>();
 	private List<String> poses = new ArrayList<String>();
 	
-	private List<T> posTree;
-	private List<T> chunkTree;
-	private List<List<T>> buildAndCheckTree;
+	private List<HeadTreeNode> posTree;
+	private List<HeadTreeNode> chunkTree;
+	private List<List<HeadTreeNode>> buildAndCheckTree;
 	private List<String> actions;
 	
 	private String[][] addtionalContext;
 
-	public ConstituentTreeSample(List<T> posTree, List<T> chunkTree, List<List<T>> buildAndCheckTree,
+	public ConstituentTreeSample(List<HeadTreeNode> posTree, List<HeadTreeNode> chunkTree, List<List<HeadTreeNode>> buildAndCheckTree,
 			List<String> actions)
 	{
 		this(posTree, chunkTree, buildAndCheckTree, actions, null);
 	}
 
-	public ConstituentTreeSample(List<T> posTree, List<T> chunkTree, List<List<T>> buildAndCheckTree,
+	public ConstituentTreeSample(List<HeadTreeNode> posTree, List<HeadTreeNode> chunkTree, List<List<HeadTreeNode>> buildAndCheckTree,
 			List<String> actions, String[][] additionalContext)
 	{
 		posTreeToWordsAndPoses(posTree);
@@ -63,7 +64,7 @@ public class ConstituentTreeSample<T extends TreeNode>
 	 * 
 	 * @param posTree
 	 */
-	public void posTreeToWordsAndPoses(List<T> posTree)
+	public void posTreeToWordsAndPoses(List<HeadTreeNode> posTree)
 	{
 		for (int i = 0; i < posTree.size(); i++)
 		{
@@ -98,7 +99,7 @@ public class ConstituentTreeSample<T extends TreeNode>
 	 * 
 	 * @return
 	 */
-	public List<T> getPosTree()
+	public List<HeadTreeNode> getPosTree()
 	{
 		return this.posTree;
 	}
@@ -108,7 +109,7 @@ public class ConstituentTreeSample<T extends TreeNode>
 	 * 
 	 * @return
 	 */
-	public List<T> getChunkTree()
+	public List<HeadTreeNode> getChunkTree()
 	{
 		return this.chunkTree;
 	}
@@ -118,7 +119,7 @@ public class ConstituentTreeSample<T extends TreeNode>
 	 * 
 	 * @return
 	 */
-	public List<List<T>> getBuildAndCheckTree()
+	public List<List<HeadTreeNode>> getBuildAndCheckTree()
 	{
 		return this.buildAndCheckTree;
 	}
@@ -153,7 +154,7 @@ public class ConstituentTreeSample<T extends TreeNode>
 		else if (obj instanceof ConstituentTreeSample)
 		{
 			@SuppressWarnings("unchecked")
-			ConstituentTreeSample<T> a = (ConstituentTreeSample<T>) obj;
+			ConstituentTreeSample a = (ConstituentTreeSample) obj;
 			return Arrays.equals(getActions().stream().toArray(), a.getActions().stream().toArray());
 		}
 		else

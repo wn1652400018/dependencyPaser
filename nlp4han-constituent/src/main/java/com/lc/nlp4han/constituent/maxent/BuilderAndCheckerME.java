@@ -42,7 +42,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	private int size;
 	private ParserSequenceClassificationModel<HeadTreeNode> model;
 
-	private ParserSequenceValidator<HeadTreeNode> sequenceValidator;
+	private ParserSequenceValidator sequenceValidator;
 	private AbstractHeadGenerator headGenerator;
 
 	/**
@@ -106,7 +106,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 		try
 		{
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
+			ObjectStream<ConstituentTreeSample> sampleStream = new ConstituentTreeSampleStream(lineStream,
 					aghw);
 			model = BuilderAndCheckerME.trainForBuild("zh", sampleStream, params, contextGen);
 			return model;
@@ -138,7 +138,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 * @throws IOException
 	 */
 	public static ModelWrapper trainForBuild(String languageCode,
-			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream, TrainingParameters params,
+			ObjectStream<ConstituentTreeSample> sampleStream, TrainingParameters params,
 			ParserContextGenerator<HeadTreeNode> contextGen) throws IOException
 	{
 		String beamSizeString = params.getSettings().get(ParserBeamSearch.BEAM_SIZE_PARAMETER);
@@ -189,7 +189,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 		try
 		{
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
+			ObjectStream<ConstituentTreeSample> sampleStream = new ConstituentTreeSampleStream(lineStream,
 					aghw);
 			model = BuilderAndCheckerME.trainForBuild("zh", sampleStream, params, contextGen);
 			modelOut = new BufferedOutputStream(new FileOutputStream(buildmodelFile));
@@ -232,7 +232,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 			throws IOException
 	{
 		ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-		ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
+		ObjectStream<ConstituentTreeSample> sampleStream = new ConstituentTreeSampleStream(lineStream,
 				aghw);
 		ModelWrapper model = BuilderAndCheckerME.trainForCheck("zh", sampleStream, params, contextGen);
 		return model;
@@ -254,7 +254,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 	 * @throws IOException
 	 */
 	public static ModelWrapper trainForCheck(String languageCode,
-			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream, TrainingParameters params,
+			ObjectStream<ConstituentTreeSample> sampleStream, TrainingParameters params,
 			ParserContextGenerator<HeadTreeNode> contextGen) throws IOException
 	{
 		String beamSizeString = params.getSettings().get(ParserBeamSearch.BEAM_SIZE_PARAMETER);
@@ -305,7 +305,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 		try
 		{
 			ObjectStream<String> lineStream = new PlainTextByTreeStream(new FileInputStreamFactory(file), encoding);
-			ObjectStream<ConstituentTreeSample<HeadTreeNode>> sampleStream = new ConstituentTreeSampleStream(lineStream,
+			ObjectStream<ConstituentTreeSample> sampleStream = new ConstituentTreeSampleStream(lineStream,
 					aghw);
 			model = BuilderAndCheckerME.trainForBuild("zh", sampleStream, params, contextGen);
 			modelOut = new BufferedOutputStream(new FileOutputStream(checkmodelFile));
@@ -382,7 +382,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 			{
 				TreeNode node = BracketExpUtil.generateTree("(" + alltree.get(i).toStringWordIndex() + ")");
 				HeadTreeNode headTree = TreeToHeadTree.treeToHeadTree(node, headGenerator);
-				ConstituentTreeSample<HeadTreeNode> sample = HeadTreeToActions.headTreeToAction(headTree,
+				ConstituentTreeSample sample = HeadTreeToActions.headTreeToAction(headTree,
 						headGenerator);
 				kActions.add(sample.getActions());
 			}

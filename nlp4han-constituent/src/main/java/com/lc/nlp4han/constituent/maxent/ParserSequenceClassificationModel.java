@@ -27,7 +27,7 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 * @return
 	 */
 	ChunkSequence bestSequenceForChunk(List<List<T>> posTree, Object[] ac,
-			ParserContextGenerator<T> generator, ParserSequenceValidator<T> validator);
+			ParserContextGenerator<T> generator, ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的num个chunk结果
@@ -47,7 +47,7 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 * @return
 	 */
 	ChunkSequence[] bestSequencesForChunk(int num, List<List<T>> posTree, Object[] ac, double min,
-			ParserContextGenerator<T> generator, ParserSequenceValidator<T> validator);
+			ParserContextGenerator<T> generator, ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的num个chunk结果
@@ -65,7 +65,7 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 * @return
 	 */
 	ChunkSequence[] bestSequencesForChunk(int num, List<List<T>> posTree, Object[] ac,
-			ParserContextGenerator<T> generator, ParserSequenceValidator<T> validator);
+			ParserContextGenerator<T> generator, ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的BuildAndCheck结果
@@ -81,7 +81,7 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 * @return
 	 */
 	BuildAndCheckSequence<T> bestSequenceForBuildAndCheck(List<List<T>> comnineChunkTree,
-			Object[] ac, ParserContextGenerator<T> generator, ParserSequenceValidator<T> validator);
+			Object[] ac, ParserContextGenerator<T> generator, ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的num个BuildAndCheck结果
@@ -102,7 +102,7 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 */
 	BuildAndCheckSequence<T>[] bestSequencesForBuildAndCheck(int num,
 			List<List<T>> comnineChunkTree, Object[] ac, double min, ParserContextGenerator<T> generator,
-			ParserSequenceValidator<T> validator);
+			ParserSequenceValidator validator);
 
 	/**
 	 * 得到最好的num个BuildAndCheck结果
@@ -121,5 +121,5 @@ public interface ParserSequenceClassificationModel<T extends TreeNode>
 	 */
 	BuildAndCheckSequence<T>[] bestSequencesForBuildAndCheck(int num,
 			List<List<T>> comnineChunkTree, Object[] ac, ParserContextGenerator<T> generator,
-			ParserSequenceValidator<T> validator);
+			ParserSequenceValidator validator);
 }

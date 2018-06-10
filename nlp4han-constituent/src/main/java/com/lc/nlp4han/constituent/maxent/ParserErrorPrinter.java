@@ -24,7 +24,7 @@ public class ParserErrorPrinter extends ParserEvaluateMonitor{
 	 * @param predict 预测的结果
 	 */
 	@Override
-	public void missclassified(ConstituentTreeSample<HeadTreeNode> reference, ConstituentTreeSample<HeadTreeNode> predict) {
+	public void missclassified(ConstituentTreeSample reference, ConstituentTreeSample predict) {
 		 errOut.println("样本的结果：");
 		 errOut.println(ConstituentTreeSample.toTree(reference.getWords(), reference.getActions()).toStringWordIndex());
 		 errOut.println();
