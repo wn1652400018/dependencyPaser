@@ -92,6 +92,7 @@ public class ParserMETrainerTool
 
 		AbstractHeadGenerator headGenerator = new HeadGeneratorCollins();
 		
+		// TODO: 可以选择首先训练词性标注模型
 		ChunkerForParserME.train(corpusFile, chunkmodelFile, params, contextGen, encoding, headGenerator);
 		
 		BuilderAndCheckerME.trainForBuild(corpusFile, buildmodelFile, params, contextGen, encoding,
