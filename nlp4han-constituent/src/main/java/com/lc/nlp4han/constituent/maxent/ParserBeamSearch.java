@@ -619,7 +619,7 @@ public class ParserBeamSearch implements ParserSequenceClassificationModel
 											// 设置头结点
 											combine.setHeadWord(aghw.extractHeadWord(combine,
 													HeadRuleSetPTB.getNormalRuleSet(), HeadRuleSetPTB.getSpecialRuleSet()));
-											combine.setHeadPos(aghw.extractHeadWordPos(combine,
+											combine.setHeadPos(aghw.extractHeadPos(combine,
 													HeadRuleSetPTB.getNormalRuleSet(), HeadRuleSetPTB.getSpecialRuleSet()));
 											copy.set(record, combine);
 											// 删除用于合并的那些位置上的
@@ -727,7 +727,7 @@ public class ParserBeamSearch implements ParserSequenceClassificationModel
 											// 设置头结点
 											combine.setHeadWord(aghw.extractHeadWord(combine,
 													HeadRuleSetPTB.getNormalRuleSet(), HeadRuleSetPTB.getSpecialRuleSet()));
-											combine.setHeadPos(aghw.extractHeadWordPos(combine,
+											combine.setHeadPos(aghw.extractHeadPos(combine,
 													HeadRuleSetPTB.getNormalRuleSet(), HeadRuleSetPTB.getSpecialRuleSet()));
 											copy.set(record, combine);
 											// 删除用于合并的那些位置上的

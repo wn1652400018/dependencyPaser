@@ -471,7 +471,7 @@ public class BuilderAndCheckerME implements BuilderAndChecker<HeadTreeNode>
 				}
 				node.setHeadWord(headGenerator.extractHeadWord(node, HeadRuleSetPTB.getNormalRuleSet(),
 						HeadRuleSetPTB.getSpecialRuleSet()));
-				node.setHeadPos(headGenerator.extractHeadWordPos(node, HeadRuleSetPTB.getNormalRuleSet(),
+				node.setHeadPos(headGenerator.extractHeadPos(node, HeadRuleSetPTB.getNormalRuleSet(),
 						HeadRuleSetPTB.getSpecialRuleSet()));
 				chunkTree.add(node);
 				i = j;

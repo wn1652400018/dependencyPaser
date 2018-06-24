@@ -81,7 +81,7 @@ public class TreeToHeadTree
 				{
 					node.setHeadWord(headGen.extractHeadWord(node, HeadRuleSetPTB.getNormalRuleSet(),
 							HeadRuleSetPTB.getSpecialRuleSet()));
-					node.setHeadPos(headGen.extractHeadWordPos(node, HeadRuleSetPTB.getNormalRuleSet(),
+					node.setHeadPos(headGen.extractHeadPos(node, HeadRuleSetPTB.getNormalRuleSet(),
 							HeadRuleSetPTB.getSpecialRuleSet()));
 				}
 				tree.push(node);

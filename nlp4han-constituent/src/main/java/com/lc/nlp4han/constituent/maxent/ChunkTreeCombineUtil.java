@@ -40,7 +40,7 @@ public class ChunkTreeCombineUtil
 				node.addChild(subTree.get(i).getFirstChild());
 				node.setHeadWord(
 						headGen.extractHeadWord(node, HeadRuleSetPTB.getNormalRuleSet(), HeadRuleSetPTB.getSpecialRuleSet()));
-				node.setHeadPos(headGen.extractHeadWordPos(node, HeadRuleSetPTB.getNormalRuleSet(),
+				node.setHeadPos(headGen.extractHeadPos(node, HeadRuleSetPTB.getNormalRuleSet(),
 						HeadRuleSetPTB.getSpecialRuleSet()));
 				subTree.get(i).getFirstChild().setParent(node);
 
@@ -59,7 +59,7 @@ public class ChunkTreeCombineUtil
 					}
 					node.setHeadWord(headGen.extractHeadWord(node, HeadRuleSetPTB.getNormalRuleSet(),
 							HeadRuleSetPTB.getSpecialRuleSet()));
-					node.setHeadPos(headGen.extractHeadWordPos(node, HeadRuleSetPTB.getNormalRuleSet(),
+					node.setHeadPos(headGen.extractHeadPos(node, HeadRuleSetPTB.getNormalRuleSet(),
 							HeadRuleSetPTB.getSpecialRuleSet()));
 				}
 				// 将一颗合并过的完整子树加入列表
