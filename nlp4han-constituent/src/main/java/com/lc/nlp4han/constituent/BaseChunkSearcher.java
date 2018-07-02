@@ -8,7 +8,7 @@ import org.omg.IOP.TAG_CODE_SETS;
 
 import com.lc.nlp4han.constituent.TreeNode;
 
-public class BaseChunk {
+public class BaseChunkSearcher {
 	//维护一个基本短语标记的列表
 	private static List<String> tags = new ArrayList<>();
 	static {
@@ -34,11 +34,11 @@ public class BaseChunk {
 	/**
 	 * 提取基本短语块
 	 * @param tn 短语结构树
-	 * @param tag 待提取的基本短语块
+	 * @param targetTag 待提取的基本短语块
 	 * 
 	 */
 
-	public static void searchForChunk(TreeNode tn, List<String> tag) {
+	public static void search(TreeNode tn, List<String> targetTag) {
 
 		List<? extends TreeNode> children = null;
 
@@ -62,10 +62,10 @@ public class BaseChunk {
 
 		if (tried) {
 			if (flag) {
-				if (tag.contains("all") && tags.contains(tn.getNodeName())) {
+				if (targetTag.contains("all") && tags.contains(tn.getNodeName())) {
 					tn.setNewName("tag:" + tn.getNodeName());
 				} else {
-					if (tag.contains(tn.getNodeName())) {
+					if (targetTag.contains(tn.getNodeName())) {
 						tn.setNewName("tag:" + tn.getNodeName());
 					}
 				}
@@ -75,7 +75,7 @@ public class BaseChunk {
 
 		for (int i = 0; i < tn.getChildrenNum(); i++)// 遍历
 		{
-			searchForChunk(children.get(i), tag);
+			search(children.get(i), targetTag);
 		}
 	}
 }
