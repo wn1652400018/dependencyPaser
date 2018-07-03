@@ -7,6 +7,7 @@ import java.util.List;
 import com.lc.nlp4han.constituent.TreeNode;
 
 public class BaseChunkSearcher {
+	
 	//维护一个基本短语标记的列表
 	private static List<String> tags = new ArrayList<>();
 	static {
