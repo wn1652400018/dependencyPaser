@@ -2,9 +2,7 @@ package com.lc.nlp4han.constituent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
-import org.omg.IOP.TAG_CODE_SETS;
 
 import com.lc.nlp4han.constituent.TreeNode;
 
