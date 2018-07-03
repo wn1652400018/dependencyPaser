@@ -3,14 +3,15 @@ package com.lc.nlp4han.constituent;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.lc.nlp4han.constituent.TreeNode;
 
-public class BaseChunkSearcher {
-	
-	//维护一个基本短语标记的列表
+public class BaseChunkSearcher
+{
+
+	// 维护一个基本短语标记的列表
 	private static List<String> tags = new ArrayList<>();
-	static {
+	static
+	{
 		tags.add("NP");
 		tags.add("ADJP");
 		tags.add("ADVP");
@@ -29,28 +30,36 @@ public class BaseChunkSearcher {
 		tags.add("CP");
 		tags.add("FRAG");
 	}
-	
+
 	/**
 	 * 提取基本短语块
-	 * @param tn 短语结构树
-	 * @param targetTag 待提取的基本短语块
+	 * 
+	 * @param tn
+	 *            短语结构树
+	 * @param targetTags
+	 *            待提取的基本短语块
 	 * 
 	 */
 
-	public static void search(TreeNode tn, List<String> targetTag) {
+	public static void search(TreeNode tn, List<String> targetTags)
+	{
 
 		List<? extends TreeNode> children = null;
 
 		boolean flag = true;// 标记是否是基本短语块
-		boolean tried = false;//节点是否被遍历过
-		if (tn != null) {
+		boolean tried = false;// 节点是否被遍历过
+		if (tn != null)
+		{
 			children = tn.getChildren();
-			if (!children.isEmpty()) {
-				for (TreeNode child : children) {
-					
+			if (!children.isEmpty())
+			{
+				for (TreeNode child : children)
+				{
+
 					// 判断该节点的子树中是否包含短语块
 					String name = child.getNodeName();
-					if (tags.contains(name)) {
+					if (tags.contains(name))
+					{
 						flag = false;
 						break;
 					}
@@ -59,12 +68,18 @@ public class BaseChunkSearcher {
 			}
 		}
 
-		if (tried) {
-			if (flag) {
-				if (targetTag.contains("all") && tags.contains(tn.getNodeName())) {
+		if (tried)
+		{
+			if (flag)
+			{
+				if (targetTags.contains("all") && tags.contains(tn.getNodeName()))
+				{
 					tn.setNewName("tag:" + tn.getNodeName());
-				} else {
-					if (targetTag.contains(tn.getNodeName())) {
+				}
+				else
+				{
+					if (targetTags.contains(tn.getNodeName()))
+					{
 						tn.setNewName("tag:" + tn.getNodeName());
 					}
 				}
@@ -74,10 +89,7 @@ public class BaseChunkSearcher {
 
 		for (int i = 0; i < tn.getChildrenNum(); i++)// 遍历
 		{
-			search(children.get(i), targetTag);
+			search(children.get(i), targetTags);
 		}
 	}
 }
-	
-			
-
