@@ -3,6 +3,8 @@ package edu.hust.dependency.arceager;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+import edu.hust.dependencyParse.DependencySample;
+
 public class Configuration {
 	private ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
 	private ArrayList<Vertice> wordsBuffer = new ArrayList<Vertice>(); 
@@ -22,12 +24,21 @@ public class Configuration {
 		// arc为空
 	}
 	public Configuration() {}
+	
+	public static Configuration initialConf(DependencySample sample) {//通过sample得到初始的一个Configuration
+		//······
+		return null;
+	}
+	
+	
+	
 	public boolean isFinalConf() {
 		if(stack.size() == 1 && wordsBuffer.isEmpty())
 			return true;
 		else
 			return false;
 	}
+
 
 	public ArrayDeque<Vertice> getStack() {
 		return stack;

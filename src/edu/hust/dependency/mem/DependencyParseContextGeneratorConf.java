@@ -2,7 +2,13 @@ package edu.hust.dependency.mem;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Properties;
+
+import edu.hust.dependency.arceager.Arc;
+import edu.hust.dependency.arceager.Configuration;
+import edu.hust.dependency.arceager.Vertice;
 
 
 /**
@@ -12,7 +18,7 @@ import java.util.Properties;
  * @author 王宁
  *
  */
-public class FeaturesGeneratorConf {
+public class DependencyParseContextGeneratorConf {
 	//定义变量控制feature的使用
 	//一个单词特征
 	private boolean s1wset = false;
@@ -47,9 +53,9 @@ public class FeaturesGeneratorConf {
 	 * 无参构造
 	 * @throws IOException IO异常
 	 */
-	public FeaturesGeneratorConf() throws IOException{
+	public DependencyParseContextGeneratorConf() throws IOException{
 		Properties featureConf = new Properties();
-        InputStream featureStream = FeaturesGeneratorConf.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/dependency/feature.properties");
+        InputStream featureStream = DependencyParseContextGeneratorConf.class.getClassLoader().getResourceAsStream("edu/hust/dependency/mem/features.properties");
         featureConf.load(featureStream);
         
 //        init(featureConf);
@@ -59,28 +65,26 @@ public class FeaturesGeneratorConf {
 	 * 有参构造
 	 * @param config 配置文件
 	 */
-	public FeaturesGeneratorConf(Properties config){
+	public DependencyParseContextGeneratorConf(Properties config){
 //		init(config);
 	}
 	
 	
 	
-	public String[] getContext(int indexi, int indexj, String[] words, String[] pos, Object[] ac) {
+	
+	public String[] getContext(Configuration conf) {
+		return getContext(new ArrayDeque<Vertice>(), new ArrayList<Vertice> (), new ArrayList<Arc>());
+	}
+	/**
+	 * 获取特征
+	 * @param Configuration的stack
+	 * @param Configuration中的buffer
+	 * @param Configuration中的关系列表
+	 * @return 特征的数组
+	 */
+	public String[] getContext(ArrayDeque<Vertice> stack, ArrayList<Vertice> wordsBuffer, ArrayList<Arc> arcs) {
 		return null;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }

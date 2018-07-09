@@ -3,13 +3,13 @@ package edu.hust.dependency.mem;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.hust.dependency.DependencyParser;
-import edu.hust.dependency.DependencyTree;
 import edu.hust.dependency.arceager.ActionType;
 import edu.hust.dependency.arceager.Arc;
 import edu.hust.dependency.arceager.Configuration;
 import edu.hust.dependency.arceager.OperatorArcEagerbased;
 import edu.hust.dependency.arceager.Oracle;
+import edu.hust.dependencyParse.DependencyParser;
+import edu.hust.dependencyParse.DependencyTree;
 
 public class DependencyParserMEM implements DependencyParser{
 

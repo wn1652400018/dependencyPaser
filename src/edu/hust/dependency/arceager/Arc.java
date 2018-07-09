@@ -2,7 +2,7 @@ package edu.hust.dependency.arceager;
 
 import java.util.ArrayList;
 
-import edu.hust.dependency.DependencyTree;
+import edu.hust.dependencyParse.DependencyTree;
 
 public class Arc {
 	private Relation relation;

@@ -1,4 +1,4 @@
-package edu.hust.dependency;
+package edu.hust.dependencyParse;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -132,6 +132,8 @@ public class DependencySample
 		this.adtionalContext = ac;
 	}
 
+	public DependencySample() {}
+	
 	/**
 	 * 输出的样本的格式
 	 * 
