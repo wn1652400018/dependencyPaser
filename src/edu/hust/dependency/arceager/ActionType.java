@@ -1,7 +1,7 @@
 package edu.hust.dependency.arceager;
 
 public class ActionType {
-	//暂时认为是分类的结构，将来在重新设计
+	//暂时认为是对特征的分类，将来再重新设计
 	private Relation relation;
 	private String baseAction;//LEFTARC、RIGHTARC···
 	public ActionType(Relation relation,String baseAction) {

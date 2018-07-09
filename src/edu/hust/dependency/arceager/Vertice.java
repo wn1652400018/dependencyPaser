@@ -9,9 +9,6 @@ public class Vertice {
 	private String pos;
 	private int indexOfWord;
 	
-	
-	
-	
 	public Vertice(String word,String pos,int indexOfWord) {
 		this.word = word;
 		this.pos = pos;
@@ -23,9 +20,9 @@ public class Vertice {
 		String[] words = sample.getWords();
 		String[] pos = sample.getPos();
 		ArrayList<Vertice> wordsBuffer = new ArrayList<Vertice>();
-		for (int i = 0; i < words.length; i++) // wordsµÄÊ×Î»´æ·ÅµÄÊÇ¡°ºËÐÄ¡±
+		for (int i = 0; i < words.length; i++) // wordså°è£…åˆ°Bufferä¸­
 			wordsBuffer.add(new Vertice(words[i], pos[i], i));
-		return null;
+		return wordsBuffer;
 	}
 	
 	
