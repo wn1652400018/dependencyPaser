@@ -3,7 +3,7 @@ package edu.hust.dependency.arceager;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-import edu.hust.dependencyParse.DependencySample;
+import edu.hust.dependency.DependencySample;
 
 public class Configuration {
 	private ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();

@@ -1,4 +1,4 @@
-package edu.hust.dependencyParse;
+package edu.hust.dependency;
 
 import java.util.ArrayList;
 import java.util.List;

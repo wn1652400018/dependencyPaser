@@ -2,7 +2,7 @@ package edu.hust.dependency.arceager;
 
 import java.util.ArrayList;
 
-import edu.hust.dependencyParse.DependencySample;
+import edu.hust.dependency.DependencySample;
 
 public class Vertice {
 	private String word;
