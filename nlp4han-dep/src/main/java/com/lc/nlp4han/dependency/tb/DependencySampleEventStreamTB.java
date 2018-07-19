@@ -85,10 +85,10 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 				indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
 				headIndexOfWord_B1 = Integer.parseInt(dependencyIndices[indexOfWord_B1 - 1]);
 				if(headIndexOfWord_B1 == 0) {
-					at = new ActionType("ROOT", "RIGHTARC_SHIFT");
+					at = new ActionType("EXTRAROOT", "RIGHTARC_SHIFT");
 					strOfAType = at.typeToString();
 					conf_ArcEager.addArc(
-							new Arc("ROOT", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
+							new Arc("EXTRAROOT", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
 					conf_ArcEager.shift();
 				}else {
 					at = new ActionType("null","SHIFT");
