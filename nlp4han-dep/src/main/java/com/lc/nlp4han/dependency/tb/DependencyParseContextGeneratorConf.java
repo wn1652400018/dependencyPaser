@@ -69,7 +69,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	public DependencyParseContextGeneratorConf() throws IOException {
 		Properties featureConf = new Properties();
 		InputStream featureStream = DependencyParseContextGeneratorConf.class.getClassLoader()
-				.getResourceAsStream("com/lc/nlp4han/dependency/feature_tb.properties");
+				.getResourceAsStream("com/lc/nlp4han/dependency/tbfeature.properties");
 		featureConf.load(featureStream);
 
 		init(featureConf);
@@ -102,10 +102,10 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 			stack.push(vertice);
 		}
 		if (wordsBuffer.size() >= 1) {
-			b1w = wordsBuffer.get(0).getPos();
+			b1w = wordsBuffer.get(0).getWord();
 			b1t = wordsBuffer.get(0).getPos();
 			if (wordsBuffer.size() >= 2) {
-				b2w = wordsBuffer.get(1).getPos();
+				b2w = wordsBuffer.get(1).getWord();
 				b2t = wordsBuffer.get(1).getPos();
 			}
 		}

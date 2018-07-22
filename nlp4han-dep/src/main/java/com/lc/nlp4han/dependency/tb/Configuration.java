@@ -16,7 +16,6 @@ public class Configuration {
 	
 	public Configuration(ArrayDeque<Vertice> stack,ArrayList<Vertice> wordsBuffer,ArrayList<Arc> arcs) {
 		
-		
 		stack.add( wordsBuffer.get(0));
 		wordsBuffer.remove(0);
 		this.stack = stack;
@@ -25,9 +24,12 @@ public class Configuration {
 	}
 
 	public Configuration(String[] words, String[] pos) {
-		wordsBuffer = Vertice.getWordsBuffer(words, pos); 
+		if(words.length != 0) {
+			wordsBuffer = Vertice.getWordsBuffer(words, pos); 
 		stack.add( wordsBuffer.get(0));
 		wordsBuffer.remove(0);
+		}
+		
 	}
 	
 	private Configuration() {}
@@ -64,13 +66,13 @@ public class Configuration {
 			return false;
 	}
 	
-	//共四类基本操作RIGHTARC_SHIFT、LEFTARC_REDUCE_SHIFT、SHIFT、REDUCE
+	//共四类基本操作RIGHTARC_SHIFT、LEFTARC_REDUCE、SHIFT、REDUCE
 	public Configuration transition(ActionType actType) {
 		switch(actType.getBaseAction()) {
 		case "RIGHTARC_SHIFT": 
 			return addArc(new Arc(actType.getRelation(),stack.peek(),wordsBuffer.get(0)));
-		case "LEFTARC_REDUCE_SHIFT":
-			return addArc(new Arc(actType.getRelation(),wordsBuffer.get(0),stack.peek())).reduce().shift();
+		case "LEFTARC_REDUCE":
+			return addArc(new Arc(actType.getRelation(),wordsBuffer.get(0),stack.peek())).reduce();
 		case "SHIFT":
 			return shift();
 		case "REDUCE":
@@ -80,6 +82,18 @@ public class Configuration {
 		}
 	}
 	
+	public static void main(String[]args) {
+		String [] words = {"根","我","爱","自然","语言","处理"};
+		String [] pos = {"0","1","2","3","4","5"};
+		ArrayList<Vertice> buffer = Vertice.getWordsBuffer(words, pos); 
+		ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
+		Configuration conf = new Configuration(stack,buffer,new ArrayList<Arc>() );
+		System.out.println(conf.toString());
+		conf.shift();
+		System.out.println(conf.toString());
+		conf.reduce();
+		System.out.println(conf.toString());
+	}
 	
 	public Configuration addArc(Arc arc) {
 		arcs.add(arc);
@@ -87,7 +101,7 @@ public class Configuration {
 	}
 	
 	public Configuration shift() {
-		if (wordsBuffer.size() == 0) {
+		if (wordsBuffer.size() != 0) {
 			stack.push(wordsBuffer.remove(0));
 			return this;
 		}else {
@@ -104,6 +118,21 @@ public class Configuration {
 			return null;
 		}
 		
+	}
+	
+	public String toString() {
+		Object [] vS = stack.toArray();
+		Object[] vB = wordsBuffer.toArray();
+		String stackStr = "";
+		String bufferStr = "";
+		for(int i = 0;i<stack.size();i++) {
+			stackStr += ((Vertice) vS[i]).getWord();
+		}
+		for (int i = 0; i < wordsBuffer.size(); i++)
+		{
+			bufferStr += ((Vertice) vB[i]).getWord();
+		}
+		return "stack="+stackStr +"bufferStr="+bufferStr;
 	}
 	
 	public ArrayDeque<Vertice> getStack() {

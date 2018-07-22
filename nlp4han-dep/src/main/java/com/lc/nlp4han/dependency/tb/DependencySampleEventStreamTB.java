@@ -71,15 +71,20 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 	private List<Event> generateEvents(String[] words, String[] pos, String[] dependency, String[] dependencyWords,
 			String[] dependencyIndices, String[][] ac)
 	{
+		if(words.length == 0)
+			return new ArrayList<Event>(words.length);;
 		Configuration conf_ArcEager  = Configuration.initialConf(words, pos);
-		ArrayList<Event> events  = new ArrayList<Event>();
+		List<Event> events  = new ArrayList<Event>();
 		ActionType at ;
 		String strOfAType;
 		int indexOfWord_S1 ;//该单词在words中索引
 		int indexOfWord_B1 ;
 		int headIndexOfWord_S1 ;//栈顶单词中心词在words中的索引  
 		int headIndexOfWord_B1 ;
-		while(!conf_ArcEager.isFinalConf()) {
+		int count = 0;
+		while(!conf_ArcEager.isFinalConf()&& count < 15) {
+			System.out.println(conf_ArcEager.toString());
+			count ++;
 			String[] context = pcg.getContext(conf_ArcEager);
 			if(conf_ArcEager.getStack().size() == 1 && conf_ArcEager.getWordsBuffer().size() != 0 ) {
 				indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
@@ -111,10 +116,10 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_B1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
 					conf_ArcEager.shift();
 				} else if(indexOfWord_B1 == headIndexOfWord_S1 ) {//左弧
-					at = new ActionType(dependency[indexOfWord_S1 - 1],"LEFTARC_REDUCE_SHIFT");
+					at = new ActionType(dependency[indexOfWord_S1 - 1],"LEFTARC_REDUCE");
 					strOfAType = at.typeToString();
 					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
-					conf_ArcEager.reduce().shift();
+					conf_ArcEager.reduce();
 				} else {//没有关系
 					at = new ActionType("null","SHIFT");
 					strOfAType = at.typeToString();

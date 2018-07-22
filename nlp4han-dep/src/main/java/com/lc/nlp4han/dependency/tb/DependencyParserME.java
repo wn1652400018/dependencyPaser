@@ -4,6 +4,7 @@ package com.lc.nlp4han.dependency.tb;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.lc.nlp4han.dependency.DependencySampleParser;
 import com.lc.nlp4han.dependency.DependencySampleParserCoNLL;
 import com.lc.nlp4han.dependency.DependencySampleStream;
 import com.lc.nlp4han.dependency.DependencyTree;
+import com.lc.nlp4han.dependency.PlainTextBySpaceLineStream;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.util.BeamSearch;
@@ -21,7 +23,6 @@ import com.lc.nlp4han.ml.util.EventTrainer;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
-import com.lc.nlp4han.ml.util.PlainTextByLineStream;
 import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
@@ -42,8 +43,23 @@ public class DependencyParserME implements DependencyParser{
     
     private ClassificationModel model;
 
-
-	
+    
+    
+    public DependencyParserME(String modelPath) throws IOException {
+    	this(new File(modelPath));
+    }
+    
+    public DependencyParserME(String modelPath,DependencyParseContextGenerator contextGenerator) throws IOException {
+    	this(new File(modelPath),contextGenerator);
+    }
+    
+    public DependencyParserME(File file) throws IOException {
+    	this(new ModelWrapper(file));
+    }
+    
+	public DependencyParserME(File file,DependencyParseContextGenerator contextGenerator) throws IOException {
+		this(new ModelWrapper(file),contextGenerator);
+	}
 	
 	public DependencyParserME(ModelWrapper model) throws IOException {
 		init(model, new DependencyParseContextGeneratorConf());
@@ -69,14 +85,18 @@ public class DependencyParserME implements DependencyParser{
     }
 	
 	
+	public static ModelWrapper train(String trainDatePath, TrainingParameters params, DependencyParseContextGenerator contextGenerator,
+			String encoding) throws IOException {
+		return train(new File(trainDatePath),params,contextGenerator,encoding);
+	}
 	
 	 public static ModelWrapper train(ObjectStream<DependencySample> samples, TrainingParameters trainParams) throws IOException{
 		 return train(samples,trainParams,new DependencyParseContextGeneratorConf());
 	 }
 	
-	 public static ModelWrapper train(File file, TrainingParameters params, DependencyParseContextGenerator contextGenerator,
+	 public static ModelWrapper train(File fileData, TrainingParameters params, DependencyParseContextGenerator contextGenerator,
 				String encoding) throws IOException{
-		ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), encoding);
+		ObjectStream<String> lineStream = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(fileData), encoding);
 
 		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
 		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
@@ -121,11 +141,18 @@ public class DependencyParserME implements DependencyParser{
 
 	@Override
 	public DependencyTree parse(String[] words, String[] poses) {
+		ArrayList<String> allWords = new ArrayList<String>(Arrays.asList(words));
+		allWords.add(0, "核心");
+		ArrayList<String> allPoses = new ArrayList<String>(Arrays.asList(poses));
+		allPoses.add(0,"root");
+		words = allWords.toArray(new String[allWords.size()]);
+		poses = allPoses.toArray(new String[allPoses.size()]);
+		
 		Oracle oracleMEBased = new Oracle(model,contextGenerator);
 		ActionType action = new ActionType();
 		Configuration currentConf = Configuration.initialConf(words, poses);
 		while (!currentConf.isFinalConf()) {
-			action = oracleMEBased.classifyConf(currentConf);
+			action = oracleMEBased.classify(currentConf);
 			currentConf.transition(action);
 		}
 		DependencyTree depTree = getDePendencyTree(currentConf.getArcs());
@@ -144,6 +171,10 @@ public class DependencyParserME implements DependencyParser{
 	
 	public  DependencyTree getDePendencyTree(ArrayList<Arc> arcs) {
 		//根据arcs列表获得依存树
+		for(Arc arc:arcs) {
+			System.out.println(arc.getHead()+" "+arc.getDependent()+" "+arc.getRelation());
+		}
+		
 		return new DependencyTree();
 	}
 
