@@ -93,7 +93,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 		List<Vertice> wordsBuffer = conf.getWordsBuffer();
 
 		s1w = stack.peek().getWord();
-		s1t = stack.peekLast().getPos();
+		s1t = stack.peek().getPos();
 
 		if (stack.size() >= 2) {
 			Vertice vertice = stack.pop();

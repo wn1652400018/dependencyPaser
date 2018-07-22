@@ -2,6 +2,7 @@ package com.lc.nlp4han.dependency.tb;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.lc.nlp4han.ml.util.ModelWrapper;
 
@@ -15,25 +16,30 @@ public class DependencyParserMEFactory
 	
 	
 	public static DependencyParserME getDependencyParser() throws IOException {
-		ModelWrapper modelWrapper = new ModelWrapper(new File("C:\\Users\\hp\\Desktop\\tb.model"));
+		InputStream modelIn = DependencyParserMEFactory.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/dependency/tb.model");
+	    ModelWrapper modelWrapper = new ModelWrapper(modelIn);
 		return new DependencyParserME(modelWrapper);
 	}
 	
 	
 	public static void main(String[] args)
 	{
-		try
-		{
-			DependencyParserME dpME =  DependencyParserMEFactory.getDependencyParser();
-		    String [] words = {"世界","第","八","大","奇迹","出现"};
-		    String [] poses = {"n","m","m","a","n","v"};
-		    dpME.parse(words, poses);
 		
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+			DependencyParserME dpME;
+			try
+			{
+				dpME = DependencyParserMEFactory.getDependencyParser();
+				String [] words = {"世界","最","先进","的","寺庙","建成"};		   
+				String [] poses = {"n","d","a","u","n","v"};	    
+				dpME.parse(words, poses);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		    
+		
+		
 		
 	}
 

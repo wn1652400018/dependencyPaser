@@ -82,8 +82,8 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 		int headIndexOfWord_S1 ;//栈顶单词中心词在words中的索引  
 		int headIndexOfWord_B1 ;
 		int count = 0;
-		while(!conf_ArcEager.isFinalConf()&& count < 15) {
-			System.out.println(conf_ArcEager.toString());
+		while(!conf_ArcEager.isFinalConf()) {
+//			System.out.println(conf_ArcEager.toString());
 			count ++;
 			String[] context = pcg.getContext(conf_ArcEager);
 			if(conf_ArcEager.getStack().size() == 1 && conf_ArcEager.getWordsBuffer().size() != 0 ) {
@@ -92,8 +92,8 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 				if(headIndexOfWord_B1 == 0) {
 					at = new ActionType("EXTRAROOT", "RIGHTARC_SHIFT");
 					strOfAType = at.typeToString();
-					conf_ArcEager.addArc(
-							new Arc("EXTRAROOT", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
+//					conf_ArcEager.addArc(new Arc("EXTRAROOT", conf_ArcEager.getStack().peek(), 
+//							conf_ArcEager.getWordsBuffer().get(0)));
 					conf_ArcEager.shift();
 				}else {
 					at = new ActionType("null","SHIFT");
@@ -113,12 +113,12 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 				if(indexOfWord_S1 == headIndexOfWord_B1) {//右弧
 					at =  new ActionType(dependency[indexOfWord_B1 - 1],"RIGHTARC_SHIFT");
 					strOfAType = at.typeToString();
-					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_B1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
+//					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_B1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
 					conf_ArcEager.shift();
 				} else if(indexOfWord_B1 == headIndexOfWord_S1 ) {//左弧
 					at = new ActionType(dependency[indexOfWord_S1 - 1],"LEFTARC_REDUCE");
 					strOfAType = at.typeToString();
-					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
+//					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
 					conf_ArcEager.reduce();
 				} else {//没有关系
 					at = new ActionType("null","SHIFT");

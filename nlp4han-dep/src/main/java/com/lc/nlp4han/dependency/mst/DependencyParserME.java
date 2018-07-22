@@ -391,7 +391,7 @@ public class DependencyParserME implements DependencyParser
 				allposes.toArray(new String[allposes.size()]));
 
 		DependencySample sample;
-		sample = MaxSpanningTree.getMaxTree(proba);
+		sample = MaxSpanningTree.getMaxTreeNoLoop(proba);
 		DependencyTree parse = new DependencyTree(sample);
 
 		return parse;

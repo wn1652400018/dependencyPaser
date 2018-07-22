@@ -16,7 +16,7 @@ public class Configuration {
 	
 	public Configuration(ArrayDeque<Vertice> stack,ArrayList<Vertice> wordsBuffer,ArrayList<Arc> arcs) {
 		
-		stack.add( wordsBuffer.get(0));
+		stack.push( wordsBuffer.get(0));
 		wordsBuffer.remove(0);
 		this.stack = stack;
 		this.wordsBuffer = wordsBuffer;
@@ -26,7 +26,7 @@ public class Configuration {
 	public Configuration(String[] words, String[] pos) {
 		if(words.length != 0) {
 			wordsBuffer = Vertice.getWordsBuffer(words, pos); 
-		stack.add( wordsBuffer.get(0));
+		stack.push( wordsBuffer.get(0));
 		wordsBuffer.remove(0);
 		}
 		
@@ -70,7 +70,7 @@ public class Configuration {
 	public Configuration transition(ActionType actType) {
 		switch(actType.getBaseAction()) {
 		case "RIGHTARC_SHIFT": 
-			return addArc(new Arc(actType.getRelation(),stack.peek(),wordsBuffer.get(0)));
+			return addArc(new Arc(actType.getRelation(),stack.peek(),wordsBuffer.get(0))).shift();
 		case "LEFTARC_REDUCE":
 			return addArc(new Arc(actType.getRelation(),wordsBuffer.get(0),stack.peek())).reduce();
 		case "SHIFT":

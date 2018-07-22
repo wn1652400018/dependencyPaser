@@ -65,12 +65,14 @@ public class Oracle {
 	public String bestOutcome(String[] context) {
 		double allPredicates[] = model.eval(context);
 		String tempAllType[] = new String[allPredicates.length];//存储所有的分类
-	
+		for (int k = 0; k < allPredicates.length; k++) {
+			tempAllType[k] = model.getOutcome(k);
+		}
+		
 		double max = -1;
 		int record = -1;
 		for (int k = 0; k < allPredicates.length; k++)
 		{
-			tempAllType[k] = model.getOutcome(k);
 			if ((allPredicates[k] > max) )
 			{
 				max = allPredicates[k];
