@@ -31,34 +31,56 @@ public class Oracle {
 	}
 	
 	
-	public ActionType classifyConf(Configuration conf) {//将当前的Configuration分类
+	public ActionType classify(Configuration conf) {//将当前的Configuration分类
 		//利用训练得到模型去判断对当前的conf做怎样的操作
+//		System.out.println(contextGenerator.getContext(conf).length);
+//		for(String str:contextGenerator.getContext(conf))
+//			System.out.println(str);
 		String StrOfType = bestOutcome(contextGenerator.getContext(conf));
+		System.out.println(StrOfType);
 		return ActionType.toType(StrOfType);
 	}
 	
-	public String bestOutcome(String[] context) {
-		double temp[] = model.eval(context);
-		String tempAllType[] = new String[temp.length];//存储所有的分类
 	
+	
+	
+	
+	/**
+	 * @param conf
+	 * 				配置
+	 * @return
+	 * 				最可能的类型,  relation/baseAction
+	 */				
+	public String bestOutcome(Configuration conf) {
+		String[] context = contextGenerator.getContext(conf);
+		return bestOutcome(context);
+	}
+	
+	/**
+	 * @param context
+	 *       		特征
+	 * @return
+	 * 				最可能的类型,  relation/baseAction
+	 */
+	public String bestOutcome(String[] context) {
+		double allPredicates[] = model.eval(context);
+		String tempAllType[] = new String[allPredicates.length];//存储所有的分类
+		for (int k = 0; k < allPredicates.length; k++) {
+			tempAllType[k] = model.getOutcome(k);
+		}
+		
 		double max = -1;
 		int record = -1;
-		for (int k = 0; k < temp.length; k++)
+		for (int k = 0; k < allPredicates.length; k++)
 		{
-			tempAllType[k] = model.getOutcome(k);
-			if ((temp[k] > max) && (tempAllType[k].compareTo("null") != 0))
+			if ((allPredicates[k] > max) )
 			{
-				max = temp[k];
+				max = allPredicates[k];
 				record = k;
 			}
 		}
-
 		// 根据最大的下标获取对应的依赖关系
 		return tempAllType[record];
 	}
-	
-	
-	
-	
-	
+
 }

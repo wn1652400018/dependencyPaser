@@ -8,7 +8,7 @@ import com.lc.nlp4han.dependency.DependencySample;
 public class Vertice {
 	private String word;
 	private String pos;
-	private int indexOfWord;//在句子中的位置，第一个位置为0
+	private int indexOfWord;//单词在句子中的位置，第一个位置为0。该句子包括人为添加的“核心”
 	
 	
 	

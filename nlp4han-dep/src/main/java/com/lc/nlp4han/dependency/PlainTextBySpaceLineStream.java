@@ -98,7 +98,7 @@ public class PlainTextBySpaceLineStream implements ObjectStream<String>
 			{
 				readContent += (line + "\n");
 			}
-		}
+		}System.out.println(readContent);
 		return readContent;
 	}
 
