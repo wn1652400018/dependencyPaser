@@ -10,6 +10,10 @@ import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.util.AbstractEventStream;
 import com.lc.nlp4han.ml.util.ObjectStream;
 
+/**
+ * @author hp
+ *
+ */
 public class DependencySampleEventStreamTB extends AbstractEventStream<DependencySample>
 {
 
@@ -51,6 +55,8 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 		return events.iterator();
 	}
 	
+	
+	
 	/**
 	 * 产生对应的事件
 	 * 
@@ -72,7 +78,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 			String[] dependencyIndices, String[][] ac)
 	{
 		if(words.length == 0)
-			return new ArrayList<Event>(words.length);;
+			return new ArrayList<Event>(words.length);
 		Configuration conf_ArcEager  = Configuration.initialConf(words, pos);
 		List<Event> events  = new ArrayList<Event>();
 		ActionType at ;
@@ -81,54 +87,110 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 		int indexOfWord_B1 ;
 		int headIndexOfWord_S1 ;//栈顶单词中心词在words中的索引  
 		int headIndexOfWord_B1 ;
-		int count = 0;
-		while(!conf_ArcEager.isFinalConf()) {
+		while(!conf_ArcEager.isFinalConf()) {//buffer为空是终止配置
 //			System.out.println(conf_ArcEager.toString());
-			count ++;
 			String[] context = pcg.getContext(conf_ArcEager);
-			if(conf_ArcEager.getStack().size() == 1 && conf_ArcEager.getWordsBuffer().size() != 0 ) {
-				indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
-				headIndexOfWord_B1 = Integer.parseInt(dependencyIndices[indexOfWord_B1 - 1]);
-				if(headIndexOfWord_B1 == 0) {
+			indexOfWord_S1 = conf_ArcEager.getStack().peek().getIndexOfWord();//该单词在words中索引
+			indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
+			if(conf_ArcEager.getStack().size() != 1) 
+				headIndexOfWord_S1 = Integer.parseInt(dependencyIndices[indexOfWord_S1 - 1]);//栈顶单词中心词在words中的索引  
+			else//防止数组越界
+				headIndexOfWord_S1 = -1;//栈顶单词中心词在words中的索引  
+			headIndexOfWord_B1 = Integer.parseInt(dependencyIndices[indexOfWord_B1 - 1]);
+			
+			if(indexOfWord_B1 == headIndexOfWord_S1 ) {//左弧
+				at = new ActionType(dependency[indexOfWord_S1 - 1],"LEFTARC_REDUCE");
+				strOfAType = at.typeToString();
+				conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1],conf_ArcEager.getWordsBuffer().get(0),conf_ArcEager.getStack().peek()));
+				conf_ArcEager.reduce();
+			}else if(indexOfWord_S1 == headIndexOfWord_B1) {//右弧
+				if(conf_ArcEager.getStack().size() ==1)
 					at = new ActionType("EXTRAROOT", "RIGHTARC_SHIFT");
-					strOfAType = at.typeToString();
-//					conf_ArcEager.addArc(new Arc("EXTRAROOT", conf_ArcEager.getStack().peek(), 
-//							conf_ArcEager.getWordsBuffer().get(0)));
-					conf_ArcEager.shift();
-				}else {
-					at = new ActionType("null","SHIFT");
-					conf_ArcEager.shift();
-					strOfAType = at.typeToString();
-				}
-				
-			}else if(conf_ArcEager.getStack().size() != 1 && conf_ArcEager.getWordsBuffer().size() == 0 ){
+				else
+					at =  new ActionType(dependency[indexOfWord_B1 - 1],"RIGHTARC_SHIFT");
+				strOfAType = at.typeToString();
+				conf_ArcEager.addArc(
+						new Arc("EXTRAROOT", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
+				conf_ArcEager.shift();		
+			}else if(conf_ArcEager.wheatheReduce(dependencyWords, pos, dependencyIndices)) {
+				//Reduce
 				at = new ActionType("null","REDUCE");
 				strOfAType = at.typeToString();
 				conf_ArcEager.reduce();
 			}else {
-				indexOfWord_S1 = conf_ArcEager.getStack().peek().getIndexOfWord();//该单词在words中索引
-				indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
-				headIndexOfWord_S1 = Integer.parseInt(dependencyIndices[indexOfWord_S1 - 1]);//栈顶单词中心词在words中的索引  
-				headIndexOfWord_B1 = Integer.parseInt(dependencyIndices[indexOfWord_B1 - 1]);
-				if(indexOfWord_S1 == headIndexOfWord_B1) {//右弧
-					at =  new ActionType(dependency[indexOfWord_B1 - 1],"RIGHTARC_SHIFT");
-					strOfAType = at.typeToString();
-//					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_B1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
-					conf_ArcEager.shift();
-				} else if(indexOfWord_B1 == headIndexOfWord_S1 ) {//左弧
-					at = new ActionType(dependency[indexOfWord_S1 - 1],"LEFTARC_REDUCE");
-					strOfAType = at.typeToString();
-//					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
-					conf_ArcEager.reduce();
-				} else {//没有关系
-					at = new ActionType("null","SHIFT");
-					strOfAType = at.typeToString();
-					conf_ArcEager.shift(); 
-				}
+				//Shift
+				at = new ActionType("null","SHIFT");
+				strOfAType = at.typeToString();
+				conf_ArcEager.shift(); 
 			}
 			Event event = new Event(strOfAType,context);
 			events.add(event);
 		}
 		return events;
 	}
+	
+//	private List<Event> generateEvents(String[] words, String[] pos, String[] dependency, String[] dependencyWords,
+//			String[] dependencyIndices, String[][] ac)
+//	{
+//		if(words.length == 0)
+//			return new ArrayList<Event>(words.length);;
+//		Configuration conf_ArcEager  = Configuration.initialConf(words, pos);
+//		List<Event> events  = new ArrayList<Event>();
+//		ActionType at ;
+//		String strOfAType;
+//		int indexOfWord_S1 ;//该单词在words中索引
+//		int indexOfWord_B1 ;
+//		int headIndexOfWord_S1 ;//栈顶单词中心词在words中的索引  
+//		int headIndexOfWord_B1 ;
+//		int count = 0;
+//		while(!conf_ArcEager.isFinalConf()) {
+////			System.out.println(conf_ArcEager.toString());
+//			count ++;
+//			String[] context = pcg.getContext(conf_ArcEager);
+//			if(conf_ArcEager.getStack().size() == 1 && conf_ArcEager.getWordsBuffer().size() != 0 ) {
+//				indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
+//				headIndexOfWord_B1 = Integer.parseInt(dependencyIndices[indexOfWord_B1 - 1]);
+//				if(headIndexOfWord_B1 == 0) {
+//					at = new ActionType("EXTRAROOT", "RIGHTARC_SHIFT");
+//					strOfAType = at.typeToString();
+////					conf_ArcEager.addArc(new Arc("EXTRAROOT", conf_ArcEager.getStack().peek(), 
+////							conf_ArcEager.getWordsBuffer().get(0)));
+//					conf_ArcEager.shift();
+//				}else {
+//					at = new ActionType("null","SHIFT");
+//					conf_ArcEager.shift();
+//					strOfAType = at.typeToString();
+//				}
+//				
+//			}else if(conf_ArcEager.getStack().size() != 1 && conf_ArcEager.getWordsBuffer().size() == 0 ){
+//				at = new ActionType("null","REDUCE");
+//				strOfAType = at.typeToString();
+//				conf_ArcEager.reduce();
+//			}else {
+//				indexOfWord_S1 = conf_ArcEager.getStack().peek().getIndexOfWord();//该单词在words中索引
+//				indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
+//				headIndexOfWord_S1 = Integer.parseInt(dependencyIndices[indexOfWord_S1 - 1]);//栈顶单词中心词在words中的索引  
+//				headIndexOfWord_B1 = Integer.parseInt(dependencyIndices[indexOfWord_B1 - 1]);
+//				if(indexOfWord_S1 == headIndexOfWord_B1) {//右弧
+//					at =  new ActionType(dependency[indexOfWord_B1 - 1],"RIGHTARC_SHIFT");
+//					strOfAType = at.typeToString();
+////					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_B1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
+//					conf_ArcEager.shift();
+//				} else if(indexOfWord_B1 == headIndexOfWord_S1 ) {//左弧
+//					at = new ActionType(dependency[indexOfWord_S1 - 1],"LEFTARC_REDUCE");
+//					strOfAType = at.typeToString();
+////					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1],conf_ArcEager.getStack().peek(),conf_ArcEager.getWordsBuffer().get(0)));
+//					conf_ArcEager.reduce();
+//				} else {//没有关系
+//					at = new ActionType("null","SHIFT");
+//					strOfAType = at.typeToString();
+//					conf_ArcEager.shift(); 
+//				}
+//			}
+//			Event event = new Event(strOfAType,context);
+//			events.add(event);
+//		}
+//		return events;
+//	}
+	
 }
