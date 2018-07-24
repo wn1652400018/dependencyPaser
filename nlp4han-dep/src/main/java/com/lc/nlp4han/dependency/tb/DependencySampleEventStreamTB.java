@@ -105,12 +105,12 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 				conf_ArcEager.reduce();
 			}else if(indexOfWord_S1 == headIndexOfWord_B1) {//右弧
 				if(conf_ArcEager.getStack().size() ==1)
-					at = new ActionType("EXTRAROOT", "RIGHTARC_SHIFT");
+					at = new ActionType("核心成分", "RIGHTARC_SHIFT");
 				else
 					at =  new ActionType(dependency[indexOfWord_B1 - 1],"RIGHTARC_SHIFT");
 				strOfAType = at.typeToString();
 				conf_ArcEager.addArc(
-						new Arc("EXTRAROOT", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
+						new Arc("核心成分", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
 				conf_ArcEager.shift();		
 			}else if(conf_ArcEager.wheatheReduce(dependencyWords, pos, dependencyIndices)) {
 				//Reduce

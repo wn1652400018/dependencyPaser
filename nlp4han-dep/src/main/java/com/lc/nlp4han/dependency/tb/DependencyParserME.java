@@ -155,7 +155,7 @@ public class DependencyParserME implements DependencyParser{
 			action = oracleMEBased.classify(currentConf);
 			currentConf.transition(action);
 		}
-		DependencyTree depTree = getDePendencyTree(currentConf.getArcs());
+		DependencyTree depTree = TBDepTree.getTree(currentConf);
 		return depTree;
 	}
 
