@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.lc.nlp4han.dependency.DependencyParser;
@@ -18,11 +17,14 @@ import com.lc.nlp4han.dependency.DependencyTree;
 import com.lc.nlp4han.dependency.PlainTextBySpaceLineStream;
 import com.lc.nlp4han.ml.model.ClassificationModel;
 import com.lc.nlp4han.ml.model.Event;
+import com.lc.nlp4han.ml.model.SequenceClassificationModel;
 import com.lc.nlp4han.ml.util.BeamSearch;
+import com.lc.nlp4han.ml.util.EventModelSequenceTrainer;
 import com.lc.nlp4han.ml.util.EventTrainer;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.SequenceTrainer;
 import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
@@ -114,7 +116,8 @@ public class DependencyParserME implements DependencyParser{
 			beamSize = Integer.parseInt(beamSizeString);
 		}
 		
-		ClassificationModel maxentModel = null;
+		ClassificationModel depModel = null;
+		SequenceClassificationModel seqDepModel = null;
 		
 		Map<String, String> manifestInfoEntries = new HashMap<String, String>();
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
@@ -123,13 +126,25 @@ public class DependencyParserME implements DependencyParser{
 		{
 			ObjectStream<Event> es = new DependencySampleEventStreamTB(sampleStream, contextGenerator);
 			EventTrainer trainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
-			maxentModel = trainer.train(es);
+			depModel = trainer.train(es);
 		}
-		else {
+		else if(TrainerType.EVENT_MODEL_SEQUENCE_TRAINER.equals(trainerType)){
+			DependencySampleSequenceStream ss = new DependencySampleSequenceStream(sampleStream, contextGenerator);
+            EventModelSequenceTrainer trainer = TrainerFactory.getEventModelSequenceTrainer(params.getSettings(),
+                    manifestInfoEntries);
+            depModel = trainer.train(ss);
+		}if (TrainerType.SEQUENCE_TRAINER.equals(trainerType))
+        {
+            SequenceTrainer trainer = TrainerFactory.getSequenceModelTrainer(
+                  params.getSettings(), manifestInfoEntries);
+            DependencySampleSequenceStream ss = new DependencySampleSequenceStream(sampleStream, contextGenerator);
+            seqDepModel = trainer.train(ss);
+        } else
+		{
 			throw new IllegalArgumentException("Trainer type is not supported: " + trainerType); 
 		}
 		
-		return new ModelWrapper(maxentModel, beamSize);
+		return new ModelWrapper(depModel, beamSize);
 	}
 	
 	
