@@ -91,4 +91,4 @@ public class DependencyParserMEFactory
 //3	先进	先进	null	null	_	5	限定	_	_
 //4	的	的	null	null	_	3	“的”字依存	_	_
 //5	清真寺	清真寺	null	null	_	6	受事	_	_
-//6	落成	落成	null	null	_	0	EXTRAROOT	_	_
+//6	落成	落成	null	null	_	0	核心成分	_	_

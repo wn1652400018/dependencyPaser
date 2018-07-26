@@ -80,7 +80,7 @@ public class Configuration
 	 * @return 有关系返回true
 	 */
 	public boolean wheatheReduce(String[] words, String poses[], String[] dependencyIndices)
-	{// 包括人工添加的“核心”
+	{// words包括人工添加的“核心”
 		if (wordsBuffer.isEmpty())
 			return false;
 		Vertice[] wordsInStack = stack.toArray(new Vertice[stack.size()]);
@@ -169,19 +169,19 @@ public class Configuration
 
 	public String toString()
 	{
-		Object[] vS = stack.toArray();
-		Object[] vB = wordsBuffer.toArray();
+		Vertice[] vS = stack.toArray(new Vertice[stack.size()]);
+		Vertice[] vB = wordsBuffer.toArray(new Vertice[wordsBuffer.size()]);
 		String stackStr = "";
 		String bufferStr = "";
 		for (int i = 0; i < stack.size(); i++)
 		{
-			stackStr += ((Vertice) vS[i]).getWord();
+			stackStr +=  vS[stack.size()-i-1].getWord()+"/"+vS[stack.size()-i-1].getIndexOfWord()+" ";
 		}
 		for (int i = 0; i < wordsBuffer.size(); i++)
 		{
-			bufferStr += ((Vertice) vB[i]).getWord();
+			bufferStr += vB[i].getWord()+"/"+vB[i].getIndexOfWord()+" ";
 		}
-		return "stack=" + stackStr + "bufferStr=" + bufferStr;
+		return "栈尾至栈顶元素：" + stackStr +" ___"+ "b=" + bufferStr;
 	}
 
 	public ArrayDeque<Vertice> getStack()
