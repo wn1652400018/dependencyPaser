@@ -33,7 +33,7 @@ public class DependencyEvalTool
 		if(trainFile != null)
 			model = DependencyParserME.train(trainFile, params, gen, encoding);
 		else {
-			InputStream inStream = DependencyEvalTool.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/dependency/tb.model");
+			InputStream inStream = DependencyEvalTool.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/dependency/tb_cpostag.model");
 			model = new ModelWrapper(inStream);
 		}
 		

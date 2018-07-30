@@ -106,8 +106,9 @@ public class DependencyParserME implements DependencyParser{
 	 }
 	 
 	public static ModelWrapper train(ObjectStream<DependencySample> sampleStream, TrainingParameters params,
-			DependencyParseContextGenerator contextGenerator) throws IOException {
-		
+			DependencyParseContextGenerator contextGenerator) throws IOException
+	{
+
 		String beamSizeString = params.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
 
 		int beamSize = DependencyParserME.DEFAULT_BEAM_SIZE;
@@ -115,35 +116,37 @@ public class DependencyParserME implements DependencyParser{
 		{
 			beamSize = Integer.parseInt(beamSizeString);
 		}
-		
+
 		ClassificationModel depModel = null;
 		SequenceClassificationModel seqDepModel = null;
-		
+
 		Map<String, String> manifestInfoEntries = new HashMap<String, String>();
 		TrainerType trainerType = TrainerFactory.getTrainerType(params.getSettings());
-		
+
 		if (TrainerType.EVENT_MODEL_TRAINER.equals(trainerType))
 		{
 			ObjectStream<Event> es = new DependencySampleEventStreamTB(sampleStream, contextGenerator);
 			EventTrainer trainer = TrainerFactory.getEventTrainer(params.getSettings(), manifestInfoEntries);
 			depModel = trainer.train(es);
 		}
-		else if(TrainerType.EVENT_MODEL_SEQUENCE_TRAINER.equals(trainerType)){
-			DependencySampleSequenceStream ss = new DependencySampleSequenceStream(sampleStream, contextGenerator);
-            EventModelSequenceTrainer trainer = TrainerFactory.getEventModelSequenceTrainer(params.getSettings(),
-                    manifestInfoEntries);
-            depModel = trainer.train(ss);
-		}if (TrainerType.SEQUENCE_TRAINER.equals(trainerType))
-        {
-            SequenceTrainer trainer = TrainerFactory.getSequenceModelTrainer(
-                  params.getSettings(), manifestInfoEntries);
-            DependencySampleSequenceStream ss = new DependencySampleSequenceStream(sampleStream, contextGenerator);
-            seqDepModel = trainer.train(ss);
-        } else
+		else if (TrainerType.EVENT_MODEL_SEQUENCE_TRAINER.equals(trainerType))
 		{
-			throw new IllegalArgumentException("Trainer type is not supported: " + trainerType); 
+			DependencySampleSequenceStream ss = new DependencySampleSequenceStream(sampleStream, contextGenerator);
+			EventModelSequenceTrainer trainer = TrainerFactory.getEventModelSequenceTrainer(params.getSettings(),
+					manifestInfoEntries);
+			depModel = trainer.train(ss);
 		}
-		
+		else if (TrainerType.SEQUENCE_TRAINER.equals(trainerType))
+		{
+			SequenceTrainer trainer = TrainerFactory.getSequenceModelTrainer(params.getSettings(), manifestInfoEntries);
+			DependencySampleSequenceStream ss = new DependencySampleSequenceStream(sampleStream, contextGenerator);
+			seqDepModel = trainer.train(ss);
+		}
+		else
+		{
+			throw new IllegalArgumentException("Trainer type is not supported: " + trainerType);
+		}
+
 		return new ModelWrapper(depModel, beamSize);
 	}
 	
@@ -168,9 +171,10 @@ public class DependencyParserME implements DependencyParser{
 		Configuration currentConf = Configuration.initialConf(words, poses);
 		while (!currentConf.isFinalConf()) {
 			action = oracleMEBased.classify(currentConf);
+			System.out.println(currentConf.toString() + "*****" + "goldAction =" + action.typeToString());
 			currentConf.transition(action);
 		}
-		DependencyTree depTree = TBDepTree.getTree(currentConf);
+		DependencyTree depTree = TBDepTree.getTree(currentConf,words,poses);
 		return depTree;
 	}
 

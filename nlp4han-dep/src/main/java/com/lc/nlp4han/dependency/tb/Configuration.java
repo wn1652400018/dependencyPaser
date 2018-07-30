@@ -79,7 +79,7 @@ public class Configuration
 	 * 
 	 * @return 有关系返回true
 	 */
-	public boolean wheatheReduce(String[] words, String poses[], String[] dependencyIndices)
+	public boolean wheatheReduce( String[] dependencyIndices)
 	{// words包括人工添加的“核心”
 		if (wordsBuffer.isEmpty())
 			return false;

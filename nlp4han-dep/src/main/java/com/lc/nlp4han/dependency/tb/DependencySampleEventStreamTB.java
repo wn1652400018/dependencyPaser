@@ -1,5 +1,9 @@
 package com.lc.nlp4han.dependency.tb;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +23,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 
 	// 上下文产生器
 	private DependencyParseContextGenerator pcg;
-
+	private int errCount = 0;
 	/**
 	 * 构造
 	 * 
@@ -52,6 +56,23 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 		String[][] ac = sample.getAditionalContext();
 
 		List<Event> events = generateEvents(words, pos, dependency, dependencyWords, dependencyIndices, ac);
+		if (events.isEmpty() && sample != null)
+		{
+			errCount++;
+			try
+			{
+				FileOutputStream s;
+				s = new FileOutputStream("C:\\Users\\hp\\Desktop\\erroSample\\erroSample" + errCount + ".txt");
+				OutputStreamWriter ow = new OutputStreamWriter(s, "utf-8");
+				BufferedWriter fr = new BufferedWriter(ow);
+				fr.write(sample.toCoNLLString());
+				fr.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 		return events.iterator();
 	}
 
@@ -75,6 +96,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 	public List<Event> generateEvents(String[] words, String[] pos, String[] dependency, String[] dependencyWords,
 			String[] dependencyIndices, String[][] ac)
 	{
+		
 		System.out.println("所有的Action及,由该Action对原句子进行操作后得到的依存sample。");
 		System.out.println("若与原始句子直接解析得到的sample相同则,Events的产生没有出错。");
 		if (words.length == 0)
@@ -135,7 +157,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 				conf_ArcEager.shift();
 
 			}
-			else if (conf_ArcEager.wheatheReduce(dependencyWords, pos, dependencyIndices))
+			else if (conf_ArcEager.wheatheReduce(dependencyIndices))
 			{
 				// Reduce
 				at = new ActionType("null", "REDUCE");
@@ -156,8 +178,11 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 			Event event = new Event(strOfAType, context);
 			events.add(event);
 		}
-		
-		System.out.println(TBDepTree.getSample(conf_ArcEager.getArcs()).toCoNLLString());// 测试产生的事件是否真确
+//		if(conf_ArcEager.getArcs().size() != dependency.length) {
+//			System.out.println(TBDepTree.getSample(conf_ArcEager.getArcs(), words,pos).toCoNLLString());
+//		}else {
+//			return new ArrayList<Event>();
+//		}
 		return events;
 	}
 }

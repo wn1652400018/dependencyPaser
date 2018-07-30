@@ -1,6 +1,5 @@
 package com.lc.nlp4han.dependency.tb;
 
-import javax.swing.event.ListSelectionEvent;
 
 import com.lc.nlp4han.dependency.DependencyParseEvaluateMonitor;
 import com.lc.nlp4han.dependency.DependencyParseMeasure;
@@ -39,6 +38,8 @@ public class DependencyParseTBEvaluator extends Evaluator<DependencySample>
 	    }
 		
 		DependencySample preSample = tagger.parse(wordsRefNoRoot, posRefNoRoot).getSample();
+		//将预测的结果输出
+		System.out.println(preSample.toCoNLLString());
 		
 		String[] dependencyWordsPre = preSample.getDependencyWords();
 		String[] dependencyPre = preSample.getDependency();
