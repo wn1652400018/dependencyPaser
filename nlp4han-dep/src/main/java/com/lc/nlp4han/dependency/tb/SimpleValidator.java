@@ -15,13 +15,13 @@ public class SimpleValidator
 	 */
 	public static boolean validate(Configuration conf, String outCome)
 	{
-//		System.out.println("执行了validate方法");
+		// System.out.println("执行了validate方法");
 		ActionType preAct = ActionType.toType(outCome);
 		if (preAct != null)
 		{
 			if (preAct.getBaseAction().equals("LEFTARC_REDUCE"))
 			{// 确保一个单词的中心词只能有一个
-				if(conf.getStack().peek().getIndexOfWord() == 0)
+				if (conf.getStack().peek().getIndexOfWord() == 0)
 					return false;
 				for (Arc arc : conf.getArcs())
 				{
@@ -36,10 +36,10 @@ public class SimpleValidator
 
 			if (preAct.getBaseAction().equals("REDUCE"))
 			{
-				if(conf.getStack().peek().getIndexOfWord() == 0)
-				
-				if(conf.getWordsBuffer().size() == 0)
-					return true;
+				if (conf.getStack().peek().getIndexOfWord() == 0)
+
+					if (conf.getWordsBuffer().size() == 0)
+						return true;
 				for (Arc arc : conf.getArcs())
 				{
 					if (arc.getHead().getIndexOfWord() == conf.getStack().peek().getIndexOfWord()
@@ -54,7 +54,7 @@ public class SimpleValidator
 
 			if (preAct.getRelation().equals("核心成分"))
 			{// 确保“核心”只能作为一个词语的中心词
-				
+
 				for (Arc arc : conf.getArcs())
 				{
 					if (arc.getRelation().equals("核心成分"))

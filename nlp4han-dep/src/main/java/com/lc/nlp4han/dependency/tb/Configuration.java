@@ -79,7 +79,7 @@ public class Configuration
 	 * 
 	 * @return 有关系返回true
 	 */
-	public boolean wheatheReduce( String[] dependencyIndices)
+	public boolean wheatheReduce(String[] dependencyIndices)
 	{// words包括人工添加的“核心”
 		if (wordsBuffer.isEmpty())
 			return false;
@@ -175,13 +175,13 @@ public class Configuration
 		String bufferStr = "";
 		for (int i = 0; i < stack.size(); i++)
 		{
-			stackStr +=  vS[stack.size()-i-1].getWord()+"/"+vS[stack.size()-i-1].getIndexOfWord()+" ";
+			stackStr += vS[stack.size() - i - 1].getWord() + "/" + vS[stack.size() - i - 1].getIndexOfWord() + " ";
 		}
 		for (int i = 0; i < wordsBuffer.size(); i++)
 		{
-			bufferStr += vB[i].getWord()+"/"+vB[i].getIndexOfWord()+" ";
+			bufferStr += vB[i].getWord() + "/" + vB[i].getIndexOfWord() + " ";
 		}
-		return "栈尾至栈顶元素：" + stackStr +" ___"+ "b=" + bufferStr;
+		return "栈尾至栈顶元素：" + stackStr + " ___" + "b=" + bufferStr;
 	}
 
 	public ArrayDeque<Vertice> getStack()

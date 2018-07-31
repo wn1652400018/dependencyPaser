@@ -13,27 +13,29 @@ import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 
 /**
-* @author 作者
-* @version 创建时间：2018年7月25日 下午5:21:36
-* 类说明
-*/
+ * @author 作者
+ * @version 创建时间：2018年7月25日 下午5:21:36 类说明
+ */
 public class EventStreamTest
 {
 
 	public static void main(String[] args)
 	{
-		
-		String path = "C:\\Users\\hp\\Desktop\\eventTest.conll";//训练样本子集
+
+		String path = "C:\\Users\\hp\\Desktop\\eventTest.conll";// 训练样本子集
 		try
 		{
-		ObjectStream<String> lineStream = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(new File(path)), "UTF-8");
-		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
-		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
-		DependencySample sample = sampleStream.read() ;
-		while( sample!= null) {
-			new DependencySampleEventStreamTB(sampleStream,new DependencyParseContextGeneratorConf()).createEvents(sample);
-			sample = sampleStream.read();
-		}
+			ObjectStream<String> lineStream = new PlainTextBySpaceLineStream(
+					new MarkableFileInputStreamFactory(new File(path)), "UTF-8");
+			DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
+			ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
+			DependencySample sample = sampleStream.read();
+			while (sample != null)
+			{
+				new DependencySampleEventStreamTB(sampleStream, new DependencyParseContextGeneratorConf())
+						.createEvents(sample);
+				sample = sampleStream.read();
+			}
 		}
 		catch (IOException e)
 		{
