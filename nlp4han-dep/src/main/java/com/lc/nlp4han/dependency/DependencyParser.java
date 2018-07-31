@@ -9,6 +9,7 @@ package com.lc.nlp4han.dependency;
  */
 public interface DependencyParser
 {
+	public static final String RootWord = "RootWord";
 
 	/**
 	 * 解析语句得到依存分析的结果
