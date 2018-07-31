@@ -60,11 +60,11 @@ public class DependencyParseCrossValidator
 
 			// 训练模型
 			CrossValidationPartitioner.TrainingSampleStream<DependencySample> trainingSampleStream = partitioner.next();
-			ModelWrapper model = DependencyParserME.train(trainingSampleStream, params, contextGenerator);
+			ModelWrapper model = DependencyParserTB.train(trainingSampleStream, params, contextGenerator);
 
 			// 评价模型
 			DependencyParseTBEvaluator evaluator = new DependencyParseTBEvaluator(
-					new DependencyParserME(model, contextGenerator), listeners);
+					new DependencyParserTB(model, contextGenerator), listeners);
 			evaluator.setMeasure(measure);
 			evaluator.evaluate(trainingSampleStream.getTestSampleStream());
 

@@ -11,10 +11,10 @@ import com.lc.nlp4han.ml.util.Evaluator;
  */
 public class DependencyParseTBEvaluator extends Evaluator<DependencySample>
 {
-	private DependencyParserME tagger;
+	private DependencyParserTB tagger;
 	private DependencyParseMeasure measure;
 
-	public DependencyParseTBEvaluator(DependencyParserME tagger, DependencyParseEvaluateMonitor... monitor)
+	public DependencyParseTBEvaluator(DependencyParserTB tagger, DependencyParseEvaluateMonitor... monitor)
 	{
 		super(monitor);
 		this.tagger = tagger;
@@ -48,12 +48,12 @@ public class DependencyParseTBEvaluator extends Evaluator<DependencySample>
 		return preSample;
 	}
 
-	public DependencyParserME getTagger()
+	public DependencyParserTB getTagger()
 	{
 		return tagger;
 	}
 
-	public void setTagger(DependencyParserME tagger)
+	public void setTagger(DependencyParserTB tagger)
 	{
 		this.tagger = tagger;
 	}

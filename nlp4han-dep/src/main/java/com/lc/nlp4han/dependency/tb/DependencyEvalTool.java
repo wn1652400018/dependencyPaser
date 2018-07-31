@@ -31,7 +31,7 @@ public class DependencyEvalTool
 		DependencyParseContextGenerator gen = new DependencyParseContextGeneratorConf();
 		ModelWrapper model;
 		if (trainFile != null)
-			model = DependencyParserME.train(trainFile, params, gen, encoding);
+			model = DependencyParserTB.train(trainFile, params, gen, encoding);
 		else
 		{
 			InputStream inStream = DependencyEvalTool.class.getClassLoader()
@@ -39,7 +39,7 @@ public class DependencyEvalTool
 			model = new ModelWrapper(inStream);
 		}
 
-		DependencyParserME tagger = new DependencyParserME(model, gen);
+		DependencyParserTB tagger = new DependencyParserTB(model, gen);
 
 		DependencyParseMeasure measure = new DependencyParseMeasure();
 		DependencyParseTBEvaluator evaluator = null;

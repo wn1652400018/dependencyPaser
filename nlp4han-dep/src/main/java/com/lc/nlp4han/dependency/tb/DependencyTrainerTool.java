@@ -73,7 +73,7 @@ public class DependencyTrainerTool
 
 		DependencyParseContextGenerator gen = new DependencyParseContextGeneratorConf();
 
-		ModelWrapper model = DependencyParserME.train(corpusFile, params, gen, encoding);
+		ModelWrapper model = DependencyParserTB.train(corpusFile, params, gen, encoding);
 
 		OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFile));
 		model.serialize(modelOut);

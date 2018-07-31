@@ -28,7 +28,7 @@ import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
 
-public class DependencyParserME implements DependencyParser
+public class DependencyParserTB implements DependencyParser
 {
 
 	public static final int DEFAULT_BEAM_SIZE = 3;
@@ -40,32 +40,32 @@ public class DependencyParserME implements DependencyParser
 
 	private ClassificationModel model;
 
-	public DependencyParserME(String modelPath) throws IOException
+	public DependencyParserTB(String modelPath) throws IOException
 	{
 		this(new File(modelPath));
 	}
 
-	public DependencyParserME(String modelPath, DependencyParseContextGenerator contextGenerator) throws IOException
+	public DependencyParserTB(String modelPath, DependencyParseContextGenerator contextGenerator) throws IOException
 	{
 		this(new File(modelPath), contextGenerator);
 	}
 
-	public DependencyParserME(File file) throws IOException
+	public DependencyParserTB(File file) throws IOException
 	{
 		this(new ModelWrapper(file));
 	}
 
-	public DependencyParserME(File file, DependencyParseContextGenerator contextGenerator) throws IOException
+	public DependencyParserTB(File file, DependencyParseContextGenerator contextGenerator) throws IOException
 	{
 		this(new ModelWrapper(file), contextGenerator);
 	}
 
-	public DependencyParserME(ModelWrapper model) throws IOException
+	public DependencyParserTB(ModelWrapper model) throws IOException
 	{
 		init(model, new DependencyParseContextGeneratorConf());
 	}
 
-	public DependencyParserME(ModelWrapper model, DependencyParseContextGenerator contextGenerator)
+	public DependencyParserTB(ModelWrapper model, DependencyParseContextGenerator contextGenerator)
 	{
 		init(model, contextGenerator);
 	}
@@ -114,7 +114,7 @@ public class DependencyParserME implements DependencyParser
 
 		String beamSizeString = params.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
 
-		int beamSize = DependencyParserME.DEFAULT_BEAM_SIZE;
+		int beamSize = DependencyParserTB.DEFAULT_BEAM_SIZE;
 		if (beamSizeString != null)
 		{
 			beamSize = Integer.parseInt(beamSizeString);
