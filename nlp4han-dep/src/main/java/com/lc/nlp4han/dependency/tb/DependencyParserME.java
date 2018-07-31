@@ -1,6 +1,5 @@
 package com.lc.nlp4han.dependency.tb;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,48 +28,48 @@ import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
 
+public class DependencyParserME implements DependencyParser
+{
 
+	public static final int DEFAULT_BEAM_SIZE = 3;
 
-public class DependencyParserME implements DependencyParser{
+	/**
+	 * 上下文产生器
+	 */
+	private DependencyParseContextGenerator contextGenerator;
 
-	
-	
-    public static final int DEFAULT_BEAM_SIZE = 3;
+	private ClassificationModel model;
 
-    /**
-     * 上下文产生器
-     */
-    private DependencyParseContextGenerator contextGenerator;
-
-    
-    private ClassificationModel model;
-
-    
-    
-    public DependencyParserME(String modelPath) throws IOException {
-    	this(new File(modelPath));
-    }
-    
-    public DependencyParserME(String modelPath,DependencyParseContextGenerator contextGenerator) throws IOException {
-    	this(new File(modelPath),contextGenerator);
-    }
-    
-    public DependencyParserME(File file) throws IOException {
-    	this(new ModelWrapper(file));
-    }
-    
-	public DependencyParserME(File file,DependencyParseContextGenerator contextGenerator) throws IOException {
-		this(new ModelWrapper(file),contextGenerator);
+	public DependencyParserME(String modelPath) throws IOException
+	{
+		this(new File(modelPath));
 	}
-	
-	public DependencyParserME(ModelWrapper model) throws IOException {
+
+	public DependencyParserME(String modelPath, DependencyParseContextGenerator contextGenerator) throws IOException
+	{
+		this(new File(modelPath), contextGenerator);
+	}
+
+	public DependencyParserME(File file) throws IOException
+	{
+		this(new ModelWrapper(file));
+	}
+
+	public DependencyParserME(File file, DependencyParseContextGenerator contextGenerator) throws IOException
+	{
+		this(new ModelWrapper(file), contextGenerator);
+	}
+
+	public DependencyParserME(ModelWrapper model) throws IOException
+	{
 		init(model, new DependencyParseContextGeneratorConf());
 	}
-	
-	public DependencyParserME(ModelWrapper model,DependencyParseContextGenerator contextGenerator) {
-		init(model,contextGenerator);
+
+	public DependencyParserME(ModelWrapper model, DependencyParseContextGenerator contextGenerator)
+	{
+		init(model, contextGenerator);
 	}
-	
+
 	/**
 	 * 初始化工作
 	 * 
@@ -78,33 +77,37 @@ public class DependencyParserME implements DependencyParser{
 	 *            模型
 	 * @param contextGen
 	 *            特征
-	 */	
+	 */
 	private void init(ModelWrapper model, DependencyParseContextGenerator contextGenerator)
-    {
+	{
 		this.model = model.getModel();
 
 		this.contextGenerator = contextGenerator;
-    }
-	
-	
-	public static ModelWrapper train(String trainDatePath, TrainingParameters params, DependencyParseContextGenerator contextGenerator,
-			String encoding) throws IOException {
-		return train(new File(trainDatePath),params,contextGenerator,encoding);
 	}
-	
-	 public static ModelWrapper train(ObjectStream<DependencySample> samples, TrainingParameters trainParams) throws IOException{
-		 return train(samples,trainParams,new DependencyParseContextGeneratorConf());
-	 }
-	
-	 public static ModelWrapper train(File fileData, TrainingParameters params, DependencyParseContextGenerator contextGenerator,
-				String encoding) throws IOException{
-		ObjectStream<String> lineStream = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(fileData), encoding);
+
+	public static ModelWrapper train(String trainDatePath, TrainingParameters params,
+			DependencyParseContextGenerator contextGenerator, String encoding) throws IOException
+	{
+		return train(new File(trainDatePath), params, contextGenerator, encoding);
+	}
+
+	public static ModelWrapper train(ObjectStream<DependencySample> samples, TrainingParameters trainParams)
+			throws IOException
+	{
+		return train(samples, trainParams, new DependencyParseContextGeneratorConf());
+	}
+
+	public static ModelWrapper train(File fileData, TrainingParameters params,
+			DependencyParseContextGenerator contextGenerator, String encoding) throws IOException
+	{
+		ObjectStream<String> lineStream = new PlainTextBySpaceLineStream(new MarkableFileInputStreamFactory(fileData),
+				encoding);
 
 		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
 		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(lineStream, sampleParser);
 		return train(sampleStream, params, contextGenerator);
-	 }
-	 
+	}
+
 	public static ModelWrapper train(ObjectStream<DependencySample> sampleStream, TrainingParameters params,
 			DependencyParseContextGenerator contextGenerator) throws IOException
 	{
@@ -149,61 +152,68 @@ public class DependencyParserME implements DependencyParser{
 
 		return new ModelWrapper(depModel, beamSize);
 	}
-	
-	
-	
+
 	@Override
-	public DependencyTree parse(String sentence) {
+	public DependencyTree parse(String sentence)
+	{
 		return null;
 	}
 
 	@Override
-	public DependencyTree parse(String[] words, String[] poses) {
+	public DependencyTree parse(String[] words, String[] poses)
+	{
 		ArrayList<String> allWords = new ArrayList<String>(Arrays.asList(words));
 		allWords.add(0, "核心");
 		ArrayList<String> allPoses = new ArrayList<String>(Arrays.asList(poses));
-		allPoses.add(0,"root");
+		allPoses.add(0, "root");
 		words = allWords.toArray(new String[allWords.size()]);
 		poses = allPoses.toArray(new String[allPoses.size()]);
-		
-		Oracle oracleMEBased = new Oracle(model,contextGenerator);
+
+		Oracle oracleMEBased = new Oracle(model, contextGenerator);
 		ActionType action = new ActionType();
 		Configuration currentConf = Configuration.initialConf(words, poses);
-		while (!currentConf.isFinalConf()) {
+		while (!currentConf.isFinalConf())
+		{
 			action = oracleMEBased.classify(currentConf);
 			System.out.println(currentConf.toString() + "*****" + "goldAction =" + action.typeToString());
 			currentConf.transition(action);
 		}
-		DependencyTree depTree = TBDepTree.getTree(currentConf,words,poses);
+		DependencyTree depTree = TBDepTree.getTree(currentConf, words, poses);
 		return depTree;
 	}
 
 	@Override
-	public DependencyTree[] parse(String sentence, int k) {
+	public DependencyTree[] parse(String sentence, int k)
+	{
 		return null;
 	}
 
 	@Override
-	public DependencyTree[] parse(String[] words, String[] poses, int k) {
+	public DependencyTree[] parse(String[] words, String[] poses, int k)
+	{
 		return null;
 	}
-	
-	public  DependencyTree getDePendencyTree(ArrayList<Arc> arcs) {
-		//根据arcs列表获得依存树
-		for(Arc arc:arcs) {
-			System.out.println(arc.getHead()+" "+arc.getDependent()+" "+arc.getRelation());
+
+	public DependencyTree getDePendencyTree(ArrayList<Arc> arcs)
+	{
+		// 根据arcs列表获得依存树
+		for (Arc arc : arcs)
+		{
+			System.out.println(arc.getHead() + " " + arc.getDependent() + " " + arc.getRelation());
 		}
-		
+
 		return new DependencyTree();
 	}
 
 	@Override
-	public DependencyTree parse(String[] wordsandposes) {
+	public DependencyTree parse(String[] wordsandposes)
+	{
 		return null;
 	}
 
 	@Override
-	public DependencyTree[] parse(String[] wordsandposes, int k) {
+	public DependencyTree[] parse(String[] wordsandposes, int k)
+	{
 		return null;
 	}
 

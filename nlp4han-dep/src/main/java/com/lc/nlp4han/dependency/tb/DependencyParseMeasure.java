@@ -1,10 +1,10 @@
 package com.lc.nlp4han.dependency.tb;
+
 /**
-* @author 王宁
-* @version 创建时间：2018年7月24日 下午6:23:49
-* 依存句法分析结果的评价指标，所有的统计均不会统计认为添加的“核心”
-* 以下所指的“根”是指整个原始句子的中心词，“标记”是指改词与中心词的具体依存关系
-*/
+ * @author 王宁
+ * @version 创建时间：2018年7月24日 下午6:23:49 依存句法分析结果的评价指标，所有的统计均不会统计认为添加的“核心”
+ *          以下所指的“根”是指整个原始句子的中心词，“标记”是指改词与中心词的具体依存关系
+ */
 public class DependencyParseMeasure
 {
 
@@ -31,7 +31,7 @@ public class DependencyParseMeasure
 
 	// 整个句子的所有词的中心词都正确的句子个数
 	private double countAllDependency = 0;
-	
+
 	// 整个句子的所有词的标记和中心词都正确的句子个数
 	private double countAllWordsAndDep = 0;
 
@@ -62,7 +62,7 @@ public class DependencyParseMeasure
 	{
 		int dependencyCount = 0;
 		int wordsAndDepCount = 0;
-		
+
 		countSentence++;
 		countAllWords += dependencyPre.length;
 		for (int i = 0; i < dependencyPre.length; i++)
@@ -80,7 +80,7 @@ public class DependencyParseMeasure
 			{
 				countWords++;
 				dependencyCount++;
-			}//带标记匹配
+			} // 带标记匹配
 			if ((dependencyWordsPre[i].compareTo(dependencyWordsRef[i]) == 0)
 					&& (dependencyPre[i].compareTo(dependencyRef[i]) == 0))
 			{

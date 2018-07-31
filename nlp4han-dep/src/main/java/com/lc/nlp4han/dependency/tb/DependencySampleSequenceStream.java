@@ -22,7 +22,7 @@ public class DependencySampleSequenceStream implements SequenceStream
 	public DependencySampleSequenceStream(ObjectStream<DependencySample> samples,
 			DependencyParseContextGenerator contextGenerator)
 	{
-		this.contextGenerator =contextGenerator;
+		this.contextGenerator = contextGenerator;
 		this.samples = samples;
 	}
 
@@ -40,9 +40,9 @@ public class DependencySampleSequenceStream implements SequenceStream
 		DependencySample sentenceSample = samples.read();
 		if (sentenceSample != null)
 		{
-			DependencySampleEventStreamTB es =new DependencySampleEventStreamTB(samples,contextGenerator);
-			List<Event> events = es.generateEvents(sentenceSample.getWords(),
-					sentenceSample.getPos(), sentenceSample.getDependency(), sentenceSample.getDependencyWords(),
+			DependencySampleEventStreamTB es = new DependencySampleEventStreamTB(samples, contextGenerator);
+			List<Event> events = es.generateEvents(sentenceSample.getWords(), sentenceSample.getPos(),
+					sentenceSample.getDependency(), sentenceSample.getDependencyWords(),
 					sentenceSample.getDependencyIndices(), sentenceSample.getAditionalContext());
 			Event[] allEvents = events.toArray(new Event[events.size()]);
 			Sequence<DependencySample> sequence = new Sequence<DependencySample>(allEvents, sentenceSample);

@@ -30,13 +30,15 @@ public class DependencyEvalTool
 	{
 		DependencyParseContextGenerator gen = new DependencyParseContextGeneratorConf();
 		ModelWrapper model;
-		if(trainFile != null)
+		if (trainFile != null)
 			model = DependencyParserME.train(trainFile, params, gen, encoding);
-		else {
-			InputStream inStream = DependencyEvalTool.class.getClassLoader().getResourceAsStream("com/lc/nlp4han/dependency/tb_cpostag.model");
+		else
+		{
+			InputStream inStream = DependencyEvalTool.class.getClassLoader()
+					.getResourceAsStream("com/lc/nlp4han/dependency/tb_cpostag.model");
 			model = new ModelWrapper(inStream);
 		}
-		
+
 		DependencyParserME tagger = new DependencyParserME(model, gen);
 
 		DependencyParseMeasure measure = new DependencyParseMeasure();
@@ -121,15 +123,18 @@ public class DependencyEvalTool
 		TrainingParameters params = TrainingParameters.defaultParams();
 		params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
 		params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
-		
-		if(trainFile != null) {
+
+		if (trainFile != null)
+		{
 			if (errorFile != null)
 			{
 				eval(new File(trainFile), params, new File(goldFile), encoding, new File(errorFile));
 			}
 			else
 				eval(new File(trainFile), params, new File(goldFile), encoding, null);
-		}else {
+		}
+		else
+		{
 			if (errorFile != null)
 			{
 				eval(null, params, new File(goldFile), encoding, new File(errorFile));
@@ -138,5 +143,5 @@ public class DependencyEvalTool
 				eval(null, params, new File(goldFile), encoding, null);
 		}
 
-	}		
+	}
 }

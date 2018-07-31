@@ -118,7 +118,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 		s1wt_b1wset = config.getProperty("feature.s1wt_b1w", "true").equals("true");
 		s1wt_b1tset = config.getProperty("feature.s1wt_b1t", "true").equals("true");
 		s1wt_b1wtset = config.getProperty("feature.s1wt_b1wt", "true").equals("true");
-		
+
 		b1w_b2tset = config.getProperty("feature.b1w_b2t", "true").equals("true");
 		b1t_b2wset = config.getProperty("feature.b1t_b2w", "true").equals("true");
 		b1w_b2wset = config.getProperty("feature.b1w_b2w", "true").equals("true");
@@ -128,7 +128,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 		b1wt_b2wset = config.getProperty("feature.b1wt_b2w", "true").equals("true");
 		b1wt_b2tset = config.getProperty("feature.b1wt_b2t", "true").equals("true");
 		b1wt_b2wtset = config.getProperty("feature.b1wt_b2wt", "true").equals("true");
-		
+
 		s1w_s2tset = config.getProperty("feature.s1w_s2t", "true").equals("true");
 		s1t_s2wset = config.getProperty("feature.s1t_s2w", "true").equals("true");
 		s1w_s2wset = config.getProperty("feature.s1w_s2w", "true").equals("true");
@@ -138,26 +138,25 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 		s1wt_s2wset = config.getProperty("feature.s1wt_s2w", "true").equals("true");
 		s1wt_s2tset = config.getProperty("feature.s1wt_s2t", "true").equals("true");
 		s1wt_s2wtset = config.getProperty("feature.s1wt_s2wt", "true").equals("true");
-		
+
 		s1w_s2w_b1wset = config.getProperty("feature.s1w_s2w_b1w", "true").equals("true");
 		s1w_s2w_b1tset = config.getProperty("feature.s1w_s2w_b1t", "true").equals("true");
 		s1t_s2t_b1wset = config.getProperty("feature.s1t_s2t_b1w", "true").equals("true");
 		s1t_s2t_b1tset = config.getProperty("feature.s1t_s2t_b1t", "true").equals("true");
 		s1wt_s2wt_b1wtset = config.getProperty("feature.s1wt_s2wt_b1wt", "true").equals("true");
-		
+
 		s1w_b1w_b2wset = config.getProperty("feature.s1w_b1w_b2w", "true").equals("true");
 		s1w_b1t_b2tset = config.getProperty("feature.s1w_b1t_b2t", "true").equals("true");
 		s1t_b1w_b2wset = config.getProperty("feature.s1t_b1w_b2w", "true").equals("true");
 		s1t_b1t_b2tset = config.getProperty("feature.s1t_b1t_b2t", "true").equals("true");
 		s1wt_b1wt_b2wtset = config.getProperty("feature.s1wt_b1wt_b2wt", "true").equals("true");
-		
+
 		s1w_s2w_b1w_b2wset = config.getProperty("feature.s1w_s2w_b1w_b2w", "true").equals("true");
 		s1t_s2t_b1t_b2tset = config.getProperty("feature.s1t_s2t_b1t_b2t", "true").equals("true");
 		s1w_s2w_b1t_b2tset = config.getProperty("feature.s1w_s2w_b1t_b2t", "true").equals("true");
 		s1t_s2t_b1w_b2wset = config.getProperty("feature.s1t_s2t_b1w_b2w", "true").equals("true");
 		s1wt_s2wt_b1wt_b2wtset = config.getProperty("feature.s1wt_s2wt_b1wt_b2wt", "true").equals("true");
-		
-		
+
 	}
 
 	/**
@@ -194,28 +193,28 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 		List<String> features = new ArrayList<String>();
 		ArrayDeque<Vertice> stack = conf.getStack();
 		List<Vertice> wordsBuffer = conf.getWordsBuffer();
-		
-			s1w = stack.peek().getWord();
-			s1t = stack.peek().getPos();
 
-			if (stack.size() >= 2)
+		s1w = stack.peek().getWord();
+		s1t = stack.peek().getPos();
+
+		if (stack.size() >= 2)
+		{
+			Vertice vertice = stack.pop();
+			s2w = stack.peek().getWord();
+			s2t = stack.peek().getPos();
+			stack.push(vertice);
+
+			if (stack.size() >= 3)
 			{
-				Vertice vertice = stack.pop();
-				s2w = stack.peek().getWord();
-				s2t = stack.peek().getPos();
-				stack.push(vertice);
-
-				if (stack.size() >= 3)
-				{
-					Vertice v1 = stack.pop();
-					Vertice v2 = stack.pop();
-					s3w = stack.peek().getWord();
-					s3t = stack.peek().getPos();
-					stack.push(v2);
-					stack.push(v1);
-				}
+				Vertice v1 = stack.pop();
+				Vertice v2 = stack.pop();
+				s3w = stack.peek().getWord();
+				s3t = stack.peek().getPos();
+				stack.push(v2);
+				stack.push(v1);
 			}
-		
+		}
+
 		if (wordsBuffer.size() >= 1)
 		{
 			b1w = wordsBuffer.get(0).getWord();
@@ -275,7 +274,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 			features.add("b2wt=" + b2w + b2t);
 		if (b3wtset && b3w != null && b3t != null)
 			features.add("b3wt=" + b3w + b3t);
-			
+
 		if (s1w_b1tset && b1t != null)
 			features.add("s1w_b1t=" + s1w + b1t);
 		if (s1t_b1wset && b1w != null)

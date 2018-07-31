@@ -24,6 +24,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 	// 上下文产生器
 	private DependencyParseContextGenerator pcg;
 	private int errCount = 0;
+
 	/**
 	 * 构造
 	 * 
@@ -96,7 +97,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 	public List<Event> generateEvents(String[] words, String[] pos, String[] dependency, String[] dependencyWords,
 			String[] dependencyIndices, String[][] ac)
 	{
-		
+
 		System.out.println("所有的Action及,由该Action对原句子进行操作后得到的依存sample。");
 		System.out.println("若与原始句子直接解析得到的sample相同则,Events的产生没有出错。");
 		if (words.length == 0)
@@ -178,11 +179,12 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 			Event event = new Event(strOfAType, context);
 			events.add(event);
 		}
-//		if(conf_ArcEager.getArcs().size() != dependency.length) {
-//			System.out.println(TBDepTree.getSample(conf_ArcEager.getArcs(), words,pos).toCoNLLString());
-//		}else {
-//			return new ArrayList<Event>();
-//		}
+		// if(conf_ArcEager.getArcs().size() != dependency.length) {
+		// System.out.println(TBDepTree.getSample(conf_ArcEager.getArcs(),
+		// words,pos).toCoNLLString());
+		// }else {
+		// return new ArrayList<Event>();
+		// }
 		return events;
 	}
 }

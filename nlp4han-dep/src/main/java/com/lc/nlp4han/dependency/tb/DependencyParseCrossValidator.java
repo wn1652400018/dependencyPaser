@@ -33,7 +33,7 @@ public class DependencyParseCrossValidator
 		this.params = params;
 		this.listeners = listeners;
 	}
-	
+
 	/**
 	 * 交叉验证
 	 * 
@@ -68,10 +68,10 @@ public class DependencyParseCrossValidator
 			evaluator.setMeasure(measure);
 			evaluator.evaluate(trainingSampleStream.getTestSampleStream());
 
-			System.out.println(measure);			
+			System.out.println(measure);
 			run++;
 		}
-		
+
 		System.out.println(measure);
 	}
 }

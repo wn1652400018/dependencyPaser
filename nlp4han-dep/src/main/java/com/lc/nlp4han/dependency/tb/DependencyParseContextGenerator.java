@@ -7,14 +7,16 @@ package com.lc.nlp4han.dependency.tb;
  * 
  *
  */
-public interface DependencyParseContextGenerator{
+public interface DependencyParseContextGenerator
+{
 
 	/**
 	 * 获取特征
 	 * 
-	 * @param conf arceager过程中的配置
+	 * @param conf
+	 *            arceager过程中的配置
 	 * 
 	 * @return
 	 */
-	 public String[] getContext(Configuration conf);
+	public String[] getContext(Configuration conf);
 }
