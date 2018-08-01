@@ -2,19 +2,19 @@ package com.lc.nlp4han.dependency.tb;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 
-import com.lc.nlp4han.dependency.DependencySample;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 
 public class Configuration
 {
 	private ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
-	private ArrayList<Vertice> wordsBuffer = new ArrayList<Vertice>();
+	private LinkedList<Vertice> wordsBuffer = new LinkedList<Vertice>();
 	private ArrayList<Arc> arcs = new ArrayList<Arc>();
 
-	public Configuration(ArrayDeque<Vertice> stack, ArrayList<Vertice> wordsBuffer, ArrayList<Arc> arcs)
+	public Configuration(ArrayDeque<Vertice> stack, LinkedList<Vertice> wordsBuffer, ArrayList<Arc> arcs)
 	{
 
 		stack.push(wordsBuffer.get(0));
@@ -32,11 +32,12 @@ public class Configuration
 			stack.push(wordsBuffer.get(0));
 			wordsBuffer.remove(0);
 		}
-
 	}
 
-	private Configuration()
+	
+	public Configuration()
 	{
+		
 	}
 
 	// public static Configuration initialConf(DependencySample sample)
@@ -44,6 +45,33 @@ public class Configuration
 	// //······
 	// return new Configuration();
 	// }
+	
+	
+	//包括“核心”
+	public static Configuration generateConfByActions(String[] wordpos, String[] priorActions)
+	{
+		String[] words = new String[(wordpos.length + 1) / 2];
+		String[] poses = new String[(wordpos.length + 1) / 2];
+		for (int i = 0; i < words.length; i++)
+		{
+			String[] word_pos = wordpos[i].split("_");
+			words[i] = word_pos[0];
+			poses[i] = word_pos[1];
+		}
+		Configuration conf = new Configuration(words,poses);
+		for (String preAction : priorActions)
+		{
+			ActionType at = ActionType.toType(preAction);
+			conf.transition(at);
+		}
+		return conf;
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * 产生一个sample初始的Configuration
 	 * 
@@ -68,7 +96,7 @@ public class Configuration
 
 	public boolean isFinalConf()
 	{
-		if (wordsBuffer.isEmpty())
+		if (wordsBuffer.isEmpty() && stack.size() == 1)
 			return true;
 		else
 			return false;
@@ -79,10 +107,10 @@ public class Configuration
 	 * 
 	 * @return 有关系返回true
 	 */
-	public boolean wheatheReduce(String[] dependencyIndices)
+	public boolean canReduce(String[] dependencyIndices)
 	{// words包括人工添加的“核心”
-		if (wordsBuffer.isEmpty())
-			return false;
+//		if (wordsBuffer.isEmpty())
+//			return false;
 		Vertice[] wordsInStack = stack.toArray(new Vertice[stack.size()]);
 		int indexOfWord_Si;// 该单词在words中索引
 		int indexOfWord_B1 = wordsBuffer.get(0).getIndexOfWord();
@@ -119,19 +147,7 @@ public class Configuration
 		}
 	}
 
-	public static void main(String[] args)
-	{
-		String[] words = { "根", "我", "爱", "自然", "语言", "处理" };
-		String[] pos = { "0", "1", "2", "3", "4", "5" };
-		ArrayList<Vertice> buffer = Vertice.getWordsBuffer(words, pos);
-		ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
-		Configuration conf = new Configuration(stack, buffer, new ArrayList<Arc>());
-		System.out.println(conf.toString());
-		conf.shift();
-		System.out.println(conf.toString());
-		conf.reduce();
-		System.out.println(conf.toString());
-	}
+
 
 	public Configuration addArc(Arc arc)
 	{
@@ -171,17 +187,30 @@ public class Configuration
 	{
 		Vertice[] vS = stack.toArray(new Vertice[stack.size()]);
 		Vertice[] vB = wordsBuffer.toArray(new Vertice[wordsBuffer.size()]);
-		String stackStr = "";
-		String bufferStr = "";
+		StringBuilder stackStr = new StringBuilder();
+		StringBuilder bufferStr = new StringBuilder();
 		for (int i = 0; i < stack.size(); i++)
 		{
-			stackStr += vS[stack.size() - i - 1].getWord() + "/" + vS[stack.size() - i - 1].getIndexOfWord() + " ";
+			stackStr.append(vS[stack.size() - i - 1].toString() + " ") ;
 		}
 		for (int i = 0; i < wordsBuffer.size(); i++)
 		{
-			bufferStr += vB[i].getWord() + "/" + vB[i].getIndexOfWord() + " ";
+			bufferStr.append(vB[i].toString() + " ");
 		}
-		return "栈尾至栈顶元素：" + stackStr + " ___" + "b=" + bufferStr;
+
+		
+		return "栈底至栈顶元素：" + stackStr.toString() + " ___" + "buffer:"+bufferStr.toString();
+	}
+
+	public String arcsToString()
+	{
+		StringBuilder allArc = new StringBuilder();
+		allArc.append("arcs:"+"\r\n");
+		for (int i = 0; i < arcs.size(); i++)
+		{
+			allArc.append(arcs.get(arcs.size() - i - 1).toString()+"\r\n");
+		}
+		return allArc.toString();
 	}
 
 	public ArrayDeque<Vertice> getStack()
@@ -194,12 +223,12 @@ public class Configuration
 		this.stack = stack;
 	}
 
-	public ArrayList<Vertice> getWordsBuffer()
+	public LinkedList<Vertice> getWordsBuffer()
 	{
 		return wordsBuffer;
 	}
 
-	public void setWordsBuffer(ArrayList<Vertice> wordsBuffer)
+	public void setWordsBuffer(LinkedList<Vertice> wordsBuffer)
 	{
 		this.wordsBuffer = wordsBuffer;
 	}
@@ -213,5 +242,17 @@ public class Configuration
 	{
 		this.arcs = arcs;
 	}
-
+	public static void main(String[] args)
+	{
+		String[] words = { "根", "我", "爱", "自然", "语言", "处理" };
+		String[] pos = { "0", "1", "2", "3", "4", "5" };
+		LinkedList<Vertice> buffer = Vertice.getWordsBuffer(words, pos);
+		ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
+		Configuration conf = new Configuration(stack, buffer, new ArrayList<Arc>());
+		System.out.println(conf.toString());
+		conf.shift();
+		System.out.println(conf.toString());
+		conf.reduce();
+		System.out.println(conf.toString());
+	}
 }
