@@ -43,4 +43,13 @@ public class Arc
 		this.dependent = dependent;
 	}
 
+	@Override
+	public String toString()
+	{
+		if (head.getIndexOfWord() < dependent.getIndexOfWord())
+			return "head:" + head.toString() + "    dependent:" + dependent.toString() + "relation:" + relation;
+		else
+			return "dependent:" + dependent.toString() + "    head:" + head.toString() + "relation:" + relation;
+	}
+
 }
