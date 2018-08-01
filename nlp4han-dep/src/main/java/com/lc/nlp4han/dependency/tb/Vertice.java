@@ -1,6 +1,6 @@
 package com.lc.nlp4han.dependency.tb;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.lc.nlp4han.dependency.DependencySample;
 
@@ -17,7 +17,7 @@ public class Vertice
 		this.indexOfWord = indexOfWord;
 	}
 
-	public static ArrayList<Vertice> getWordsBuffer(DependencySample sample)
+	public static LinkedList<Vertice> getWordsBuffer(DependencySample sample)
 	{
 
 		String[] words = sample.getWords();
@@ -26,11 +26,11 @@ public class Vertice
 		return getWordsBuffer(words, pos);
 	}
 
-	public static ArrayList<Vertice> getWordsBuffer(String[] words, String[] pos)
+	public static LinkedList<Vertice> getWordsBuffer(String[] words, String[] pos)
 	{
 
-		ArrayList<Vertice> wordsBuffer = new ArrayList<Vertice>();
-		for (int i = 0; i < words.length; i++) // words����λ��ŵ��ǡ����ġ�
+		LinkedList<Vertice> wordsBuffer = new LinkedList<Vertice>();
+		for (int i = 0; i < words.length; i++) 
 			wordsBuffer.add(new Vertice(words[i], pos[i], i));
 		return wordsBuffer;
 	}
@@ -48,6 +48,12 @@ public class Vertice
 	public int getIndexOfWord()
 	{
 		return indexOfWord;
+	}
+
+	@Override
+	public String toString()
+	{
+		return word + "/" + indexOfWord;
 	}
 
 }
