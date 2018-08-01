@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import com.lc.nlp4han.dependency.DependencyParser;
@@ -23,7 +24,9 @@ import com.lc.nlp4han.ml.util.EventTrainer;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 import com.lc.nlp4han.ml.util.ObjectStream;
+import com.lc.nlp4han.ml.util.Sequence;
 import com.lc.nlp4han.ml.util.SequenceTrainer;
+import com.lc.nlp4han.ml.util.SequenceValidator;
 import com.lc.nlp4han.ml.util.TrainerFactory;
 import com.lc.nlp4han.ml.util.TrainingParameters;
 import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
@@ -39,6 +42,10 @@ public class DependencyParserTB implements DependencyParser
 	private DependencyParseContextGenerator contextGenerator;
 
 	private ClassificationModel model;
+
+	private SequenceClassificationModel<String> SModel;
+
+	private SequenceValidator<String> sequenceValidator;
 
 	public DependencyParserTB(String modelPath) throws IOException
 	{
@@ -82,7 +89,11 @@ public class DependencyParserTB implements DependencyParser
 	{
 		this.model = model.getModel();
 
+		this.SModel = model.getSequenceModel();
+
 		this.contextGenerator = contextGenerator;
+
+		this.sequenceValidator = new DependencyParseSequenceValidator();
 	}
 
 	public static ModelWrapper train(String trainDatePath, TrainingParameters params,
@@ -163,7 +174,7 @@ public class DependencyParserTB implements DependencyParser
 	public DependencyTree parse(String[] words, String[] poses)
 	{
 		ArrayList<String> allWords = new ArrayList<String>(Arrays.asList(words));
-		allWords.add(0, "核心");
+		allWords.add(0, DependencyParserTB.RootWord);
 		ArrayList<String> allPoses = new ArrayList<String>(Arrays.asList(poses));
 		allPoses.add(0, "root");
 		words = allWords.toArray(new String[allWords.size()]);
@@ -172,12 +183,17 @@ public class DependencyParserTB implements DependencyParser
 		Oracle oracleMEBased = new Oracle(model, contextGenerator);
 		ActionType action = new ActionType();
 		Configuration currentConf = Configuration.initialConf(words, poses);
+		String[] priorDecisions = new String[2 * (words.length - 1) + 1];
+		int indexOfConf = 0;
 		while (!currentConf.isFinalConf())
 		{
-			action = oracleMEBased.classify(currentConf);
-			System.out.println(currentConf.toString() + "*****" + "goldAction =" + action.typeToString());
+			action = oracleMEBased.classify(currentConf, priorDecisions, null);
+			System.out.println(currentConf.toString() + "*****" + "preAction =" + action.typeToString());
 			currentConf.transition(action);
+			priorDecisions[indexOfConf] = action.typeToString();
+			indexOfConf++;
 		}
+		System.out.println(currentConf.arcsToString());
 		DependencyTree depTree = TBDepTree.getTree(currentConf, words, poses);
 		return depTree;
 	}
@@ -191,7 +207,30 @@ public class DependencyParserTB implements DependencyParser
 	@Override
 	public DependencyTree[] parse(String[] words, String[] poses, int k)
 	{
-		return null;
+		ArrayList<String> allWords = new ArrayList<String>(Arrays.asList(words));
+		allWords.add(0, DependencyParserTB.RootWord);
+		ArrayList<String> allPoses = new ArrayList<String>(Arrays.asList(poses));
+		allPoses.add(0, "root");
+		words = allWords.toArray(new String[allWords.size()]);
+		poses = allPoses.toArray(new String[allPoses.size()]);
+		String[] wordpos = new String[words.length*2-1];
+		for (int i = 0; i < words.length ; i++)
+		{
+			wordpos[i] = words[i] + "_" + poses[i];
+		}
+		
+		Sequence[] allSequence= SModel.bestSequences(k, wordpos, null, contextGenerator, sequenceValidator);
+		DependencyTree [] allTree= new DependencyTree[allSequence.length];
+		for (int i = 0; i < allSequence.length; i++)
+		{
+			Configuration conf = Configuration.initialConf(words, poses);
+			for(String outcome :allSequence[i].getOutcomes()) {
+				conf.transition(ActionType.toType(outcome));
+			}
+			DependencyTree depTree = TBDepTree.getTree(conf, words, poses);
+			allTree[i] = depTree;
+		}
+		return allTree;
 	}
 
 	public DependencyTree getDePendencyTree(ArrayList<Arc> arcs)
@@ -199,7 +238,7 @@ public class DependencyParserTB implements DependencyParser
 		// 根据arcs列表获得依存树
 		for (Arc arc : arcs)
 		{
-			System.out.println(arc.getHead() + " " + arc.getDependent() + " " + arc.getRelation());
+			arc.toString();
 		}
 
 		return new DependencyTree();
