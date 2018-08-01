@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.lc.nlp4han.dependency.tb.DependencyParseContextGenerator;
+import com.lc.nlp4han.dependency.DependencyParser;
 import com.lc.nlp4han.dependency.DependencySample;
 import com.lc.nlp4han.ml.model.Event;
 import com.lc.nlp4han.ml.util.AbstractEventStream;
@@ -98,11 +99,11 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 			String[] dependencyIndices, String[][] ac)
 	{
 
-		System.out.println("所有的Action及,由该Action对原句子进行操作后得到的依存sample。");
-		System.out.println("若与原始句子直接解析得到的sample相同则,Events的产生没有出错。");
 		if (words.length == 0)
 			return new ArrayList<Event>(words.length);
 		Configuration conf_ArcEager = Configuration.initialConf(words, pos);
+		String[] priorDecisions = new String[2 * (words.length - 1) + 1];
+
 		List<Event> events = new ArrayList<Event>();
 		ActionType at;
 		String strOfAType;
@@ -110,72 +111,88 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 		int indexOfWord_B1;
 		int headIndexOfWord_S1;// 栈顶单词中心词在words中的索引
 		int headIndexOfWord_B1;
+
+		int indexOfConf = 0;
 		while (!conf_ArcEager.isFinalConf())
 		{// buffer为空是终止配置
 			// System.out.println(conf_ArcEager.toString());
-			String[] context = pcg.getContext(conf_ArcEager);
-			indexOfWord_S1 = conf_ArcEager.getStack().peek().getIndexOfWord();// 该单词在words中索引
-			indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
-			if (conf_ArcEager.getStack().size() != 1)
-			{
-				headIndexOfWord_S1 = Integer.parseInt(dependencyIndices[indexOfWord_S1 - 1]);// 栈顶单词中心词在words中的索引
-			}
-			else
-			{// 防止数组越界
-				if (!conf_ArcEager.getStack().peek().getWord().equals("核心"))
-					System.err.println("不是gold句子。");
-				headIndexOfWord_S1 = -1;// 栈顶单词中心词在words中的索引
-			}
-			headIndexOfWord_B1 = Integer.parseInt(dependencyIndices[indexOfWord_B1 - 1]);
 
-			if (indexOfWord_B1 == headIndexOfWord_S1)
-			{// 左弧
+			String[] context = ((DependencyParseContextGeneratorConf)pcg).getContext(conf_ArcEager, priorDecisions, null);
 
-				at = new ActionType(dependency[indexOfWord_S1 - 1], "LEFTARC_REDUCE");
-				System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
-				strOfAType = at.typeToString();
-				conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1], conf_ArcEager.getWordsBuffer().get(0),
-						conf_ArcEager.getStack().peek()));
-				conf_ArcEager.reduce();
-
-			}
-			else if (indexOfWord_S1 == headIndexOfWord_B1)
-			{// 右弧
-				if (conf_ArcEager.getStack().size() == 1)
-				{
-					if (!conf_ArcEager.getStack().peek().getWord().equals("核心"))
-						System.err.println("不是gold句子。");
-					at = new ActionType("核心成分", "RIGHTARC_SHIFT");
-				}
-				else
-				{
-					at = new ActionType(dependency[indexOfWord_B1 - 1], "RIGHTARC_SHIFT");
-				}
-				System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
-				strOfAType = at.typeToString();
-				conf_ArcEager.addArc(
-						new Arc("核心成分", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
-				conf_ArcEager.shift();
-
-			}
-			else if (conf_ArcEager.wheatheReduce(dependencyIndices))
+			if (conf_ArcEager.getWordsBuffer().size() == 0 && conf_ArcEager.getStack().size() > 1)
 			{
 				// Reduce
 				at = new ActionType("null", "REDUCE");
 				System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
 				strOfAType = at.typeToString();
 				conf_ArcEager.reduce();
-
 			}
 			else
 			{
-				// Shift
-				at = new ActionType("null", "SHIFT");
-				System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
-				strOfAType = at.typeToString();
-				conf_ArcEager.shift();
+				indexOfWord_S1 = conf_ArcEager.getStack().peek().getIndexOfWord();// 该单词在words中索引
+				indexOfWord_B1 = conf_ArcEager.getWordsBuffer().get(0).getIndexOfWord();
+				if (conf_ArcEager.getStack().size() != 1)
+				{
+					headIndexOfWord_S1 = Integer.parseInt(dependencyIndices[indexOfWord_S1 - 1]);// 栈顶单词中心词在words中的索引
+				}
+				else
+				{// 防止数组越界
+					if (!conf_ArcEager.getStack().peek().getWord().equals(DependencyParser.RootWord))
+						System.err.println("不是gold句子。");
+					headIndexOfWord_S1 = -1;// 栈顶单词中心词在words中的索引
+				}
+				headIndexOfWord_B1 = Integer.parseInt(dependencyIndices[indexOfWord_B1 - 1]);
 
+				if (indexOfWord_B1 == headIndexOfWord_S1)
+				{// 左弧
+					at = new ActionType(dependency[indexOfWord_S1 - 1], "LEFTARC_REDUCE");
+					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+					strOfAType = at.typeToString();
+					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1], conf_ArcEager.getWordsBuffer().get(0),
+							conf_ArcEager.getStack().peek()));
+					conf_ArcEager.reduce();
+				}
+				else if (indexOfWord_S1 == headIndexOfWord_B1)
+				{// 右弧
+					if (conf_ArcEager.getStack().size() == 1)
+					{
+						if (!conf_ArcEager.getStack().peek().getWord().equals(DependencyParser.RootWord))
+							System.err.println("不是gold句子。");
+						at = new ActionType("核心成分", "RIGHTARC_SHIFT");
+					}
+					else
+					{
+						at = new ActionType(dependency[indexOfWord_B1 - 1], "RIGHTARC_SHIFT");
+					}
+					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+					strOfAType = at.typeToString();
+					conf_ArcEager.addArc(
+							new Arc("核心成分", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
+					conf_ArcEager.shift();
+
+				}
+				else if (conf_ArcEager.canReduce(dependencyIndices))
+				{
+					// Reduce
+					at = new ActionType("null", "REDUCE");
+					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+					strOfAType = at.typeToString();
+					conf_ArcEager.reduce();
+
+				}
+				else
+				{
+					// Shift
+					at = new ActionType("null", "SHIFT");
+					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+					strOfAType = at.typeToString();
+					conf_ArcEager.shift();
+
+				}
 			}
+			priorDecisions[indexOfConf] = strOfAType;
+			indexOfConf++;
+
 			Event event = new Event(strOfAType, context);
 			events.add(event);
 		}
