@@ -1,5 +1,7 @@
 package com.lc.nlp4han.dependency.tb;
 
+import com.lc.nlp4han.ml.util.BeamSearchContextGenerator;
+
 /**
  * 特征生成的接口
  * 
@@ -7,7 +9,7 @@ package com.lc.nlp4han.dependency.tb;
  * 
  *
  */
-public interface DependencyParseContextGenerator
+public interface DependencyParseContextGenerator extends BeamSearchContextGenerator<String>
 {
 
 	/**
@@ -18,5 +20,4 @@ public interface DependencyParseContextGenerator
 	 * 
 	 * @return
 	 */
-	public String[] getContext(Configuration conf);
 }

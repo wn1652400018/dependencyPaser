@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.IOException;
 
 import com.lc.nlp4han.ml.model.ClassificationModel;
+import com.lc.nlp4han.ml.model.SequenceClassificationModel;
 import com.lc.nlp4han.ml.util.ModelWrapper;
 
 /**
- * actionԤ����
+ * action预测
  * 
  * TODO: 通过Configuration得到ActionType
  * 
@@ -18,31 +19,18 @@ public class Oracle
 {
 	private ClassificationModel model;
 	private DependencyParseContextGenerator contextGenerator;
-
-	public Oracle(File model, DependencyParseContextGenerator contextGenerator) throws IOException
-	{
-		this(new ModelWrapper(model).getModel(), contextGenerator);
-	}
-
-	public Oracle(ModelWrapper modelwrapper, DependencyParseContextGenerator contextGenerator)
-	{
-		this(modelwrapper.getModel(), contextGenerator);
-	}
-
+	
 	public Oracle(ClassificationModel model, DependencyParseContextGenerator contextGenerator)
 	{
 		this.model = model;
 		this.contextGenerator = contextGenerator;
 	}
 
-	public ActionType classify(Configuration conf)
+	public ActionType classify(Configuration currentConf, String[] priorDecisions,
+			Object[] additionalContext)
 	{// 将当前的Configuration分类
-		// 利用训练得到模型去判断对当前的conf做怎样的操作
-		// System.out.println(contextGenerator.getContext(conf).length);
-		// for(String str:contextGenerator.getContext(conf))
-		// System.out.println(str);
 
-		String[] context = contextGenerator.getContext(conf);
+		String[] context = ((DependencyParseContextGeneratorConf)contextGenerator).getContext(currentConf,priorDecisions,null);
 		double allPredicates[] = model.eval(context);
 		String tempAllType[] = new String[allPredicates.length];// 存储所有的分类
 
@@ -52,7 +40,7 @@ public class Oracle
 		}
 
 		int indexOfBestOutcome = getBestIndexOfOutcome(allPredicates);
-		while (!SimpleValidator.validate(conf, tempAllType[indexOfBestOutcome]))
+		while (!SimpleValidator.validate(currentConf, tempAllType[indexOfBestOutcome]))
 		{// ActionType不符合依存转换关系
 			allPredicates[indexOfBestOutcome] = -1;
 			indexOfBestOutcome = getBestIndexOfOutcome(allPredicates);

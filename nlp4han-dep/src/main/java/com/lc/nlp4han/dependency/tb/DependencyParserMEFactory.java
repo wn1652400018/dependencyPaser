@@ -16,7 +16,7 @@ public class DependencyParserMEFactory
 	public static DependencyParserTB getDependencyParser() throws IOException
 	{
 		InputStream modelIn = DependencyParserMEFactory.class.getClassLoader()
-				.getResourceAsStream("com/lc/nlp4han/dependency/tb_cpostag2.model");
+				.getResourceAsStream("com/lc/nlp4han/dependency/tb_cpostag.model");
 		ModelWrapper modelWrapper = new ModelWrapper(modelIn);
 		return new DependencyParserTB(modelWrapper);
 	}
@@ -28,15 +28,21 @@ public class DependencyParserMEFactory
 		{
 			dpME = DependencyParserMEFactory.getDependencyParser();
 
-			// String [] words = {"世界","最","先进","的","清真寺","落成"};
-			// String [] poses = {"n","d","a","u","n","v"};
-			// String [] words = {"化作","电波","传","向","世界","各个","角落"};
-			// String [] poses = {"v","n","v","p","n","r","n"};
+//			 String [] words = {"世界","最","先进","的","清真寺","落成"};
+//			 String [] poses = {"n","d","a","u","n","v"};
+			 String [] words = {"化作","电波","传","向","世界","各个","角落"};
+			 String [] poses = {"v","n","v","p","n","r","n"};
 
-			String[] words = { "给", "庄重", "的", "清真寺", "平", "添", "了", "几分", "生机" };
-			String[] poses = { "p", "a", "u", "n", "v", "v", "u", "m", "n" };
-			DependencyTree depTree = dpME.parse(words, poses);
-			System.out.println(depTree.getSample().toCoNLLString());
+//			String[] words = { "给", "庄重", "的", "清真寺", "平", "添", "了", "几分", "生机" };
+//			String[] poses = { "p", "a", "u", "n", "v", "v", "u", "m", "n" };
+			 
+//			 
+//			DependencyTree depTree = dpME.parse(words, poses);
+//			System.out.println(depTree.getSample().toCoNLLString());
+
+			DependencyTree[] depTree = dpME.parse(words, poses, 1);
+			for (DependencyTree tree : depTree)
+				System.out.println(tree.getSample().toCoNLLString());
 		}
 		catch (IOException e)
 		{

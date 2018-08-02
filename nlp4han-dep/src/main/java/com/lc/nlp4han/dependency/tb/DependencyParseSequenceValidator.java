@@ -1,22 +1,21 @@
 package com.lc.nlp4han.dependency.tb;
 
+import com.lc.nlp4han.ml.util.SequenceValidator;
+
 /**
  * @author 作者
- * @version 创建时间：2018年7月27日 下午2:38:17 类说明
+ * @version 创建时间：2018年7月25日 下午10:35:28 类说明
  */
-public class SimpleValidator
+public class DependencyParseSequenceValidator implements SequenceValidator<String>
 {
-	/**
-	 * @param conf
-	 *            当前的配置
-	 * @param outCome
-	 *            基于当前配置的预测结果
-	 * @return 返回预测结果的合法性
-	 */
-	public static boolean validate(Configuration conf, String outCome)
+
+	@Override
+	public boolean validSequence(int indexOfCurrentConf, String[] wordpos, String[] priorOutcomes,
+			String preOutcome)
 	{
-		// System.out.println("执行了validate方法");
-		ActionType preAct = ActionType.toType(outCome);
+		Configuration conf = Configuration.generateConfByActions(wordpos, priorOutcomes);
+
+		ActionType preAct = ActionType.toType(preOutcome);
 		if (preAct != null)
 		{
 			if (preAct.getBaseAction().equals("LEFTARC_REDUCE"))
@@ -98,4 +97,5 @@ public class SimpleValidator
 		}
 		return false;
 	}
+
 }
