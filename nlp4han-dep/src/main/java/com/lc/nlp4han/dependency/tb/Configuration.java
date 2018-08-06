@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 
-
-
 public class Configuration
 {
 	private ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
@@ -34,10 +32,9 @@ public class Configuration
 		}
 	}
 
-	
 	public Configuration()
 	{
-		
+
 	}
 
 	// public static Configuration initialConf(DependencySample sample)
@@ -45,20 +42,19 @@ public class Configuration
 	// //······
 	// return new Configuration();
 	// }
-	
-	
-	//包括“核心”
+
+	// 包括“核心”
 	public static Configuration generateConfByActions(String[] wordpos, String[] priorActions)
 	{
-		String[] words = new String[(wordpos.length + 1) / 2];
-		String[] poses = new String[(wordpos.length + 1) / 2];
+		String[] words = new String[wordpos.length / 2 + 1];
+		String[] poses = new String[wordpos.length / 2 + 1];
 		for (int i = 0; i < words.length; i++)
 		{
-			String[] word_pos = wordpos[i].split("_");
+			String[] word_pos = wordpos[i].split("/");
 			words[i] = word_pos[0];
 			poses[i] = word_pos[1];
 		}
-		Configuration conf = new Configuration(words,poses);
+		Configuration conf = new Configuration(words, poses);
 		for (String preAction : priorActions)
 		{
 			ActionType at = ActionType.toType(preAction);
@@ -66,12 +62,7 @@ public class Configuration
 		}
 		return conf;
 	}
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * 产生一个sample初始的Configuration
 	 * 
@@ -109,8 +100,8 @@ public class Configuration
 	 */
 	public boolean canReduce(String[] dependencyIndices)
 	{// words包括人工添加的“核心”
-//		if (wordsBuffer.isEmpty())
-//			return false;
+		// if (wordsBuffer.isEmpty())
+		// return false;
 		Vertice[] wordsInStack = stack.toArray(new Vertice[stack.size()]);
 		int indexOfWord_Si;// 该单词在words中索引
 		int indexOfWord_B1 = wordsBuffer.get(0).getIndexOfWord();
@@ -146,8 +137,6 @@ public class Configuration
 			throw new IllegalArgumentException("参数不合法!");
 		}
 	}
-
-
 
 	public Configuration addArc(Arc arc)
 	{
@@ -191,24 +180,23 @@ public class Configuration
 		StringBuilder bufferStr = new StringBuilder();
 		for (int i = 0; i < stack.size(); i++)
 		{
-			stackStr.append(vS[stack.size() - i - 1].toString() + " ") ;
+			stackStr.append(vS[stack.size() - i - 1].toString() + " ");
 		}
 		for (int i = 0; i < wordsBuffer.size(); i++)
 		{
 			bufferStr.append(vB[i].toString() + " ");
 		}
 
-		
-		return "栈底至栈顶元素：" + stackStr.toString() + " ___" + "buffer:"+bufferStr.toString();
+		return "栈底至栈顶元素：" + stackStr.toString() + " ___" + "buffer:" + bufferStr.toString();
 	}
 
 	public String arcsToString()
 	{
 		StringBuilder allArc = new StringBuilder();
-		allArc.append("arcs:"+"\r\n");
+		allArc.append("arcs:" + "\r\n");
 		for (int i = 0; i < arcs.size(); i++)
 		{
-			allArc.append(arcs.get(arcs.size() - i - 1).toString()+"\r\n");
+			allArc.append(arcs.get(arcs.size() - i - 1).toString() + "\r\n");
 		}
 		return allArc.toString();
 	}
@@ -242,6 +230,7 @@ public class Configuration
 	{
 		this.arcs = arcs;
 	}
+
 	public static void main(String[] args)
 	{
 		String[] words = { "根", "我", "爱", "自然", "语言", "处理" };
