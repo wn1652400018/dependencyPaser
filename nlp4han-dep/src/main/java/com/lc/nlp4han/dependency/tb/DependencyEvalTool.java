@@ -35,7 +35,7 @@ public class DependencyEvalTool
 		else
 		{
 			InputStream inStream = DependencyEvalTool.class.getClassLoader()
-					.getResourceAsStream("com/lc/nlp4han/dependency/tb_cpostag.model");
+					.getResourceAsStream("com/lc/nlp4han/dependency/tb_cpostag4.model");
 			model = new ModelWrapper(inStream);
 		}
 
@@ -60,7 +60,8 @@ public class DependencyEvalTool
 		DependencySampleParser sampleParser = new DependencySampleParserCoNLL();
 		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(linesStream, sampleParser);
 		evaluator.evaluate(sampleStream);
-
+		
+		System.out.println(evaluator.getMeasure().getData());
 		System.out.println(evaluator.getMeasure());
 	}
 

@@ -23,7 +23,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 {
 
 	// 上下文产生器
-	private DependencyParseContextGenerator pcg;
+	private static DependencyParseContextGenerator pcg;
 	private int errCount = 0;
 
 	/**
@@ -38,7 +38,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 	{
 
 		super(samples);
-		this.pcg = pcg;
+		DependencySampleEventStreamTB.pcg = pcg;
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 	 *            额外的信息
 	 * @return 事件列表
 	 */
-	public List<Event> generateEvents(String[] words, String[] pos, String[] dependency, String[] dependencyWords,
+	public static List<Event> generateEvents(String[] words, String[] pos, String[] dependency, String[] dependencyWords,
 			String[] dependencyIndices, String[][] ac)
 	{
 

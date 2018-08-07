@@ -2,12 +2,14 @@ package com.lc.nlp4han.dependency.tb;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import com.lc.nlp4han.dependency.DependencySample;
 import com.lc.nlp4han.dependency.DependencySampleParser;
 import com.lc.nlp4han.dependency.DependencySampleParserCoNLL;
 import com.lc.nlp4han.dependency.DependencySampleStream;
 import com.lc.nlp4han.dependency.PlainTextBySpaceLineStream;
+import com.lc.nlp4han.ml.perceptron.SimplePerceptronSequenceTrainer;
 import com.lc.nlp4han.ml.util.MarkableFileInputStreamFactory;
 import com.lc.nlp4han.ml.util.ObjectStream;
 import com.lc.nlp4han.ml.util.TrainingParameters;
@@ -69,9 +71,13 @@ public class DependencyCrossValidatorTool
 		}
 
 		TrainingParameters params = TrainingParameters.defaultParams();
+		
 		params.put(TrainingParameters.CUTOFF_PARAM, Integer.toString(cutoff));
 		params.put(TrainingParameters.ITERATIONS_PARAM, Integer.toString(iters));
-
+		//修改训练模型为EventModelSequenceTrainer
+		params.put(TrainingParameters.ALGORITHM_PARAM, SimplePerceptronSequenceTrainer.PERCEPTRON_SEQUENCE_VALUE);
+		
+		
 		ObjectStream<String> linesStream = new PlainTextBySpaceLineStream(
 				new MarkableFileInputStreamFactory(corpusFile), encoding);
 
@@ -81,7 +87,10 @@ public class DependencyCrossValidatorTool
 		// 交叉验证
 		DependencyParseCrossValidator crossValidator = new DependencyParseCrossValidator(params);
 		DependencyParseContextGenerator contextGen = new DependencyParseContextGeneratorConf();
+		LocalDateTime start = LocalDateTime.now();
 		crossValidator.evaluate(sampleStream, folds, contextGen);
+		System.out.println("开始时间:"+start);
+		System.out.println("结束时间:"+LocalDateTime.now());
 	}
 
 }

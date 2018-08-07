@@ -34,7 +34,7 @@ import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
 public class DependencyParserTB implements DependencyParser
 {
 
-	public static final int DEFAULT_BEAM_SIZE = 3;
+	public static final int DEFAULT_BEAM_SIZE = 4;
 
 	/**
 	 * 上下文产生器
@@ -46,6 +46,7 @@ public class DependencyParserTB implements DependencyParser
 	private SequenceClassificationModel<String> SModel;
 
 	private SequenceValidator<String> sequenceValidator;
+	
 
 	public DependencyParserTB(String modelPath) throws IOException
 	{
@@ -123,13 +124,13 @@ public class DependencyParserTB implements DependencyParser
 			DependencyParseContextGenerator contextGenerator) throws IOException
 	{
 
-		String beamSizeString = params.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
+//		String beamSizeString = params.getSettings().get(BeamSearch.BEAM_SIZE_PARAMETER);
 
 		int beamSize = DependencyParserTB.DEFAULT_BEAM_SIZE;
-		if (beamSizeString != null)
-		{
-			beamSize = Integer.parseInt(beamSizeString);
-		}
+//		if (beamSizeString != null)
+//		{
+//			beamSize = Integer.parseInt(beamSizeString);
+//		}
 
 		ClassificationModel depModel = null;
 		SequenceClassificationModel seqDepModel = null;
@@ -145,6 +146,7 @@ public class DependencyParserTB implements DependencyParser
 		}
 		else if (TrainerType.EVENT_MODEL_SEQUENCE_TRAINER.equals(trainerType))
 		{
+			System.err.println(TrainerType.EVENT_MODEL_SEQUENCE_TRAINER);
 			DependencySampleSequenceStream ss = new DependencySampleSequenceStream(sampleStream, contextGenerator);
 			EventModelSequenceTrainer trainer = TrainerFactory.getEventModelSequenceTrainer(params.getSettings(),
 					manifestInfoEntries);
@@ -164,11 +166,7 @@ public class DependencyParserTB implements DependencyParser
 		return new ModelWrapper(depModel, beamSize);
 	}
 
-	@Override
-	public DependencyTree parse(String sentence)
-	{
-		return null;
-	}
+	
 
 	@Override
 	public DependencyTree parse(String[] words, String[] poses)
@@ -183,7 +181,7 @@ public class DependencyParserTB implements DependencyParser
 		Oracle oracleMEBased = new Oracle(model, contextGenerator);
 		ActionType action = new ActionType();
 		Configuration currentConf = Configuration.initialConf(words, poses);
-		String[] priorDecisions = new String[2 * (words.length - 1) + 1];
+		String[] priorDecisions = new String[2 * (words.length - 1) ];
 		int indexOfConf = 0;
 		while (!currentConf.isFinalConf())
 		{
@@ -199,9 +197,18 @@ public class DependencyParserTB implements DependencyParser
 	}
 
 	@Override
+	public DependencyTree parse(String sentence)
+	{
+		String[] wordsandposes = sentence.split("/");
+		return parse(wordsandposes);
+	}
+	
+	@Override
 	public DependencyTree[] parse(String sentence, int k)
 	{
-		return null;
+		
+		String[] wordsandposes = sentence.split("/");
+		return parse(wordsandposes,k);
 	}
 
 	@Override
@@ -213,10 +220,10 @@ public class DependencyParserTB implements DependencyParser
 		allPoses.add(0, "root");
 		words = allWords.toArray(new String[allWords.size()]);
 		poses = allPoses.toArray(new String[allPoses.size()]);
-		String[] wordpos = new String[words.length*2-1];
+		String[] wordpos = new String[(words.length-1)*2];
 		for (int i = 0; i < words.length ; i++)
 		{
-			wordpos[i] = words[i] + "_" + poses[i];
+			wordpos[i] = words[i] + "/" + poses[i];
 		}
 		
 		Sequence[] allSequence= SModel.bestSequences(k, wordpos, null, contextGenerator, sequenceValidator);
@@ -232,28 +239,32 @@ public class DependencyParserTB implements DependencyParser
 		}
 		return allTree;
 	}
-
-	public DependencyTree getDePendencyTree(ArrayList<Arc> arcs)
-	{
-		// 根据arcs列表获得依存树
-		for (Arc arc : arcs)
-		{
-			arc.toString();
-		}
-
-		return new DependencyTree();
-	}
-
 	@Override
 	public DependencyTree parse(String[] wordsandposes)
 	{
-		return null;
+		String[] words = new String[wordsandposes.length ];
+		String[] poses = new String[wordsandposes.length ];
+		for (int i = 0; i < wordsandposes.length; i++)
+		{
+			String[] word_pos = wordsandposes[i].split("/");
+			words[i ] = word_pos[0];
+			poses[i ] = word_pos[1];
+		}
+		return parse(words,poses,1)[0];
 	}
 
 	@Override
 	public DependencyTree[] parse(String[] wordsandposes, int k)
 	{
-		return null;
+		String[] words = new String[wordsandposes.length ];
+		String[] poses = new String[wordsandposes.length ];
+		for (int i = 0; i < wordsandposes.length; i++)
+		{
+			String[] word_pos = wordsandposes[i].split("/");
+			words[i ] = word_pos[0];
+			poses[i ] = word_pos[1];
+		}
+		return parse(words,poses,k);
 	}
 
 }
