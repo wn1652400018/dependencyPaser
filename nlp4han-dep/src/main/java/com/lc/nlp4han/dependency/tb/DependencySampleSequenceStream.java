@@ -32,7 +32,7 @@ public class DependencySampleSequenceStream implements SequenceStream
 	@Override
 	public Event[] updateContext(Sequence sequence, AbstractModel model)// 感知机算法使用
 	{
-		System.out.println("使用了updateContext方法");
+//		System.out.println("使用了updateContext方法");
 		Sequence<DependencySample> pss = sequence;
 		try
 		{

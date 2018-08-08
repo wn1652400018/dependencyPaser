@@ -61,19 +61,19 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 		if (events.isEmpty() && sample != null)
 		{
 			errCount++;
-			try
-			{
-				FileOutputStream s;
-				s = new FileOutputStream("C:\\Users\\hp\\Desktop\\erroSample\\erroSample" + errCount + ".txt");
-				OutputStreamWriter ow = new OutputStreamWriter(s, "utf-8");
-				BufferedWriter fr = new BufferedWriter(ow);
-				fr.write(sample.toCoNLLString());
-				fr.close();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+//			try
+//			{
+//				FileOutputStream s;
+//				s = new FileOutputStream("C:\\Users\\hp\\Desktop\\erroSample\\erroSample" + errCount + ".txt");
+//				OutputStreamWriter ow = new OutputStreamWriter(s, "utf-8");
+//				BufferedWriter fr = new BufferedWriter(ow);
+//				fr.write(sample.toCoNLLString());
+//				fr.close();
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
 		}
 		return events.iterator();
 	}
@@ -123,7 +123,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 			{
 				// Reduce
 				at = new ActionType("null", "REDUCE");
-				System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+//				System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
 				strOfAType = at.typeToString();
 				conf_ArcEager.reduce();
 			}
@@ -146,7 +146,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 				if (indexOfWord_B1 == headIndexOfWord_S1)
 				{// 左弧
 					at = new ActionType(dependency[indexOfWord_S1 - 1], "LEFTARC_REDUCE");
-					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+//					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
 					strOfAType = at.typeToString();
 					conf_ArcEager.addArc(new Arc(dependency[indexOfWord_S1 - 1], conf_ArcEager.getWordsBuffer().get(0),
 							conf_ArcEager.getStack().peek()));
@@ -164,7 +164,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 					{
 						at = new ActionType(dependency[indexOfWord_B1 - 1], "RIGHTARC_SHIFT");
 					}
-					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+//					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
 					strOfAType = at.typeToString();
 					conf_ArcEager.addArc(
 							new Arc("核心成分", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
@@ -175,7 +175,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 				{
 					// Reduce
 					at = new ActionType("null", "REDUCE");
-					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+//					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
 					strOfAType = at.typeToString();
 					conf_ArcEager.reduce();
 
@@ -184,7 +184,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 				{
 					// Shift
 					at = new ActionType("null", "SHIFT");
-					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
+//					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
 					strOfAType = at.typeToString();
 					conf_ArcEager.shift();
 

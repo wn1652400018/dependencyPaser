@@ -28,7 +28,7 @@ public class DependencyParseSequenceValidator implements SequenceValidator<Strin
 				{
 					if (arc.getDependent() == conf.getStack().peek())
 					{
-						System.out.println("因为栈顶单词已经有中心词故不能有LEFTARC_REDUCE操作");
+//						System.out.println("因为栈顶单词已经有中心词故不能有LEFTARC_REDUCE操作");
 						return false;
 					}
 				}
@@ -39,7 +39,7 @@ public class DependencyParseSequenceValidator implements SequenceValidator<Strin
 			{
 				if (conf.getWordsBuffer().isEmpty())
 				{
-					System.out.println("因为buffer位空，故不能有RIGHTARC_SHIFT操作");
+//					System.out.println("因为buffer位空，故不能有RIGHTARC_SHIFT操作");
 					return false;
 				}
 				if (preAct.getRelation().equals("核心成分"))// 分类中只有rightarc才有可能是核心成分
@@ -65,7 +65,7 @@ public class DependencyParseSequenceValidator implements SequenceValidator<Strin
 			{
 				if (conf.getWordsBuffer().isEmpty())
 				{
-					System.out.println("因为buffer位空，故不能有SHIFT操作");
+//					System.out.println("因为buffer位空，故不能有SHIFT操作");
 					return false;
 				}
 				else
@@ -78,7 +78,7 @@ public class DependencyParseSequenceValidator implements SequenceValidator<Strin
 					return true;
 				if (conf.getStack().peek().getIndexOfWord() == 0)
 				{
-					System.out.println("因为栈顶是ROOT，故不能有REDUCE操作");
+//					System.out.println("因为栈顶是ROOT，故不能有REDUCE操作");
 					return false;
 				}
 
@@ -90,7 +90,7 @@ public class DependencyParseSequenceValidator implements SequenceValidator<Strin
 						return true;
 					}
 				}
-				System.out.println("因为栈顶单词还没有建立依存关系，故不能有REDUCE操作");
+//				System.out.println("因为栈顶单词还没有建立依存关系，故不能有REDUCE操作");
 				return false;
 			}
 
