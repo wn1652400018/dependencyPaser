@@ -61,7 +61,7 @@ public class DependencyEvalTool
 		ObjectStream<DependencySample> sampleStream = new DependencySampleStream(linesStream, sampleParser);
 		evaluator.evaluate(sampleStream);
 		
-		System.out.println(evaluator.getMeasure().getData());
+//		System.out.println(evaluator.getMeasure().getData());
 		System.out.println(evaluator.getMeasure());
 	}
 

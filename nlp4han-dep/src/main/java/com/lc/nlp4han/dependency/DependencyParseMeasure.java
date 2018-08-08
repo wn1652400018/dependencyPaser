@@ -100,7 +100,7 @@ public class DependencyParseMeasure
 
 			if ((dependencyWordsPre[i].compareTo(dependencyWordsRef[i]) == 0)
 					&& (dependencyPre[i].compareTo(dependencyRef[i]) == 0)
-					&& (dependencyWordsPre[i].compareTo(DependencyParser.RootWord) != 0))
+					&& (dependencyWordsPre[i].compareTo(DependencyParser.RootWord) == 0))
 //					&& ((dependencyPre[i].compareTo("ROOT") == 0) || dependencyPre[i].compareTo("核心成分") == 0))
 			{
 				countWordsAndDepRoot++;
