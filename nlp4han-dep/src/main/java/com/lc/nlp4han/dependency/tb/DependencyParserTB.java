@@ -186,12 +186,12 @@ public class DependencyParserTB implements DependencyParser
 		while (!currentConf.isFinalConf())
 		{
 			action = oracleMEBased.classify(currentConf, priorDecisions, null);
-			System.out.println(currentConf.toString() + "*****" + "preAction =" + action.typeToString());
+//			System.out.println(currentConf.toString() + "*****" + "preAction =" + action.typeToString());
 			currentConf.transition(action);
 			priorDecisions[indexOfConf] = action.typeToString();
 			indexOfConf++;
 		}
-		System.out.println(currentConf.arcsToString());
+//		System.out.println(currentConf.arcsToString());
 		DependencyTree depTree = TBDepTree.getTree(currentConf, words, poses);
 		return depTree;
 	}

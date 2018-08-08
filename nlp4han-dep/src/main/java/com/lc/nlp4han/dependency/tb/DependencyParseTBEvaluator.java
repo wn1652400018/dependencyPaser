@@ -40,8 +40,8 @@ public class DependencyParseTBEvaluator extends Evaluator<DependencySample>
 		
 		
 		DependencySample preSample = tagger.parse(wordsRefNoRoot, posRefNoRoot,3)[0].getSample();
-		// 将预测的结果输出
-		System.out.println(preSample.toCoNLLString());
+//		// 将预测的结果输出
+//		System.out.println(preSample.toCoNLLString());
 
 		String[] dependencyWordsPre = preSample.getDependencyWords();
 		String[] dependencyPre = preSample.getDependency();
