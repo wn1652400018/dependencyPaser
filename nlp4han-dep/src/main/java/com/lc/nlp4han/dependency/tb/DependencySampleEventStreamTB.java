@@ -158,7 +158,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 					{
 						if (!conf_ArcEager.getStack().peek().getWord().equals(DependencyParser.RootWord))
 							System.err.println("不是gold句子。");
-						at = new ActionType("核心成分", "RIGHTARC_SHIFT");
+						at = new ActionType(DependencyParser.RootDep, "RIGHTARC_SHIFT");
 					}
 					else
 					{
@@ -167,7 +167,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 //					System.out.println(conf_ArcEager.toString() + "*****" + "goldAction =" + at.typeToString());
 					strOfAType = at.typeToString();
 					conf_ArcEager.addArc(
-							new Arc("核心成分", conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
+							new Arc(strOfAType, conf_ArcEager.getStack().peek(), conf_ArcEager.getWordsBuffer().get(0)));
 					conf_ArcEager.shift();
 
 				}

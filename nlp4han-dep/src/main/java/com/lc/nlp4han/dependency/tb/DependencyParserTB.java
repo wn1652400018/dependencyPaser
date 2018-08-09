@@ -34,7 +34,7 @@ import com.lc.nlp4han.ml.util.TrainerFactory.TrainerType;
 public class DependencyParserTB implements DependencyParser
 {
 
-	public static final int DEFAULT_BEAM_SIZE = 4;
+	public static final int DEFAULT_BEAM_SIZE = 3;
 
 	/**
 	 * 上下文产生器

@@ -1,6 +1,8 @@
 package com.lc.nlp4han.dependency.tb;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import com.lc.nlp4han.dependency.DependencyParseEvaluateMonitor;
 import com.lc.nlp4han.dependency.DependencyParseMeasure;
@@ -71,7 +73,10 @@ public class DependencyParseCrossValidator
 			System.out.println(measure);
 			run++;
 		}
-
+		FileOutputStream fo = new FileOutputStream("C:\\Users\\hp\\Desktop\\"+System.currentTimeMillis()+".txt");
+		OutputStreamWriter osw = new OutputStreamWriter(fo, "utf-8");
+		osw.write(measure.toString());
+		osw.close();
 		System.out.println(measure);
 	}
 }
