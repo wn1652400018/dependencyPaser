@@ -4,7 +4,7 @@ import com.lc.nlp4han.dependency.DependencyParser;
 import com.lc.nlp4han.ml.util.SequenceValidator;
 
 /**
- * @author 作者
+ * @author 王宁
  * @version 创建时间：2018年7月25日 下午10:35:28 类说明
  */
 public class DependencyParseSequenceValidator implements SequenceValidator<String>
@@ -14,7 +14,7 @@ public class DependencyParseSequenceValidator implements SequenceValidator<Strin
 	public boolean validSequence(int indexOfCurrentConf, String[] wordpos, String[] priorOutcomes,
 			String preOutcome)
 	{
-		Configuration_ArcEager conf = Configuration_ArcEager.generateConfByActions(wordpos, priorOutcomes);
+		Configuration_ArcEager conf = new Configuration_ArcEager().generateConfByActions(wordpos, priorOutcomes);
 
 		ActionType preAct = ActionType.toType(preOutcome);
 		if (preAct != null)

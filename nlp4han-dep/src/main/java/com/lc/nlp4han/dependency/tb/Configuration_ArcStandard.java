@@ -9,7 +9,7 @@ import java.util.LinkedList;
 * @version 创建时间：2018年8月19日 上午9:59:53
 * 类说明
 */
-public class Configuration_ArcStandard
+public class Configuration_ArcStandard extends Configuration
 {
 	private ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
 	private LinkedList<Vertice> wordsBuffer = new LinkedList<Vertice>();
@@ -17,63 +17,53 @@ public class Configuration_ArcStandard
 
 	public Configuration_ArcStandard(ArrayDeque<Vertice> stack, LinkedList<Vertice> wordsBuffer, ArrayList<Arc> arcs)
 	{
-
-		stack.push(wordsBuffer.get(0));
-		wordsBuffer.remove(0);
-		this.stack = stack;
-		this.wordsBuffer = wordsBuffer;
-		this.arcs = arcs;
+		super(stack,wordsBuffer,arcs);
 	}
 
 	public Configuration_ArcStandard(String[] words, String[] pos)
 	{
-		if (words.length != 0)
-		{
-			wordsBuffer = Vertice.getWordsBuffer(words, pos);
-			stack.push(wordsBuffer.get(0));
-			wordsBuffer.remove(0);
-		}
+		super(words,pos);
 	}
 	
 	public Configuration_ArcStandard()
 	{
 	}
 	
-	public static Configuration_ArcEager generateConfByActions(String[] wordpos, String[] priorActions) {
-		//暂时先管这个
+	public  Configuration_ArcStandard generateConfByActions(String[] wordpos, String[] priorActions) {
+		//暂时先不管这个
 		return null;
 	}
-	
-	public static Configuration_ArcEager initialConf(String[] words, String[] pos)
-	{
-		return new Configuration_ArcEager(words, pos);
-	}
-	
-	public boolean isFinalConf()
-	{
-		if (wordsBuffer.isEmpty() && stack.size() == 1)
-			return true;
-		else
-			return false;
-	}
-	
+		
 	/**
-	 * 当栈顶元素和buffer第一个单词没有关系时，判断是否reduce
+	 * 当栈顶两个单词有右弧关系时，判断是否right_reduce
 	 * 
-	 * @return 有关系返回true
+	 * @return 当wordBuffer中有单词是栈顶单词的依存词时返回false
 	 */
 	public boolean canReduce(String[] dependencyIndices) {
-		return false;
+		int indexOfWord_Bi;// 该单词在words中索引
+		int indexOfWord_S1 = stack.peek().getIndexOfWord();
+		int headIndexOfWord_Bi;// buffer第i个单词中心词在words中的索引
+		for (int i = 0; i < wordsBuffer.size(); i++)
+		{
+			indexOfWord_Bi = wordsBuffer.get(i).getIndexOfWord();// 该单词在words中索引
+			headIndexOfWord_Bi = Integer.parseInt(dependencyIndices[indexOfWord_Bi - 1]);// buffer第i个单词中心词在words中的索引
+			if (indexOfWord_S1 == headIndexOfWord_Bi )
+				return false;
+		}
+		return true;
 	}
 	
 	//共三类基本操作RIGHTARC_REDUCE、LEFTARC_REDUCE、SHIFT
 	public Configuration_ArcStandard transition(ActionType actType) {
+		Vertice S1 = stack.pop();
+		Vertice S2 = stack.peek();
+		stack.push(S1);
 		switch (actType.getBaseAction())
 		{
 		case "RIGHTARC_REDUCE":
-//			return addArc(new Arc(actType.getRelation(), stack.peek(), wordsBuffer.get(0))).reduce();
+			return addArc(new Arc(actType.getRelation(),S2,S1)).reduce(actType);
 		case "LEFTARC_REDUCE":
-//			return addArc(new Arc(actType.getRelation(), wordsBuffer.get(0), stack.peek())).reduce();
+			return addArc(new Arc(actType.getRelation(),S1,S2)).reduce(actType);
 		case "SHIFT":
 			return shift();
 		default:
@@ -101,71 +91,18 @@ public class Configuration_ArcStandard
 
 	}
 	
-	public Configuration_ArcStandard reduce()
+	public Configuration_ArcStandard reduce(ActionType actType)
 	{
-	return null;
-
-	}
-	
-	
-	
-	
-	public String toString()
-	{
-		Vertice[] vS = stack.toArray(new Vertice[stack.size()]);
-		Vertice[] vB = wordsBuffer.toArray(new Vertice[wordsBuffer.size()]);
-		StringBuilder stackStr = new StringBuilder();
-		StringBuilder bufferStr = new StringBuilder();
-		for (int i = 0; i < stack.size(); i++)
-		{
-			stackStr.append(vS[stack.size() - i - 1].toString() + " ");
-		}
-		for (int i = 0; i < wordsBuffer.size(); i++)
-		{
-			bufferStr.append(vB[i].toString() + " ");
-		}
-
-		return "栈底至栈顶元素：" + stackStr.toString() + " ___" + "buffer:" + bufferStr.toString();
+		if (actType.getBaseAction().equals("RIGHTARC_REDUCE")) {
+			stack.pop();
+			return this;
+		}else if(actType.getBaseAction().equals("LEFTARC_REDUCE")){
+			Vertice S1 = stack.pop();
+			stack.pop();
+			stack.push(S1);
+			return this;
+		}else
+			return null;
 	}
 
-	public String arcsToString()
-	{
-		StringBuilder allArc = new StringBuilder();
-		allArc.append("arcs:" + "\r\n");
-		for (int i = 0; i < arcs.size(); i++)
-		{
-			allArc.append(arcs.get(arcs.size() - i - 1).toString() + "\r\n");
-		}
-		return allArc.toString();
-	}
-
-	public ArrayDeque<Vertice> getStack()
-	{
-		return stack;
-	}
-
-	public void setStack(ArrayDeque<Vertice> stack)
-	{
-		this.stack = stack;
-	}
-
-	public LinkedList<Vertice> getWordsBuffer()
-	{
-		return wordsBuffer;
-	}
-
-	public void setWordsBuffer(LinkedList<Vertice> wordsBuffer)
-	{
-		this.wordsBuffer = wordsBuffer;
-	}
-
-	public ArrayList<Arc> getArcs()
-	{
-		return arcs;
-	}
-
-	public void setArcs(ArrayList<Arc> arcs)
-	{
-		this.arcs = arcs;
-	}
 }

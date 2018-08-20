@@ -200,7 +200,7 @@ public class DependencyParseContextGeneratorConf_ArcEager implements DependencyP
 	@Override
 	public String[] getContext(int index, String[] wordpos, String[] priorDecisions, Object[] additionalContext)
 	{
-		Configuration_ArcEager conf = Configuration_ArcEager.generateConfByActions(wordpos, priorDecisions);
+		Configuration_ArcEager conf = new Configuration_ArcEager().generateConfByActions(wordpos, priorDecisions);
 		return getContext(conf, priorDecisions, additionalContext);
 	}
 
