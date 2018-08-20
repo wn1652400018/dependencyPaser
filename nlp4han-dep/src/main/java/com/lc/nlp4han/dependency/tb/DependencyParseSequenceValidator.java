@@ -14,7 +14,7 @@ public class DependencyParseSequenceValidator implements SequenceValidator<Strin
 	public boolean validSequence(int indexOfCurrentConf, String[] wordpos, String[] priorOutcomes,
 			String preOutcome)
 	{
-		Configuration conf = Configuration.generateConfByActions(wordpos, priorOutcomes);
+		Configuration_ArcEager conf = Configuration_ArcEager.generateConfByActions(wordpos, priorOutcomes);
 
 		ActionType preAct = ActionType.toType(preOutcome);
 		if (preAct != null)

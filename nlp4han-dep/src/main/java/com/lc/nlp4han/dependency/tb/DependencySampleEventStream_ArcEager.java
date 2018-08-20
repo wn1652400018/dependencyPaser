@@ -19,7 +19,7 @@ import com.lc.nlp4han.ml.util.ObjectStream;
  * @author hp
  *
  */
-public class DependencySampleEventStreamTB extends AbstractEventStream<DependencySample>
+public class DependencySampleEventStream_ArcEager extends AbstractEventStream<DependencySample>
 {
 
 	// 上下文产生器
@@ -34,11 +34,11 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 	 * @param pcg
 	 *            特征
 	 */
-	public DependencySampleEventStreamTB(ObjectStream<DependencySample> samples, DependencyParseContextGenerator pcg)
+	public DependencySampleEventStream_ArcEager(ObjectStream<DependencySample> samples, DependencyParseContextGenerator pcg)
 	{
 
 		super(samples);
-		DependencySampleEventStreamTB.pcg = pcg;
+		DependencySampleEventStream_ArcEager.pcg = pcg;
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 
 		if (words.length == 0)
 			return new ArrayList<Event>(words.length);
-		Configuration conf_ArcEager = Configuration.initialConf(words, pos);
+		Configuration_ArcEager conf_ArcEager = Configuration_ArcEager.initialConf(words, pos);
 		String[] priorDecisions = new String[2 * (words.length - 1) + 1];
 
 		List<Event> events = new ArrayList<Event>();
@@ -117,7 +117,7 @@ public class DependencySampleEventStreamTB extends AbstractEventStream<Dependenc
 		{// buffer为空是终止配置
 			// System.out.println(conf_ArcEager.toString());
 
-			String[] context = ((DependencyParseContextGeneratorConf)pcg).getContext(conf_ArcEager, priorDecisions, null);
+			String[] context = ((DependencyParseContextGeneratorConf_ArcEager)pcg).getContext(conf_ArcEager, priorDecisions, null);
 
 			if (conf_ArcEager.getWordsBuffer().size() == 0 && conf_ArcEager.getStack().size() > 1)
 			{

@@ -15,7 +15,7 @@ public class SimpleValidator
 	 *            基于当前配置的预测结果
 	 * @return 返回预测结果的合法性
 	 */
-	public static boolean validate(Configuration conf, String outCome)
+	public static boolean validate(Configuration_ArcEager conf, String outCome)
 	{
 		// System.out.println("执行了validate方法");
 		ActionType preAct = ActionType.toType(outCome);

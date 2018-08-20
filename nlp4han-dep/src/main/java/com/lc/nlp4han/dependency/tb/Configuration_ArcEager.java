@@ -6,13 +6,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class Configuration
+public class Configuration_ArcEager
 {
 	private ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
 	private LinkedList<Vertice> wordsBuffer = new LinkedList<Vertice>();
 	private ArrayList<Arc> arcs = new ArrayList<Arc>();
 
-	public Configuration(ArrayDeque<Vertice> stack, LinkedList<Vertice> wordsBuffer, ArrayList<Arc> arcs)
+	public Configuration_ArcEager(ArrayDeque<Vertice> stack, LinkedList<Vertice> wordsBuffer, ArrayList<Arc> arcs)
 	{
 
 		stack.push(wordsBuffer.get(0));
@@ -22,7 +22,7 @@ public class Configuration
 		this.arcs = arcs;
 	}
 
-	public Configuration(String[] words, String[] pos)
+	public Configuration_ArcEager(String[] words, String[] pos)
 	{
 		if (words.length != 0)
 		{
@@ -32,7 +32,7 @@ public class Configuration
 		}
 	}
 
-	public Configuration()
+	public Configuration_ArcEager()
 	{
 
 	}
@@ -44,7 +44,7 @@ public class Configuration
 	// }
 
 	// 包括“核心”
-	public static Configuration generateConfByActions(String[] wordpos, String[] priorActions)
+	public static Configuration_ArcEager generateConfByActions(String[] wordpos, String[] priorActions)
 	{
 		String[] words = new String[wordpos.length / 2 + 1];
 		String[] poses = new String[wordpos.length / 2 + 1];
@@ -54,7 +54,7 @@ public class Configuration
 			words[i] = word_pos[0];
 			poses[i] = word_pos[1];
 		}
-		Configuration conf = new Configuration(words, poses);
+		Configuration_ArcEager conf = new Configuration_ArcEager(words, poses);
 		for (String preAction : priorActions)
 		{
 			ActionType at = ActionType.toType(preAction);
@@ -80,9 +80,9 @@ public class Configuration
 	 *            额外的信息
 	 * @return 事件列表
 	 */
-	public static Configuration initialConf(String[] words, String[] pos)
+	public static Configuration_ArcEager initialConf(String[] words, String[] pos)
 	{
-		return new Configuration(words, pos);
+		return new Configuration_ArcEager(words, pos);
 	}
 
 	public boolean isFinalConf()
@@ -121,7 +121,7 @@ public class Configuration
 	}
 
 	// 共四类基本操作RIGHTARC_SHIFT、LEFTARC_REDUCE、SHIFT、REDUCE
-	public Configuration transition(ActionType actType)
+	public Configuration_ArcEager transition(ActionType actType)
 	{
 		switch (actType.getBaseAction())
 		{
@@ -138,13 +138,13 @@ public class Configuration
 		}
 	}
 
-	public Configuration addArc(Arc arc)
+	public Configuration_ArcEager addArc(Arc arc)
 	{
 		arcs.add(arc);
 		return this;
 	}
 
-	public Configuration shift()
+	public Configuration_ArcEager shift()
 	{
 		if (wordsBuffer.size() != 0)
 		{
@@ -158,7 +158,7 @@ public class Configuration
 
 	}
 
-	public Configuration reduce()
+	public Configuration_ArcEager reduce()
 	{
 		if (!stack.isEmpty())
 		{
@@ -237,7 +237,7 @@ public class Configuration
 		String[] pos = { "0", "1", "2", "3", "4", "5" };
 		LinkedList<Vertice> buffer = Vertice.getWordsBuffer(words, pos);
 		ArrayDeque<Vertice> stack = new ArrayDeque<Vertice>();
-		Configuration conf = new Configuration(stack, buffer, new ArrayList<Arc>());
+		Configuration_ArcEager conf = new Configuration_ArcEager(stack, buffer, new ArrayList<Arc>());
 		System.out.println(conf.toString());
 		conf.shift();
 		System.out.println(conf.toString());

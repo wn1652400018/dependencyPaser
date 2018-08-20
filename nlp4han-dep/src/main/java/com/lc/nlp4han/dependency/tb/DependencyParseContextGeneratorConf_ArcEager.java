@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class DependencyParseContextGeneratorConf implements DependencyParseContextGenerator
+public class DependencyParseContextGeneratorConf_ArcEager implements DependencyParseContextGenerator
 {
 	// 定义变量控制feature的使用
 	// 一个单词特征
@@ -98,10 +98,10 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	 * @throws IOException
 	 *             IO异常
 	 */
-	public DependencyParseContextGeneratorConf() throws IOException
+	public DependencyParseContextGeneratorConf_ArcEager() throws IOException
 	{
 		Properties featureConf = new Properties();
-		InputStream featureStream = DependencyParseContextGeneratorConf.class.getClassLoader()
+		InputStream featureStream = DependencyParseContextGeneratorConf_ArcEager.class.getClassLoader()
 				.getResourceAsStream("com/lc/nlp4han/dependency/tbfeature.properties");
 		featureConf.load(featureStream);
 
@@ -114,7 +114,7 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	 * @param config
 	 *            配置文件
 	 */
-	public DependencyParseContextGeneratorConf(Properties config)
+	public DependencyParseContextGeneratorConf_ArcEager(Properties config)
 	{
 		init(config);
 	}
@@ -200,11 +200,11 @@ public class DependencyParseContextGeneratorConf implements DependencyParseConte
 	@Override
 	public String[] getContext(int index, String[] wordpos, String[] priorDecisions, Object[] additionalContext)
 	{
-		Configuration conf = Configuration.generateConfByActions(wordpos, priorDecisions);
+		Configuration_ArcEager conf = Configuration_ArcEager.generateConfByActions(wordpos, priorDecisions);
 		return getContext(conf, priorDecisions, additionalContext);
 	}
 
-	public String[] getContext(Configuration conf, String[] priorDecisions, Object[] additionalContext)
+	public String[] getContext(Configuration_ArcEager conf, String[] priorDecisions, Object[] additionalContext)
 	{
 
 		String s1w, s1t, s2w, s2t, s3w, s3t, b1w, b1t, b2w, b2t, b3w, b3t;

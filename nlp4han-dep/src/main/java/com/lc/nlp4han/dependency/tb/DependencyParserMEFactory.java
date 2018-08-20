@@ -13,17 +13,17 @@ import com.lc.nlp4han.ml.util.ModelWrapper;
 public class DependencyParserMEFactory
 {
 
-	public static DependencyParserTB getDependencyParser() throws IOException
+	public static DependencyParser_ArcEager getDependencyParser() throws IOException
 	{
 		InputStream modelIn = DependencyParserMEFactory.class.getClassLoader()
 				.getResourceAsStream("com/lc/nlp4han/dependency/tb_cpostag2.model");
 		ModelWrapper modelWrapper = new ModelWrapper(modelIn);
-		return new DependencyParserTB(modelWrapper);
+		return new DependencyParser_ArcEager(modelWrapper);
 	}
 
 	public static void main(String[] args)
 	{
-		DependencyParserTB dpME;
+		DependencyParser_ArcEager dpME;
 		try
 		{
 			dpME = DependencyParserMEFactory.getDependencyParser();
